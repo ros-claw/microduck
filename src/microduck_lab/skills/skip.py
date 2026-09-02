@@ -256,10 +256,13 @@ class RopeSkipSession:
                     self._settle_wait = 0.5
             elif getattr(self, "_settle_wait", 0.0) > 0:
                 self._settle_wait -= DT
-            elif (self._since_crossing > 3.5 and self._jumper_down_s == 0.0
-                    and self.cfg.mode == "rotate"):
-                # rotation needs a re-toss; swing/snake just keep pumping
-                self._request_toss()               # "one more time!"
+            elif self._since_crossing > 3.5 and self._jumper_down_s == 0.0:
+                # rope died — turners give it another go. Rotate gets the full
+                # wind-up+toss; swing just takes a velocity kick (no lift).
+                if self.cfg.mode == "rotate":
+                    self._request_toss()
+                else:
+                    self.coach.toss(spin_mult=0.6)
                 self._since_crossing = 0.0
             # mouths track rope phase with 90° lead (real contribution) —
             # but stop winding when the rope is fouled, or they'd coil it more
