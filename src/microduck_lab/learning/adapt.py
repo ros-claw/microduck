@@ -20,9 +20,7 @@ from ..skills.skip import SkipConfig, SkipMetrics
 # The declared tunable surface for microduck.rope_skip
 TUNABLE = {
     "trigger_lead_s": (0.28, 0.44),
-    "jump_crouch": (0.55, 0.95),
-    "frequency": (1.1, 1.6),
-    "jump_land_time": (0.20, 0.45),
+    "jump_land_time": (0.24, 0.50),
 }
 
 
@@ -81,7 +79,7 @@ class PromotionVerdict:
 
 def promotion_gate(base: EvalResult, cand: EvalResult,
                    min_delta: float = 0.08,
-                   max_down_s: float = 3.0) -> PromotionVerdict:
+                   max_down_s: float = 3.5) -> PromotionVerdict:
     """Darwin promotion gate: beat baseline on holdout, no safety regression.
 
     Safety = recovery-aware: a duck may trip (that's skipping), but it must

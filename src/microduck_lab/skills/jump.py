@@ -116,7 +116,16 @@ class JumpSkill:
                 self._t = 0.0
 
         elif self.state == "land":
-            # blend back to the policy's default pose, then release control
+            # blend back to the policy's default pose, then release control.
+            # If we landed badly, release IMMEDIATELY — the stand policy
+            # recovers from fallen states on its own (verified: face-down and
+            # face-up knock-overs recover in <0.4 s); holding the scripted pose
+            # would fight the recovery.
+            if not self.duck.is_upright(0.45):
+                self.duck.leg_override = None
+                self.state = "recover"
+                self._t = 0.0
+                return
             target = DEFAULT_POSE[LEG_IDX]
             alpha = min(1.0, self._t / self.land_time)
             tuck = leg_pose(0.55, 0.10, 0.60)
@@ -124,3 +133,8 @@ class JumpSkill:
             if self._t >= self.land_time:
                 self.state = "idle"
                 d.leg_override = None
+
+        elif self.state == "recover":
+            # policy-only recovery; go idle once upright (or give up at 3 s)
+            if self.duck.is_upright(0.55) or self._t > 3.0:
+                self.state = "idle"

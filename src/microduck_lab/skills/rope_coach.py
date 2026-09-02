@@ -127,6 +127,10 @@ class CoachRopeDriver:
             d.xfrc_applied[b, :3] = self._seg_masses[i] * a_t * tangential / n
 
     # ------------------------------------------------------------- sensing
+    @property
+    def spin_rate(self) -> float:
+        return self._rate_lp
+
     def belly_phase(self) -> tuple[float, float]:
         """Sensor-world rope observation: (belly angle, belly radius).
 

@@ -33,7 +33,7 @@ DT = 0.02  # policy step (50 Hz)
 
 @dataclass
 class SkipConfig:
-    frequency: float = 1.35          # team rhythm (rope revs/s)
+    frequency: float = 1.45          # team rhythm (rope revs/s)
     rope_length: float = 0.55
     rope_density: float = 50.0
     turner_sep: float = 0.5
@@ -48,7 +48,7 @@ class SkipConfig:
     jump_extend_time: float = 0.07
     jump_flight_time: float = 0.24
     jump_land_time: float = 0.30
-    jumper_offset: tuple = (0.0, 0.0)  # jumper pos offset from chord center
+    jumper_offset: tuple = (0.0, -0.38)  # jumper waits outside the sweep, then enters
     seed: int = 0                      # evaluation seed (domain randomization)
 
 
@@ -139,7 +139,7 @@ class RopeSkipSession:
             self.ducks[name].active_policy = "sitstand"
             self.ducks[name].set_command(twist=(1, 0, 0),
                                          head=(-self.cfg.turner_crane,) * 2 + (0, 0))
-        for _ in range(int(3.0 * 50)):
+        for _ in range(int(2.0 * 50)):
             for d in self.ducks.values():
                 d.step()
             mujoco.mj_step(self.world.model, self.world.data, SUBSTEPS)
@@ -152,6 +152,48 @@ class RopeSkipSession:
         for t in self.turners:
             t.start()
         self._coach_on = True
+        # the jumper waits outside the rope's sweep and enters when the spin
+        # is up to tempo — real skippers never stand inside a starting rope
+        from .navigate import WalkTo
+        j = self.ducks[self.jumper_name]
+        j.active_policy = "walk"
+        self._entry = WalkTo(j)
+        self._entered = False
+
+    def _entry_update(self, ang, amp):
+        """Walk the jumper in once the rope is up to tempo."""
+        j = self.ducks[self.jumper_name]
+        if self._entered:
+            return True
+        # time-based entry: the toss + spin-up take ~2 s; walk in once the
+        # rope has had time to establish (phase-gated when we do have tempo)
+        pos = j.trunk_pos()
+        dist = math.hypot(pos[0], pos[1])
+        if self._t > 2.2 and self._entry.target is None:
+            self._entry.go_to(0.0, 0.0)
+        if self._entry.target is not None:
+            self._entry.update()
+            if dist < 0.07 or self._entry.done:
+                j.active_policy = "stand"
+                j.set_command(twist=(0, 0, 0))
+                self._entered = True
+                return True
+        return False
+
+    def _recenter(self):
+        """A skipper who drifted (or got knocked) off the middle walks back."""
+        j = self.ducks[self.jumper_name]
+        pos = j.trunk_pos()
+        if (self.jump.state == "idle" and j.is_upright(0.45)
+                and math.hypot(pos[0], pos[1]) > 0.12):
+            if not hasattr(self, "_recenter_nav"):
+                from .navigate import WalkTo
+                self._recenter_nav = WalkTo(j)
+            if self._recenter_nav.target is None or self._recenter_nav.done:
+                self._recenter_nav.go_to(0.0, 0.0)
+            self._recenter_nav.update()
+            return True
+        return False
 
     def _request_toss(self):
         """Wind-up → toss: lift the belly off the floor first, then spin."""
@@ -210,14 +252,14 @@ class RopeSkipSession:
             for t in self.turners:
                 t.update(self._turner_phase, s)
 
-            # --- jumper timing (sensor world: belly phase only) ---
+            # --- jumper entry + timing (sensor world: belly phase only) ---
             jd = self.ducks[self.jumper_name]
-            if self._prev_angle is not None and amp > 0.10:
+            self._entry_update(ang, amp)
+            if self._entered and self.jump.state == "idle":
+                self._recenter()
+            if self._entered and self._prev_angle is not None and amp > 0.10:
                 rate = ((ang - self._prev_angle + math.pi) % (2 * math.pi) - math.pi) / DT
-                # only attempt when the rope is actually up to tempo — real
-                # skippers wait for the rope to settle into its spin
-                up_to_tempo = rate > 0.8 * (2 * math.pi * self.coach.frequency)
-                if up_to_tempo:
+                if rate > 0.5:
                     # time until belly reaches bottom (angle wraps to 0 ahead)
                     dist = (-ang) % (2 * math.pi)
                     ttc = dist / rate
@@ -267,7 +309,7 @@ class RopeSkipSession:
         belly_phase() returns atan2(dy, -dz) ∈ (-π, π]; bottom dead center = 0.
         Forward rotation ⇒ angle increases through 0 at each crossing.
         """
-        if not self._coach_on or self._t < 4.0:
+        if not self._coach_on or not self._entered:
             return
         ang, amp = self.coach.belly_phase()
         if self._last_ang is not None and amp > 0.12:

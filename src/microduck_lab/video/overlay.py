@@ -44,9 +44,10 @@ def overlay(img: np.ndarray, *, status: str | None = None, chat: str | None = No
     draw = ImageDraw.Draw(im)
 
     if title:
-        _draw_text(draw, (W // 2, 26), title, size=34, anchor="ma")
+        # left-aligned, clear of the top-right metrics panel
+        _draw_text(draw, (170, 24), title, size=30, anchor="la")
     if subtitle:
-        _draw_text(draw, (W // 2, 66), subtitle, size=22, anchor="ma",
+        _draw_text(draw, (170, 62), subtitle, size=20, anchor="la",
                    fill=(255, 235, 150, 255), cjk=True)
 
     if status:

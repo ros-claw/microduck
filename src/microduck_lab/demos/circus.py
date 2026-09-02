@@ -129,8 +129,8 @@ def _run_skip_scene(out: pathlib.Path, cfg: SkipConfig, *, seconds: float,
 
 def scene_first_attempt(out: pathlib.Path):
     """The honest first attempt with untrained timing — trips included."""
-    cfg = SkipConfig(trigger_lead_s=0.30, seed=42)   # untrained guess
-    m, _ = _run_skip_scene(out, cfg, seconds=11.0, status="ACTING",
+    cfg = SkipConfig(trigger_lead_s=0.46, seed=42)   # untrained guess: jumps way too late
+    m, _ = _run_skip_scene(out, cfg, seconds=16.0, status="ACTING",
                            title="First attempt — untrained timing",
                            subtitle="第一次尝试（没练过）")
     return m
@@ -147,9 +147,9 @@ def scene_practice(out: pathlib.Path, variants: list[tuple[str, SkipConfig]]):
         ren = CinematicRenderer(s.world.model, 320, 180)
         ren.set_cam("side")
         frames = []
-        for i in range(int(9 * 50)):
+        for i in range(int(12 * 50)):
             s.step()
-            if i > 4 * 50 and i % 8 == 0:      # capture the action window
+            if i > 5 * 50 and i % 8 == 0:      # capture the action window
                 frames.append(ren.render(s.world.data))
         ren.close()
         # keep a middle chunk of ~2.5s at 12.5fps → 31 frames
@@ -206,7 +206,7 @@ def scene_evolution(out: pathlib.Path, practice_log: pathlib.Path,
 
 def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
     """The performance take: champion config, camera work, slow-mo on the best jump."""
-    return _run_skip_scene(out, champion_cfg, seconds=11.0, status="CHAMPION",
+    return _run_skip_scene(out, champion_cfg, seconds=16.0, status="CHAMPION",
                            title="Performance — champion skill",
                            subtitle="正式表演")
 

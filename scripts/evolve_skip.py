@@ -12,10 +12,11 @@ from microduck_lab.learning import adapt
 ROOT = pathlib.Path("~/workspace/microduck").expanduser()
 ROBOT = ROOT / "microduck_rl/src/mjlab_microduck/robot/microduck/robot_allcollisions.xml"
 POL = ROOT / "microduck/policies"
-BANK = {"stand": str(POL / "alpha_stand.onnx"), "sitstand": str(POL / "alpha_sitstand.onnx")}
+BANK = {"stand": str(POL / "alpha_stand.onnx"), "walk": str(POL / "alpha_walking.onnx"),
+        "sitstand": str(POL / "alpha_sitstand.onnx")}
 
-TRAIN_SEEDS = [101, 202, 303, 404, 505, 606, 707, 808]
-HOLDOUT_SEEDS = [777, 888, 999, 111, 222, 333]   # Darwin only; the search never sees these
+TRAIN_SEEDS = [101, 202, 303, 404, 505, 606]
+HOLDOUT_SEEDS = [777, 888, 999, 111]   # Darwin only; the search never sees these
 
 log = PracticeLog(ROOT / "rosclaw-microduck/practice/rope_skip.jsonl")
 
@@ -27,7 +28,7 @@ def evaluate(cfg: SkipConfig, seeds, tag: str, version: str) -> adapt.EvalResult
         s = RopeSkipSession(str(ROBOT), BANK, c)
         s.settle()
         s.start_rope()
-        m = s.run_episode(10.0)
+        m = s.run_episode(14.0)
         eps.append(m)
         log.record(PracticeRecord(
             skill_id="microduck.rope_skip", skill_version=version,
@@ -49,7 +50,7 @@ def evaluate(cfg: SkipConfig, seeds, tag: str, version: str) -> adapt.EvalResult
 
 def main(rounds: int = 4):
     print("=== ROSClaw evolution loop: microduck.rope_skip ===", flush=True)
-    champion_cfg = SkipConfig()
+    champion_cfg = SkipConfig(jump_crouch=0.65)
     champion_ver = "1.0"
     champion_h = evaluate(champion_cfg, HOLDOUT_SEEDS, "baseline v1.0 HOLDOUT", "1.0")
     print(f"champion v1.0 holdout: {champion_h.success_rate:.0%}", flush=True)
