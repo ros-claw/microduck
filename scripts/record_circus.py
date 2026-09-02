@@ -60,14 +60,14 @@ def main():
     if not p.exists() or "practice" in args.scenes:
         print("shooting practice montage...", flush=True)
         variants = [
-            ("lead=0.28", SkipConfig(trigger_lead_s=0.28, seed=11)),
-            ("lead=0.34", SkipConfig(trigger_lead_s=0.34, seed=22)),
-            ("lead=0.40", SkipConfig(trigger_lead_s=0.40, seed=33)),
-            ("crouch=0.62", SkipConfig(jump_crouch=0.62, seed=44)),
-            ("crouch=0.85", SkipConfig(jump_crouch=0.85, seed=55)),
-            ("f=1.18", SkipConfig(frequency=1.18, seed=66)),
-            ("f=1.35", SkipConfig(frequency=1.35, seed=77)),
-            ("f=1.52", SkipConfig(frequency=1.52, seed=88)),
+            ("lead=0.42", SkipConfig(trigger_lead_s=0.42, seed=11)),
+            ("lead=0.45", SkipConfig(trigger_lead_s=0.45, seed=22)),
+            ("lead=0.50", SkipConfig(trigger_lead_s=0.50, seed=33)),
+            ("lead=0.60", SkipConfig(trigger_lead_s=0.60, seed=44)),
+            ("f=0.95", SkipConfig(frequency=0.95, seed=55)),
+            ("f=1.017", SkipConfig(frequency=1.017, seed=66)),
+            ("f=1.15", SkipConfig(frequency=1.15, seed=77)),
+            ("f=1.30", SkipConfig(frequency=1.30, seed=88)),
         ]
         labels = circus.scene_practice(p, variants)
         for l in labels:

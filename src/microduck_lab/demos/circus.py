@@ -130,10 +130,10 @@ def _run_skip_scene(out: pathlib.Path, cfg: SkipConfig, *, seconds: float,
 
 def scene_first_attempt(out: pathlib.Path):
     """The honest first attempt with untrained timing — trips included."""
-    cfg = SkipConfig(seed=42, blind=True)   # first attempt: hops WITHOUT watching the rope
+    cfg = SkipConfig(seed=42, never_jump_until=7.0, trigger_lead_s=0.40)   # watches, then jumps too early
     m, _ = _run_skip_scene(out, cfg, seconds=16.0, status="ACTING",
-                           title="First attempt — hopping blind",
-                           subtitle="第一次尝试：还不看绳子，光凭感觉跳")
+                           title="First attempt — never skipped before",
+                           subtitle="第一次尝试：先看绳子，起跳时机全错")
     return m
 
 
@@ -142,7 +142,7 @@ def scene_practice(out: pathlib.Path, variants: list[tuple[str, SkipConfig]]):
     tiles = []
     labels = []
     for tag, cfg in variants:
-        s = RopeSkipSession(str(ROBOT), POLICIES, cfg, playground=False)
+        s = RopeSkipSession(str(ROBOT), POLICIES, cfg, playground=True)
         s.settle()
         s.start_rope()
         ren = CinematicRenderer(s.world.model, 320, 180)
@@ -251,9 +251,10 @@ def scene_evolution(out: pathlib.Path, practice_log: pathlib.Path,
 
 def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
     """The performance take: champion config; shoot up to 3 takes, keep the best
-    (like any real demo film). Each take is a fresh world with a different seed."""
+    (like any real demo film). Each take is a fresh world with a different seed.
+    Returns (metrics, consec) of the winning take."""
     best = None
-    for take, seed in enumerate([7, 21, 55]):
+    for take, seed in enumerate([304, 314, 311]):
         cfg = replace(champion_cfg, seed=seed)
         tmp = out.with_suffix(f".take{take}.mp4")
         m, consec = _run_skip_scene(tmp, cfg, seconds=16.0, status="CHAMPION",
@@ -263,14 +264,14 @@ def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
               flush=True)
         score = m.successful_skips * 10 + m.consecutive_best
         if best is None or score > best[0]:
-            best = (score, tmp)
+            best = (score, tmp, m, consec)
     # keep only the winning take at the canonical name
     best[1].replace(out)
     for take in range(3):
         t = out.with_suffix(f".take{take}.mp4")
         if t.exists():
             t.unlink()
-    return best
+    return best[2], best[3]
 
 
 def scene_celebration(out: pathlib.Path):

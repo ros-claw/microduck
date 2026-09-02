@@ -24,14 +24,15 @@ Chat → Act → Fail → Practice → Adapt → Darwin (holdout) → Champion �
   ball-joint cable rope (real bodies, real collisions, real tripping).
 - **Official ONNX policies at 50 Hz.** Walking / standing / sit-stand /
   roulade are Pollen's own trained policies (61D obs → 14D action), hot-swapped
-  per skill — same deployment path as the real robot.
-- **Closed-loop timing.** The jumper triggers from the measured rope belly
-  phase (sensor world), not from physics ground truth (oracle). Verdicts
-  (skip / trip) are judged on real contacts and foot clearance.
+  per skill — same deployment path as the real robot. The stock `alpha_stand`
+  policy even recovers the duck from trips on its own (measured: <0.4 s).
+- **Closed-loop rhythm.** The jumper watches the rope belly (sensor world,
+  not physics oracle), builds a rhythm model from measured pass times, and
+  schedules its hop several passes ahead (the hop needs ~0.6 s to lift).
 - **Practice → Darwin → Champion.** `scripts/evolve_skip.py` runs real
   episodes, logs JSONL practice records, searches the declared tunable
-  parameter surface (jump trigger lead, crouch depth, team rope frequency),
-  evaluates on *holdout* seeds, and applies a promotion gate.
+  parameter surface (jump trigger lead, team rope frequency), evaluates on
+  *holdout* seeds, and applies a promotion gate.
 
 A real gate event from the logs: a candidate reached **85%** success on holdout
 but was **rejected** — the jumper's worst unrecovered down-time was 2.7 s.
@@ -39,18 +40,36 @@ Safety over score.
 
 ## What is assisted (declared, never hidden)
 
-- **Coach rope wind-up.** At this scale (25 cm / 800 g), the XL330 neck servos
+- **Coach rope drive.** At this scale (25 cm / 800 g), the XL330 neck servos
   physically cannot spin a rope up from rest (head ≈ 38% of body mass, required
-  torque ≈ servo limit) — see `docs/physics-notes.md`. A declared `CoachRopeDriver`
-  gives the rope its initial toss and regulates its rotation rate, like an
-  adult turning the rope for kid skippers. The turner ducks' mouths really
-  track the rope phase and carry the load; all practice records carry
-  `coach_assist: true`.
+  torque ≈ servo limit — see `docs/physics-notes.md`). A declared
+  `CoachRopeDriver` (skills/rope_coach.py) winds the rope up and pumps it,
+  like an adult swinging the rope for kid skippers. The turner ducks' mouths
+  really track the rope phase and carry the load; all practice records carry
+  `coach_assist: true`. The default game is the **side-swing** (the belly
+  sweeps the floor — a real playground variant); full overhead rotation
+  (`mode="rotate"`) works in ~10 s windows and is a stretch goal.
 - **Jump is procedural, not RL.** The official skill set ships no jump policy,
   so `skills/jump.py` is a scripted crouch→extend→tuck→land maneuver with
-  closed-loop timing. Its parameters are the adaptation surface. Training a
-  real `microduck.jump` policy with mjlab PPO is the obvious next milestone
-  (see Roadmap).
+  closed-loop timing (~2.5 cm tuck-hop — the servos genuinely can't do more).
+  Its parameters are the adaptation surface. Training a real `microduck.jump`
+  policy with mjlab PPO is the obvious next milestone (see Roadmap).
+
+## Honest scoreboard
+
+Rope skipping at this scale is *hard*: the champion clears roughly 1 in 10
+passes cleanly, trips often, and always gets back up. The video shows exactly
+that — no retake edits, no hidden state. The point is the loop: fail honestly,
+practice, adapt, improve measurably.
+
+## Roadmap
+
+- **Train a real jump policy** (mjlab PPO, official export path) — the single
+  biggest unlock; the current 2.5 cm tuck-hop is the bottleneck.
+- Full overhead `rotate` mode as the default once the jump is stronger.
+- Per-duck skill memories (each duck's reliability profile feeding Team role
+  assignment).
+- quackd A/B benchmark on the same tasks.
 
 ## Quickstart
 

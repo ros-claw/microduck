@@ -50,3 +50,22 @@ robot_allcollisions.xml, official ONNX policies).
   use 1e-4.
 - `actuator_trnid`-based qpos/dof indexing is required for namespaced models.
 """
+
+## Jump / skipping findings (the honest part)
+
+- The scripted tuck-hop reaches ~2.5 cm foot clearance for ~0.1 s, peaking
+  ~0.6 s after trigger (crouch 0.18 + extend 0.07 + flight 0.24 + …). The lead
+  time must be ≈0.6 s — an early lead grid (0.28–0.44 s) was systematically
+  miscalibrated until we profiled the maneuver.
+- The position servos (kp 0.55, ±0.96 Nm) cannot ballistically launch the body:
+  trunk apex rises <1 cm. Real rope skipping needs a trained jump policy.
+- The swing's belly does NOT reach the hanging arc bottom: dynamic shortening
+  keeps it ~4 cm up. Floor-grazing requires the rope long enough that the
+  resting belly lies on the floor (L≥0.62 at mouth z 0.165) — but then the
+  resting rope won't pump up. We run "swing" with L=0.55.
+- Full rotation mode additionally suffers rope coil-up around the craned heads
+  (no swivel on the mouths) — guarded by the coil detector + drop-regrab-reset.
+- Judge honesty: verdicts need a ±0.12 s windowed feet-peak (50 Hz sampling
+  misses the hop apex), real rope-contact evidence, and an upright check 0.5 s
+  after the pass. The agent context (rhythm model) never sees oracle state.
+

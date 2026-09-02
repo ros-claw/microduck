@@ -25,8 +25,8 @@ class CinematicRenderer:
             c.lookat = [0, 0, 0.14]; c.distance = 0.9; c.azimuth = 60; c.elevation = -4
         elif preset == "wide":
             c.lookat = [0, 0, 0.1]; c.distance = 1.8; c.azimuth = 100; c.elevation = -22
-        elif preset == "swing":          # oblique view of the rope's swing plane
-            c.lookat = [0, -0.03, 0.10]; c.distance = 1.25; c.azimuth = 55; c.elevation = -13
+        elif preset == "swing":          # nearly down the rope axis: belly sweeps across frame
+            c.lookat = [0, -0.02, 0.10]; c.distance = 1.15; c.azimuth = 25; c.elevation = -12
         if target is not None:
             c.lookat = list(target)
 

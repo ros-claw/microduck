@@ -45,9 +45,9 @@ def overlay(img: np.ndarray, *, status: str | None = None, chat: str | None = No
 
     if title:
         # left-aligned, clear of the top-right metrics panel
-        _draw_text(draw, (170, 24), title, size=30, anchor="la")
+        _draw_text(draw, (215, 22), title, size=30, anchor="la")
     if subtitle:
-        _draw_text(draw, (170, 62), subtitle, size=20, anchor="la",
+        _draw_text(draw, (215, 60), subtitle, size=20, anchor="la",
                    fill=(255, 235, 150, 255), cjk=True)
 
     if status:

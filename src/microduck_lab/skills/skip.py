@@ -51,6 +51,7 @@ class SkipConfig:
     jump_land_time: float = 0.30
     jumper_offset: tuple = (0.0, -0.38)
     blind: bool = False            # True = hop periodically WITHOUT watching the rope (naive baseline)  # jumper waits outside the sweep, then enters
+    never_jump_until: float = 0.0  # scene tool: jumper just stands there until t (the "hasn't learned yet" beat)
     seed: int = 0                      # evaluation seed (domain randomization)
 
 
@@ -173,11 +174,11 @@ class RopeSkipSession:
         j = self.ducks[self.jumper_name]
         if self._entered:
             return True
-        # time-based entry: the toss + spin-up take ~2 s; walk in once the
-        # rope has had time to establish (phase-gated when we do have tempo)
+        # enter when the rope is live (real swing amplitude) AND the belly is
+        # on the FAR side from the jumper (who approaches from -y)
         pos = j.trunk_pos()
         dist = math.hypot(pos[0], pos[1])
-        if self._t > 2.2 and self._entry.target is None:
+        if self._t > 2.2 and self._entry.target is None and amp > 0.10 and ang > 0.8:
             self._entry.go_to(0.0, 0.0)
         if self._entry.target is not None:
             self._entry.update()
@@ -275,7 +276,9 @@ class RopeSkipSession:
             self._entry_update(ang, amp)
             if self._entered and self.jump.state == "idle":
                 self._recenter()
-            if self._entered and cfg.blind:
+            if self._entered and self._t < cfg.never_jump_until:
+                pass  # hasn't learned to jump yet — just stands and watches
+            elif self._entered and cfg.blind:
                 # naive baseline: hop on a fixed timer, no rope perception
                 self._blind_next = getattr(self, "_blind_next", 0.0)
                 if (self.jump.state == "idle" and jd.is_upright(0.45)
