@@ -1,0 +1,30 @@
+# Pinned upstream assets. `scripts/bootstrap.py` fetches and verifies these.
+# Never track develop HEAD; bump explicitly after re-running regression.
+
+microduck_rl:
+  repository: pollen-robotics/microduck_rl
+  commit: 5946fd9cdbc58956424420153e51975af3b30d77   # develop @ 2026-09-02
+  license: {code: Apache-2.0, models: CC-BY-SA-NC}
+  assets:
+    robot_mjcf: src/mjlab_microduck/robot/microduck/robot_allcollisions.xml
+    meshes_dir: src/mjlab_microduck/robot/microduck/assets
+
+microduck_runtime:
+  repository: pollen-robotics/microduck
+  commit: 9f7eaad1008fffd90ef871a33a18aecd066b51a9   # main @ 2026-09-02
+  license: {code: Apache-2.0}
+  assets:
+    policies:
+      stand: policies/alpha_stand.onnx
+      walk: policies/alpha_walking.onnx
+      sitstand: policies/alpha_sitstand.onnx
+      roulade: policies/roulade.onnx
+      kick_left: policies/ball_kick_left.onnx
+      kick_right: policies/ball_kick_right.onnx
+      ground_pick: policies/alpha_ground_pick.onnx
+
+reference:
+  quackd:
+    repository: rokbenko/quackd
+    commit: ba607f1de0537e287223af43e6b8fc601bd7f651
+    role: reference implementation / future A/B benchmark (not a dependency)
