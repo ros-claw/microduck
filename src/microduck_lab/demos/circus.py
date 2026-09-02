@@ -254,7 +254,7 @@ def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
     (like any real demo film). Each take is a fresh world with a different seed.
     Returns (metrics, consec) of the winning take."""
     best = None
-    for take, seed in enumerate([304, 314, 311]):
+    for take, seed in enumerate([304, 311, 314]):
         cfg = replace(champion_cfg, seed=seed)
         tmp = out.with_suffix(f".take{take}.mp4")
         m, consec = _run_skip_scene(tmp, cfg, seconds=16.0, status="CHAMPION",
