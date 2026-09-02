@@ -19,8 +19,8 @@ from ..skills.skip import SkipConfig, SkipMetrics
 
 # The declared tunable surface for microduck.rope_skip
 TUNABLE = {
-    "trigger_lead_s": (0.28, 0.44),
-    "jump_land_time": (0.24, 0.50),
+    "trigger_lead_s": (0.45, 0.75),
+    "frequency": (0.95, 1.35),
 }
 
 

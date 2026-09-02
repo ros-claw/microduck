@@ -26,23 +26,31 @@ from ..sim.runtime import DuckRuntime
 
 
 class CoachRopeDriver:
-    """Applies a gentle tangential force field to keep the rope rotating.
+    """Rope coach: spin-up (wind-up + toss) and two drive modes.
 
-    F_i = k · m_seg · (ω_target × r_i)  — proportional to each segment's mass,
-    so the rope rotates as a rigid body in the limit. A governor slows down /
-    speeds up toward `frequency` using the measured belly phase rate.
+    mode="rotate": continuous tangential drive (full overhead hoop).
+    mode="swing":  oscillating tangential drive at the pendulum resonance —
+                   the belly sweeps the floor back and forth ("side-swing"
+                   skipping, a real playground game). Far more robust at this
+                   scale: no ω²R > g requirement, belly grazes the floor
+                   deterministically each pass.
+    mode="snake":  bang-bang lateral push along the floor ("snake in the
+                   grass") — the belly slides left-right through the jumper's
+                   position. The most robust: gravity is fully floor-supported.
     """
 
     def __init__(self, world, frequency: float = 1.3, gain: float = 0.25,
-                 rate_kp: float = 4.0):
+                 rate_kp: float = 4.0, mode: str = "rotate"):
         self.world = world
         self.frequency = frequency
         self.gain = gain
         self.rate_kp = rate_kp
+        self.mode = mode
         self.enabled = False
         self._seg_masses = None
         self._rate_lp = 0.0
         self._prev_angle = None
+        self._swing_phase = 0.0
 
     def start(self):
         m = self.world.model
@@ -68,7 +76,7 @@ class CoachRopeDriver:
         d.qvel[adr:adr + 3] = np.cross([om, 0, 0], p0 - c)
         d.qvel[adr + 3:adr + 6] = [om, 0, 0]
 
-    def windup_lift(self, strength: float = 14.0):
+    def windup_lift(self, strength: float = 9.0):
         """One step of 'the coach lifts the rope up': raise the belly off the
         floor before the toss, so the first revolution doesn't plow the floor."""
         w = self.world
@@ -115,6 +123,28 @@ class CoachRopeDriver:
             d.xfrc_applied[:] = 0.0
             return
 
+        if self.mode == "snake":
+            # push the belly side to side along the floor, WITH its motion
+            belly = self.belly_y_rate(dt)
+            push = 1.0 if belly >= 0 else -1.0
+            for i, b in enumerate(w.rope_body_ids):
+                d.xfrc_applied[b, 1] = self._seg_masses[i] * self.gain * omega * push * 2.0
+            return
+        if self.mode == "swing":
+            # swing pump: always push tangentially WITH the belly's motion
+            # (bang-bang, like pumping a playground swing), ease off when the
+            # arc is already big enough (governor on the belly radius/angle).
+            push = 1.0 if self._rate_lp >= 0 else -1.0
+            govern = 1.0 if amp < 0.20 else 0.25
+            for i, b in enumerate(w.rope_body_ids):
+                r = d.xpos[b] - c
+                tangential = np.cross(axis, r)
+                n = np.linalg.norm(tangential)
+                if n < 1e-6:
+                    continue
+                d.xfrc_applied[b, :3] = (self._seg_masses[i] * self.gain * omega
+                                         * push * govern * tangential / n)
+            return
         rate_err = omega - self._rate_lp
         for i, b in enumerate(w.rope_body_ids):
             r = d.xpos[b] - c
@@ -131,20 +161,37 @@ class CoachRopeDriver:
     def spin_rate(self) -> float:
         return self._rate_lp
 
-    def belly_phase(self) -> tuple[float, float]:
+    def belly_y_rate(self, dt: float = 0.02) -> float:
+        """Low-passed lateral velocity of the rope belly (snake mode)."""
+        w = self.world
+        pts = np.array([w.data.xpos[b] for b in w.rope_body_ids])
+        y = float(pts[len(pts) // 2][1])
+        if not hasattr(self, "_prev_belly_y"):
+            self._prev_belly_y = y
+            self._y_rate_lp = 0.0
+            return 0.0
+        rate = (y - self._prev_belly_y) / dt
+        self._prev_belly_y = y
+        self._y_rate_lp = 0.9 * self._y_rate_lp + 0.1 * rate
+        return self._y_rate_lp
+
+    def belly_phase(self, at_x: float | None = None) -> tuple[float, float]:
         """Sensor-world rope observation: (belly angle, belly radius).
 
-        Angle 0 = belly straight down (under the jumper's feet). Measured from
-        rope body positions — the v0 'rope detector' (sim segmentation stand-in
-        for the depth camera), NOT the agent's task oracle.
+        Angle 0 = belly straight down. Measured from the rope section nearest
+        `at_x` (the jumper's position) when given — the rope is floppy, so the
+        section near the jumper has its own phase lag vs the midpoint.
         """
         w = self.world
         d = w.data
         pts = np.array([d.xpos[b] for b in w.rope_body_ids])
         c = pts[[0, -1]].mean(axis=0)
-        mid = pts[len(pts) // 2]
+        if at_x is None:
+            mid = pts[len(pts) // 2]
+        else:
+            k = int(np.argmin(np.abs(pts[:, 0] - at_x)))
+            mid = pts[max(2, min(len(pts) - 3, k))]
         dy, dz = mid[1] - c[1], mid[2] - c[2]
-        # angle from straight-down, in the Y-Z plane
         return math.atan2(dy, -dz), math.hypot(dy, dz)
 
     def belly_bottom_crossing_eta(self, dt: float, prev_angle: float, angle: float) -> float | None:

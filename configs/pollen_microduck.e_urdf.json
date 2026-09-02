@@ -1,0 +1,62 @@
+{
+  "identity": {
+    "vendor": "Pollen Robotics",
+    "model": "Microduck",
+    "robot_class": "biped",
+    "mass_kg": 0.8,
+    "height_m": 0.25,
+    "floating_base": true
+  },
+  "kinematics": {
+    "physical_actuated_dof": 15,
+    "policy_actuated_dof": 14,
+    "auxiliary_actuators": {
+      "mouth": {
+        "policy_controlled": false,
+        "semantic_capabilities": ["grab", "release", "rope_hold"]
+      }
+    },
+    "joint_order": [
+      "left_hip_yaw", "left_hip_roll", "left_hip_pitch", "left_knee", "left_ankle",
+      "neck_pitch", "head_pitch", "head_yaw", "head_roll",
+      "right_hip_yaw", "right_hip_roll", "right_hip_pitch", "right_knee", "right_ankle"
+    ]
+  },
+  "policy_contract": {
+    "frequency_hz": 50,
+    "observation_dim": 61,
+    "observation_layout": "48 proprioception + 13 command [twist(3), head_pose(4), body_pose(6)]",
+    "action_dim": 14,
+    "action_convention": "ctrl = STAND2_pose + action * scale (position actuators)",
+    "normalization": "baked into ONNX by official exporter"
+  },
+  "sensors": {
+    "imu": ["imu_ang_vel (gyro)", "imu_accel"],
+    "sites": ["mouth_tip", "left_foot", "right_foot", "head_camera", "tof"]
+  },
+  "model_variants": {
+    "walk": "robot_walk.xml (simplified collisions)",
+    "all_collisions": "robot_allcollisions.xml (this project)",
+    "rollers": "robot_allcollisions_rollers.xml",
+    "backlash": "*_backlash.xml (sim2real realism)"
+  },
+  "capability_hints": [
+    "locomotion.walk", "locomotion.turn_in_place", "posture.stand",
+    "posture.sit_stand", "recover.stand_up (via stand policy)",
+    "trick.roulade", "interaction.kick_left/right", "manipulation.ground_pick",
+    "rope.hold (mouth latch)", "rope.turn (phase-tracking head sway)",
+    "jump.tuck_hop (procedural, ~2.5 cm)"
+  ],
+  "sandbox": {
+    "preferred_engine": "mujoco",
+    "training_engine": "mjlab (upstream microduck_rl)",
+    "physics_reference": "upstream microduck_rl @ upstream.lock.yaml"
+  },
+  "metadata": {
+    "source": {
+      "microduck_rl": "pollen-robotics/microduck_rl @ 5946fd9",
+      "microduck": "pollen-robotics/microduck @ 9f7eaad"
+    },
+    "license": {"code": "Apache-2.0", "models": "CC-BY-SA-NC"}
+  }
+}

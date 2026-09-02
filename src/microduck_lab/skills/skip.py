@@ -33,22 +33,24 @@ DT = 0.02  # policy step (50 Hz)
 
 @dataclass
 class SkipConfig:
-    frequency: float = 1.45          # team rhythm (rope revs/s)
+    frequency: float = 1.15          # swing pump rhythm (Hz)
+    mode: str = "swing"              # "swing" (default, robust) | "rotate" (stretch) | "snake"
     rope_length: float = 0.55
     rope_density: float = 50.0
     turner_sep: float = 0.5
-    turner_crane: float = 0.2        # head-up command for turners
+    turner_crane: float = 0.0        # head-up command for turners
     coach_gain: float = 0.25
     coach_rate_kp: float = 4.0
     sway: float = 0.012              # turner mouth ellipse radius (visual+pump)
     # jumper
-    trigger_lead_s: float = 0.34     # jump trigger lead before bottom crossing
+    trigger_lead_s: float = 0.60     # jump trigger lead before the pass (hop takes ~0.6 s to lift)
     jump_crouch: float = 0.72
     jump_crouch_time: float = 0.18
     jump_extend_time: float = 0.07
     jump_flight_time: float = 0.24
     jump_land_time: float = 0.30
-    jumper_offset: tuple = (0.0, -0.38)  # jumper waits outside the sweep, then enters
+    jumper_offset: tuple = (0.0, -0.38)
+    blind: bool = False            # True = hop periodically WITHOUT watching the rope (naive baseline)  # jumper waits outside the sweep, then enters
     seed: int = 0                      # evaluation seed (domain randomization)
 
 
@@ -112,7 +114,8 @@ class RopeSkipSession:
         self.turner_names = (ta, tb)
         self.jumper_name = j
         self.coach = CoachRopeDriver(self.world, frequency=cfg.frequency * freq_jit,
-                                     gain=cfg.coach_gain, rate_kp=cfg.coach_rate_kp)
+                                     gain=cfg.coach_gain, rate_kp=cfg.coach_rate_kp,
+                                     mode=cfg.mode)
         cfgj = cfg
         self.jump = JumpSkill(
             self.ducks[j], crouch_depth=cfgj.jump_crouch,
@@ -146,7 +149,12 @@ class RopeSkipSession:
 
     def start_rope(self):
         self.coach.start()
-        self._request_toss()
+        if self.cfg.mode == "rotate":
+            self._request_toss()
+        else:
+            self._tossed = True              # swing pumps up from rest
+            self._windup_until = 0.0
+            self.coach.toss(spin_mult=0.35)  # small seed perturbation
         self.turners = [RopeTurner(self.ducks[n], self.cfg.sway, radius_z=0.008)
                         for n in self.turner_names]
         for t in self.turners:
@@ -173,7 +181,7 @@ class RopeSkipSession:
             self._entry.go_to(0.0, 0.0)
         if self._entry.target is not None:
             self._entry.update()
-            if dist < 0.07 or self._entry.done:
+            if dist < 0.035 or self._entry.done:
                 j.active_policy = "stand"
                 j.set_command(twist=(0, 0, 0))
                 self._entered = True
@@ -185,7 +193,7 @@ class RopeSkipSession:
         j = self.ducks[self.jumper_name]
         pos = j.trunk_pos()
         if (self.jump.state == "idle" and j.is_upright(0.45)
-                and math.hypot(pos[0], pos[1]) > 0.12):
+                and math.hypot(pos[0], pos[1]) > 0.05):
             if not hasattr(self, "_recenter_nav"):
                 from .navigate import WalkTo
                 self._recenter_nav = WalkTo(j)
@@ -229,13 +237,22 @@ class RopeSkipSession:
             ang, amp = self.coach.belly_phase()
             coiled = getattr(self.coach, "_coil_hold", 0.0) > 1.2
 
-            # turner etiquette #2: if the rope fouls (coils) or dies, the
-            # turners stop winding, wait for it to settle, and re-toss.
+            # turner etiquette #2: rope fouled (coiled around a head)?
+            # drop it, let it fall, pick it up, re-toss. Rope just dead?
+            # re-toss in place.
             self._since_crossing = getattr(self, "_since_crossing", 0.0) + DT
-            if coiled:  # fouled — stop winding
-                pass
+            if coiled and not getattr(self, "_resetting", False):
+                self._resetting = True
+                self._reset_phase_t = self._t
+                self.world.set_rope_latched(False)   # drop
                 self._since_crossing = 0.0
-                self._settle_wait = 1.0
+            if getattr(self, "_resetting", False):
+                dt_reset = self._t - self._reset_phase_t
+                if dt_reset > 0.9:                   # rope fell to the floor
+                    self.world.set_rope_latched(True)   # pick up
+                    self._request_toss()
+                    self._resetting = False
+                    self._settle_wait = 0.5
             elif getattr(self, "_settle_wait", 0.0) > 0:
                 self._settle_wait -= DT
             elif self._since_crossing > 3.5 and self._jumper_down_s == 0.0:
@@ -254,20 +271,74 @@ class RopeSkipSession:
 
             # --- jumper entry + timing (sensor world: belly phase only) ---
             jd = self.ducks[self.jumper_name]
+            ang, amp = self.coach.belly_phase(at_x=float(jd.trunk_pos()[0]))
             self._entry_update(ang, amp)
             if self._entered and self.jump.state == "idle":
                 self._recenter()
-            if self._entered and self._prev_angle is not None and amp > 0.10:
+            if self._entered and cfg.blind:
+                # naive baseline: hop on a fixed timer, no rope perception
+                self._blind_next = getattr(self, "_blind_next", 0.0)
+                if (self.jump.state == "idle" and jd.is_upright(0.45)
+                        and self._t > self._blind_next):
+                    self.jump.trigger()
+                    self._blind_next = self._t + 0.55   # duck natural cadence ≠ rope tempo
+            # --- unified pass detection (sensor world) → rhythm model ---
+            crossed_now = False
+            if self._prev_angle is not None:
+                if cfg.mode == "rotate":
+                    crossed_now = amp > 0.10 and self._prev_angle < 0 <= ang
+                elif cfg.mode == "swing":
+                    crossed_now = amp > 0.08 and ((self._prev_angle < 0 <= ang) or (self._prev_angle > 0 >= ang))
+                elif cfg.mode == "snake":
+                    y = float(np.mean([w.data.xpos[b][1] for b in w.rope_body_ids[len(w.rope_body_ids)//2-1:len(w.rope_body_ids)//2+1]]))
+                    prev_y = getattr(self, "_prev_belly_y_j", y)
+                    self._prev_belly_y_j = y
+                    yrate = (y - prev_y) / DT
+                    crossed_now = (prev_y * y < 0) and abs(yrate) > 0.03
+            if crossed_now:
+                pt = getattr(self, "_pass_times", [])
+                pt.append(self._t)
+                self._pass_times = pt[-6:]
+            self._crossed_now = crossed_now
+
+            if self._entered and not cfg.blind and self._prev_angle is not None and amp > 0.10:
                 rate = ((ang - self._prev_angle + math.pi) % (2 * math.pi) - math.pi) / DT
-                if rate > 0.5:
-                    # time until belly reaches bottom (angle wraps to 0 ahead)
-                    dist = (-ang) % (2 * math.pi)
-                    ttc = dist / rate
-                    # trigger so mid-flight hits the crossing
-                    if (self.jump.state == "idle"
-                            and jd.is_upright(0.45)
-                            and abs(ttc - cfg.trigger_lead_s) < DT * 1.5):
-                        self.jump.trigger()
+                self._rate_lp_j = (0.85 * getattr(self, "_rate_lp_j", 0.0)
+                                   + 0.15 * rate)
+                rate_s = self._rate_lp_j
+                if cfg.mode == "rotate":
+                    if rate_s > 0.5:
+                        # time until belly reaches bottom (angle wraps to 0 ahead)
+                        dist = (-ang) % (2 * math.pi)
+                        ttc = dist / rate_s
+                        # EDGE trigger: fire once when ttc crosses the lead time
+                        prev_ttc = getattr(self, "_prev_ttc", None)
+                        self._prev_ttc = ttc
+                        if (self.jump.state == "idle"
+                                and jd.is_upright(0.45)
+                                and prev_ttc is not None
+                                and prev_ttc > cfg.trigger_lead_s >= ttc
+                                and prev_ttc - ttc < 0.2):
+                            self.jump.trigger()
+                else:
+                    # swing/snake: predict the next pass from the measured rhythm
+                    if len(getattr(self, "_pass_times", [])) >= 3:
+                        intervals = np.diff(self._pass_times)
+                        P = float(np.median(intervals))
+                        next_pass = self._pass_times[-1] + P
+                        # the hop needs ~0.6 s from trigger to airborne — aim
+                        # several passes ahead if the lead exceeds the interval
+                        k = 0
+                        while next_pass + k * P - self._t < cfg.trigger_lead_s - 0.02:
+                            k += 1
+                        ttg = next_pass + k * P - self._t
+                        prev_ttg = getattr(self, "_prev_ttg", None)
+                        self._prev_ttg = ttg
+                        if (self.jump.state == "idle"
+                                and jd.is_upright(0.45)
+                                and prev_ttg is not None
+                                and prev_ttg > cfg.trigger_lead_s >= ttg):
+                            self.jump.trigger()
             self._prev_angle = ang
 
             # --- metrics updated in _judge_step (oracle side) ---
@@ -304,28 +375,92 @@ class RopeSkipSession:
         return m
 
     def _judge_step(self):
-        """Oracle-side crossing detection + success/trip judgement.
+        """Oracle-side verdicts with a look-back/look-ahead window.
 
-        belly_phase() returns atan2(dy, -dz) ∈ (-π, π]; bottom dead center = 0.
-        Forward rotation ⇒ angle increases through 0 at each crossing.
+        A crossing is a skip iff at the belly's bottom pass the jumper was
+        airborne above the rope AND the rope touched no part of the jumper in
+        a ±0.2 s window AND the jumper is upright 0.5 s later. A trip is a
+        rope-jumper contact in the window (or a fall right after). A pass
+        with no contact and no jump attempt is a miss.
         """
         if not self._coach_on or not self._entered:
             return
-        ang, amp = self.coach.belly_phase()
-        if self._last_ang is not None and amp > 0.12:
-            if self._last_ang < 0 <= ang:
-                self._since_crossing = 0.0
-                self.metrics.crossings += 1
-                jd = self.ducks[self.jumper_name]
-                lz, rz = self.jump.feet_z()
-                clearance = min(lz, rz)
-                if self.jump.state in ("flight", "extend") or clearance > 0.015:
+        w = self.world
+        jx = float(self.ducks[self.jumper_name].trunk_pos()[0])
+        ang, amp = self.coach.belly_phase(at_x=jx)
+        # --- track rope↔jumper contacts continuously (oracle evidence) ---
+        sky_bodies = getattr(self, "_sky_bodies", None)
+        if sky_bodies is None:
+            m = w.model
+            self._sky_bodies = {b for b in range(m.nbody)
+                                if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith(self.jumper_name + "/")}
+            self._rope_geoms = {g for g in range(m.ngeom)
+                                if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or "").startswith("rope/")}
+            self._sky_bodies = self._sky_bodies
+            sky_bodies = self._sky_bodies
+        contact = False
+        for ci in range(w.data.ncon):
+            con = w.data.contact[ci]
+            g1, g2 = con.geom1, con.geom2
+            if g1 in self._rope_geoms or g2 in self._rope_geoms:
+                b1 = w.model.geom_bodyid[g1]
+                b2 = w.model.geom_bodyid[g2]
+                if b1 in sky_bodies or b2 in sky_bodies:
+                    contact = True
+                    break
+        if not hasattr(self, "_contact_hist"):
+            self._contact_hist = []
+            self._feet_hist = []
+        self._contact_hist.append((self._t, contact))
+        # keep 1 s of history
+        self._contact_hist = [(t, c) for t, c in self._contact_hist if self._t - t < 1.0]
+        # feet height history for windowed airborne check (50 Hz sampling would
+        # miss the hop peak otherwise)
+        if hasattr(self, "_feet_hist"):
+            lz0, rz0 = self.jump.feet_z()
+            self._feet_hist.append((self._t, min(lz0, rz0)))
+            self._feet_hist = [(t, f) for t, f in self._feet_hist if self._t - t < 1.0]
+
+        jd = self.ducks[self.jumper_name]
+        # --- resolve pending verdicts (0.5 s after the crossing) ---
+        if getattr(self, "_verdicts_due", None):
+            due = [v for v in self._verdicts_due if self._t >= v["t_cross"] + 0.5]
+            self._verdicts_due = [v for v in self._verdicts_due if self._t < v["t_cross"] + 0.5]
+            for v in due:
+                window_contact = any(c for t, c in self._contact_hist
+                                     if abs(t - v["t_cross"]) <= 0.2)
+                upright_after = jd.is_upright(0.45)
+                attempted = v["attempted"]
+                # airborne: peak feet height within ±0.12 s of the pass
+                air_peak = max((f for t, f in getattr(self, "_feet_hist", [])
+                                if abs(t - v["t_cross"]) <= 0.12), default=0.0)
+                airborne = air_peak > 0.015
+                if window_contact:
+                    self.metrics.trips += 1
+                    self._consec = 0
+                elif attempted and airborne and upright_after:
                     self.metrics.successful_skips += 1
-                    self.metrics.clearances.append(clearance)
+                    self.metrics.clearances.append(v["clearance"])
                     self._consec = getattr(self, "_consec", 0) + 1
                     self.metrics.consecutive_best = max(
                         self.metrics.consecutive_best, self._consec)
                 else:
-                    self.metrics.trips += 1
+                    self.metrics.misses += 1
                     self._consec = 0
+
+        # --- detect crossings, schedule verdict (event computed in step) ---
+        crossed = getattr(self, "_crossed_now", False)
+        self._crossed_now = False
+        if crossed:
+            if True:
+                self._since_crossing = 0.0
+                self.metrics.crossings += 1
+                lz, rz = self.jump.feet_z()
+                if not hasattr(self, "_verdicts_due"):
+                    self._verdicts_due = []
+                self._verdicts_due.append({
+                    "t_cross": self._t,
+                    "clearance": min(lz, rz),
+                    "attempted": self.jump.state in ("crouch", "extend", "flight", "land"),
+                })
         self._last_ang = ang

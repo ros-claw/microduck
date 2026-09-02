@@ -28,7 +28,7 @@ def evaluate(cfg: SkipConfig, seeds, tag: str, version: str) -> adapt.EvalResult
         s = RopeSkipSession(str(ROBOT), BANK, c)
         s.settle()
         s.start_rope()
-        m = s.run_episode(14.0)
+        m = s.run_episode(16.0)
         eps.append(m)
         log.record(PracticeRecord(
             skill_id="microduck.rope_skip", skill_version=version,
@@ -50,7 +50,7 @@ def evaluate(cfg: SkipConfig, seeds, tag: str, version: str) -> adapt.EvalResult
 
 def main(rounds: int = 4):
     print("=== ROSClaw evolution loop: microduck.rope_skip ===", flush=True)
-    champion_cfg = SkipConfig(jump_crouch=0.65)
+    champion_cfg = SkipConfig(trigger_lead_s=0.40)   # v1.0: untrained guess — jumps too early
     champion_ver = "1.0"
     champion_h = evaluate(champion_cfg, HOLDOUT_SEEDS, "baseline v1.0 HOLDOUT", "1.0")
     print(f"champion v1.0 holdout: {champion_h.success_rate:.0%}", flush=True)

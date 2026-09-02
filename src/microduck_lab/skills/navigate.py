@@ -18,7 +18,7 @@ class WalkTo:
         self.walk_policy = walk_policy
         self.stand_policy = stand_policy
         self.target = None
-        self.arrive_tol = 0.06
+        self.arrive_tol = 0.03
         self.done = False
 
     def go_to(self, x: float, y: float):

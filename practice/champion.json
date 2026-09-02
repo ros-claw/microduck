@@ -1,12 +1,21 @@
 {
   "skill_id": "microduck.rope_skip",
-  "champion": "1.0",
+  "champion": "1.1-swing",
   "params": {
-    "trigger_lead_s": 0.34,
+    "trigger_lead_s": 0.45,
+    "frequency": 1.017,
+    "mode": "swing",
     "jump_crouch": 0.72,
-    "frequency": 1.45,
     "jump_land_time": 0.3
   },
-  "holdout_success": 0.5882936507936508,
-  "consecutive_best": 10
+  "measured": {
+    "skips": 3,
+    "crossings": 34,
+    "trips": 16,
+    "note": "honest: ~1 in 11 passes cleared cleanly; trips recovered"
+  },
+  "provenance": "evolve_skip.py + focused search, seeds 101/202/303/404",
+  "baseline_v1.0": {
+    "note": "blind hopping / lead 0.40: 0 skips, trips on most passes"
+  }
 }
