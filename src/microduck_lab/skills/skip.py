@@ -356,6 +356,7 @@ class RopeSkipSession:
             d.step()
         mujoco.mj_step(w.model, w.data, SUBSTEPS)
         self._t += DT
+        self._judge_step()
         if self._coach_on and self._t > 3:
             up_t = all(self.ducks[n].is_upright(0.4) for n in self.turner_names)
             up_j = self.ducks[self.jumper_name].is_upright(0.4)
@@ -375,7 +376,6 @@ class RopeSkipSession:
             self.step()
             if render_cb and i % 2 == 0:
                 render_cb(self)
-            self._judge_step()
         m = self.metrics
         m.duration_s = seconds
         m.turner_upright_frac = float(np.mean(self._up_h)) if self._up_h else 1.0
