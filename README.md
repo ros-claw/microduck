@@ -55,12 +55,20 @@ Safety over score.
   Its parameters are the adaptation surface. Training a real `microduck.jump`
   policy with mjlab PPO is the obvious next milestone (see Roadmap).
 
-## Honest scoreboard
+## Honest scoreboard (v2 — with the trained jump)
 
-Rope skipping at this scale is *hard*: the champion clears roughly 1 in 10
-passes cleanly, trips often, and always gets back up. The video shows exactly
-that — no retake edits, no hidden state. The point is the loop: fail honestly,
-practice, adapt, improve measurably.
+**The duck learned to jump.** The mjlab-PPO policy (`policies/jump.onnx`) hops
+13–17 cm and lands on its feet — vs ~2.5 cm for the best hand-tuned maneuver.
+That transfer required two non-obvious discoveries (see docs/physics-notes.md):
+training must run against the XML position servos (BAM-trained explosive
+policies don't transfer), and the real PU sole (mu≈2, solref 0.04) is what
+makes the launch physical.
+
+**Rope skipping remains the open challenge.** The rope rotates in a clean loop
+(coach-assisted), the jumper hops in rhythm — but at 25 cm / 2 cm clearances
+the coherent loop + hop timing is genuinely chaotic (this is essentially the
+Marope problem). Current honest rate: occasional clean skips per episode, not
+yet reliable. The next milestone is rope-loop stabilization.
 
 ## Roadmap
 
