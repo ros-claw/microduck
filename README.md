@@ -72,9 +72,11 @@ yet reliable. The next milestone is rope-loop stabilization.
 
 ## Roadmap
 
-- **Train a real jump policy** (mjlab PPO, official export path) — the single
-  biggest unlock; the current 2.5 cm tuck-hop is the bottleneck.
-- Full overhead `rotate` mode as the default once the jump is stronger.
+- ~~Train a real jump policy~~ **DONE (v2)**: `policies/jump.onnx` hops 13–17 cm,
+  trained on mjlab PPO against the deployment actuators (XML position servos).
+- **Rope-loop stabilization** (the frontier): keep the rotating loop planar and
+  floor-grazing under the jumper's contact disturbances; then continuous
+  hopping at the rope rate. This is where the skip rate gets to 80%+.
 - Per-duck skill memories (each duck's reliability profile feeding Team role
   assignment).
 - quackd A/B benchmark on the same tasks.
