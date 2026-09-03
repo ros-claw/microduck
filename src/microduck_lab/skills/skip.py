@@ -292,6 +292,7 @@ class RopeSkipSession:
             mujoco.mj_step(w.model, w.data, SUBSTEPS)
             return
         if self._coach_on:
+            jd = self.ducks[self.jumper_name]
             jup = jd.is_upright(0.45)
             self._jumper_down_s = 0.0 if jup else getattr(self, "_jumper_down_s", 0.0) + DT
             if self._jumper_down_s > 1.2 and self.coach.enabled:
