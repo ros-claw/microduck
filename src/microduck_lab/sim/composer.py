@@ -213,6 +213,7 @@ def compose_world(
     rope: RopeSpec | None = None,
     rope_height: float = 0.21,
     playground: bool = True,
+    grippy_ducks: list[str] | None = None,
 ) -> ComposedWorld:
     """Compose ducks (+ optional rope) into one compiled MuJoCo world."""
     robot_xml = str(robot_xml)
@@ -306,6 +307,20 @@ def compose_world(
 
     model = spec.compile()
     data = mujoco.MjData(model)
+
+    # Real PU soles (grippy + compliant) — but ONLY for ducks that jump.
+    # Explosive policies (jump) transfer only with the soft grippy sole
+    # (mu~2, solref 0.04 — infer_policy.py's sole emulation). Turners keep
+    # the stiffer default sole: grippy-soft feet change the sitting contact
+    # and kill the rope swing. `grippy_ducks` selects which ducks get it.
+    grippy = set(grippy_ducks or [])
+    for g in range(model.ngeom):
+        nm = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, g)
+        if nm and re.search(r"(left|right)_foot_collision$", nm):
+            duck = nm.split("/")[0]
+            if duck in grippy:
+                model.geom_friction[g, 0] = 2.0
+                model.geom_solref[g] = [0.04, 1.0]
 
     if rope is not None:
         # MuJoCo auto-computes the body2 anchor of a connect equality at qpos0

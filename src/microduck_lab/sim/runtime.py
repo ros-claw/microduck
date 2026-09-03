@@ -86,6 +86,27 @@ class PolicyBank:
         return out.squeeze(0).astype(np.float32)
 
 
+XL330_CURRENT_LIMIT_A = 1.75   # firmware current limit
+XL330_KT = 0.3660              # N·m/A (bam model xl330-m6) — torque = kt·I
+
+
+def apply_current_limit(model: mujoco.MjModel, prefix: str = ""):
+    """Clamp actuators to the XL330 firmware torque limit (kt × 1.75 A ≈ 0.64 Nm).
+
+    infer_policy.py does this for deployment rehearsal — the training stack
+    uses the BAM voltage model whose torque saturates the same way. Without
+    the clamp, the position actuators deliver the XML's 0.96 Nm (50% more
+    than reality) and policies trained with BAM transfer badly.
+    """
+    lim = XL330_KT * XL330_CURRENT_LIMIT_A
+    for a in range(model.nu):
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_ACTUATOR, a)
+        if name and name.startswith(prefix) and not name.startswith(f"{prefix}rope"):
+            model.actuator_forcerange[a, 0] = -lim
+            model.actuator_forcerange[a, 1] = lim
+            model.actuator_forcelimited[a] = 1
+
+
 class DuckRuntime:
     """One duck's control interface into a shared MuJoCo world.
 
@@ -148,6 +169,18 @@ class DuckRuntime:
         self.head_override: np.ndarray | None = None   # absolute joint targets (4)
         self.leg_override: np.ndarray | None = None    # absolute joint targets (10)
 
+        # BAM voltage-model drive (optional, the faithful deployment path):
+        # when set, ctrl targets go through bam's XL330 M6 dynamics instead of
+        # the plain position servos. Enable for explosive trained policies.
+        self.bam_drive = None
+
+        # Training-feeds-delayed-joint_vel: the velocity/standup/jump envs delay
+        # joint_vel by exactly 1 policy step (delay_min_lag=delay_max_lag=1).
+        # Deploying with CURRENT joint_vel is out-of-distribution for policies
+        # trained that way — keep a 1-step buffer.
+        self.joint_vel_delay = 0   # infer_policy.py deploys with NO obs delay
+        self._jv_prev = np.zeros(14, dtype=np.float32)
+
     # ------------------------------------------------------------------ util
     def _sensor_adr(self, short: str) -> int:
         sid = mujoco.mj_name2id(
@@ -193,7 +226,12 @@ class DuckRuntime:
 
     def get_obs(self) -> np.ndarray:
         jp = self.data.qpos[self.joint_qpos_idx] - self.default_pose
-        jv = self.data.qvel[self.joint_qvel_idx]
+        jv_now = self.data.qvel[self.joint_qvel_idx].astype(np.float32)
+        if self.joint_vel_delay > 0:
+            jv = self._jv_prev
+            self._jv_prev = jv_now
+        else:
+            jv = jv_now
         return np.concatenate([
             self.base_ang_vel(),
             self.projected_gravity(),
@@ -214,7 +252,10 @@ class DuckRuntime:
             target[HEAD_IDX] = self.head_override
         if self.leg_override is not None:
             target[LEG_IDX] = self.leg_override
-        self.data.ctrl[self.act_ids] = target
+        if self.bam_drive is not None:
+            self.bam_drive.drive(target)   # BAM writes torques into data.ctrl
+        else:
+            self.data.ctrl[self.act_ids] = target
 
 
 ACTUATOR_NAMES = [

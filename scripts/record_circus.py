@@ -55,6 +55,14 @@ def main():
         print("  first attempt:", m.successful_skips, "/", m.crossings, "skips", flush=True)
     segs.append(p)
 
+    # S35: teach a duck to jump (the RL payoff)
+    p = seg / "s35_jump_evolution.mp4"
+    if not p.exists() or "jump" in args.scenes:
+        print("shooting jump evolution...", flush=True)
+        from microduck_lab.demos.jump_scene import scene_jump_evolution
+        scene_jump_evolution(p)
+    segs.append(p)
+
     # S4: practice montage
     p = seg / "s4_practice.mp4"
     if not p.exists() or "practice" in args.scenes:

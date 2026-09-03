@@ -99,7 +99,7 @@ class RopeSkipSession:
         self.world = compose_world(
             robot_xml, ducks,
             rope=RopeSpec(ta, tb, length=cfg.rope_length, count=30, density=cfg.rope_density),
-            playground=playground, rope_height=0.19)
+            playground=playground, rope_height=0.19, grippy_ducks=[j])
         # smooth gym floor under the rope
         for g in range(self.world.model.ngeom):
             nm = mujoco.mj_id2name(self.world.model, mujoco.mjtObj.mjOBJ_GEOM, g)
@@ -146,8 +146,9 @@ class RopeSkipSession:
             mujoco.mj_step(self.world.model, self.world.data, SUBSTEPS)
         for name in self.turner_names:
             self.ducks[name].active_policy = "sitstand"
+            crane = self.cfg.turner_crane if self.cfg.mode != "rotate" else 0.25
             self.ducks[name].set_command(twist=(1, 0, 0),
-                                         head=(-self.cfg.turner_crane,) * 2 + (0, 0))
+                                         head=(-crane,) * 2 + (0, 0))
         for _ in range(int(2.0 * 50)):
             for d in self.ducks.values():
                 d.step()
@@ -172,7 +173,9 @@ class RopeSkipSession:
         j = self.ducks[self.jumper_name]
         j.active_policy = "walk"
         self._entry = WalkTo(j)
+        self._entry.arrive_tol = 0.03
         self._entered = False
+        self._wait_pos = (float(j.trunk_pos()[0]), float(j.trunk_pos()[1]))
 
     def _entry_update(self, ang, amp):
         """Walk the jumper in once the rope is up to tempo."""
@@ -183,8 +186,13 @@ class RopeSkipSession:
         # on the FAR side from the jumper (who approaches from -y)
         pos = j.trunk_pos()
         dist = math.hypot(pos[0], pos[1])
-        if self._t > 2.2 and self._entry.target is None and amp > 0.10 and ang > 0.8:
+        if self._t > 2.2 and self._entry.target is None and amp > 0.08 and ang > 0.5:
             self._entry.go_to(0.0, 0.0)
+        elif self._entry.target is None:
+            # hold the wait position against the stand policy's drift
+            wx, wy = self._wait_pos
+            if math.hypot(pos[0] - wx, pos[1] - wy) > 0.05:
+                self._entry.go_to(wx, wy)
         if self._entry.target is not None:
             self._entry.update()
             if dist < 0.035 or self._entry.done:
@@ -293,7 +301,8 @@ class RopeSkipSession:
                 self._blind_next = getattr(self, "_blind_next", 0.0)
                 if (self.jump.state == "idle" and jd.is_upright(0.45)
                         and self._t > self._blind_next):
-                    self.jump.trigger()
+                    if self.jump.trigger():
+                        self._last_jump_t = self._t
                     self._blind_next = self._t + 0.55   # duck natural cadence ≠ rope tempo
             # --- unified pass detection (sensor world) → rhythm model ---
             crossed_now = False
@@ -351,7 +360,8 @@ class RopeSkipSession:
                                 and jd.is_upright(0.45)
                                 and prev_ttg is not None
                                 and prev_ttg > cfg.trigger_lead_s >= ttg):
-                            self.jump.trigger()
+                            if self.jump.trigger():
+                                self._last_jump_t = self._t
             self._prev_angle = ang
 
             # --- metrics updated in _judge_step (oracle side) ---
@@ -474,6 +484,7 @@ class RopeSkipSession:
                 self._verdicts_due.append({
                     "t_cross": self._t,
                     "clearance": min(lz, rz),
-                    "attempted": self.jump.state in ("crouch", "extend", "flight", "land"),
+                    "attempted": (self.jump.state in ("crouch", "extend", "flight", "land", "jump")
+                                  or getattr(self, "_last_jump_t", -9) > self._t - 1.0),
                 })
         self._last_ang = ang
