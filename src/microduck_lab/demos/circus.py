@@ -35,6 +35,9 @@ POLICIES = {
     "walk": str(POL / "alpha_walking.onnx"),
     "sitstand": str(POL / "alpha_sitstand.onnx"),
     "roulade": str(POL / "roulade.onnx"),
+    # the trained jump policy (see docs: Mjlab-Jump-Flat-MicroDuck → ONNX)
+    **({"jump": str(pathlib.Path(__file__).resolve().parents[2] / "policies/jump.onnx")}
+       if (pathlib.Path(__file__).resolve().parents[2] / "policies/jump.onnx").exists() else {}),
 }
 
 FPS = 25
@@ -130,7 +133,7 @@ def _run_skip_scene(out: pathlib.Path, cfg: SkipConfig, *, seconds: float,
 
 def scene_first_attempt(out: pathlib.Path):
     """The honest first attempt with untrained timing — trips included."""
-    cfg = SkipConfig(seed=42, never_jump_until=7.0, trigger_lead_s=0.40)   # watches, then jumps too early
+    cfg = SkipConfig(seed=42, never_jump_until=7.0, trigger_lead_s=0.40, mode="rotate", frequency=1.5)   # watches, then jumps too early
     m, _ = _run_skip_scene(out, cfg, seconds=16.0, status="ACTING",
                            title="First attempt — never skipped before",
                            subtitle="第一次尝试：先看绳子，起跳时机全错")

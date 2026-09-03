@@ -112,14 +112,15 @@ class CoachRopeDriver:
         # Coil guard: if the rope has wound up around the mouths (belly no
         # longer sweeps near the floor), driving harder only tightens the coil
         # — ease off completely and let gravity unwind it.
+        # Grace period: the wind-up + spin-up legitimately holds the rope high
+        # for the first seconds; only arm the guard once spinning is possible.
+        self._spin_time = getattr(self, "_spin_time", 0.0) + dt
         zmin = float(np.min([d.xpos[b][2] for b in w.rope_body_ids]))
-        # a healthy pass lifts the belly for ~half a period; a coil keeps it
-        # aloft for multiple periods
-        if zmin > 0.12:
+        if zmin > 0.12 and self._spin_time > 3.0:
             self._coil_hold = getattr(self, "_coil_hold", 0.0) + dt
         else:
             self._coil_hold = 0.0
-        if self._coil_hold > 1.2:
+        if self._coil_hold > 2.0:
             d.xfrc_applied[:] = 0.0
             return
 
@@ -146,6 +147,14 @@ class CoachRopeDriver:
                                          * push * govern * tangential / n)
             return
         rate_err = omega - self._rate_lp
+        # loop-height governor: the rope must keep grazing the floor at the
+        # bottom. If the bottom climbs (loop inflating/migrating up), ease the
+        # drive off; if it scrapes low, keep driving. Measured on the belly.
+        zmin = float(np.min([d.xpos[b][2] for b in w.rope_body_ids]))
+        self._bottom_lp = (0.9 * getattr(self, "_bottom_lp", 0.0) + 0.1 * zmin)
+        # healthy rotation dips the belly low each pass; the low-pass bottom
+        # rising means the loop is climbing
+        self._drive_scale = float(np.clip(1.0 - 6.0 * (self._bottom_lp - 0.02), 0.3, 1.0))
         for i, b in enumerate(w.rope_body_ids):
             r = d.xpos[b] - c
             tangential = np.cross(axis, r)
@@ -153,7 +162,7 @@ class CoachRopeDriver:
             if n < 1e-6:
                 continue
             # tangential: keep the spin at the target rate (governor)
-            a_t = self.gain * omega + self.rate_kp * rate_err
+            a_t = (self.gain * omega + self.rate_kp * rate_err) * self._drive_scale
             d.xfrc_applied[b, :3] = self._seg_masses[i] * a_t * tangential / n
 
     # ------------------------------------------------------------- sensing

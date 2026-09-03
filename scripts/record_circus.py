@@ -68,14 +68,14 @@ def main():
     if not p.exists() or "practice" in args.scenes:
         print("shooting practice montage...", flush=True)
         variants = [
-            ("lead=0.45", SkipConfig(trigger_lead_s=0.45, seed=304)),
-            ("lead=0.55", SkipConfig(trigger_lead_s=0.55, seed=311)),
-            ("lead=0.62", SkipConfig(trigger_lead_s=0.62, seed=314)),
-            ("lead=0.70", SkipConfig(trigger_lead_s=0.70, seed=305)),
-            ("f=0.95", SkipConfig(frequency=0.95, seed=306)),
-            ("f=1.15", SkipConfig(frequency=1.15, seed=307)),
-            ("f=1.30", SkipConfig(frequency=1.30, seed=308)),
-            ("blind", SkipConfig(seed=309, blind=True)),
+            ("lead=0.15", SkipConfig(trigger_lead_s=0.15, seed=304, mode="rotate", frequency=1.5)),
+            ("lead=0.25", SkipConfig(trigger_lead_s=0.25, seed=311, mode="rotate", frequency=1.5)),
+            ("lead=0.35", SkipConfig(trigger_lead_s=0.35, seed=314, mode="rotate", frequency=1.5)),
+            ("lead=0.45", SkipConfig(trigger_lead_s=0.45, seed=305, mode="rotate", frequency=1.5)),
+            ("f=1.2", SkipConfig(frequency=1.2, seed=306, mode="rotate", trigger_lead_s=0.28)),
+            ("f=1.5", SkipConfig(frequency=1.5, seed=307, mode="rotate", trigger_lead_s=0.25)),
+            ("f=1.8", SkipConfig(frequency=1.8, seed=308, mode="rotate", trigger_lead_s=0.2)),
+            ("blind", SkipConfig(seed=309, blind=True, mode="rotate", frequency=1.5)),
         ]
         labels = circus.scene_practice(p, variants)
         for l in labels:

@@ -149,7 +149,7 @@ class PolicyJump:
     (train: uv run train Mjlab-Jump-Flat-MicroDuck; export: scripts/export.py).
     """
 
-    def __init__(self, duck: DuckRuntime, duration: float = 0.6):
+    def __init__(self, duck: DuckRuntime, duration: float = 0.5):
         self.duck = duck
         self.duration = duration
         self.state = "idle"

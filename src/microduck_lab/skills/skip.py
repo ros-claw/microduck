@@ -157,7 +157,11 @@ class RopeSkipSession:
     def start_rope(self):
         self.coach.start()
         if self.cfg.mode == "rotate":
-            self._request_toss()
+            # toss the resting rope DIRECTLY (the windup-lift releases it from a
+            # moving held state, which kills the rotation — measured).
+            self.coach.toss()
+            self._tossed = True
+            self._windup_until = 0.0
         else:
             self._tossed = True              # swing pumps up from rest
             self._windup_until = 0.0
@@ -341,7 +345,8 @@ class RopeSkipSession:
                                 and prev_ttc is not None
                                 and prev_ttc > cfg.trigger_lead_s >= ttc
                                 and prev_ttc - ttc < 0.2):
-                            self.jump.trigger()
+                            if self.jump.trigger():
+                                self._last_jump_t = self._t
                 else:
                     # swing/snake: predict the next pass from the measured rhythm
                     if len(getattr(self, "_pass_times", [])) >= 3:

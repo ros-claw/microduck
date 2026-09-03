@@ -2,9 +2,9 @@
   "skill_id": "microduck.rope_skip",
   "champion": "1.1-swing",
   "params": {
-    "trigger_lead_s": 0.62,
-    "frequency": 1.15,
-    "mode": "swing",
+    "trigger_lead_s": 0.25,
+    "frequency": 1.5,
+    "mode": "rotate",
     "jump_crouch": 0.72,
     "jump_land_time": 0.3
   },
@@ -17,5 +17,6 @@
   "provenance": "evolve_skip.py + focused search, seeds 101/202/303/404",
   "baseline_v1.0": {
     "note": "blind hopping / lead 0.40: 0 skips, trips on most passes"
-  }
+  },
+  "note": "rotate mode + trained jump policy (policies/jump.onnx)"
 }
