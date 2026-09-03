@@ -138,3 +138,53 @@ class JumpSkill:
             # policy-only recovery; go idle once upright (or give up at 3 s)
             if self.duck.is_upright(0.55) or self._t > 3.0:
                 self.state = "idle"
+
+
+class PolicyJump:
+    """Jump driven by a TRAINED ONNX policy (the microduck.jump skill).
+
+    Same contract as the official roulade/kick behavior policies: all-zero 13D
+    command, session swap for `duration` seconds, hands back to `stand`.
+    Drop-in replacement for the procedural JumpSkill once a jump policy exists
+    (train: uv run train Mjlab-Jump-Flat-MicroDuck; export: scripts/export.py).
+    """
+
+    def __init__(self, duck: DuckRuntime, duration: float = 2.0):
+        self.duck = duck
+        self.duration = duration
+        self.state = "idle"
+        self._t = 0.0
+        self._prev_policy = "stand"
+        self.max_feet_z = 0.0
+
+    def feet_z(self):
+        l = self.duck.site_pos("left_foot")[2]
+        r = self.duck.site_pos("right_foot")[2]
+        return float(l), float(r)
+
+    @property
+    def airborne(self) -> bool:
+        l, r = self.feet_z()
+        return min(l, r) > 0.012
+
+    def trigger(self):
+        if self.state != "idle":
+            return False
+        self._prev_policy = self.duck.active_policy
+        self.duck.active_policy = "jump"
+        self.duck.set_command()  # all-zero 13D, like roulade/kick
+        self.state = "jump"
+        self._t = 0.0
+        self.max_feet_z = 0.0
+        return True
+
+    def update(self, dt: float):
+        if self.state == "idle":
+            return
+        self._t += dt
+        l, r = self.feet_z()
+        self.max_feet_z = max(self.max_feet_z, min(l, r))
+        if self._t >= self.duration:
+            self.duck.active_policy = self._prev_policy
+            self.duck.set_command()
+            self.state = "idle"

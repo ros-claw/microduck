@@ -118,10 +118,15 @@ class RopeSkipSession:
                                      gain=cfg.coach_gain, rate_kp=cfg.coach_rate_kp,
                                      mode=cfg.mode)
         cfgj = cfg
-        self.jump = JumpSkill(
-            self.ducks[j], crouch_depth=cfgj.jump_crouch,
-            crouch_time=cfgj.jump_crouch_time, extend_time=cfgj.jump_extend_time,
-            flight_time=cfgj.jump_flight_time, land_time=cfgj.jump_land_time)
+        if "jump" in policy_paths:
+            # trained policy present — the real microduck.jump skill
+            from .jump import PolicyJump
+            self.jump = PolicyJump(self.ducks[j])
+        else:
+            self.jump = JumpSkill(
+                self.ducks[j], crouch_depth=cfgj.jump_crouch,
+                crouch_time=cfgj.jump_crouch_time, extend_time=cfgj.jump_extend_time,
+                flight_time=cfgj.jump_flight_time, land_time=cfgj.jump_land_time)
         self.turners = None
         self._t = 0.0
         self.metrics = SkipMetrics()
