@@ -35,6 +35,8 @@ DT = 0.02  # policy step (50 Hz)
 class SkipConfig:
     frequency: float = 1.15          # swing pump rhythm (Hz)
     mode: str = "swing"              # "swing" (default, robust) | "rotate" (stretch) | "snake"
+    rope_mode: str = "free"          # "free" (chain+connect) | "mocap" (driven carriers, deterministic loop)
+    mocap_radius: float = 0.11       # drive-circle radius for mocap rope (the "handle" amplification)
     rope_length: float = 0.55
     rope_density: float = 50.0
     turner_sep: float = 0.5
@@ -99,7 +101,7 @@ class RopeSkipSession:
         self.world = compose_world(
             robot_xml, ducks,
             rope=RopeSpec(ta, tb, length=cfg.rope_length, count=30, density=cfg.rope_density),
-            playground=playground, rope_height=0.19, grippy_ducks=[j])
+            playground=playground, rope_height=0.19, grippy_ducks=[j], rope_mode=cfg.rope_mode)
         # smooth gym floor under the rope
         for g in range(self.world.model.ngeom):
             nm = mujoco.mj_id2name(self.world.model, mujoco.mjtObj.mjOBJ_GEOM, g)
@@ -156,6 +158,16 @@ class RopeSkipSession:
 
     def start_rope(self):
         self.coach.start()
+        if self.cfg.rope_mode == "mocap":
+            # deterministic loop: mocap carriers drive the rope ends in circles.
+            # No coach force needed — the driver IS the rope motion.
+            from ..sim.stiff_rope import StiffRope
+            self._stiff = StiffRope(self.world.model, self.world.data,
+                                    "rope/carryA", "rope/carryB")
+            self._stiff_phase = 0.0
+            # anchor circles at the measured mouth positions (post-settle)
+            self._stiff_cA = self.ducks[self.turner_names[0]].site_pos("mouth_tip").copy()
+            self._stiff_cB = self.ducks[self.turner_names[1]].site_pos("mouth_tip").copy()
         if self.cfg.mode == "rotate":
             # toss the resting rope DIRECTLY (the windup-lift releases it from a
             # moving held state, which kills the rotation — measured).
@@ -190,7 +202,8 @@ class RopeSkipSession:
         # on the FAR side from the jumper (who approaches from -y)
         pos = j.trunk_pos()
         dist = math.hypot(pos[0], pos[1])
-        if self._t > 2.2 and self._entry.target is None and amp > 0.08 and ang > 0.5:
+        if self._entry.target is None and ((self._t > 2.2 and amp > 0.08 and abs(ang) > 2.0)
+                                           or self._t > 5.0):
             self._entry.go_to(0.0, 0.0)
         elif self._entry.target is None:
             # hold the wait position against the stand policy's drift
@@ -210,8 +223,8 @@ class RopeSkipSession:
         """A skipper who drifted (or got knocked) off the middle walks back."""
         j = self.ducks[self.jumper_name]
         pos = j.trunk_pos()
-        if (self.jump.state == "idle" and j.is_upright(0.45)
-                and math.hypot(pos[0], pos[1]) > 0.05):
+        if (self.jump.state in ("idle",) and j.is_upright(0.45)
+                and math.hypot(pos[0], pos[1]) > 0.04):
             if not hasattr(self, "_recenter_nav"):
                 from .navigate import WalkTo
                 self._recenter_nav = WalkTo(j)
@@ -230,10 +243,55 @@ class RopeSkipSession:
     def step(self):
         cfg = self.cfg
         w = self.world
-        if self._coach_on:
-            # real-world etiquette: when the jumper trips, the turners ease off
-            # the rope and wait; resume (re-toss) once they're back up.
+        if self._coach_on and self.cfg.rope_mode == "mocap":
+            # deterministic driven loop: move the carriers, mouths track visually
+            self._stiff_phase = self._stiff.drive(
+                self._stiff_phase, self.cfg.mocap_radius,
+                self._stiff_cA, self._stiff_cB, self.cfg.frequency, DT)
+            # turners' mouths follow the rope ends (they hold it)
+            ang_r, amp_r, _ = self._stiff.belly()
+            ph = self._stiff_phase + math.pi / 2
+            s_ = min(1.0, self._t / 2.0)
+            for t in self.turners:
+                t.update(ph, s_)
+            ang, amp = ang_r, amp_r
+            # crossing = driver phase passes the bottom (belly under the jumper)
+            bottom_ang = math.pi  # belly_phase: 0 = straight down... measure
+            prev_ph = getattr(self, "_stiff_prev_phase", None)
+            self._stiff_prev_phase = self._stiff_phase
+            # detect the belly crossing the bottom via the measured belly angle
+            if self._prev_angle is not None:
+                self._crossed_now = (amp > 0.08 and
+                                     self._prev_angle < 0 <= ang)
+            # jump trigger on the measured rope phase (sensor world)
             jd = self.ducks[self.jumper_name]
+            self._entry_update(ang, amp)
+            if self._entered and self.jump.state == "idle":
+                self._recenter()
+            if self._entered and self._prev_angle is not None and amp > 0.10:
+                rate = ((ang - self._prev_angle + math.pi) % (2 * math.pi) - math.pi) / DT
+                self._rate_lp_j = (0.85 * getattr(self, "_rate_lp_j", 0.0) + 0.15 * rate)
+                rate_s = self._rate_lp_j
+                if rate_s > 0.5:
+                    dist = (-ang) % (2 * math.pi)
+                    ttc = dist / rate_s
+                    prev_ttc = getattr(self, "_prev_ttc", None)
+                    self._prev_ttc = ttc
+                    if (self.jump.state == "idle" and jd.is_upright(0.45)
+                            and prev_ttc is not None
+                            and prev_ttc > cfg.trigger_lead_s >= ttc
+                            and prev_ttc - ttc < 0.2):
+                        if self.jump.trigger():
+                            self._last_jump_t = self._t
+            self._prev_angle = ang
+            self._judge_step()
+            self._t += DT
+            self.jump.update(DT)
+            for d in self.ducks.values():
+                d.step()
+            mujoco.mj_step(w.model, w.data, SUBSTEPS)
+            return
+        if self._coach_on:
             jup = jd.is_upright(0.45)
             self._jumper_down_s = 0.0 if jup else getattr(self, "_jumper_down_s", 0.0) + DT
             if self._jumper_down_s > 1.2 and self.coach.enabled:

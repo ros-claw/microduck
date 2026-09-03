@@ -60,29 +60,31 @@ def build_stiff_rope_spec(length: float, count: int, radius: float, density: flo
 
 
 class StiffRope:
-    """Drives the two mocap rope ends along the turners' mouth circle."""
+    """Drives the two mocap rope-end carriers along synchronized circles.
 
-    def __init__(self, model, data, name_a="rope/A", name_b="rope/B"):
+    Works on the composed world's custom serial-chain rope (rope/seg_*) with
+    mocap carriers (rope/carryA, rope/carryB) connected to the rope ends.
+    """
+
+    def __init__(self, model, data, name_a="rope/carryA", name_b="rope/carryB"):
         self.model, self.data = model, data
         self.body_a = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, name_a)
         self.body_b = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, name_b)
         self.mocap_a = int(model.body_mocapid[self.body_a])
         self.mocap_b = int(model.body_mocapid[self.body_b])
-        assert self.mocap_a >= 0 and self.mocap_b >= 0
+        assert self.mocap_a >= 0 and self.mocap_b >= 0, "carriers must be mocap"
         self.phase = 0.0
-        # rope body ids for sensing (the composite's segment bodies)
+        # rope segment bodies (the custom chain)
         self.rope_body_ids = [b for b in range(model.nbody)
-                              if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith("rope/B_")
-                              or (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "") in ("rope/B_first", "rope/B_last")]
+                              if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith("rope/seg")]
 
     def drive(self, phase: float, radius: float, center_a: np.ndarray, center_b: np.ndarray,
               freq: float, dt: float):
         """Move both mocap ends along synchronized circles in the Y-Z plane."""
         self.phase = (phase + 2 * math.pi * freq * dt) % (2 * math.pi)
         for mid, c in ((self.mocap_a, center_a), (self.mocap_b, center_b)):
-            tgt = c + np.array([0.0, radius * math.cos(phase), radius * math.sin(phase)])
-            self.data.mocap_pos[mid] = tgt
-            # mocap_quat identity
+            self.data.mocap_pos[mid] = c + np.array([0.0, radius * math.cos(phase),
+                                                     radius * math.sin(phase)])
         return self.phase
 
     def belly(self):

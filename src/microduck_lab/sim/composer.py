@@ -56,6 +56,7 @@ class ComposedWorld:
     ducks: list[DuckSpec]
     rope_body_ids: list[int] = field(default_factory=list)
     rope_eq_ids: list[int] = field(default_factory=list)
+    mocap_body_ids: dict = field(default_factory=dict)   # mocap rope carriers
 
     def set_rope_latched(self, latched: bool):
         for eq in self.rope_eq_ids:
@@ -214,6 +215,7 @@ def compose_world(
     rope_height: float = 0.21,
     playground: bool = True,
     grippy_ducks: list[str] | None = None,
+    rope_mode: str = "free",          # "free" (chain + connect) | "mocap" (driven carriers)
 ) -> ComposedWorld:
     """Compose ducks (+ optional rope) into one compiled MuJoCo world."""
     robot_xml = str(robot_xml)
@@ -281,6 +283,7 @@ def compose_world(
     # --- rope ---
     rope_eq_specs: list = []
     rope_q0 = None
+    mocap_ids: dict = {}
     if rope is not None:
         da = next(d for d in ducks if d.name == rope.turner_a)
         db = next(d for d in ducks if d.name == rope.turner_b)
@@ -294,16 +297,34 @@ def compose_world(
         rope_frame = spec.worldbody.add_frame(pos=[0, 0, 0])
         spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
 
-        for turner, rbody in ((rope.turner_a, "rope/seg_0"), (rope.turner_b, "rope/end")):
-            eq = spec.add_equality()
-            eq.type = mujoco.mjtEq.mjEQ_CONNECT
-            eq.objtype = mujoco.mjtObj.mjOBJ_BODY
-            eq.name1 = f"{turner}/jaw_soft"
-            eq.name2 = rbody
-            for i in range(3):
-                eq.data[i] = MOUTH_TIP_LOCAL[i]
-            eq.solref = [0.02, 1.0]
-            rope_eq_specs.append(eq)
+        if rope_mode == "mocap":
+            # rigid carriers (mocap) that drive the rope ends — the turners
+            # hold the rope FIRMLY (disclosed idealization: the grip is rigid)
+            for cname, p in (("rope/carryA", pA), ("rope/carryB", pB)):
+                cb = spec.worldbody.add_body(name=cname, pos=[float(p[0]), float(p[1]), float(p[2])])
+                cb.mocap = True
+                cb.add_geom(name=cname + "_g", type=mujoco.mjtGeom.mjGEOM_SPHERE,
+                            size=[0.004], rgba=[1, 0, 0, 0.0])  # invisible
+            for cname, rbody in (("rope/carryA", "rope/seg_0"), ("rope/carryB", "rope/end")):
+                eq = spec.add_equality()
+                eq.type = mujoco.mjtEq.mjEQ_CONNECT
+                eq.objtype = mujoco.mjtObj.mjOBJ_BODY
+                eq.name1 = cname
+                eq.name2 = rbody
+                for k in range(3):
+                    eq.data[k] = 0.0
+                rope_eq_specs.append(eq)
+        else:
+            for turner, rbody in ((rope.turner_a, "rope/seg_0"), (rope.turner_b, "rope/end")):
+                eq = spec.add_equality()
+                eq.type = mujoco.mjtEq.mjEQ_CONNECT
+                eq.objtype = mujoco.mjtObj.mjOBJ_BODY
+                eq.name1 = f"{turner}/jaw_soft"
+                eq.name2 = rbody
+                for i in range(3):
+                    eq.data[i] = MOUTH_TIP_LOCAL[i]
+                eq.solref = [0.02, 1.0]
+                rope_eq_specs.append(eq)
 
     model = spec.compile()
     data = mujoco.MjData(model)
@@ -350,4 +371,8 @@ def compose_world(
             return int(n.rsplit("_", 1)[1])
         world.rope_body_ids = sorted(ids, key=_key)
         world.rope_eq_ids = [int(e.id) for e in rope_eq_specs]
+        if rope_mode == "mocap":
+            for cname in ("rope/carryA", "rope/carryB"):
+                bid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, cname)
+                world.mocap_body_ids[cname] = int(model.body_mocapid[bid])
     return world
