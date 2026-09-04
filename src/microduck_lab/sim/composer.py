@@ -29,6 +29,46 @@ DUCK_COLORS = {
 # mouth_tip site position in the jaw_soft body frame (from robot MJCF)
 MOUTH_TIP_LOCAL = (-0.00809334, 0.0, -0.0777383)
 
+# handle direction in the jaw frame: forward-down (the natural beak-holding
+# angle), chosen so the resting tip sits near mouth height and head pitch/yaw
+# sweep it in the y-z plane (measured sweep: 0.4 rad -> 3-4 cm per axis)
+_HANDLE_DIR = (0.85, 0.0, -0.53)
+
+
+def _add_handle(child_spec: mujoco.MjSpec, length: float = 0.05,
+                direction=_HANDLE_DIR):
+    """Weld a lightweight jump-rope handle into the duck's beak (jaw_soft).
+
+    The duck grips the handle, not the rope directly — like a real skipper
+    holding the handle, not the cord. A small head ATTITUDE change (pitch/yaw)
+    swings the handle tip through a large arc, so the rope is driven by cheap
+    joint ROTATION instead of expensive translation of the 300 g head. The rope
+    connects to the handle tip via a connect equality = a passive swivel.
+
+    `direction` is the handle's direction in the jaw frame. The default points
+    forward-down (≈ the beak's natural holding angle) so the resting tip sits
+    near mouth height and head pitch/yaw sweep it in the y-z plane (measured:
+    0.4 rad → 3-4 cm tip motion in each axis).
+    """
+    import numpy as np
+    jaw = None
+    for b in child_spec.bodies:
+        if b.name == "jaw_soft":
+            jaw = b
+            break
+    if jaw is None:
+        raise ValueError("jaw_soft not found in robot spec")
+    base = np.array(MOUTH_TIP_LOCAL, dtype=float)
+    d = np.array(direction, dtype=float)
+    d = d / np.linalg.norm(d)
+    tip = d * length                      # tip in the handle body frame
+    hb = jaw.add_body(name="handle", pos=[float(base[0]), float(base[1]), float(base[2])])
+    hb.add_geom(name="handle_g", type=mujoco.mjtGeom.mjGEOM_CAPSULE,
+                fromto=[0, 0, 0, float(tip[0]), float(tip[1]), float(tip[2])],
+                size=[0.0025], rgba=[0.85, 0.65, 0.20, 1.0], contype=0, conaffinity=0)
+    # the swivel point: the rope end connects here (point joint, rotation-free)
+    hb.add_site(name="handle_tip", pos=[float(tip[0]), float(tip[1]), float(tip[2])])
+
 
 @dataclass
 class DuckSpec:
@@ -216,6 +256,7 @@ def compose_world(
     playground: bool = True,
     grippy_ducks: list[str] | None = None,
     rope_mode: str = "free",          # "free" (chain + connect) | "mocap" (driven carriers)
+    handle_len: float = 0.0,          # >0: turners hold a lightweight jump-rope handle
 ) -> ComposedWorld:
     """Compose ducks (+ optional rope) into one compiled MuJoCo world."""
     robot_xml = str(robot_xml)
@@ -272,10 +313,15 @@ def compose_world(
             cone.rgba = [1.0, 0.45, 0.15, 1.0]
 
     # --- ducks ---
+    turners_with_handles = set()
+    if rope is not None and handle_len > 0.0:
+        turners_with_handles = {rope.turner_a, rope.turner_b}
     for d in ducks:
         child = mujoco.MjSpec.from_file(robot_xml)
         if d.color:
             _tint_duck(child, d.color)
+        if d.name in turners_with_handles:
+            _add_handle(child, handle_len)
         frame = spec.worldbody.add_frame(pos=[d.pos[0], d.pos[1], 0.0],
                                          quat=_yaw_quat(d.yaw))
         spec.attach(child, prefix=f"{d.name}/", frame=frame)
@@ -322,10 +368,19 @@ def compose_world(
                 eq = spec.add_equality()
                 eq.type = mujoco.mjtEq.mjEQ_CONNECT
                 eq.objtype = mujoco.mjtObj.mjOBJ_BODY
-                eq.name1 = f"{turner}/jaw_soft"
+                if turner in turners_with_handles:
+                    # rope end → handle tip (a point joint = passive swivel)
+                    import numpy as _np
+                    _d = _np.array(_HANDLE_DIR) / _np.linalg.norm(_HANDLE_DIR)
+                    _tip = _d * handle_len       # tip in the handle body frame
+                    eq.name1 = f"{turner}/handle"
+                    for i in range(3):
+                        eq.data[i] = _tip[i]
+                else:
+                    eq.name1 = f"{turner}/jaw_soft"
+                    for i in range(3):
+                        eq.data[i] = MOUTH_TIP_LOCAL[i]
                 eq.name2 = rbody
-                for i in range(3):
-                    eq.data[i] = MOUTH_TIP_LOCAL[i]
                 eq.solref = [0.02, 1.0]
                 rope_eq_specs.append(eq)
 

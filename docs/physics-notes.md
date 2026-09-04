@@ -107,3 +107,26 @@ world (`B_first` has no joint). To hold BOTH ends on mocap carriers, wrap the
 composite in a freejoint body (which needs a small geom — a massless free body
 falls through the connect constraint) and connect wrapper→carrierA,
 B_last→carrierB.
+
+## CR-03: jump-rope handle + wrench budget (feasible)
+
+A lightweight handle welded into the beak (jaw_soft) — the duck holds the
+handle, not the cord (like a real skipper). The rope end connects to the handle
+tip via a point-connect = a passive swivel (no coiling).
+
+Measured:
+- **Leverage works**: 0.4 rad of head pitch → 4.4 cm vertical tip throw; 0.4 rad
+  head yaw → 4.3 cm lateral. The rope is driven by cheap head ROTATION, not
+  translation of the 300 g head. (Head-neutral standing pose; NOTE the sweep
+  degenerates if the head is craned fully down — the down-pointing handle's tip
+  approaches the rotation axis.)
+- **Wrench budget PASSES easily**: the rope's reaction force at the endpoint
+  during sustained oracle rotation is RMS ~1.43 N / max ~3.0 N (measured from
+  the connect constraint force). At a 5 cm handle + head lever (~0.13 m from
+  the neck joints), that's ~0.07 Nm RMS / ~0.18 Nm peak at the neck — ~15% of
+  the XL330 envelope (0.96 Nm). The rope load is NOT the constraint.
+
+The remaining blocker is NOT torque or geometry — it's that a hand-tuned
+IK/servo circle-tracker can't drive the rope while keeping a standing duck
+balanced (the 0904 doc's §3/§6 point: rope turning must be a LEARNED
+whole-body policy — that's CR-05, the real remaining research).
