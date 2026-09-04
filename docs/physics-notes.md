@@ -130,3 +130,19 @@ The remaining blocker is NOT torque or geometry — it's that a hand-tuned
 IK/servo circle-tracker can't drive the rope while keeping a standing duck
 balanced (the 0904 doc's §3/§6 point: rope turning must be a LEARNED
 whole-body policy — that's CR-05, the real remaining research).
+
+## CR-05 progress (turner RL + classic skip world) — honest state
+
+- turner_motion RL policy TRAINED (Mjlab-Turner-Flat-MicroDuck): the duck
+  learns to swing the mouth-held handle tip along a target circle while
+  balancing. turner_circle_track 0.0003 → 0.96 (normalized), zero falls.
+  The no-rope precursor to the learned rope turner.
+- build_classic_world: elastic cable + 3 ducks + mocap carriers, rope↔turner
+  contact excluded (turners brace; only the jumper's contact is scored). The
+  phase-tracking swing-up spins a real overhead loop over the middle duck
+  (rendered, verified visually).
+- REMAINING BLOCKER for the clean classic skip: the jumper's hop drifts forward
+  out of the grazing zone, and the hop apex/timing needs the RL rope_hop v2
+  (in-place periodic hop, CR-06) + a PLL + a rotation-speed governor (the
+  free-running phase-tracking drive overspins to ~2.3 Hz; the naive governor
+  broke the swing-up — needs a proper swing-up→capture→govern state machine).

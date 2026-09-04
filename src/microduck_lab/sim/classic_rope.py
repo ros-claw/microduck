@@ -35,6 +35,7 @@ def build_classic_world(
     turner_sep: float = 0.50,
     carrier_height: float = 0.18,
     playground: bool = False,
+    timestep: float = 0.005,
 ):
     """3 ducks + an elastic-cable rope on mocap carriers, one MuJoCo world.
 
@@ -51,7 +52,7 @@ def build_classic_world(
     cB = np.array([turner_sep / 2, 0.0, carrier_height])
 
     spec = mujoco.MjSpec()
-    spec.option.timestep = 0.001          # the elastic cable needs fine steps
+    spec.option.timestep = timestep      # 0.005 for duck servos; the cable holds up (CG solver, 100 iters)
     spec.option.solver = mujoco.mjtSolver.mjSOL_CG
     spec.option.iterations = 100
     spec.option.ls_iterations = 20
