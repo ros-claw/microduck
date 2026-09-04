@@ -69,3 +69,41 @@ robot_allcollisions.xml, official ONNX policies).
   misses the hop apex), real rope-contact evidence, and an upright check 0.5 s
   after the pass. The agent context (rhythm model) never sees oracle state.
 
+
+---
+
+## CORRECTION (2026-09-04): classic overhead rope IS physically feasible
+
+The earlier draft concluded the full overhead loop was geometrically impossible
+("mouth at 19 cm < duck 25 cm"). That was WRONG — it confused the endpoint
+height with the belly's rotation radius. A loop rotating about the endpoint
+axis with belly radius R reaches top ≈ h_endpoint + R. For R ≈ 0.17 m the top
+is ≈ 0.35 m > the 25 cm duck. The 0904 discussion caught this; the Oracle
+Rope Feasibility Lab (CR-02) then PROVED it in physics.
+
+**Oracle experiment** (`scripts/oracle_rope_lab.py`, no ducks, two ideal mocap
+endpoints at h=18 cm, sep=0.50 m, `mujoco.elasticity.cable` rope):
+- The rope forms a stable full-rotation loop: **top ≈ 35 cm, bottom ≈ 1–2 cm,
+  sustained 8+ revolutions**, at multiple configs (L∈[0.78,0.86],
+  density∈[100,400]). FEASIBLE = YES.
+- Working reference: L=0.82 m, density=400 (≈3.7 g rope), bend=1e3.
+
+**The mechanism that was missing** (not "gravity too strong"):
+1. **Swing-up is the barrier.** A naive fixed-frequency circle drive NEVER
+   inflates the loop (belly stays at R≈5 cm no matter the amplitude/frequency).
+   A phase-tracking drive (endpoints lead the measured belly angle by +90°,
+   amplitude ramping) pumps the pendulum over the top and captures it into
+   rotation — like pumping a swing.
+2. **Endpoint phase difference Δφ**: in-phase (Δφ=0) is correct for a planar
+   loop; Δφ=180° completely fails (0 revolutions, the ends fight). Measured.
+3. **Air drag was never the issue** — MuJoCo defaults density=0/viscosity=0
+   (no fluid forces). Dissipation is joint/bend damping + contacts.
+4. The rope self-selects a rotation speed set by drive amplitude × rope mass;
+   a speed governor (lead-angle → 0 at target ω) is needed to hold a
+   hopper-friendly ~1.2–1.5 Hz instead of free-running to 5–8 Hz.
+
+**Composite-cable gotcha (CR-01)**: the cable's first body is welded to the
+world (`B_first` has no joint). To hold BOTH ends on mocap carriers, wrap the
+composite in a freejoint body (which needs a small geom — a massless free body
+falls through the connect constraint) and connect wrapper→carrierA,
+B_last→carrierB.
