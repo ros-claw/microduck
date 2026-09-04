@@ -55,28 +55,47 @@ Safety over score.
   Its parameters are the adaptation surface. Training a real `microduck.jump`
   policy with mjlab PPO is the obvious next milestone (see Roadmap).
 
-## Honest scoreboard (v2 — with the trained jump)
+## Honest scoreboard (v3 — the ducks actually skip)
 
-**The duck learned to jump.** The mjlab-PPO policy (`policies/jump.onnx`) hops
-13–17 cm and lands on its feet — vs ~2.5 cm for the best hand-tuned maneuver.
-That transfer required two non-obvious discoveries (see docs/physics-notes.md):
-training must run against the XML position servos (BAM-trained explosive
-policies don't transfer), and the real PU sole (mu≈2, solref 0.04) is what
-makes the launch physical.
+**Three ducks skip a rope together — 93% on unseen seeds.** The winning
+configuration, found by the Practice→Darwin loop and *verified by watching the
+frames* (not just the metrics):
 
-**Rope skipping remains the open challenge.** The rope rotates in a clean loop
-(coach-assisted), the jumper hops in rhythm — but at 25 cm / 2 cm clearances
-the coherent loop + hop timing is genuinely chaotic (this is essentially the
-Marope problem). Current honest rate: occasional clean skips per episode, not
-yet reliable. The next milestone is rope-loop stabilization.
+- **The rope is a floor-sweep "snake"** (a real beginner variant). At 25 cm /
+  800 g the full overhead loop under-inflates and coils — measured. So the
+  turners hold the rope low (carriers at 2 cm) and sweep it side to side; the
+  pass under the jumper is ≤ 1.2 cm high.
+- **Duck-lead cooperative timing.** The jumper crouches when *it* is ready;
+  the turners *watch the crouch* and release; a closed-loop servo on the
+  measured rope position lands the pass exactly on the hop apex (~0.86 s).
+  The turners park the rope while the jumper repositions, and lift it clear
+  when the jumper falls. This is the multi-agent cooperation.
+- **The hop is procedural** (crouch → extend → hand control to the stand
+  policy at toe-off): ~5 cm apex, **100% upright landings**. The trained RL
+  jump policy (below) hops higher but drifts and falls — Darwin rejected it
+  for skipping.
+
+**Result: 13/14 clean skips (93%) across 8 holdout seeds** the champion never
+trained on; turners upright 100%. See `practice/champion.json`.
+
+**The duck also learned to jump (RL).** The mjlab-PPO policy
+(`policies/jump.onnx`) hops 13–17 cm and lands on its feet — vs ~2.5 cm for
+the best hand-tuned maneuver. That transfer required two non-obvious
+discoveries (see docs/physics-notes.md): training must run against the XML
+position servos (BAM-trained explosive policies don't transfer), and the real
+PU sole (mu≈2, solref 0.04) is what makes the launch physical. The RL hop's
+landing drift makes it worse for *skipping* than the procedural hop — a real,
+measured trade-off.
 
 ## Roadmap
 
 - ~~Train a real jump policy~~ **DONE (v2)**: `policies/jump.onnx` hops 13–17 cm,
   trained on mjlab PPO against the deployment actuators (XML position servos).
-- **Rope-loop stabilization** (the frontier): keep the rotating loop planar and
-  floor-grazing under the jumper's contact disturbances; then continuous
-  hopping at the rope rate. This is where the skip rate gets to 80%+.
+- ~~Rope skipping~~ **DONE (v3)**: floor-sweep snake + duck-lead cooperative
+  timing → 93% holdout. (Full overhead rotation remains a stretch goal —
+  at this scale the loop physically can't stay inflated over a 25 cm duck.)
+- Retrain the RL jump for *in-place* hopping + stick the landing under the
+  rope, so the ducks can do continuous full-loop skipping.
 - Per-duck skill memories (each duck's reliability profile feeding Team role
   assignment).
 - quackd A/B benchmark on the same tasks.

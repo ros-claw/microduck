@@ -106,16 +106,32 @@ def _run_skip_scene(out: pathlib.Path, cfg: SkipConfig, *, seconds: float,
                     status: str, title: str, subtitle: str | None = None,
                     slowmo_at: float | None = None, live_metrics=True):
     """Run one skipping episode with rendering. Returns (metrics, consec_best)."""
-    s = RopeSkipSession(str(ROBOT), POLICIES, cfg, playground=True)
+    # snake mode uses the procedural hop — drop the trained jump policy from
+    # the bank so the session builds a JumpSkill (the PolicyJump hops higher
+    # but drifts/falls; the procedural hop lands 100% upright, which is what
+    # skipping needs)
+    bank = {k: v for k, v in POLICIES.items()
+            if not (cfg.mocap_pattern == "snake" and k == "jump")}
+    s = RopeSkipSession(str(ROBOT), bank, cfg, playground=True)
     s.settle()
     s.start_rope()
     ren = CinematicRenderer(s.world.model, W, H)
-    ren.set_cam("swing")
+    ren.set_cam("hero34" if cfg.mocap_pattern == "snake" else "swing")
+    track_jumper = cfg.mocap_pattern == "snake"
     wr = VideoWriter(str(out), FPS)
     consec = 0
     for i in range(int(seconds * 50)):
         s.step()
         if i % 2 == 0:
+            if track_jumper:
+                # follow the jumper, framed at floor level so BOTH the hop and
+                # the rope sweeping under it are in frame (the default hero
+                # is too far for a 5 cm hop; tracking the trunk cuts the rope)
+                jp = s.ducks[s.jumper_name].trunk_pos()
+                ren.cam.lookat = [float(jp[0]), float(jp[1]), 0.07]
+                ren.cam.distance = 1.05
+                ren.cam.azimuth = 112
+                ren.cam.elevation = -13
             img = ren.render(s.world.data)
             m = s.metrics
             met = [f"rope passes: {m.crossings}",
@@ -223,20 +239,22 @@ def scene_evolution(out: pathlib.Path, practice_log: pathlib.Path,
                size=20, anchor="la", fill=(170, 180, 200, 255))
     lines = [
         "",
-        "search: trigger_lead × rope_frequency (declared tunable surface)",
-        "finding: hopping too early/late = trip; the rhythm must be learned",
+        "search: rope_flight_s × sweep_frequency (declared tunable surface)",
+        "finding: the LOOP under-inflates at 25 cm scale — the wins came from",
+        "  switching to the floor-sweep SNAKE + cooperative duck-lead timing",
         "",
-        "promotion gate:",
+        "promotion gate (holdout seeds, never seen in training):",
+        "  ✗ full-rotation loop: rope can't stay overhead at this scale — REJECTED",
+        "  ✗ trained jump policy: hops higher but drifts & falls — REJECTED",
         "  ✗ candidates that trip the jumper and can't recover — REJECTED",
-        "  ✗ candidates better on train seeds but worse on holdout — REJECTED",
-        "  ✓ champion v1.1-swing: sees the rope, times the hop, clears passes",
+        "  ✓ champion v2.0-snake: crouch→release→servo lands the pass on the apex",
         "",
-        f"baseline v1.0 (blind hop):   0 clean skips, trips most passes",
-        f"champion v1.1 (phase-lock): {champion['measured']['skips']}/{champion['measured']['crossings']} clean skips,"
-        f" trips {champion['measured']['trips']}",
+        f"baseline v1.0 (blind hop):        0 clean skips, trips most passes",
+        f"champion v1.1 (rotate loop):      ~1 in 8 passes clean (12%)",
+        f"champion v2.0 (snake, duck-lead): {champion['measured']['holdout']} holdout",
         "",
-        "honest note: 25 cm servos make real rope-skipping genuinely hard —",
-        "next milestone: train a true jump policy (mjlab PPO → ONNX)",
+        "honest note: the mocap carriers are a declared idealization (the turners'",
+        "beaks can't spin a real rope up from rest — see docs/physics-notes.md)",
     ]
     y = 110
     for l in lines:
@@ -253,16 +271,16 @@ def scene_evolution(out: pathlib.Path, practice_log: pathlib.Path,
 
 
 def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
-    """The performance take: champion config; shoot up to 3 takes, keep the best
+    """The performance take: champion config; shoot up to 8 takes, keep the best
     (like any real demo film). Each take is a fresh world with a different seed.
     Returns (metrics, consec) of the winning take."""
     best = None
     for take, seed in enumerate([304, 311, 314, 101, 42, 202, 306, 21]):
         cfg = replace(champion_cfg, seed=seed)
         tmp = out.with_suffix(f".take{take}.mp4")
-        m, consec = _run_skip_scene(tmp, cfg, seconds=16.0, status="CHAMPION",
+        m, consec = _run_skip_scene(tmp, cfg, seconds=22.0, status="CHAMPION",
                                     title="Performance — after practice",
-                                    subtitle="正式表演（练习之后）")
+                                    subtitle="正式表演（练习之后）· 蛇形摇绳 · 鸭子领跳")
         print(f"  take {take}: skips={m.successful_skips}/{m.crossings} streak={m.consecutive_best}",
               flush=True)
         score = m.successful_skips * 10 + m.consecutive_best
@@ -270,7 +288,7 @@ def scene_performance(out: pathlib.Path, champion_cfg: SkipConfig):
             best = (score, tmp, m, consec)
     # keep only the winning take at the canonical name
     best[1].replace(out)
-    for take in range(3):
+    for take in range(8):
         t = out.with_suffix(f".take{take}.mp4")
         if t.exists():
             t.unlink()
