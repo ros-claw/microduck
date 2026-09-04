@@ -78,14 +78,29 @@ class StiffRope:
         self.rope_body_ids = [b for b in range(model.nbody)
                               if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith("rope/seg")]
 
-    def drive(self, phase: float, radius: float, center_a: np.ndarray, center_b: np.ndarray,
-              freq: float, dt: float):
-        """Move both mocap ends along synchronized circles in the Y-Z plane."""
-        self.phase = (phase + 2 * math.pi * freq * dt) % (2 * math.pi)
+    def place(self, phase: float, radius: float, center_a: np.ndarray, center_b: np.ndarray,
+              pattern: str = "circle"):
+        """Position both mocap ends for an absolute phase (no advance)."""
+        self.phase = phase % (2 * math.pi)
         for mid, c in ((self.mocap_a, center_a), (self.mocap_b, center_b)):
-            self.data.mocap_pos[mid] = c + np.array([0.0, radius * math.cos(phase),
-                                                     radius * math.sin(phase)])
+            if pattern in ("pendulum", "snake"):
+                self.data.mocap_pos[mid] = c + np.array([0.0, radius * math.sin(self.phase), 0.0])
+            else:
+                self.data.mocap_pos[mid] = c + np.array([0.0, radius * math.cos(self.phase),
+                                                         radius * math.sin(self.phase)])
+
+    def drive(self, phase: float, radius: float, center_a: np.ndarray, center_b: np.ndarray,
+              freq: float, dt: float, pattern: str = "circle"):
+        """Advance the phase by freq·dt and place the carriers."""
+        self.place(phase + 2 * math.pi * freq * dt, radius, center_a, center_b, pattern)
         return self.phase
+
+    def mid_y(self) -> float:
+        """Lateral position of the rope's middle third (the part near the jumper)."""
+        pts = np.array([self.data.xpos[b] for b in self.rope_body_ids])
+        n = len(pts)
+        return float(np.mean(pts[n // 3: 2 * n // 3, 1]))
+
 
     def belly(self):
         pts = np.array([self.data.xpos[b] for b in self.rope_body_ids])

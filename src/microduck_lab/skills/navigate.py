@@ -42,10 +42,11 @@ class WalkTo:
         bearing = math.atan2(delta[1], delta[0]) - yaw
         bearing = (bearing + math.pi) % (2 * math.pi) - math.pi
         ang = float(np.clip(2.0 * bearing, -1.2, 1.2))
-        # walking policy: actual speed ≈ 0.45 × commanded — command hot
+        # walking policy: actual speed ≈ 0.45 × commanded — command hot.
+        # NOTE: the policy has a gait-initiation dead zone — below ~0.25
+        # command from standstill it shuffles in place (measured: 0.2 cm/s at
+        # vx=0.15 vs 12 cm/s at vx=0.30). Never command the dead zone.
         vx = 0.30 if abs(bearing) < 0.5 else 0.0
-        if dist < 0.25:
-            vx = min(vx, 0.15)
         # lateral assist when close and roughly aligned
         vy = 0.0
         if dist < 0.3 and abs(bearing) < 1.2:

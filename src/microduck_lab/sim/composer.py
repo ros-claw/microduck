@@ -303,8 +303,11 @@ def compose_world(
             for cname, p in (("rope/carryA", pA), ("rope/carryB", pB)):
                 cb = spec.worldbody.add_body(name=cname, pos=[float(p[0]), float(p[1]), float(p[2])])
                 cb.mocap = True
+                # invisible AND non-colliding: a mocap body has infinite mass —
+                # a colliding carrier bulldozes the turners when it moves
                 cb.add_geom(name=cname + "_g", type=mujoco.mjtGeom.mjGEOM_SPHERE,
-                            size=[0.004], rgba=[1, 0, 0, 0.0])  # invisible
+                            size=[0.004], rgba=[1, 0, 0, 0.0],
+                            contype=0, conaffinity=0)
             for cname, rbody in (("rope/carryA", "rope/seg_0"), ("rope/carryB", "rope/end")):
                 eq = spec.add_equality()
                 eq.type = mujoco.mjtEq.mjEQ_CONNECT

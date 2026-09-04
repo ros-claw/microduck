@@ -17,6 +17,7 @@ The tunable parameter surface (what ROSClaw Practice/Darwin adapts):
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass, field
 
 import mujoco
@@ -37,6 +38,11 @@ class SkipConfig:
     mode: str = "swing"              # "swing" (default, robust) | "rotate" (stretch) | "snake"
     rope_mode: str = "free"          # "free" (chain+connect) | "mocap" (driven carriers, deterministic loop)
     mocap_radius: float = 0.11       # drive-circle radius for mocap rope (the "handle" amplification)
+    mocap_pattern: str = "circle"    # "circle" (full loop) | "pendulum" (side-swing) | "snake" (low floor sweep, turners park&release)
+    mocap_z: float = 0.05            # carrier height for snake (turners hold the rope low to the floor)
+    snake_amplitude: float = 0.16    # lateral sweep amplitude for snake (m)
+    wait_pos: tuple = (0.0, -0.06)   # jumper ready position (snake parks away from it)
+    rope_flight_s: float = 0.90      # snake: target rope release→pass time (the hop apex)
     rope_length: float = 0.55
     rope_density: float = 50.0
     turner_sep: float = 0.5
@@ -46,11 +52,11 @@ class SkipConfig:
     sway: float = 0.012              # turner mouth ellipse radius (visual+pump)
     # jumper
     trigger_lead_s: float = 0.60     # jump trigger lead before the pass (hop takes ~0.6 s to lift)
-    jump_crouch: float = 0.72
-    jump_crouch_time: float = 0.18
-    jump_extend_time: float = 0.07
-    jump_flight_time: float = 0.24
-    jump_land_time: float = 0.30
+    jump_crouch: float = 0.55        # 0.55 + instant handoff = 5.5 cm hop, 100% upright landings
+    jump_crouch_time: float = 0.22   # (the extension needs the full 0.10 s — shorter
+    jump_extend_time: float = 0.10   #  extension = weak push, the duck just walks forward)
+    jump_flight_time: float = 0.01   # hand to the stand policy right after toe-off;
+    jump_land_time: float = 0.01     # it flies the body level and sticks the landing
     jumper_offset: tuple = (0.0, -0.38)
     blind: bool = False            # True = hop periodically WITHOUT watching the rope (naive baseline)  # jumper waits outside the sweep, then enters
     never_jump_until: float = 0.0  # scene tool: jumper just stands there until t (the "hasn't learned yet" beat)
@@ -101,7 +107,20 @@ class RopeSkipSession:
         self.world = compose_world(
             robot_xml, ducks,
             rope=RopeSpec(ta, tb, length=cfg.rope_length, count=30, density=cfg.rope_density),
-            playground=playground, rope_height=0.19, grippy_ducks=[j], rope_mode=cfg.rope_mode)
+            playground=playground, rope_height=0.19, grippy_ducks=[], rope_mode=cfg.rope_mode)
+        # Grippy PU soles are applied DYNAMICALLY: on only while the jumper is
+        # actually hopping (the launch needs them), off while standing/walking
+        # (the soft grippy sole makes the stand policy drift ~14 cm/s — the
+        # duck would wander out of the rope between hops). Like a real skipper
+        # digging in only for the takeoff.
+        m0 = self.world.model
+        self._jumper_soles = [g for g in range(m0.ngeom)
+                              if (lambda nm: nm and nm.startswith(j + "/") and
+                                  re.search(r"(left|right)_foot_collision$", nm))(
+                                  mujoco.mj_id2name(m0, mujoco.mjtObj.mjOBJ_GEOM, g) or "")]
+        self._sole_normal = [(float(m0.geom_friction[g, 0]), m0.geom_solref[g].copy())
+                             for g in self._jumper_soles]
+        self._grip_on = False
         # smooth gym floor under the rope
         for g in range(self.world.model.ngeom):
             nm = mujoco.mj_id2name(self.world.model, mujoco.mjtObj.mjOBJ_GEOM, g)
@@ -159,7 +178,7 @@ class RopeSkipSession:
     def start_rope(self):
         self.coach.start()
         if self.cfg.rope_mode == "mocap":
-            # deterministic loop: mocap carriers drive the rope ends in circles.
+            # deterministic driven loop: mocap carriers drive the rope ends.
             # No coach force needed — the driver IS the rope motion.
             from ..sim.stiff_rope import StiffRope
             self._stiff = StiffRope(self.world.model, self.world.data,
@@ -168,6 +187,25 @@ class RopeSkipSession:
             # anchor circles at the measured mouth positions (post-settle)
             self._stiff_cA = self.ducks[self.turner_names[0]].site_pos("mouth_tip").copy()
             self._stiff_cB = self.ducks[self.turner_names[1]].site_pos("mouth_tip").copy()
+            if self.cfg.mocap_pattern == "snake":
+                # snake: turners hold the rope LOW and sweep it along the floor.
+                # Carriers anchor at the turner BODY x (±0.25), not the mouths:
+                # the mouth span (0.33 m) leaves 19 cm of slack rope that piles
+                # on the floor and kills the sweep (measured). A taut rope
+                # (L=0.52 over the 0.50 m span) sweeps cleanly past the sitting
+                # turners (their feet sprawl forward, clear of the line).
+                # Start parked at the +y extreme, away from the jumper's spot.
+                self._stiff_cA0 = self._stiff_cA.copy()
+                self._stiff_cB0 = self._stiff_cB.copy()
+                self._stiff_cA = np.array([*self.ducks[self.turner_names[0]].trunk_pos()[:2] * 1.0,
+                                           self.cfg.mocap_z])
+                self._stiff_cB = np.array([*self.ducks[self.turner_names[1]].trunk_pos()[:2] * 1.0,
+                                           self.cfg.mocap_z])
+                self._stiff_phase = math.pi / 2
+                self._snake_parked = True
+                self._snake_armed = True       # parked → a departure can fire the hop
+                self._snake_mid_y = None
+                self._snake_rate = 0.0
         if self.cfg.mode == "rotate":
             # toss the resting rope DIRECTLY (the windup-lift releases it from a
             # moving held state, which kills the rotation — measured).
@@ -193,6 +231,13 @@ class RopeSkipSession:
         self._entered = False
         self._wait_pos = (float(j.trunk_pos()[0]), float(j.trunk_pos()[1]))
 
+    def _skip_spot(self):
+        """Where the jumper should stand to skip (snake: opposite the rope park)."""
+        if self.cfg.mocap_pattern == "snake":
+            dest = getattr(self, "_snake_dest", 1)
+            return (0.0, -dest * 0.10)
+        return (0.0, 0.0)
+
     def _entry_update(self, ang, amp):
         """Walk the jumper in once the rope is up to tempo."""
         j = self.ducks[self.jumper_name]
@@ -201,10 +246,18 @@ class RopeSkipSession:
         # enter when the rope is live (real swing amplitude) AND the belly is
         # on the FAR side from the jumper (who approaches from -y)
         pos = j.trunk_pos()
-        dist = math.hypot(pos[0], pos[1])
-        if self._entry.target is None and ((self._t > 2.2 and amp > 0.08 and abs(ang) > 2.0)
-                                           or self._t > 5.0):
-            self._entry.go_to(0.0, 0.0)
+        spot = self._skip_spot()
+        dist = math.hypot(pos[0] - spot[0], pos[1] - spot[1])
+        if self.cfg.mocap_pattern == "snake":
+            # rope starts parked away from the wait spot — entry is safe at once
+            rope_live = self._t > 1.0
+        else:
+            rope_live = (amp > 0.08 and
+                         (abs(ang) > 2.0 or self.cfg.mocap_pattern == "pendulum"))
+        if self._entry.target is None and ((self._t > 2.2 and rope_live)
+                                           or self._t > 5.0
+                                           or (self.cfg.mocap_pattern == "snake" and rope_live)):
+            self._entry.go_to(*spot)
         elif self._entry.target is None:
             # hold the wait position against the stand policy's drift
             wx, wy = self._wait_pos
@@ -220,34 +273,281 @@ class RopeSkipSession:
         return False
 
     def _recenter(self):
-        """A skipper who drifted (or got knocked) off the middle walks back."""
+        """A skipper who drifted (or got knocked) off the spot walks back."""
         j = self.ducks[self.jumper_name]
         pos = j.trunk_pos()
+        spot = self._skip_spot()
         if (self.jump.state in ("idle",) and j.is_upright(0.45)
-                and math.hypot(pos[0], pos[1]) > 0.04):
+                and math.hypot(pos[0] - spot[0], pos[1] - spot[1]) > 0.04):
             if not hasattr(self, "_recenter_nav"):
                 from .navigate import WalkTo
                 self._recenter_nav = WalkTo(j)
             if self._recenter_nav.target is None or self._recenter_nav.done:
-                self._recenter_nav.go_to(0.0, 0.0)
+                self._recenter_nav.go_to(*spot)
             self._recenter_nav.update()
             return True
         return False
+
+    def _try_jump(self):
+        """Trigger the hop; dig the soles in for the takeoff+landing window.
+        (Grip toggling only applies to the trained PolicyJump — and the policy
+        needs the grippy-converged stand state, so this is currently disabled;
+        the procedural JumpSkill hops 7.8 cm on stock soles.)"""
+        if self.jump.trigger():
+            self._last_jump_t = self._t
+            return True
+        return False
+
+    def _set_grip(self, on: bool):
+        """Dig-in soles for the takeoff window only (see __init__ note)."""
+        if on == self._grip_on:
+            return
+        m0 = self.world.model
+        for g, (mu, solref) in zip(self._jumper_soles, self._sole_normal):
+            if on:
+                m0.geom_friction[g, 0] = 2.0
+                m0.geom_solref[g] = [0.04, 1.0]
+            else:
+                m0.geom_friction[g, 0] = mu
+                m0.geom_solref[g] = solref
+        self._grip_on = on
 
     def _request_toss(self):
         """Wind-up → toss: lift the belly off the floor first, then spin."""
         self._windup_until = self._t + 0.7
         self._tossed = False
 
+    def _snake_step(self):
+        """Snake mode: the turners sweep the rope along the FLOOR side to side
+        (a real beginner variant) and PARK it at the extreme while the jumper
+        repositions, releasing when it's ready — patient turners, like for a
+        kid skipper. Every pass is therefore a genuine attempt.
+
+        Geometry (measured): the hop is a forward LEAP (~20 cm) — so the duck
+        always jumps TOWARD the oncoming rope, landing on the side the rope
+        came from, which the sweep never revisits. The duck ping-pongs between
+        the two sides, turning to face the parked rope each cycle.
+        """
+        cfg = self.cfg
+        w = self.world
+        jd = self.ducks[self.jumper_name]
+
+        # --- sensor world: rope middle lateral position + rate ---
+        mid_y = self._stiff.mid_y()
+        prev_mid = self._snake_mid_y if self._snake_mid_y is not None else mid_y
+        raw_rate = (mid_y - prev_mid) / DT
+        self._snake_rate = 0.8 * self._snake_rate + 0.2 * raw_rate
+        self._snake_mid_y = mid_y
+
+        pos = jd.trunk_pos()
+        # turner etiquette #3: the jumper is DOWN — lift the rope up off it so
+        # the stand policy can recover (a fallen duck tangled in the rope never
+        # gets up; measured). Lift while down, lower once upright.
+        if not jd.is_upright(0.45):
+            self._jdown = getattr(self, "_jdown", 0.0) + DT
+        else:
+            self._jdown = 0.0
+        lift_target = 0.16 if self._jdown > 1.0 else cfg.mocap_z
+        self._snake_z = getattr(self, "_snake_z", cfg.mocap_z)
+        self._snake_z += float(np.clip(lift_target - self._snake_z, -DT*0.08, DT*0.08))
+
+        # carrier ramp: mouths → low snake hold over the first 1.5 s
+        a = min(1.0, self._t / 1.5)
+        a = a * a * (3 - 2 * a)          # smoothstep
+        cA = (1 - a) * self._stiff_cA0 + a * self._stiff_cA
+        cB = (1 - a) * self._stiff_cB0 + a * self._stiff_cB
+        cA = cA.copy(); cB = cB.copy()
+        cA[2] = cB[2] = self._snake_z
+
+        # --- where should the jumper be? Opposite the rope's park side,
+        # facing it (so the leap carries it toward the oncoming rope). ---
+        dest = getattr(self, "_snake_dest", 1)
+        spot = (0.0, -dest * 0.10)
+        face_yaw = dest * math.pi / 2
+
+        # --- jumper navigation: walk to spot, then turn to face the rope ---
+        self._entry_update(0.0, 0.2)
+        pos = jd.trunk_pos()
+        nav_busy = False
+        if self._entered and self.jump.state == "idle":
+            nav_busy = self._snake_reposition(spot, face_yaw)
+        ready_now = (self._entered and self.jump.state == "idle" and not nav_busy
+                     and jd.is_upright(0.45)
+                     and math.hypot(pos[0] - spot[0], pos[1] - spot[1]) < 0.05)
+        # require a settle dwell at LOW VELOCITY: a hop from a creeping duck
+        # comes out a weak stagger-step (measured: 2.8 cm vs 5.5 cm from still).
+        lv = np.linalg.norm(jd.trunk_linvel()[:2]) if hasattr(jd, "trunk_linvel") else 0.0
+        still = lv < 0.05
+        if ready_now and still and getattr(self, "_ready_since", None) is None:
+            self._ready_since = self._t
+        elif not (ready_now and still):
+            self._ready_since = None
+        ready = ready_now and still and (self._t - getattr(self, "_ready_since", self._t)) > 0.5
+        if ready:
+            # hop-quality gate: fire only when the stand policy is near its
+            # canonical pose (legs near default, trunk level). The hop apex is
+            # chaotic in the micro-state (3-7 cm); this SELECTS the good ones.
+            obs = jd.get_obs()
+            legs_near_default = bool(np.max(np.abs(obs[6:20])) < 0.15)
+            level = bool(obs[5] < -0.985)     # projected gravity z ≈ -1
+            ready = ready and legs_near_default and level
+
+        # --- turner coordination: the rope PARKS at an extreme while the jumper
+        # repositions. DUCK-LEAD release (real cooperative timing — "ready...
+        # NOW"): the jumper crouches when IT is ready; the turners see the
+        # crouch and release; the sweep's ~0.9 s flight to the duck lands on
+        # the hop's apex (~0.9 s). Every pass is a genuine attempt. ---
+        parked = getattr(self, "_snake_parked", True)
+        ph = self._stiff_phase
+        hopping = self.jump.state != "idle"
+        if parked and hopping:
+            parked = False                  # release! (turners saw the crouch)
+            self._sweep_t0 = self._t
+            self._sweep_mid0 = mid_y
+            self._sweep_target_y = getattr(self, "_takeoff_y", spot[1])
+        if not parked:
+            # closed-loop arrival servo: the turners speed up / slow down the
+            # sweep on the MEASURED rope position so the rope reaches the duck
+            # exactly rope_flight_s after the release (= the hop apex).
+            # Ease-in over 0.45 s: a jerked release WHIPS the rope (it coasts
+            # through faster than the carriers and the servo can't slow it).
+            t_rel = getattr(self, "_sweep_t0", self._t)
+            ease = min(1.0, (self._t - t_rel) / 0.45)
+            ease = ease * ease * (3 - 2 * ease)
+            T = cfg.rope_flight_s
+            mid0 = getattr(self, "_sweep_mid0", mid_y)
+            ty = getattr(self, "_sweep_target_y", spot[1])
+            dirn = float(np.sign(ty - mid0) or 1.0)
+            dist_total = abs(ty - mid0) + 0.05        # aim a touch past the line
+            p_actual = (mid_y - mid0) * dirn          # grows as the rope nears
+            p_des = min(1.15, (self._t - t_rel) / T) * dist_total
+            err = p_des - p_actual                    # >0: rope behind schedule
+            rate_scale = float(np.clip(1.0 + 2.0 * err / max(dist_total, 0.05), 0.30, 2.0))
+            self._snake_rate_scale = 0.7 * getattr(self, "_snake_rate_scale", 1.0) + 0.3 * rate_scale
+            advance = 2 * math.pi * cfg.frequency * DT * self._snake_rate_scale * ease
+            k = math.ceil((ph - math.pi / 2 + 1e-6) / math.pi)
+            nxt = math.pi / 2 + k * math.pi
+            new = ph + advance
+            if new >= nxt:
+                new = nxt
+                parked = True               # park at the opposite extreme
+            self._stiff_phase = new % (2 * math.pi)
+        self._snake_parked = parked
+        self._stiff.place(self._stiff_phase, cfg.snake_amplitude,
+                          cA, cB, pattern="pendulum")
+        # turners' mouths track the rope ends (they hold it)
+        ph_vis = self._stiff_phase + math.pi / 2
+        s_ = min(1.0, self._t / 2.0)
+        for t in self.turners:
+            t.update(ph_vis, s_)
+
+        # --- duck's jump trigger: the rope is parked (sensor: |mid_y| high,
+        # |rate| ~0 sustained) and the duck is settled → crouch NOW ---
+        parked_sensor = abs(mid_y) > 0.11 and abs(self._snake_rate) < 0.03
+        self._parked_for = (getattr(self, "_parked_for", 0.0) + DT) if parked_sensor else 0.0
+        if ready and self._parked_for > 0.25 and self.jump.state == "idle":
+            if self._try_jump():
+                self._takeoff_y = float(pos[1])
+
+        # --- crossing event for the judge: rope middle passes the takeoff line,
+        # only during a real sweep (never while parked — the rope settling or
+        # the duck brushing the pile must not flip the spot or count a pass).
+        dy = getattr(self, "_takeoff_y", spot[1])
+        if (not self._snake_parked
+                and (prev_mid - dy) * (mid_y - dy) < 0
+                and self._t - getattr(self, "_last_snake_cross", -9) > 0.8):
+            self._crossed_now = True
+            self._last_snake_cross = self._t
+            # the pass is decided — the jumper now prepares for the new park
+            # side (it's landing there already): flip the target spot/facing
+            self._snake_dest = -dest
+
+        self._judge_step()
+        self._t += DT
+        prev_state = self.jump.state
+        self.jump.update(DT)
+        # detect hop completion → brief no-walk settle so the landing settles
+        if prev_state != "idle" and self.jump.state == "idle":
+            self._land_settle_until = self._t + 0.6
+        for d in self.ducks.values():
+            d.step()
+        mujoco.mj_step(w.model, w.data, SUBSTEPS)
+        # metrics bookkeeping (mirrors the main step path)
+        if self._t > 3:
+            up_t = all(self.ducks[n].is_upright(0.4) for n in self.turner_names)
+            up_j = jd.is_upright(0.4)
+            self._up_h.append(up_t)
+            self._upj_h.append(up_j)
+            self._down_t = 0.0 if up_t else getattr(self, "_down_t", 0.0) + DT
+            self._down_j = 0.0 if up_j else getattr(self, "_down_j", 0.0) + DT
+            self.metrics.turner_max_down_s = max(self.metrics.turner_max_down_s, self._down_t)
+            self.metrics.jumper_max_down_s = max(self.metrics.jumper_max_down_s, self._down_j)
+
+    def _snake_reposition(self, spot, face_yaw) -> bool:
+        """Walk to the spot, then turn to face the parked rope. Returns True
+        while still moving (not settled). Never walks/turns a wobbling duck —
+        stepping during a landing transient compounds into a fall (measured:
+        the early-session deaths)."""
+        from .navigate import WalkTo, TurnTo
+        j = self.ducks[self.jumper_name]
+        if not hasattr(self, "_repo_nav"):
+            self._repo_nav = WalkTo(j)
+            self._repo_turn = TurnTo(j)
+        pos = j.trunk_pos()
+        dist = math.hypot(pos[0] - spot[0], pos[1] - spot[1])
+        yaw_err = abs((face_yaw - j.trunk_yaw() + math.pi) % (2 * math.pi) - math.pi)
+        # post-landing settle ONLY: hold still for 0.6 s right after a hop so
+        # the landing transient dies before walking (stepping on a wobbling
+        # duck compounds into a fall). After that, walk freely — a velocity
+        # gate here would abort the walk as soon as it builds speed (measured:
+        # the duck once crept for 27 s without arriving). A fallen duck never
+        # walks (the stand policy recovers it first).
+        if self._t < getattr(self, "_land_settle_until", 0.0) or not j.is_upright(0.45):
+            if j.active_policy != "stand":
+                j.active_policy = "stand"
+                j.set_command(twist=(0, 0, 0))
+            return True
+        if dist > 0.05:
+            if self._repo_nav.target is None or self._repo_nav.done:
+                self._repo_nav.arrive_tol = 0.04
+                self._repo_nav.go_to(*spot)
+            self._repo_nav.update()
+            return True
+        # facing with hysteresis: start a turn at >0.40 rad, accept at <0.30
+        # (the duck's stand yaw settles ~0.26 rad off — without hysteresis the
+        # turn start/cancel churns forever and readiness never holds)
+        if not self._repo_turn.done:
+            if yaw_err < 0.30:
+                self._repo_turn.done = True
+                self._repo_turn.target_yaw = None
+            else:
+                self._repo_turn.update()
+                return True
+        elif yaw_err > 0.40:
+            self._repo_turn.turn_to(face_yaw)
+            self._repo_turn.update()
+            return True
+        # hold: stand still
+        if j.active_policy != "stand":
+            j.active_policy = "stand"
+            j.set_command(twist=(0, 0, 0))
+        return False
+
     # ------------------------------------------------------------------- run
     def step(self):
         cfg = self.cfg
         w = self.world
         if self._coach_on and self.cfg.rope_mode == "mocap":
+            pendulum = self.cfg.mocap_pattern == "pendulum"
+            snake = self.cfg.mocap_pattern == "snake"
+            if snake:
+                self._snake_step()
+                return
             # deterministic driven loop: move the carriers, mouths track visually
             self._stiff_phase = self._stiff.drive(
                 self._stiff_phase, self.cfg.mocap_radius,
-                self._stiff_cA, self._stiff_cB, self.cfg.frequency, DT)
+                self._stiff_cA, self._stiff_cB, self.cfg.frequency, DT,
+                pattern=self.cfg.mocap_pattern)
             # turners' mouths follow the rope ends (they hold it)
             ang_r, amp_r, _ = self._stiff.belly()
             ph = self._stiff_phase + math.pi / 2
@@ -255,38 +555,69 @@ class RopeSkipSession:
             for t in self.turners:
                 t.update(ph, s_)
             ang, amp = ang_r, amp_r
-            # crossing = driver phase passes the bottom (belly under the jumper)
-            bottom_ang = math.pi  # belly_phase: 0 = straight down... measure
-            prev_ph = getattr(self, "_stiff_prev_phase", None)
             self._stiff_prev_phase = self._stiff_phase
             # detect the belly crossing the bottom via the measured belly angle
             if self._prev_angle is not None:
-                self._crossed_now = (amp > 0.08 and
-                                     self._prev_angle < 0 <= ang)
+                if pendulum:
+                    # side-swing: belly passes under the duck in BOTH directions
+                    self._crossed_now = (amp > 0.08 and
+                                         ((self._prev_angle < 0 <= ang) or
+                                          (self._prev_angle > 0 >= ang)))
+                else:
+                    self._crossed_now = (amp > 0.08 and
+                                         self._prev_angle < 0 <= ang)
+            if getattr(self, "_crossed_now", False):
+                pt = getattr(self, "_pass_times", [])
+                pt.append(self._t)
+                self._pass_times = pt[-6:]
             # jump trigger on the measured rope phase (sensor world)
             jd = self.ducks[self.jumper_name]
             self._entry_update(ang, amp)
             if self._entered and self.jump.state == "idle":
                 self._recenter()
             if self._entered and self._prev_angle is not None and amp > 0.10:
-                rate = ((ang - self._prev_angle + math.pi) % (2 * math.pi) - math.pi) / DT
-                self._rate_lp_j = (0.85 * getattr(self, "_rate_lp_j", 0.0) + 0.15 * rate)
-                rate_s = self._rate_lp_j
-                if rate_s > 0.5:
-                    dist = (-ang) % (2 * math.pi)
-                    ttc = dist / rate_s
-                    prev_ttc = getattr(self, "_prev_ttc", None)
-                    self._prev_ttc = ttc
-                    if (self.jump.state == "idle" and jd.is_upright(0.45)
-                            and prev_ttc is not None
-                            and prev_ttc > cfg.trigger_lead_s >= ttc
-                            and prev_ttc - ttc < 0.2):
-                        if self.jump.trigger():
-                            self._last_jump_t = self._t
+                if pendulum:
+                    # rhythm model from measured pass times: the pendulum's two
+                    # passes per period are NOT evenly spaced (rope dynamics lag
+                    # the drive), so predict the next interval as
+                    # period − last_interval (period = pass[t-1] − pass[t-3]).
+                    pt = getattr(self, "_pass_times", [])
+                    if len(pt) >= 4:
+                        period = pt[-1] - pt[-3]
+                        last_iv = pt[-1] - pt[-2]
+                        next_pass = pt[-1] + (period - last_iv)
+                        k = 0
+                        while next_pass + k * (period / 2) - self._t < cfg.trigger_lead_s - 0.02:
+                            k += 1
+                        ttg = next_pass + k * (period / 2) - self._t
+                        prev_ttg = getattr(self, "_prev_ttg", None)
+                        self._prev_ttg = ttg
+                        if (self.jump.state == "idle" and jd.is_upright(0.45)
+                                and prev_ttg is not None
+                                and prev_ttg > cfg.trigger_lead_s >= ttg):
+                            if self._try_jump():
+                                pass
+                else:
+                    rate = ((ang - self._prev_angle + math.pi) % (2 * math.pi) - math.pi) / DT
+                    self._rate_lp_j = (0.85 * getattr(self, "_rate_lp_j", 0.0) + 0.15 * rate)
+                    rate_s = self._rate_lp_j
+                    if rate_s > 0.5:
+                        dist = (-ang) % (2 * math.pi)
+                        ttc = dist / rate_s
+                        prev_ttc = getattr(self, "_prev_ttc", None)
+                        self._prev_ttc = ttc
+                        if (self.jump.state == "idle" and jd.is_upright(0.45)
+                                and prev_ttc is not None
+                                and prev_ttc > cfg.trigger_lead_s >= ttc
+                                and prev_ttc - ttc < 0.2):
+                            if self._try_jump():
+                                pass
             self._prev_angle = ang
             self._judge_step()
             self._t += DT
             self.jump.update(DT)
+            if self.jump.state == "idle":
+                self._set_grip(False)
             for d in self.ducks.values():
                 d.step()
             mujoco.mj_step(w.model, w.data, SUBSTEPS)
@@ -364,8 +695,8 @@ class RopeSkipSession:
                 self._blind_next = getattr(self, "_blind_next", 0.0)
                 if (self.jump.state == "idle" and jd.is_upright(0.45)
                         and self._t > self._blind_next):
-                    if self.jump.trigger():
-                        self._last_jump_t = self._t
+                    if self._try_jump():
+                        pass
                     self._blind_next = self._t + 0.55   # duck natural cadence ≠ rope tempo
             # --- unified pass detection (sensor world) → rhythm model ---
             crossed_now = False
@@ -404,8 +735,8 @@ class RopeSkipSession:
                                 and prev_ttc is not None
                                 and prev_ttc > cfg.trigger_lead_s >= ttc
                                 and prev_ttc - ttc < 0.2):
-                            if self.jump.trigger():
-                                self._last_jump_t = self._t
+                            if self._try_jump():
+                                pass
                 else:
                     # swing/snake: predict the next pass from the measured rhythm
                     if len(getattr(self, "_pass_times", [])) >= 3:
@@ -424,13 +755,15 @@ class RopeSkipSession:
                                 and jd.is_upright(0.45)
                                 and prev_ttg is not None
                                 and prev_ttg > cfg.trigger_lead_s >= ttg):
-                            if self.jump.trigger():
-                                self._last_jump_t = self._t
+                            if self._try_jump():
+                                pass
             self._prev_angle = ang
 
             # --- metrics updated in _judge_step (oracle side) ---
 
         self.jump.update(DT)
+        if self.jump.state == "idle":
+            self._set_grip(False)
         for d in self.ducks.values():
             d.step()
         mujoco.mj_step(w.model, w.data, SUBSTEPS)
@@ -514,13 +847,19 @@ class RopeSkipSession:
             due = [v for v in self._verdicts_due if self._t >= v["t_cross"] + 0.5]
             self._verdicts_due = [v for v in self._verdicts_due if self._t < v["t_cross"] + 0.5]
             for v in due:
-                window_contact = any(c for t, c in self._contact_hist
-                                     if abs(t - v["t_cross"]) <= 0.2)
+                # contact evidence: a single-step toe graze on a light floor
+                # snake doesn't trip a hopper (it keeps flying and lands
+                # upright). A TRIP is contact that is sustained (≥3 steps ≈
+                # the rope caught a foot) or that brings the duck down.
+                n_contact_steps = sum(1 for t, c in self._contact_hist
+                                      if abs(t - v["t_cross"]) <= 0.2 and c)
+                window_contact = n_contact_steps >= 3
                 upright_after = jd.is_upright(0.45)
                 attempted = v["attempted"]
-                # airborne: peak feet height within ±0.12 s of the pass
+                # airborne: peak feet height within ±0.2 s of the pass (the
+                # flight is ~0.6 s long — a tighter window just mis-times)
                 air_peak = max((f for t, f in getattr(self, "_feet_hist", [])
-                                if abs(t - v["t_cross"]) <= 0.12), default=0.0)
+                                if abs(t - v["t_cross"]) <= 0.2), default=0.0)
                 airborne = air_peak > 0.015
                 if window_contact:
                     self.metrics.trips += 1
@@ -549,6 +888,6 @@ class RopeSkipSession:
                     "t_cross": self._t,
                     "clearance": min(lz, rz),
                     "attempted": (self.jump.state in ("crouch", "extend", "flight", "land", "jump")
-                                  or getattr(self, "_last_jump_t", -9) > self._t - 1.0),
+                                  or getattr(self, "_last_jump_t", -9) > self._t - 1.5),
                 })
         self._last_ang = ang
