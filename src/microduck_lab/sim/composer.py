@@ -87,6 +87,8 @@ class RopeSpec:
     radius: float = 0.0035              # m
     density: float = 300.0              # kg/m^3 (light rope)
     color: tuple = (1.0, 0.55, 0.10, 1.0)
+    stiffness: float = 0.0              # ball-joint torsional stiffness (a beaded/trick
+                                        # rope has some — it holds a loop shape; 0 = floppy)
 
 
 @dataclass
@@ -221,7 +223,7 @@ def _rope_spec_xml(rope: RopeSpec, pA, pB) -> str:
             rel_q = quat_mul(quat_inv(abs_q[i - 1]), abs_q[i])
             pos_attr = f'pos="{seg:.5f} 0 0"'
         joint = (f'{indent}  <freejoint name="rope_free"/>\n' if i == 0 else
-                 f'{indent}  <joint name="rope_j{i}" type="ball" damping="0.0001"/>\n')
+                 f'{indent}  <joint name="rope_j{i}" type="ball" damping="0.0001" stiffness="{rope.stiffness}" springref="0"/>\n')
         xml.append(
             f'{indent}<body name="seg_{i}" {pos_attr} '
             f'quat="{rel_q[0]:.5f} {rel_q[1]:.5f} {rel_q[2]:.5f} {rel_q[3]:.5f}">\n'
