@@ -35,16 +35,24 @@ def run_classic_skip(
     render_fps: int = 25,
     overlay_fn=None,
     bank=None,
+    hop_onnx=None,          # trained hop policy; None = procedural JumpSkill
 ):
     """Run + render a classic overhead-rope skip session. Returns metrics dict."""
     if bank is None:
         bank = {"stand": str(POL / "alpha_stand.onnx"),
                 "sitstand": str(POL / "alpha_sitstand.onnx")}
+        if hop_onnx:
+            bank["jump"] = str(hop_onnx)
     bank = PolicyBank(bank)
     SUB = 20   # 1 ms physics × 20 = 50 Hz policy
     rng = np.random.default_rng(seed)
 
     m, d, info = build_classic_world(rope_length=rope_length, rope_density=rope_density)
+    # thicker, high-visibility rope so the skip reads on video
+    for g in range(m.ngeom):
+        nm = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
+        if nm.startswith("rope/"):
+            m.geom_rgba[g] = [1.0, 0.45, 0.05, 1.0]
     ids = info["rope_body_ids"]
     ma, mb = info["mocap_a"], info["mocap_b"]
     cA, cB = info["carrier_centers"]
@@ -53,10 +61,17 @@ def run_classic_skip(
     rt = {}
     for nm in ("lavender", "cream"):
         rt[nm] = DuckRuntime(m, d, bank, prefix=f"{nm}/", name=nm)
-        rt[nm].active_policy = "sitstand"
-        rt[nm].set_command(twist=(1, 0, 0), head=(-0.2,) * 2 + (0, 0))
+        # STANDING turners look competent; sitting reads as collapsed on video
+        rt[nm].active_policy = "stand"
+        rt[nm].set_command(twist=(0, 0, 0))
     rt["sky"] = DuckRuntime(m, d, bank, prefix="sky/", name="sky")
     rt["sky"].active_policy = "stand"
+    # grippy soles for the jumper (the trained hop needs them — physics notes)
+    for g in range(m.ngeom):
+        nm = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
+        if nm.startswith("sky/") and "foot_collision" in nm:
+            m.geom_friction[g, 0] = 2.0
+            m.geom_solref[g] = [0.04, 1.0]
 
     def belly_state():
         pts = np.array([d.xpos[b] for b in ids])
@@ -70,7 +85,11 @@ def run_classic_skip(
         for _ in range(SUB):
             mujoco.mj_step(m, d)
 
-    jump = JumpSkill(rt["sky"], crouch_depth=0.55, flight_time=0.01, land_time=0.01)
+    if hop_onnx is not None:
+        from ..skills.jump import PolicyJump
+        jump = PolicyJump(rt["sky"], duration=1.0)
+    else:
+        jump = JumpSkill(rt["sky"], crouch_depth=0.55, flight_time=0.01, land_time=0.01)
     prev_th, wraps = belly_state()[0], 0
     cont = 0.0
     phys_i = 0
