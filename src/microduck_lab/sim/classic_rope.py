@@ -36,6 +36,10 @@ def build_classic_world(
     carrier_height: float = 0.18,
     playground: bool = False,
     timestep: float = 0.005,
+    rope_kind: str = "cable",       # "cable" (elastic plugin) | "chain" (ball-joint
+                                    # serial chain — numerically tame, sustains a
+                                    # SLOW ~1 Hz loop; measured the cable's floor
+                                    # is ~2.8 Hz and chaos-fragile)
 ):
     """3 ducks + an elastic-cable rope on mocap carriers, one MuJoCo world.
 
@@ -74,6 +78,10 @@ def build_classic_world(
     gmat.texrepeat = [4, 4]
     floor = spec.worldbody.add_geom(name="floor", type=mujoco.mjtGeom.mjGEOM_PLANE, size=[0, 0, 0.05])
     floor.material = "gp"
+    # contact bits: rope(2,1) ⟂ floor(1,7) collide; jumper(4, 5→7) ghosts the
+    # rope until the skip starts (a duck IN the sweep during spin-up bleeds the
+    # build — measured), while jumper⟂floor always collide
+    floor.conaffinity = 7
 
     # ducks
     for d in ducks:
@@ -90,35 +98,61 @@ def build_classic_world(
         cb.add_geom(name=cname + "_g", type=mujoco.mjtGeom.mjGEOM_SPHERE, size=[0.004],
                     rgba=[1, 0, 0, 0.0], contype=0, conaffinity=0)
 
-    # elastic cable: first body is world-welded, so ride it on a massed
-    # freejoint wrapper (see oracle_rope.py note)
-    cable_xml = f"""
-    <mujoco model="rope">
-      <extension><plugin plugin="mujoco.elasticity.cable"/></extension>
-      <worldbody>
-        <body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}">
-          <freejoint/>
-          <geom type="sphere" size="0.004" contype="0" conaffinity="0" rgba="1 1 0 0"/>
-          <composite type="cable" curve="s" count="41 1 1" size="{rope_length}"
-                     offset="0 0 0" initial="none">
-            <plugin plugin="mujoco.elasticity.cable">
-              <config key="twist" value="1e4"/><config key="bend" value="{rope_bend}"/>
-            </plugin>
-            <joint kind="main" damping="0.0001"/>
-            <geom type="capsule" size="{rope_radius}" density="{rope_density}"
-                  rgba="0.9 0.55 0.1 1" friction="0.05 0.005 0.0001" contype="1" conaffinity="1"/>
-            <skin rgba="0.9 0.55 0.1 1" inflate="0.002"/>
-          </composite>
-        </body>
-      </worldbody>
-    </mujoco>
-    """
-    rope_spec = mujoco.MjSpec.from_string(cable_xml)
-    rope_frame = spec.worldbody.add_frame(pos=[0, 0, 0])
-    spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
+    if rope_kind == "chain":
+        # Serial ball-joint chain (a real floppy rope — NO elastic plugin).
+        # Measured: sustains a slow ~1 Hz floor-grazing overhead loop and
+        # survives going live, where the elastic cable is chaos-fragile and
+        # only sustains ≥2.8 Hz. The slow rate is also the hop-friendly one.
+        n_seg = 40
+        seg = rope_length / n_seg
+        parts = ['<mujoco model="rope"><worldbody>',
+                 f'<body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}"><freejoint/>',
+                 '<geom type="sphere" size="0.004" contype="0" conaffinity="0" rgba="1 1 0 0"/>']
+        for i in range(n_seg):
+            parts.append(
+                f'<body name="seg_{i}" pos="{seg:.5f} 0 0">'
+                f'<joint name="rj{i}" type="ball" damping="0.0001" stiffness="0" springref="0"/>'
+                f'<geom name="rope_s{i}" type="capsule" size="{rope_radius}" fromto="0 0 0 {seg:.5f} 0 0" '
+                f'density="{rope_density}" rgba="0.9 0.55 0.1 1" '
+                f'friction="0.01 0.005 0.0001" contype="2" conaffinity="1" '
+                f'solimp="0.6 0.8 0.001" solref="0.03 1.0"/>')
+        parts.append('</body>' * (n_seg + 1))
+        parts.append('</worldbody></mujoco>')
+        rope_spec = mujoco.MjSpec.from_string("".join(parts))
+        rope_frame = spec.worldbody.add_frame(pos=[0, 0, 0])
+        spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
+        last_body = f"rope/seg_{n_seg - 1}"
+    else:
+        # elastic cable: first body is world-welded, so ride it on a massed
+        # freejoint wrapper (see oracle_rope.py note)
+        cable_xml = f"""
+        <mujoco model="rope">
+          <extension><plugin plugin="mujoco.elasticity.cable"/></extension>
+          <worldbody>
+            <body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}">
+              <freejoint/>
+              <geom type="sphere" size="0.004" contype="0" conaffinity="0" rgba="1 1 0 0"/>
+              <composite type="cable" curve="s" count="41 1 1" size="{rope_length}"
+                         offset="0 0 0" initial="none">
+                <plugin plugin="mujoco.elasticity.cable">
+                  <config key="twist" value="1e4"/><config key="bend" value="{rope_bend}"/>
+                </plugin>
+                <joint kind="main" damping="0.0001"/>
+                <geom type="capsule" size="{rope_radius}" density="{rope_density}"
+                      rgba="0.9 0.55 0.1 1" friction="0.05 0.005 0.0001" contype="1" conaffinity="1"/>
+                <skin rgba="0.9 0.55 0.1 1" inflate="0.002"/>
+              </composite>
+            </body>
+          </worldbody>
+        </mujoco>
+        """
+        rope_spec = mujoco.MjSpec.from_string(cable_xml)
+        rope_frame = spec.worldbody.add_frame(pos=[0, 0, 0])
+        spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
+        last_body = "rope/B_last"
 
     # connect: wrapper→carrierA, cable last body→carrierB
-    for n1, n2 in (("rope/ropewrap", "ropeA"), ("rope/B_last", "ropeB")):
+    for n1, n2 in (("rope/ropewrap", "ropeA"), (last_body, "ropeB")):
         eq = spec.add_equality()
         eq.type = mujoco.mjtEq.mjEQ_CONNECT
         eq.objtype = mujoco.mjtObj.mjOBJ_BODY
@@ -131,7 +165,7 @@ def build_classic_world(
     # contact pairs (declared: they hold it, it doesn't knock them over). Only
     # the JUMPER's rope contact is physically scored (real trips).
     duck_names = [d.name for d in ducks]
-    turner_names = sorted({duck_names[0], duck_names[1]})   # first two = turners
+    turner_names = sorted(set(duck_names[:2]))   # first two = turners
     # collect body names from the spec (rope segments + turner duck bodies)
     rope_body_names = sorted({(b.name or "") for b in spec.bodies
                               if (b.name or "").startswith("rope/")})
@@ -144,12 +178,390 @@ def build_classic_world(
             ex.bodyname2 = tb
 
     model = spec.compile()
+    # MuJoCo's compiler AUTO-COMPUTES the connect anchor from the rest pose:
+    # the cable rests 0.86 m along +x from ropewrap, so B_last's auto-anchor
+    # lands 0.34 m past carrier B and the rope end trails free (measured:
+    # B_last at x=0.58 instead of 0.25). Zero the anchors — both ends ride
+    # exactly on their carriers.
+    model.eq_data[:, :] = 0.0
     data = mujoco.MjData(model)
 
     rope_body_ids = [b for b in range(model.nbody)
-                     if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith("rope/B_")]
+                     if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith(("rope/B_", "rope/seg_"))]
     mocap_a = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeA")])
     mocap_b = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeB")])
     info = dict(rope_body_ids=rope_body_ids, mocap_a=mocap_a, mocap_b=mocap_b,
                 carrier_centers=(cA, cB), turner_names=tuple(turner_names))
     return model, data, info
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+class RopeHoldDrive:
+    """Two-stage rope drive for the classic skip (measured physics):
+
+    Stage 0 (lift spin-up): carriers start 0.16 m HIGH and lower over 12–20 s.
+    A two-pinned rope piled on the floor can NEVER spin up (measured: the
+    floor pile kills the swing); lifted, the belly swings free, the loop
+    inflates (~8 Hz), then lowering the carriers deepens the loop until the
+    belly grazes the floor. Real turners start a long rope exactly this way.
+
+    Stage 1 (hold): the drive phase advances at `om_drive` (starting from the
+    measured rope rate, ramped slowly toward `settle_target_hz`) plus a phase
+    servo toward `cont + 90°` (kp). Pure forcing collapses the loop; pure
+    tracking runs away to 4–8 Hz; the mix holds a floor-grazing loop at
+    ~2.8–3.4 Hz (measured: settle ≈ target + ~1.5 Hz).
+
+    The elastic cable cannot sustain an inflated loop below ~2.8 Hz
+    (centrifugal support at a 0.18 m axis) — the jumper's hop rate is trained
+    to match the rope, not vice versa.
+    """
+
+    def __init__(self, axis_z: float, settle_target_hz: float = 1.3,
+                 tau_s: float = 6.0, kp: float = 4.0,
+                 r_spin: float = 0.05, r_hold: float = 0.05,
+                 lift: float = 0.16, lower_duration: float = 8.0,
+                 hold_mode: bool = True):
+        # hold_mode=False (the CHAIN): never ramp down — pure phase-tracking
+        # forever. The chain self-selects ~1.05 Hz and the rate-hold machinery
+        # (om_drive forcing + phase servo + amplitude servo) KILLS it
+        # (measured). The cable needs the hold; the chain just tracks.
+        self.hold_mode = hold_mode
+        self.axis_z = axis_z
+        self.settle_target = 2 * math.pi * settle_target_hz
+        # external rate target (rad/s): the demo sets this to the DUCK's
+        # measured hop rate once hopping — the rope follows the jumper, like
+        # real turners. Clipped to the loop's sustainable band.
+        self.rate_target = self.settle_target
+        self.tau = tau_s
+        self.kp = kp
+        self.r_spin = r_spin
+        self.r_hold = r_hold
+        self.lift = lift
+        self.lower_duration = lower_duration
+        self.prev_th = None
+        self.wraps = 0
+        self.cont = 0.0
+        self.omega = 0.0
+        self.phys_i = 0
+        self.om_drive = None       # None = still spinning up
+        self.phi = 0.0
+        self.timing_corr = 0.0     # outer PLL: pass-vs-apex timing offset (rad)
+        self._corr_applied = 0.0   # slew-limited version actually applied to phi
+                                     # (a timing_corr jump teleports the carriers
+                                     # and yanks the loop dead — measured)
+        self.t = 0.0
+        self.t_inflated = None
+        # swing-up is chaotic (any numeric perturbation flips the outcome —
+        # measured: same code holds at 2.9 Hz in one harness, stalls in
+        # another). On stall, RETRY: re-lift the carriers, re-spin with a
+        # slightly different amplitude (the attempt jitter breaks the tie).
+        self.attempt = 0
+        self.stall_t = 0.0
+        self.retries = 0
+        self.track_xy = np.zeros(2)   # carrier drift-follow (rope stays over
+                                        # a drifting jumper; set by the demo)
+
+    def reset_spinup(self):
+        """Re-enter spin-up after a stall (rope state is reset by the caller —
+        restore the rope dofs to their rest pose, leave the ducks alone)."""
+        self.om_drive = None
+        self.stall_t = 0.0
+        self.attempt += 1
+        self.retries += 1
+        self.t_inflated = None
+        self.prev_th = None
+        self.wraps = 0
+        self.cont = 0.0
+        self.omega = 0.0
+
+    @staticmethod
+    def _wrap_pi(x: float) -> float:
+        return (x + math.pi) % (2 * math.pi) - math.pi
+
+    def carrier_z(self) -> float:
+        """Current carrier height: LIFTED during spin-up (a rope piled on the
+        floor can never spin up — measured — so the carriers start high and the
+        belly swings free, exactly like real turners starting a long rope).
+        The lower runs on a FIXED schedule after inflation: the falling axis is
+        a parametric pump that helps push the swing over the top."""
+        if self.t_inflated is None:
+            return self.axis_z + self.lift
+        f = min(1.0, max(0.0, (self.t - self.t_inflated - 2.0) / self.lower_duration))
+        return self.axis_z + self.lift * (1.0 - f)
+
+    def step(self, data, ids, ma, mb, cA0, cB0, dt: float = 0.001):
+        self.t += dt
+        cz = self.carrier_z()
+        cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
+        cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        # The belly angle is measured about the FIXED final axis (not the
+        # riding carrier height) — this is the exact reference the proven
+        # spin-up (oracle + lift tests) used; don't "fix" it.
+        pts = np.array([data.xpos[b] for b in ids])
+        belly = pts[np.argmin(pts[:, 2])]
+        th = math.atan2(belly[1] - self.track_xy[1], -(belly[2] - self.axis_z))
+        if self.prev_th is None:
+            self.prev_th = th
+        dth = th - self.prev_th
+        if dth > math.pi:
+            self.wraps -= 1
+        elif dth < -math.pi:
+            self.wraps += 1
+        self.prev_th = th
+        new_cont = th + self.wraps * 2 * math.pi
+        inst_w = (new_cont - self.cont) / dt
+        self.cont = new_cont
+        self.omega = 0.995 * self.omega + 0.005 * inst_w
+
+        if self.om_drive is None:
+            # proven chain spin-up: a LINEAR resonant swing (a driven
+            # oscillator — deterministic, unlike the chaotic tracking catch),
+            # amplitude ramping, UNTIL the swing visibly builds; then hand over
+            # to phase-tracking which wraps the swing into a rotating loop.
+            # A time-gated seed deadlocks when the swing hasn't built yet
+            # (measured); gate on the swing amplitude instead.
+            if abs(self.cont) < 1.5:
+                A = min(0.05 + 0.005 * self.attempt, 0.01 + self.t * 0.008)
+                yA = A * math.sin(2 * math.pi * 1.2 * self.t)
+                # linear drive writes the carriers directly (no circle phase)
+                data.mocap_pos[ma] = cA + np.array([0, yA, 0.0])
+                data.mocap_pos[mb] = cB + np.array([0, yA, 0.0])
+                self.phys_i += 1
+                return
+            r = min(self.r_spin * (1 + 0.04 * self.attempt), 0.012 + self.phys_i * 0.00002)
+            self.phi = self.cont + math.pi / 2
+            if abs(self.cont) > 4 * math.pi and abs(self.omega) > 3:
+                if self.hold_mode:
+                    self.om_drive = abs(self.omega)   # lock in the measured rate
+                if self.t_inflated is None:
+                    self.t_inflated = self.t
+        else:
+            # amplitude servo: hold the loop's belly radius at the axis height
+            # (floor-graze). A stall/contact transient shrinks the loop and it
+            # never re-inflates on phase-tracking alone (measured) — so pump
+            # harder when the belly rides high, ease off when it digs.
+            belly_r = math.hypot(belly[1], belly[2] - self.axis_z)
+            r = float(np.clip(self.r_hold * (1 + 2.0 * (self.axis_z - belly_r)),
+                              0.6 * self.r_hold, 1.6 * self.r_hold))
+            self.om_drive += (self.rate_target - self.om_drive) * dt / self.tau
+            err = self._wrap_pi(self.cont + math.copysign(math.pi / 2, self.omega) - self.phi)
+            self.phi += math.copysign(self.om_drive, self.omega) * dt + self.kp * err * dt
+            # stall watchdog: lost rotation OR the loop shrank (belly rides
+            # high — after a grazing death the rope keeps swinging small and
+            # om never quite hits the |om|<1 gate — measured)
+            belly_r = math.hypot(belly[1] - self.track_xy[1], belly[2] - self.axis_z)
+            if abs(self.omega) < 1.0 or (self.carrier_z() <= self.axis_z + 0.01
+                                         and belly_r < 0.6 * self.axis_z):
+                self.stall_t += dt
+            else:
+                self.stall_t = 0.0
+
+        self._corr_applied += float(np.clip(self.timing_corr - self._corr_applied,
+                                            -0.5 * dt, 0.5 * dt))
+        phi = self.phi + self._corr_applied
+        yA = r * math.cos(phi)
+        zA = r * math.sin(phi)
+        data.mocap_pos[ma] = cA + np.array([0, yA, zA])
+        data.mocap_pos[mb] = cB + np.array([0, yA, zA])
+        self.phys_i += 1
+
+    @property
+    def inflated(self) -> bool:
+        return self.t_inflated is not None
+
+    @property
+    def stalled(self) -> bool:
+        """Hold-phase stall → the caller should reset the rope dofs and call
+        reset_spinup()."""
+        return self.om_drive is not None and self.stall_t > 2.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+class ChainRopeDrive:
+    """Minimal drive for the serial-chain rope — the EXACT recipe measured to
+    hold a ~1.05 Hz floor-grazing overhead loop live for 70+ s:
+
+    - carriers start LIFTED (+0.16 m) and lower over t=12–20 s
+    - phase-tracking circles (phi = belly_angle + 90°), amplitude ramp
+      0.012→0.05 over ~2 s — the tracking self-excites the swing into rotation
+    - no seed, no rate control, no watchdog: the chain's floor-graze contact
+      governs the rate once live; extra machinery only breaks it (measured).
+
+    The outer timing PLL (pass↔apex) writes `timing_corr`, applied slew-limited.
+    """
+
+    def __init__(self, axis_z: float, lift: float = 0.16,
+                 lower_t0: float = 12.0, lower_t1: float = 26.0,
+                 r_max: float = 0.05):
+        self.axis_z = axis_z
+        self.lift = lift
+        self.lower_t0 = lower_t0
+        self.lower_t1 = lower_t1
+        self.r_max = r_max
+        self.prev_th = None
+        self.wraps = 0
+        self.cont = 0.0
+        self.omega = 0.0
+        self.t = 0.0
+        self.phys_i = 0
+        self.timing_corr = 0.0
+        self._corr_applied = 0.0
+        self.track_xy = np.zeros(2)
+        self.t_inflated = None
+        self.stall_t = 0.0
+        self.retries = 0
+        self.attempt = 0
+        self.lower_t0_eff = lower_t0   # shifts on each retry
+
+    def reset_spinup(self):
+        """Re-spin after a stall: swing-up is chaotic — the caller resets the
+        rope dofs to rest; the lower schedule re-arms with a fresh window and
+        the amplitude ramp jitters per attempt."""
+        self.retries += 1
+        self.attempt += 1
+        self.t_inflated = None
+        self.stall_t = 0.0
+        self.prev_th = None
+        self.wraps = 0
+        self.cont = 0.0
+        self.omega = 0.0
+        self.lower_t0_eff = self.t + 2.0     # re-lift, lower again 12 s later
+        self.r_max = 0.05 * (1 + 0.05 * self.attempt)
+
+    def carrier_z(self) -> float:
+        f = min(1.0, max(0.0, (self.t - self.lower_t0_eff) / (self.lower_t1 - self.lower_t0)))
+        return self.axis_z + self.lift * (1.0 - f)
+
+    @property
+    def inflated(self) -> bool:
+        if self.t_inflated is None and abs(self.cont) > 4 * math.pi and abs(self.omega) > 2:
+            self.t_inflated = self.t
+        return self.t_inflated is not None
+
+    @property
+    def stalled(self) -> bool:
+        return self.stall_t > 2.0
+
+    def step(self, data, ids, ma, mb, cA0, cB0, dt: float = 0.001):
+        self.t += dt
+        cz = self.carrier_z()
+        cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
+        cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        pts = np.array([data.xpos[b] for b in ids])
+        belly = pts[np.argmin(pts[:, 2])]
+        th = math.atan2(belly[1] - self.track_xy[1], -(belly[2] - self.axis_z))
+        if self.prev_th is None:
+            self.prev_th = th
+        dth = th - self.prev_th
+        if dth > math.pi:
+            self.wraps -= 1
+        elif dth < -math.pi:
+            self.wraps += 1
+        self.prev_th = th
+        new_cont = th + self.wraps * 2 * math.pi
+        inst_w = (new_cont - self.cont) / dt
+        self.cont = new_cont
+        self.omega = 0.995 * self.omega + 0.005 * inst_w
+
+        # stall watchdog: after inflation, losing the rotation (or never
+        # re-catching after the lower) → the caller resets + re-spins
+        if self.t_inflated is not None or self.t > 18.0:
+            belly_r = math.hypot(belly[1] - self.track_xy[1], belly[2] - self.axis_z)
+            weak = abs(self.omega) < 1.5 or (self.carrier_z() <= self.axis_z + 0.01
+                                             and belly_r < 0.5 * self.axis_z)
+            self.stall_t = self.stall_t + dt if weak else 0.0
+        r = min(self.r_max, 0.012 + self.phys_i * 0.00002)
+        self._corr_applied += float(np.clip(self.timing_corr - self._corr_applied,
+                                            -0.5 * dt, 0.5 * dt))
+        phi = self.cont + math.pi / 2 + self._corr_applied
+        yA = r * math.cos(phi)
+        zA = r * math.sin(phi)
+        data.mocap_pos[ma] = cA + np.array([0, yA, zA])
+        data.mocap_pos[mb] = cB + np.array([0, yA, zA])
+        self.phys_i += 1
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+class ChainForcedDrive:
+    """Deterministic rope drive for the heavy serial chain (the money-shot
+    drive). Measured on the density-1000 chain: a linear resonant seed wraps
+    the rope into rotation, then FORCED circles at the target rate hold a
+    grazing overhead loop indefinitely (pass_hz == drive rate, top 0.33 m,
+    bottom ~0) — no chaos, no runaway, direct phase control for the PLL.
+
+    Phase-tracking (self-excited) drives were measured chaos-fragile and
+    rate-uncontrollable; this drive trades "emergent" for RELIABLE: the rate
+    is exactly the duck's trained hop rate, and `phase_off` shifts every pass
+    by exactly itself (1:1) for the timing PLL.
+    """
+
+    def __init__(self, axis_z: float, rate_hz: float = 3.1,
+                 lift: float = 0.16, lower_t0: float = 12.0, lower_t1: float = 26.0,
+                 r_drive: float = 0.05, seed_hz: float = 1.2):
+        self.axis_z = axis_z
+        self.rate_hz = rate_hz
+        self.lift = lift
+        self.lower_t0 = lower_t0
+        self.lower_t1 = lower_t1
+        self.r_drive = r_drive
+        self.seed_hz = seed_hz
+        self.t = 0.0
+        self.phys_i = 0
+        self.phase = 0.0            # drive phase (advanced at rate_hz)
+        self.phase_off = 0.0        # PLL offset (pass↔apex), slew-limited
+        self._off_applied = 0.0
+        self.track_xy = np.zeros(2)
+        self.prev_th = None
+        self.wraps = 0
+        self.cont = 0.0
+        self.omega = 0.0
+        self.t_inflated = None
+
+    def carrier_z(self) -> float:
+        f = min(1.0, max(0.0, (self.t - self.lower_t0) / (self.lower_t1 - self.lower_t0)))
+        return self.axis_z + self.lift * (1.0 - f)
+
+    @property
+    def inflated(self) -> bool:
+        if self.t_inflated is None and abs(self.cont) > 2 * math.pi and abs(self.omega) > 2:
+            self.t_inflated = self.t
+        return self.t_inflated is not None
+
+    def step(self, data, ids, ma, mb, cA0, cB0, dt: float = 0.001):
+        self.t += dt
+        cz = self.carrier_z()
+        cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
+        cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        # measure the belly angle (for the inflated flag + monitoring only)
+        pts = np.array([data.xpos[b] for b in ids])
+        belly = pts[np.argmin(pts[:, 2])]
+        th = math.atan2(belly[1] - self.track_xy[1], -(belly[2] - self.axis_z))
+        if self.prev_th is None:
+            self.prev_th = th
+        dth = th - self.prev_th
+        if dth > math.pi:
+            self.wraps -= 1
+        elif dth < -math.pi:
+            self.wraps += 1
+        self.prev_th = th
+        new_cont = th + self.wraps * 2 * math.pi
+        self.omega = 0.995 * self.omega + 0.005 * (new_cont - self.cont) / dt
+        self.cont = new_cont
+
+        if not self.inflated:
+            # linear resonant seed: wraps the rope into rotation reliably
+            A = min(0.06, 0.012 + self.t * 0.008)
+            yA = A * math.sin(2 * math.pi * self.seed_hz * self.t)
+            zA = 0.0
+            self.phase = 2 * math.pi * self.rate_hz * self.t  # keep the clock fresh
+        else:
+            # forced circles at the duck's rate + the PLL phase offset
+            self.phase += 2 * math.pi * self.rate_hz * dt
+            self._off_applied += float(np.clip(self.phase_off - self._off_applied,
+                                               -0.5 * dt, 0.5 * dt))
+            phi = self.phase + self._off_applied
+            yA = self.r_drive * math.cos(phi)
+            zA = self.r_drive * math.sin(phi)
+        data.mocap_pos[ma] = cA + np.array([0, yA, zA])
+        data.mocap_pos[mb] = cB + np.array([0, yA, zA])
+        self.phys_i += 1

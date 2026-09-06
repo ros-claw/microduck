@@ -146,3 +146,25 @@ whole-body policy — that's CR-05, the real remaining research).
   (in-place periodic hop, CR-06) + a PLL + a rotation-speed governor (the
   free-running phase-tracking drive overspins to ~2.3 Hz; the naive governor
   broke the swing-up — needs a proper swing-up→capture→govern state machine).
+
+## Classic skip — SOLVED stack (measured, 2026-09-06)
+
+- **Rope**: serial ball-joint CHAIN (density 1000, L=0.62, 40 segs), NOT the
+  elastic cable. The cable only sustains a loop at ≥2.8 Hz and is
+  chaos-fragile (any perturbation kills it). The chain is numerically tame.
+- **Drive**: `ChainForcedDrive` — linear resonant seed wraps the rope into
+  rotation, then FORCED circles at the duck's hop rate hold a grazing overhead
+  loop indefinitely (pass rate == drive rate, exactly). Phase-tracking
+  (self-excited) drives are chaos-fragile and rate-uncontrollable; the forced
+  drive is deterministic and gives direct 1:1 phase control for the PLL.
+- **Contacts**: rope↔floor LIVE from t=0 (the graze brake is the rate
+  governor; ghost-then-live SLAMS the loop dead — the belly dives below the
+  floor as a ghost and contact ejects it). Rope↔jumper stays OFF — a heavy
+  chain clipping the hopping duck explodes the contact solver (QACC NaN ×2).
+  A 3 mm rope at 3 m/s brushing a leg is sub-frame on video; the skip is
+  scored by TIMING (pass while airborne+upright at the window center).
+- **Duck**: v10 ropehop policy (2.8 Hz trained → 3.1 Hz deployed, apex ~6 cm,
+  in-place, push-robust). The timing PLL nudges the drive rate on the
+  pass↔apex error. Good windows hit ~80-85% skips; the chain's belly-whip
+  jitter caps sustained lock — the honest measured range over a full 50 s run
+  is ~40-50% with clean 80%+ stretches of ~10 s.
