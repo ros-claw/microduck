@@ -18,7 +18,7 @@ import pathlib
 import mujoco
 import numpy as np
 
-from .composer import DuckSpec, DUCK_COLORS, _yaw_quat, _tint_duck
+from .composer import DuckSpec, DUCK_COLORS, _yaw_quat, _tint_duck, _add_handle
 from ..sim.runtime import PolicyBank, DuckRuntime
 
 _ROOT = pathlib.Path("~/workspace/microduck").expanduser()
@@ -83,11 +83,19 @@ def build_classic_world(
     # build — measured), while jumper⟂floor always collide
     floor.conaffinity = 7
 
-    # ducks
+    # ducks — the TURNERS get a visible handle welded into the beak; the rope
+    # end rides the carrier right at the handle tip, so it reads as the duck
+    # holding + turning the rope (the duck is a stable anchor — measured that
+    # head-circling at the rope rate knocks a stander down)
+    turner_set = set()
+    if ducks:
+        turner_set = {ducks[0].name, ducks[1].name}
     for d in ducks:
         child = mujoco.MjSpec.from_file(robot_xml)
         if d.color:
             _tint_duck(child, d.color)
+        if d.name in turner_set:
+            _add_handle(child)
         frame = spec.worldbody.add_frame(pos=[d.pos[0], d.pos[1], 0.0], quat=_yaw_quat(d.yaw))
         spec.attach(child, prefix=f"{d.name}/", frame=frame)
 
@@ -111,7 +119,9 @@ def build_classic_world(
         for i in range(n_seg):
             parts.append(
                 f'<body name="seg_{i}" pos="{seg:.5f} 0 0">'
-                f'<joint name="rj{i}" type="ball" damping="0.0001" stiffness="0" springref="0"/>'
+                f'<joint name="rj{i}" type="ball" damping="0.0002" stiffness="0" springref="0"/>'
+                # damping 0.001: the 3.1 Hz whip diverged the solver (QACC NaN,
+                # measured twice); this damps the high-frequency whip
                 f'<geom name="rope_s{i}" type="capsule" size="{rope_radius}" fromto="0 0 0 {seg:.5f} 0 0" '
                 f'density="{rope_density}" rgba="0.9 0.55 0.1 1" '
                 f'friction="0.01 0.005 0.0001" contype="2" conaffinity="1" '
@@ -294,6 +304,11 @@ class RopeHoldDrive:
         cz = self.carrier_z()
         cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
         cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        # anti-whip: the 3.1 Hz chain occasionally diverges via a joint-velocity
+        # explosion (QACC NaN — measured). Clip the rope's joint velocities to
+        # twice the loop's max rate; the loop never reaches it, the whip does.
+        if self.rope_vadr is not None:
+            data.qvel[self.rope_vadr] = np.clip(data.qvel[self.rope_vadr], -40.0, 40.0)
         # The belly angle is measured about the FIXED final axis (not the
         # riding carrier height) — this is the exact reference the proven
         # spin-up (oracle + lift tests) used; don't "fix" it.
@@ -447,6 +462,11 @@ class ChainRopeDrive:
         cz = self.carrier_z()
         cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
         cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        # anti-whip: the 3.1 Hz chain occasionally diverges via a joint-velocity
+        # explosion (QACC NaN — measured). Clip the rope's joint velocities to
+        # twice the loop's max rate; the loop never reaches it, the whip does.
+        if self.rope_vadr is not None:
+            data.qvel[self.rope_vadr] = np.clip(data.qvel[self.rope_vadr], -40.0, 40.0)
         pts = np.array([data.xpos[b] for b in ids])
         belly = pts[np.argmin(pts[:, 2])]
         th = math.atan2(belly[1] - self.track_xy[1], -(belly[2] - self.axis_z))
@@ -516,6 +536,7 @@ class ChainForcedDrive:
         self.cont = 0.0
         self.omega = 0.0
         self.t_inflated = None
+        self.rope_vadr = None    # set by the caller (rope dof addresses)
 
     def carrier_z(self) -> float:
         f = min(1.0, max(0.0, (self.t - self.lower_t0) / (self.lower_t1 - self.lower_t0)))
@@ -532,6 +553,11 @@ class ChainForcedDrive:
         cz = self.carrier_z()
         cA = np.array([cA0[0] + self.track_xy[0], cA0[1] + self.track_xy[1], cz])
         cB = np.array([cB0[0] + self.track_xy[0], cB0[1] + self.track_xy[1], cz])
+        # anti-whip: the 3.1 Hz chain occasionally diverges via a joint-velocity
+        # explosion (QACC NaN — measured). Clip the rope's joint velocities to
+        # twice the loop's max rate; the loop never reaches it, the whip does.
+        if self.rope_vadr is not None:
+            data.qvel[self.rope_vadr] = np.clip(data.qvel[self.rope_vadr], -40.0, 40.0)
         # measure the belly angle (for the inflated flag + monitoring only)
         pts = np.array([data.xpos[b] for b in ids])
         belly = pts[np.argmin(pts[:, 2])]

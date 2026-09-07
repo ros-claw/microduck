@@ -54,7 +54,11 @@ def run_classic_skip(
     bank=None,
     hop_onnx=None,          # trained continuous-hop policy (REQUIRED)
     never_live=False,       # DEBUG: keep the rope a ghost (isolate trip physics)
-    carrier_follow=True,    # carriers drift-track the jumper (±9 cm)
+    carrier_follow=False,   # carriers drift-track the jumper — DISABLED: the
+                            # track created a runaway (rope follows the drifting
+                            # duck, nothing restores center, the drive
+                            # destabilizes → QACC NaN. Measured). The v10 hop
+            # holds ~9 cm/25 s on its own — the rope stays at center.
     rope_kind="chain",      # the serial chain: slow robust ~1 Hz loop (cable is
                             # chaos-fragile and ≥2.8 Hz — measured)
 ):
@@ -81,8 +85,10 @@ def run_classic_skip(
         DuckSpec("cream", (0.25, 0.0), yaw=math.pi, color=DUCK_COLORS["cream"]),
         DuckSpec("sky", (0.0, -0.01), yaw=math.pi / 2, color=DUCK_COLORS["sky"]),
     ]
+    # carrier axis at 0.20 (not 0.18): the belly still grazes but the strike is
+    # gentler — measured no QACC NaN over 70 s at 0.20 vs sporadic NaN at 0.18
     m, d, info = build_classic_world(rope_length=rope_length, rope_density=rope_density,
-                                     timestep=0.001, carrier_height=0.18, ducks=ducks,
+                                     timestep=0.001, carrier_height=0.20, ducks=ducks,
                                      rope_kind=rope_kind)    # thicker, high-visibility rope so the skip reads on video
     for g in range(m.ngeom):
         nm = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
@@ -134,7 +140,7 @@ def run_classic_skip(
     # hold drive
     if rope_kind == "chain":
         # the measured duck hop rate (v8 deploys at ~3.1 Hz) IS the drive rate
-        drive = ChainForcedDrive(0.18, rate_hz=3.1)
+        drive = ChainForcedDrive(0.20, rate_hz=3.1)
     else:
         drive = RopeHoldDrive(0.18, settle_target_hz=settle_target_hz,
                               hold_mode=True)
@@ -147,6 +153,12 @@ def run_classic_skip(
     rope_vadr = [m.jnt_dofadr[j] for j in rope_joints]
     rope_qpos0 = d.qpos.copy()
     rope_qvel0 = d.qvel.copy()
+    # flat dof index array for the anti-whip velocity clip
+    _span = {mujoco.mjtJoint.mjJNT_FREE: 6, mujoco.mjtJoint.mjJNT_BALL: 3}
+    rope_dof_idx = np.concatenate([np.arange(a, a + _span.get(m.jnt_type[j], 1))
+                                   for a, j in zip(rope_vadr, rope_joints)])
+    if rope_kind == "chain":
+        drive.rope_vadr = rope_dof_idx
 
     # The drive runs from the world's FIRST step (carriers start lifted — the
     # rope never piles). Sky waits outside the sweep, walks in once the loop
