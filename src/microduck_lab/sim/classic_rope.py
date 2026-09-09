@@ -40,6 +40,9 @@ def build_classic_world(
                                     # serial chain — numerically tame, sustains a
                                     # SLOW ~1 Hz loop; measured the cable's floor
                                     # is ~2.8 Hz and chaos-fragile)
+    connect_to: str = "carriers",   # "carriers" (mocap idealization) | "handles"
+                                    # (rope ends ride the turners' handle bodies —
+                                    # the ducks' bodies really drive the rope)
 ):
     """3 ducks + an elastic-cable rope on mocap carriers, one MuJoCo world.
 
@@ -99,14 +102,94 @@ def build_classic_world(
         frame = spec.worldbody.add_frame(pos=[d.pos[0], d.pos[1], 0.0], quat=_yaw_quat(d.yaw))
         spec.attach(child, prefix=f"{d.name}/", frame=frame)
 
-    # rope carriers (mocap, non-colliding)
-    for cname, p in (("ropeA", cA), ("ropeB", cB)):
+    # rope carriers (mocap, non-colliding) — only in the carriers idealization
+    for cname, p in ((("ropeA", cA), ("ropeB", cB)) if connect_to == "carriers" else ()):
         cb = spec.worldbody.add_body(name=cname, pos=[float(p[0]), float(p[1]), float(p[2])])
         cb.mocap = True
         cb.add_geom(name=cname + "_g", type=mujoco.mjtGeom.mjGEOM_SPHERE, size=[0.004],
                     rgba=[1, 0, 0, 0.0], contype=0, conaffinity=0)
 
-    if rope_kind == "chain":
+    if connect_to == "handles":
+        # the rope's ends ride the turners' handle bodies. The anchors are the
+        # MEASURED handle-body rest origins (tip site is 4 cm further out along
+        # the stick; the connect anchors at the body origin = the beak base).
+        # Measured on the compiled world: (±0.164, 0, 0.228).
+        # the chain spawns from cA extending +x: anchor_a must be the LEFT
+        # turner (lavender, -x) so the rope reaches anchor_b (cream, +x) in
+        # its rest pose (the reverse yanks the whole span at t=0 — measured).
+        # anchor at the handle TIPS (z 0.27) — pins at the lower handle-body
+        # origin (0.228) do NOT spin the rope up (measured: floor graze during
+        # buildup kills it); the tips (0.27) clear it.
+        cA = np.array([-0.138, 0.0, 0.270])    # lavender handle tip
+        cB = np.array([0.138, 0.0, 0.270])     # cream handle tip
+    if rope_kind == "triple":
+        # Hinge-TRIPLE chain (bend y/z + axial twist with armature) — the exact
+        # rope the CR-05 rope-turner policy trains on. The twist DOF is
+        # load-bearing: a two-ended rope twists one turn per loop turn, and
+        # hinge-PAIR chains (no twist) cannot rotate as a loop (measured).
+        # Spawned SAGGING (parabola between the two anchors) — a straight spawn
+        # with L >> span yanks the far connect at t=0 (measured).
+        n_seg = 24
+        seg = rope_length / n_seg
+        span = float(np.linalg.norm(cB - cA))
+
+        def _rope_end(sag):
+            pos = np.zeros(2)
+            ang = 0.0
+            prev = None
+            for i in range(n_seg):
+                u = (i + 0.5) / n_seg
+                alpha = np.arctan2((4 * sag / span) * (2 * u - 1), 1.0)
+                ang = alpha if prev is None else ang + alpha - prev
+                prev = alpha
+                pos += seg * np.array([np.cos(ang), np.sin(ang)])
+            return pos
+
+        lo, hi = 0.01, rope_length
+        for _ in range(80):
+            mid = 0.5 * (lo + hi)
+            if _rope_end(mid)[0] > span:
+                lo = mid
+            else:
+                hi = mid
+        sag = 0.5 * (lo + hi)
+        # per-segment relative y-pitch quats (MuJoCo quat w,x,y,z; pitch about
+        # -y by alpha maps +x to (cos a, 0, sin a)-style descent)
+        parts = ['<mujoco model="rope"><worldbody>',
+                 f'<body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}"><freejoint/>',
+                 '<geom type="sphere" size="0.004" contype="0" conaffinity="0" rgba="1 1 0 0"/>']
+        prev_alpha = 0.0
+        for i in range(n_seg):
+            u = (i + 0.5) / n_seg
+            alpha = float(np.arctan2((4 * sag / span) * (2 * u - 1), 1.0))
+            rel = alpha - prev_alpha
+            prev_alpha = alpha
+            # rotation about +y by -rel: quat (cos(rel/2), 0, -sin(rel/2)... ) —
+            # descending tangent (alpha<0 early) must pitch the segment DOWN:
+            # R_y(theta) maps +x to (cosθ, 0, -sinθ); want -sinθ = -|drop| → θ=alpha... 
+            qw = math.cos(alpha / 2 - (0 if i == 0 else 0))
+            # rel rotation about y by (alpha_i - alpha_{i-1}) with sign so the
+            # chain sags: measured by the FK above; quat about +y of angle rel
+            qw, qy = math.cos(rel / 2), -math.sin(rel / 2)
+            parts.append(
+                f'<body name="seg_{i}" pos="{seg:.5f} 0 0" quat="{qw:.6f} 0 {qy:.6f} 0">'
+                f'<joint name="rty{i}" type="hinge" axis="0 1 0" damping="0.0002"/>'
+                f'<joint name="rtz{i}" type="hinge" axis="0 0 1" damping="0.0002"/>'
+                f'<joint name="rtx{i}" type="hinge" axis="1 0 0" damping="0.0002" armature="1e-5"/>'
+                f'<geom name="rope_s{i}" type="capsule" size="{rope_radius}" fromto="0 0 0 {seg:.5f} 0 0" '
+                # CONTACTLESS: the rope-turner policy trained with a contactless
+                # rope (Warp stability); floor contact changes the yank dynamics
+                # the policy's balance was hardened against — deploy as trained.
+                f'density="{rope_density}" rgba="0.9 0.55 0.1 1" '
+                f'friction="0.01 0.005 0.0001" contype="0" conaffinity="0" '
+                f'solimp="0.6 0.8 0.001" solref="0.03 1.0"/>')
+        parts.append('</body>' * (n_seg + 1))
+        parts.append('</worldbody></mujoco>')
+        rope_spec = mujoco.MjSpec.from_string("".join(parts))
+        rope_frame = spec.worldbody.add_frame(pos=[0, 0, 0])
+        spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
+        last_body = f"rope/seg_{n_seg - 1}"
+    elif rope_kind == "chain":
         # Serial ball-joint chain (a real floppy rope — NO elastic plugin).
         # Measured: sustains a slow ~1 Hz floor-grazing overhead loop and
         # survives going live, where the elastic cable is chaos-fragile and
@@ -161,8 +244,14 @@ def build_classic_world(
         spec.attach(rope_spec, prefix="rope/", frame=rope_frame)
         last_body = "rope/B_last"
 
-    # connect: wrapper→carrierA, cable last body→carrierB
-    for n1, n2 in (("rope/ropewrap", "ropeA"), (last_body, "ropeB")):
+    # connect: wrapper→A-side anchor, rope last body→B-side anchor
+    if connect_to == "handles":
+        # anchor_a = LEFT turner (lavender at -x), anchor_b = RIGHT (cream) —
+        # matches the chain's +x spawn direction (see above).
+        anchor_a, anchor_b = "lavender/handle", "cream/handle"
+    else:
+        anchor_a, anchor_b = "ropeA", "ropeB"
+    for n1, n2 in (("rope/ropewrap", anchor_a), (last_body, anchor_b)):
         eq = spec.add_equality()
         eq.type = mujoco.mjtEq.mjEQ_CONNECT
         eq.objtype = mujoco.mjtObj.mjOBJ_BODY
@@ -170,6 +259,12 @@ def build_classic_world(
         eq.name2 = n2
         for k in range(3):
             eq.data[k] = 0.0
+        if connect_to == "handles":
+            # SOFT: matches the training env's far-end connect (solref 0.04);
+            # a hard connect yanks the beak harder than the policy was
+            # hardened against (measured: turners fall instantly on CPU).
+            eq.solref = [0.04, 1.0]
+            eq.solimp = [0.8, 0.95, 0.01, 0.0, 2.0]
 
     # The turner ducks brace the rope they're holding — exclude rope↔turner
     # contact pairs (declared: they hold it, it doesn't knock them over). Only
@@ -194,12 +289,28 @@ def build_classic_world(
     # B_last at x=0.58 instead of 0.25). Zero the anchors — both ends ride
     # exactly on their carriers.
     model.eq_data[:, :] = 0.0
+    if connect_to == "handles":
+        # ...then re-anchor precisely: the rope ends ride the handle TIP sites
+        # (body2 anchor = the tip's local position in the handle frame), and
+        # the rope's last-segment TIP (body1 anchor = +seg along the segment).
+        for eq_i in range(model.neq):
+            n1 = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, model.eq_obj1id[eq_i]) or ""
+            n2 = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, model.eq_obj2id[eq_i]) or ""
+            if "/handle" in n2:
+                tip_sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, n2.replace("/handle", "/handle_tip"))
+                if tip_sid >= 0:
+                    model.eq_data[eq_i, 3:6] = model.site_pos[tip_sid]
+            if n1.startswith("rope/seg_"):
+                model.eq_data[eq_i, 0:3] = [rope_length / 24, 0.0, 0.0]
     data = mujoco.MjData(model)
 
     rope_body_ids = [b for b in range(model.nbody)
                      if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or "").startswith(("rope/B_", "rope/seg_"))]
-    mocap_a = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeA")])
-    mocap_b = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeB")])
+    if connect_to == "carriers":
+        mocap_a = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeA")])
+        mocap_b = int(model.body_mocapid[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "ropeB")])
+    else:
+        mocap_a = mocap_b = -1
     info = dict(rope_body_ids=rope_body_ids, mocap_a=mocap_a, mocap_b=mocap_b,
                 carrier_centers=(cA, cB), turner_names=tuple(turner_names))
     return model, data, info

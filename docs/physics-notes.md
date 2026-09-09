@@ -168,3 +168,35 @@ whole-body policy — that's CR-05, the real remaining research).
   pass↔apex error. Good windows hit ~80-85% skips; the chain's belly-whip
   jitter caps sustained lock — the honest measured range over a full 50 s run
   is ~40-50% with clean 80%+ stretches of ~10 s.
+
+## Honest duck-driven overhead skip (v4, 2026-09-09) — measured
+
+The rope's ends connect into the turners' beak-handles and the DUCKS spin it up
+(`demos/honest_skip.py`, `rope_kind="triple"`, `connect_to="handles"`):
+
+- **Two-ended in-phase circles spin the chain up from rest with NO seed** —
+  two-pin probe: span 0.276 m, pins at z=0.27, L=0.50, r=0.06 m at 3.1 Hz →
+  the rope locks to the drive rate. The catch is bistable/chaotic across L and
+  amplitude (L=0.55 needs r=0.07, L=0.62 fails at r=0.06). Pin HEIGHT is
+  load-bearing: z=0.228 does NOT spin up (the floor graze during buildup kills
+  it), z=0.27 does. A free-ENDED rope cannot be spun up by any fixed drive
+  pattern (measured: circles, phase-locked circle, velocity pump all give om≈0).
+- **The rope must twist to loop**: a two-ended rotating rope twists one full
+  turn per loop turn. Ball-joint chains allow it; hinge-PAIR chains (no axial
+  DOF) cannot rotate as a loop (measured: ball +29 turns, hinge-pair 0). The
+  Warp-compatible rope is a hinge TRIPLE (bend y/z + axial twist with
+  armature=1e-5 — the tiny roll inertia is rank-deficient without it).
+- **The turner policy is RL with the rope IN the Warp training loop** (CR-05):
+  rope-phase obs + rotation reward + circle-track. The chain's anti-whip qvel
+  clamp (±20 rad/s per env step) is mandatory in Warp; the far-end connect
+  needs `eq_data` zeroed post-compile (the compiler auto-computes a wrong
+  anchor — the same lab-demo bug); the connect is distance-gated off when the
+  duck thrashes (a both-ends-constrained thrashing duck explodes the solver).
+- **Deployment obs contract**: spawn the ducks at DEFAULT_POSE (the home
+  crouch), NOT the XML's straight-leg qpos0 — the ±0.45 rad joint_pos_rel
+  offset is inside the stand/hop policies' robustness but throws the
+  specialist turner into violent action (measured: instant falls).
+- **The timing PLL must track the hopper's RATE, not just phase** (a learned
+  hopper is no metronome): EMA the takeoff rate into the drive frequency +
+  integrate the filtered pass-vs-apex error at 25%/cycle. The phase-only PLL
+  limit-cycled at ~50%; the rate-tracking PLL hits 93% (122/131 over 50 s).

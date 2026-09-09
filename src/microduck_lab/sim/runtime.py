@@ -263,3 +263,160 @@ ACTUATOR_NAMES = [
     "neck_pitch", "head_pitch", "head_yaw", "head_roll",
     "right_hip_yaw", "right_hip_roll", "right_hip_pitch", "right_knee", "right_ankle",
 ]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+class TurnerDuckRuntime(DuckRuntime):
+    """DuckRuntime + the turner-motion policy's extended 69D obs contract:
+    [base_lin_vel(3), base_ang_vel(3), proj_grav(3), joint_pos_rel(14),
+     joint_vel(14), last_action(14), twist_cmd(3), turner_phase(2),
+     tip_rel(3), head_cmd(4), body_cmd(6)].
+
+    The turner policy (Mjlab-Turner-Flat-MicroDuck) drives the mouth-held
+    handle tip along a target circle while the legs balance — the REAL rope
+    turner (the rope connects to the handle tip, so the duck's body drives it).
+    """
+
+    def __init__(self, *args, turn_frequency: float = 3.1, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.turn_frequency = turn_frequency
+        self.imu_lin_vel_adr = self._sensor_adr("imu_lin_vel")
+        self.tip_site_id = mujoco.mj_name2id(
+            self.model, mujoco.mjtObj.mjOBJ_SITE, f"{self.prefix}handle_tip")
+        assert self.tip_site_id >= 0, f"{self.name}: no handle_tip site"
+        self.tip_rest = None
+        self.clock_t = 0.0
+        self.phase_offset_s = 0.0   # PLL: shifts the drive clock's phase
+
+    def base_lin_vel(self) -> np.ndarray:
+        return self.data.sensordata[self.imu_lin_vel_adr:self.imu_lin_vel_adr + 3].astype(np.float32)
+
+    def tip_rel(self) -> np.ndarray:
+        tip = self.data.site_xpos[self.tip_site_id]
+        if self.tip_rest is None:
+            self.tip_rest = tip.copy()
+        return (tip - self.tip_rest).astype(np.float32)
+
+    def reset_clock(self):
+        self.clock_t = 0.0
+        self.tip_rest = None
+
+    def get_obs(self) -> np.ndarray:
+        base = super().get_obs()  # 61D: [ang_vel, grav, jp, jv, last_action, cmd13]
+        # The turner obs reorders/extends: lin_vel first, then the 61D layout
+        # minus the 13D command block's head/body padding, which move to the end.
+        # Runtime 61D = [ang_vel(3), grav(3), jp(14), jv(14), last_action(14), cmd(13)].
+        ang_vel = base[0:3]
+        grav = base[3:6]
+        jp = base[6:20]
+        jv = base[20:34]
+        last_action = base[34:48]
+        cmd13 = base[48:61]          # [twist(3), head(4), body(6)]
+        twist = cmd13[0:3]
+        head_cmd = cmd13[3:7]
+        body_cmd = cmd13[7:13]
+        phase = 2.0 * math.pi * self.turn_frequency * (self.clock_t + self.phase_offset_s)
+        phase_obs = np.array([math.sin(phase), math.cos(phase)], dtype=np.float32)
+        tip_rel = self.tip_rel()
+        return np.concatenate([
+            self.base_lin_vel(), ang_vel, grav, jp, jv, last_action,
+            twist, phase_obs, tip_rel, head_cmd, body_cmd,
+        ]).astype(np.float32)
+
+    def step(self):
+        """One 50 Hz policy step with the turner obs (69D)."""
+        obs = self.get_obs()
+        assert obs.shape == (69,), obs.shape
+        action = self.bank.infer(self.active_policy, obs)
+        self.last_action = action.copy()
+        target = self.default_pose + action * self.action_scale
+        if self.head_override is not None:
+            target[HEAD_IDX] = self.head_override
+        if self.leg_override is not None:
+            target[LEG_IDX] = self.leg_override
+        if self.bam_drive is not None:
+            self.bam_drive.drive(target)
+        else:
+            self.data.ctrl[self.act_ids] = target
+        self.clock_t += 0.02
+
+
+class RopeTurnerDuckRuntime(TurnerDuckRuntime):
+    """TurnerDuckRuntime + the rope-in-the-loop policy's 73D obs contract:
+    [lin_vel(3), ang_vel(3), grav(3), jp(14), jv(14), last_action(14),
+     twist(3), turner_phase(2), turner_amp(1), tip_rel(3), rope_phase(3),
+     head_cmd(4), body_cmd(6)].
+
+    rope_phase = (sin, cos, om/30) of the rope belly's angle about the drive
+    axis, mirroring the training env's `rope_phase_obs` (same EMA, same
+    normalization). The frequency-curriculum obs was dropped with the
+    curriculum (the two-ended in-phase circle spins up directly at 3.1 Hz).
+    """
+
+    def __init__(self, *args, rope_body_ids, axis_y: float = 0.0,
+                 axis_z: float = 0.20, **kwargs):
+        kwargs.setdefault("turn_frequency", 3.1)
+        super().__init__(*args, **kwargs)
+        self.rope_body_ids = list(rope_body_ids)
+        self.axis_y = axis_y
+        self.axis_z = axis_z
+        self._rope_phase = 0.0
+        self._rope_raw = None
+        self._rope_om = 0.0
+
+    def rope_phase_obs(self) -> np.ndarray:
+        pts = self.data.xpos[self.rope_body_ids]          # (n, 3)
+        belly = pts[np.argmin(pts[:, 2])]
+        dy = belly[1] - self.axis_y
+        dz = belly[2] - self.axis_z
+        raw = math.atan2(dy, -dz)
+        if self._rope_raw is None:
+            self._rope_raw = raw
+            self._rope_phase = raw
+        dth = raw - self._rope_raw
+        if dth > math.pi:
+            dth -= 2 * math.pi
+        elif dth < -math.pi:
+            dth += 2 * math.pi
+        self._rope_raw = raw
+        self._rope_phase += dth
+        self._rope_om = 0.95 * self._rope_om + 0.05 * (dth / 0.02)
+        om = max(-30.0, min(30.0, self._rope_om)) / 30.0
+        return np.array([math.sin(self._rope_phase),
+                         math.cos(self._rope_phase), om], dtype=np.float32)
+
+    def reset_clock(self):
+        super().reset_clock()
+        self._rope_phase = 0.0
+        self._rope_raw = None
+        self._rope_om = 0.0
+
+    def _amp_obs(self) -> np.ndarray:
+        # turner_amp_obs: amplitude x clamp(t/3s, 0.15, 1) — the circle ramp
+        amp = 0.075 * max(0.15, min(1.0, self.clock_t / 3.0))
+        return np.array([amp], dtype=np.float32)
+
+    def get_obs(self) -> np.ndarray:
+        base = super().get_obs()   # 69D: ... twist, phase(2), tip_rel(3), head(4), body(6)
+        # 69D: twist at 51:54, phase 54:56, tip_rel 56:59, head 59:63, body 63:69
+        # -> 73D: ... phase 54:56, amp 56:57, tip_rel 57:60, rope_phase 60:63, ...
+        amp = self._amp_obs()
+        rope_obs = self.rope_phase_obs()
+        return np.concatenate([base[:56], amp, base[56:59], rope_obs,
+                               base[59:]]).astype(np.float32)
+
+    def step(self):
+        obs = self.get_obs()
+        assert obs.shape == (73,), obs.shape
+        action = self.bank.infer(self.active_policy, obs)
+        self.last_action = action.copy()
+        target = self.default_pose + action * self.action_scale
+        if self.head_override is not None:
+            target[HEAD_IDX] = self.head_override
+        if self.leg_override is not None:
+            target[LEG_IDX] = self.leg_override
+        if self.bam_drive is not None:
+            self.bam_drive.drive(target)
+        else:
+            self.data.ctrl[self.act_ids] = target
+        self.clock_t += 0.02

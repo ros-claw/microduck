@@ -1,0 +1,272 @@
+"""Honest classic rope-skip: the rope's ends ride the turner ducks' handle tips
+and the rope is driven by the turners' BODIES (the learned turner policy swings
+the mouth-held handle in the drive circle while the legs balance) — no mocap
+carriers, no kinematic idealization. The jumper runs the trained rope-hop
+policy. A timing PLL nudges the shared drive clock's phase so the belly passes
+under the jumper's feet at apex.
+
+This is the CR-05 answer: rope connected to the ducks' beaks, driven by the
+ducks' whole-body motion, measured overhead loop (3.1 Hz is the physical rate
+at this scale — the loop needs the speed to stand over the head).
+"""
+
+from __future__ import annotations
+
+import math
+import pathlib
+
+import mujoco
+import numpy as np
+
+from ..sim.classic_rope import build_classic_world
+from ..sim.runtime import PolicyBank, DuckRuntime, TurnerDuckRuntime, RopeTurnerDuckRuntime
+
+ROOT = pathlib.Path("~/workspace/microduck").expanduser()
+POL = ROOT / "microduck/policies"
+
+AIR_Z = 0.015
+PASS_Z = 0.08
+
+
+def run_honest_classic_skip(
+    out,
+    seconds: float = 50.0,
+    rope_length: float = 0.50,
+    rope_density: float = 500.0,
+    turn_hz: float = 3.1,
+    render_fps: int = 25,
+    overlay_fn=None,
+    turner_onnx=None,
+    hop_onnx=None,
+    seed: int = 0,
+):
+    """Run + render the honest classic skip. Returns (metrics, frames)."""
+    assert turner_onnx and hop_onnx, "needs the turner + hop policies"
+    bank = PolicyBank({
+        "stand": str(POL / "alpha_stand.onnx"),
+        "walk": str(POL / "alpha_walking.onnx"),
+        "turn": str(turner_onnx),
+        "jump": str(hop_onnx),
+    })
+    SUB = 20
+
+    m, d, info = build_classic_world(
+        rope_length=rope_length, rope_density=rope_density,
+        timestep=0.001, carrier_height=0.20, rope_kind="triple",
+        connect_to="handles", turner_sep=0.448,
+    )
+    for g in range(m.ngeom):
+        nm = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
+        if nm.startswith("rope/"):
+            m.geom_rgba[g] = [1.0, 0.45, 0.05, 1.0]
+    ids = info["rope_body_ids"]
+
+    rt = {}
+    for nm in ("lavender", "cream"):
+        rt[nm] = RopeTurnerDuckRuntime(m, d, bank, prefix=f"{nm}/", name=nm,
+                                       turn_frequency=turn_hz,
+                                       rope_body_ids=info["rope_body_ids"],
+                                       axis_y=0.0, axis_z=0.20)
+        # the turner policy runs from t=0 (it stands AND turns; the 69D obs
+        # can't feed the 61D stand policy, so no stand-first settle)
+        rt[nm].active_policy = "turn"
+        rt[nm].set_command(twist=(0, 0, 0))
+    rt["sky"] = DuckRuntime(m, d, bank, prefix="sky/", name="sky")
+    rt["sky"].active_policy = "stand"
+    rt["sky"].set_command(twist=(0, 0, 0))
+
+    # seed → tiny spawn jitter (the chain spin-up is chaotic; different seeds
+    # land different spin-up outcomes — pick a clean run for the video)
+    rng = np.random.default_rng(seed)
+    # Spawn the ducks at the DEFAULT_POSE (home crouch), NOT the XML's
+    # straight-leg qpos0: the policies' joint_pos_rel obs is relative to home,
+    # so a straight-leg spawn reads as a ±0.45 rad offset — inside the stand
+    # policy's robustness but NOT the specialist turner's (measured: the turner
+    # policy fires violent actions on the offset obs and throws the duck).
+    for dd in rt.values():
+        d.qpos[dd.joint_qpos_idx] = dd.default_pose + rng.uniform(-0.02, 0.02, 14)
+        d.qvel[dd.joint_qvel_idx] = 0.0
+    mujoco.mj_forward(m, d)
+
+    # anti-whip: clip the rope's joint velocities in the physics loop (the
+    # 3.1 Hz chain occasionally diverges via a joint-velocity explosion —
+    # measured; the loop never reaches ±40 rad/s, the whip does)
+    _span = {mujoco.mjtJoint.mjJNT_FREE: 6, mujoco.mjtJoint.mjJNT_BALL: 3}
+    rope_vadr = np.concatenate([
+        np.arange(m.jnt_dofadr[j], m.jnt_dofadr[j] + _span.get(m.jnt_type[j], 1))
+        for j in range(m.njnt)
+        if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, j) or "").startswith("rope/")])
+
+    # rope↔jumper contact stays off (a chain clipping the hopper explodes the
+    # solver, measured); rope↔turner excluded pairwise in the builder. The
+    # skip is scored by TIMING.
+    rope_geoms = {g for g in range(m.ngeom)
+                  if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or "").startswith("rope/")}
+
+    def feet_z():
+        return min(rt["sky"].site_pos("left_foot")[2], rt["sky"].site_pos("right_foot")[2])
+
+    def rope_near_z():
+        pts = np.array([d.xpos[b] for b in ids])
+        near = pts[np.abs(pts[:, 0]) < 0.15]
+        return float(np.min(near[:, 2])) if len(near) else 1.0
+
+    def rope_top_z():
+        pts = np.array([d.xpos[b] for b in ids])
+        near = pts[np.abs(pts[:, 0]) < 0.15]
+        return float(np.max(near[:, 2])) if len(near) else 0.0
+
+    ren = mujoco.Renderer(m, height=540, width=960)
+    camera = mujoco.MjvCamera()
+    camera.type = mujoco.mjtCamera.mjCAMERA_FREE
+    camera.lookat = [0, 0, 0.13]
+    camera.distance = 0.95
+    camera.azimuth = 115
+    camera.elevation = -12
+
+    # settle: 1 s to absorb the connect's initial transient, then the turners
+    # circle from t=0 — in-phase 3.1 Hz circles spin the rope up with NO seed
+    # (measured: two-pin probe, r=0.05-0.06, locks at the drive rate)
+    for _ in range(int(1 * 50)):
+        for dd in rt.values():
+            dd.step()
+        for _ in range(SUB):
+            d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -40.0, 40.0)
+            mujoco.mj_step(m, d)
+
+
+    frames = []
+    metrics = dict(passes=0, skips=0, trips=0)
+    last_apex_t = None
+    prev_rope_z = 1.0
+    pass_enter_t = None
+    airborne = False
+    rising = False
+    prev_feet = 0.0
+    air_hist: list[bool] = []
+    up_hist: list[bool] = []
+    hopping = False
+    t = 0.0
+    takeoffs: list[float] = []
+    duck_rate = turn_hz
+    e_filt = 0.0
+    # rope rate tracker (belly wraps) for the hop gate
+    _prev_th = None
+    _wraps = 0
+    _cont = 0.0
+    rope_rate = 0.0
+    rope_fast_t = 0.0
+    low_z_t = 0.0
+    hop_start_t = None
+    hop_retries = 0
+    last_stand_t = 0.0
+    NPOL = int(seconds * 50)
+    for pi in range(NPOL):
+        t = pi * 0.02
+        # rope rotation rate (belly wraps about the drive axis)
+        _bp = np.array([d.xpos[b] for b in ids])
+        _belly = _bp[np.argmin(_bp[:, 2])]
+        _th = math.atan2(_belly[1], -(_belly[2] - 0.20))
+        if _prev_th is not None:
+            _dth = _th - _prev_th
+            if _dth > math.pi: _wraps -= 1
+            elif _dth < -math.pi: _wraps += 1
+            _new_cont = _th + _wraps * 2 * math.pi
+            rope_rate = 0.98 * rope_rate + 0.02 * abs(_new_cont - _cont) / 0.02
+            _cont = _new_cont
+        _prev_th = _th
+        rope_fast_t = rope_fast_t + 0.02 if rope_rate > 15.0 else 0.0
+        # the jumper starts hopping once the rope spins fast for a sustained
+        # stretch AND sweeps low (the over-conservative late gate measured
+        # WORSE — the early window is fine once the rope locks)
+        if not hopping and t > 8.0 and rope_fast_t > 1.0 and rope_near_z() < 0.12:
+            rt["sky"].active_policy = "jump"
+            rt["sky"].set_command()
+            hopping = True
+            hop_start_t = t
+        # watchdog: SUSTAINED low trunk (a real face-plant) → re-stand and
+        # retry the hop (the hop's launch crouch dips to z≈0.03 — only a
+        # sustained low z is a real fall, so gate on duration)
+        sky_z = rt["sky"].trunk_pos()[2]
+        low_z_t = low_z_t + 0.02 if sky_z < 0.07 else 0.0
+        if (hopping and hop_start_t is not None and t > hop_start_t + 2.0
+                and low_z_t > 0.8 and hop_retries < 4):
+            rt["sky"].active_policy = "stand"
+            rt["sky"].set_command(twist=(0, 0, 0))
+            hopping = False
+            hop_start_t = None
+            last_stand_t = t
+            hop_retries += 1
+        if (not hopping and hop_start_t is None and t > 8.0
+                and t > last_stand_t + 2.5 and rope_near_z() < 0.15):
+            rt["sky"].active_policy = "jump"
+            rt["sky"].set_command()
+            hopping = True
+            hop_start_t = t
+        for dd in rt.values():
+            dd.step()
+        for _ in range(SUB):
+            d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -40.0, 40.0)
+            mujoco.mj_step(m, d)
+
+        fz = feet_z()
+        if airborne and fz < 0.01:
+            airborne = False
+        elif not airborne and fz > 0.02:
+            airborne = True
+            takeoffs.append(t)
+            if len(takeoffs) >= 3:
+                duck_rate = 1.0 / float(np.median(np.diff(takeoffs[-4:])))
+                # the drive RATE tracks the hopper's measured rate (a learned
+                # hopper is no metronome — measured in the carrier version)
+                for nm in ("lavender", "cream"):
+                    rt[nm].turn_frequency += 0.05 * (duck_rate - rt[nm].turn_frequency)
+        air = airborne
+        air_hist.append(air)
+        up_hist.append(rt["sky"].is_upright(0.5))
+        if len(air_hist) > 60:
+            air_hist.pop(0); up_hist.pop(0)
+        rz = rope_near_z()
+
+        if air and fz < prev_feet and rising:
+            last_apex_t = t - 0.02
+        rising = air and fz >= prev_feet
+
+        if prev_rope_z > PASS_Z >= rz:
+            pass_enter_t = t
+        if prev_rope_z <= PASS_Z < rz and pass_enter_t is not None:
+            last_pass_t = 0.5 * (pass_enter_t + t)
+            pass_enter_t = None
+            mid_idx = int((last_pass_t - t) / 0.02)
+            air_mid = air_hist[mid_idx] if -len(air_hist) <= mid_idx < 0 else air
+            up_mid = up_hist[mid_idx] if -len(up_hist) <= mid_idx < 0 else True
+            if hopping:
+                metrics["passes"] += 1
+                if air_mid and up_mid:
+                    metrics["skips"] += 1
+                else:
+                    metrics["trips"] += 1
+            # timing PLL (classic structure): EMA the pass-vs-apex error and
+            # integrate the shared drive clock's phase offset at 25%/cycle —
+            # the raw-gain version limit-cycled (measured in the carrier demo)
+            if last_apex_t is not None:
+                P = 1.0 / rt["lavender"].turn_frequency
+                e = (last_pass_t - last_apex_t + P / 2) % P - P / 2
+                e_filt = 0.5 * e + 0.5 * e_filt
+                for nm in ("lavender", "cream"):
+                    rt[nm].phase_offset_s += e_filt * 0.25
+                    rt[nm].phase_offset_s = float(np.clip(rt[nm].phase_offset_s, -0.16, 0.16))
+                last_apex_t = None
+        prev_feet = fz
+        prev_rope_z = rz
+
+        if pi % 2 == 0:
+            sp = rt["sky"].trunk_pos()
+            camera.lookat = [0.9 * camera.lookat[0] + 0.1 * sp[0],
+                             0.9 * camera.lookat[1] + 0.1 * sp[1], 0.13]
+            ren.update_scene(d, camera=camera)
+            img = ren.render().copy()
+            if overlay_fn is not None:
+                img = overlay_fn(img, t, metrics)
+            frames.append(img)
+    return metrics, frames
