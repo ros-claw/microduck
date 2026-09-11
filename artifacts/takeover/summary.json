@@ -1,40 +1,33 @@
 {
   "date": "2026-09-11",
   "project_accepted": false,
-  "training_iterations_this_gpu_session": 1800,
-  "training_envs": 2048,
-  "training_commit": "db8bab2",
-  "policy": "policies/ropehop_high.onnx",
-  "policy_sha256": "d002206f4c791b3cb6db292bac8639473f18705f2d682c84dd82c894b0ab6cee",
-  "single_duck_no_rope": {
-    "seeds": [
-      101,
-      202,
-      303,
-      404
+  "aggregate_target_met_in_test_batch": true,
+  "all_initial_states_pass": false,
+  "current_contact_recovery": "contact-summary.json",
+  "policy": "policies/ropehop_contact.onnx",
+  "policy_sha256": "4d2e1f85bc3243dfe6d05d9221a77b855a9dbabf734d17214181dc9d032abdd4",
+  "clean_skips": 442,
+  "full_revolutions": 516,
+  "physical_success_rate": 0.8565891472868217,
+  "criteria_scope": "MuJoCo simulation; eight seeded +/-0.02 rad initial servo perturbations, 30s each, first 9s excluded as startup; not a guarantee for all initial states.",
+  "regression_tests_passed": 40,
+  "training_commit": "18052aa",
+  "previous_stage_summary": "summary-phase1.json",
+  "remaining": "Three of eight tested seeds remain below 80%; improve startup and sustained landing/contact robustness.",
+  "video": {
+    "path": "out/contact_skip.mp4",
+    "duration_s": 20,
+    "fps": 25,
+    "frames": 500,
+    "size": [
+      960,
+      544
     ],
-    "seconds_each": 30,
-    "clean_hops": 372,
-    "attempts": 376,
-    "nonfoot_contact_s": 0.0,
-    "tilted_s": 0.0,
-    "max_drift_m": 0.03041478548361081,
-    "source": "hop-high3799-heldout30s.json"
-  },
-  "three_duck_example": {
-    "seed": 0,
-    "seconds": 20,
-    "completed": true,
-    "clean_skips": 0,
-    "full_revolutions": 34,
-    "passed": false,
-    "max_scored_rope_floor_penetration_m": 0.0016414312839274307,
-    "source": "physical-high3799-initial1.57079632679-seed0.json"
-  },
-  "regression_tests_passed": 31,
-  "videos": {
-    "single_duck": "out/clean_hop_high_3799.mp4",
-    "three_duck_diagnostic": "out/physical_skip_high_3799.mp4"
-  },
-  "remaining": "Rope-foot contact and actual underfoot clearance; the single-duck score is not rope-skipping success."
+    "audit_source": "artifacts/takeover/contact-final-video.json",
+    "clean_skips": 33,
+    "full_revolutions": 33,
+    "passed": true,
+    "sha256": "bf2e1245dbf7b87324611d9db12d1689055d0cba81d6d0acb5af4ed8f1365baf",
+    "renderer": "NVIDIA GB10/PCIe"
+  }
 }

@@ -56,6 +56,9 @@ def run_honest_classic_skip(
     settle_seconds: float = 1.,
     rope_initial_phase: float = 0.,
     rope_velocity_limit: float = 40.,
+    fixed_turn_rate: bool = False,
+    hop_feedback: bool = True,
+    max_turn_hz: float | None = None,
 ):
     """Return (legacy timing counters, frames), NOT physical skip success.
 
@@ -71,6 +74,10 @@ def run_honest_classic_skip(
         raise ValueError("settle_seconds must be nonnegative")
     if rope_velocity_limit < 0:
         raise ValueError("rope_velocity_limit must be nonnegative; zero disables clipping")
+    if max_turn_hz is not None:
+        if max_turn_hz <= 0:
+            raise ValueError('max_turn_hz must be positive')
+        turn_hz = min(turn_hz, max_turn_hz)
     bank = PolicyBank({
         "stand": str(POL / "alpha_stand.onnx"),
         "walk": str(POL / "alpha_walking.onnx"),
@@ -115,9 +122,25 @@ def run_honest_classic_skip(
     rt["sky"] = DuckRuntime(m, d, bank, prefix="sky/", name="sky")
     rt["sky"].active_policy = "stand"
     rt["sky"].set_command(twist=(0, 0, 0))
+    # Feedback from the material middle of the real flexible rope. No clock
+    # drives the jumper's height command. The training apparatus uses the same
+    # lower-crossing phase convention, but acceptance remains this full scene.
+    middle_body = ids[len(ids)//2]
+    handle_sites = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f'{nm}/handle_tip')
+                    for nm in ('lavender', 'cream')]
+    if min(handle_sites) < 0:
+        raise ValueError('Missing rope handle sites')
+    def measured_rope_phase():
+        if not hop_feedback:
+            return float(np.pi)  # explicit ablation: zero height delta, same physics
+        belly = d.xpos[middle_body]
+        foot_y = .5*(rt['sky'].site_pos('left_foot')[1]+rt['sky'].site_pos('right_foot')[1])
+        axis_z = float(np.mean(d.site_xpos[handle_sites, 2]))
+        return float(np.arctan2(belly[1]-foot_y, axis_z-belly[2]))
+    rt['sky'].hop_phase_source = measured_rope_phase
 
-    # seed → tiny spawn jitter (the chain spin-up is chaotic; different seeds
-    # land different spin-up outcomes — pick a clean run for the video)
+    # Seeded spawn jitter exposes the chain's startup sensitivity. Evaluation
+    # reports unsuccessful seeds as well as the seed shown in the video.
     rng = np.random.default_rng(seed)
     # Spawn the ducks at the DEFAULT_POSE (home crouch), NOT the XML's
     # straight-leg qpos0: the policies' joint_pos_rel obs is relative to home,
@@ -157,8 +180,10 @@ def run_honest_classic_skip(
     ren = mujoco.Renderer(m, height=540, width=960) if render else None
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_FREE
-    camera.lookat = [0, 0, 0.13]
-    camera.distance = 0.95
+    # Include the whole overhead loop; the old low, tight framing clipped the
+    # rope at the top and visually made its two ends look disconnected.
+    camera.lookat = [0, 0, 0.25]
+    camera.distance = 1.15
     camera.azimuth = 115
     camera.elevation = -12
 
@@ -265,12 +290,14 @@ def run_honest_classic_skip(
         elif not airborne and fz > 0.02:
             airborne = True
             takeoffs.append(t)
-            if len(takeoffs) >= 3:
+            if len(takeoffs) >= 3 and not fixed_turn_rate:
                 duck_rate = 1.0 / float(np.median(np.diff(takeoffs[-4:])))
                 # the drive RATE tracks the hopper's measured rate (a learned
                 # hopper is no metronome — measured in the carrier version)
                 for nm in ("lavender", "cream"):
                     rt[nm].turn_frequency += 0.05 * (duck_rate - rt[nm].turn_frequency)
+                    if max_turn_hz is not None:
+                        rt[nm].turn_frequency = min(rt[nm].turn_frequency, max_turn_hz)
         air = airborne
         air_hist.append(air)
         up_hist.append(rt["sky"].is_upright(0.5))
@@ -304,7 +331,7 @@ def run_honest_classic_skip(
             if observed_pass is not None and observed_pass != last_feedback_pass:
                 feedback_pass = observed_pass
                 last_feedback_pass = observed_pass
-        if feedback_pass is not None:
+        if feedback_pass is not None and not fixed_turn_rate:
             # timing PLL (classic structure): EMA the pass-vs-apex error and
             # integrate the shared drive clock's phase offset at 25%/cycle —
             # the raw-gain version limit-cycled (measured in the carrier demo)

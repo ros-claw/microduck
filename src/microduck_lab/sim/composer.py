@@ -259,6 +259,7 @@ def compose_world(
     grippy_ducks: list[str] | None = None,
     rope_mode: str = "free",          # "free" (chain + connect) | "mocap" (driven carriers)
     handle_len: float = 0.0,          # >0: turners hold a lightweight jump-rope handle
+    extra_specs: tuple = (),         # (namespace, MjSpec) physical apparatus
 ) -> ComposedWorld:
     """Compose ducks (+ optional rope) into one compiled MuJoCo world."""
     robot_xml = str(robot_xml)
@@ -386,6 +387,8 @@ def compose_world(
                 eq.solref = [0.02, 1.0]
                 rope_eq_specs.append(eq)
 
+    for namespace, extra in extra_specs:
+        spec.attach(extra, prefix=namespace, frame=spec.worldbody.add_frame())
     model = spec.compile()
     data = mujoco.MjData(model)
 

@@ -75,6 +75,7 @@ class PolicyBank:
     paths: dict[str, str]
     _sessions: dict[str, object] = field(default_factory=dict)
     _centering: dict[str, str | None] = field(default_factory=dict)
+    _height_command: dict[str, str | None] = field(default_factory=dict)
 
     def get(self, name: str):
         if name not in self._sessions:
@@ -102,6 +103,20 @@ class PolicyBank:
                 raise ValueError(f'unsupported hop centering version: {value}')
             self._centering[name] = value
         return self._centering[name] == 'v1'
+
+    def uses_hop_height_command(self, name: str) -> bool:
+        if name not in self._height_command:
+            value = self.get(name).get_modelmeta().custom_metadata_map.get('hop_height_command')
+            if value not in (None, 'sweep-v1'):
+                raise ValueError(f'unsupported hop height command: {value}')
+            self._height_command[name] = value
+        return self._height_command[name] == 'sweep-v1'
+
+
+def sweep_height_command(phase: float) -> float:
+    """Shared body-z delta target (metres); phase zero is under the feet."""
+    wrapped = math.atan2(math.sin(phase), math.cos(phase))
+    return .06 * max(0., 1. - (wrapped / (math.pi*.65))**2)
 
 
 XL330_CURRENT_LIMIT_A = 1.75   # firmware current limit
@@ -182,6 +197,7 @@ class DuckRuntime:
         self.last_action = np.zeros(14, dtype=np.float32)
         self.command = np.zeros(13, dtype=np.float32)  # unified command block
         self.active_policy = "stand"
+        self.hop_phase_source = None  # callable returning a measured obstacle angle
 
         # actuation-level overrides (policy still runs; these replace ctrl slots)
         self.head_override: np.ndarray | None = None   # absolute joint targets (4)
@@ -260,7 +276,18 @@ class DuckRuntime:
         ]).astype(np.float32)
 
     def step(self):
-        """One 50 Hz policy step: infer, apply, advance physics 4 substeps."""
+        """Infer and write actuator targets at 50 Hz; the caller advances physics."""
+        if self.bank.uses_hop_height_command(self.active_policy):
+            if self.hop_phase_source is None:
+                raise ValueError('This hop policy requires an explicit obstacle phase source')
+            phase = float(self.hop_phase_source())
+            if not math.isfinite(phase):
+                raise ValueError('Nonfinite obstacle phase')
+            self.command[9] = sweep_height_command(phase)
+            self._height_command_active = True
+        elif getattr(self, '_height_command_active', False):
+            self.command[9] = 0.
+            self._height_command_active = False
         if self.bank.uses_hop_centering(self.active_policy):
             pose = np.array([*self.trunk_pos()[:2],self.trunk_yaw()])
             if getattr(self,'_centering_policy',None) != self.active_policy:

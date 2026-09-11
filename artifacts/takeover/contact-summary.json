@@ -1,0 +1,113 @@
+{
+  "policy": "policies/ropehop_contact.onnx",
+  "sha256": "4d2e1f85bc3243dfe6d05d9221a77b855a9dbabf734d17214181dc9d032abdd4",
+  "training_commit": "18052aa",
+  "configuration": "scripts/contact_skip.sh",
+  "clean_skips": 442,
+  "full_revolutions": 516,
+  "aggregate_success_rate": 0.8565891472868217,
+  "aggregate_at_least_80_percent": true,
+  "all_seeds_passed": false,
+  "seeds_passed": 5,
+  "scope": "MuJoCo simulation; eight seeded +/-0.02 rad initial servo perturbations, 30s each, first 9s excluded as startup; not a guarantee for all initial states.",
+  "criteria": {
+    "warmup_s": 9.0,
+    "minimum_cycles": 20,
+    "sole_clearance_m": 0.001,
+    "landing_support_s": 0.05,
+    "attachment_limit_m": 0.01,
+    "min_upright_cos": 0.8,
+    "max_rope_floor_penetration_m": 0.002
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "seconds": 30.0,
+      "clean_skips": 65,
+      "full_revolutions": 65,
+      "success_rate": 1.0,
+      "passed": true,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed0.json"
+    },
+    {
+      "seed": 1,
+      "seconds": 30.0,
+      "clean_skips": 65,
+      "full_revolutions": 65,
+      "success_rate": 1.0,
+      "passed": true,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed1.json"
+    },
+    {
+      "seed": 2,
+      "seconds": 30.0,
+      "clean_skips": 65,
+      "full_revolutions": 65,
+      "success_rate": 1.0,
+      "passed": true,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed2.json"
+    },
+    {
+      "seed": 3,
+      "seconds": 30.0,
+      "clean_skips": 43,
+      "full_revolutions": 63,
+      "success_rate": 0.6825396825396826,
+      "passed": false,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed3.json"
+    },
+    {
+      "seed": 101,
+      "seconds": 30.0,
+      "clean_skips": 65,
+      "full_revolutions": 65,
+      "success_rate": 1.0,
+      "passed": true,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed101.json"
+    },
+    {
+      "seed": 202,
+      "seconds": 30.0,
+      "clean_skips": 37,
+      "full_revolutions": 64,
+      "success_rate": 0.578125,
+      "passed": false,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed202.json"
+    },
+    {
+      "seed": 303,
+      "seconds": 30.0,
+      "clean_skips": 65,
+      "full_revolutions": 65,
+      "success_rate": 1.0,
+      "passed": true,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed303.json"
+    },
+    {
+      "seed": 404,
+      "seconds": 30.0,
+      "clean_skips": 37,
+      "full_revolutions": 64,
+      "success_rate": 0.578125,
+      "passed": false,
+      "source": "artifacts/takeover/physical-sweep-contact-3900-cap3p1-seed404.json"
+    }
+  ],
+  "cpu_tests_passed": 40,
+  "video": {
+    "path": "out/contact_skip.mp4",
+    "duration_s": 20,
+    "fps": 25,
+    "frames": 500,
+    "size": [
+      960,
+      544
+    ],
+    "audit_source": "artifacts/takeover/contact-final-video.json",
+    "clean_skips": 33,
+    "full_revolutions": 33,
+    "passed": true,
+    "sha256": "bf2e1245dbf7b87324611d9db12d1689055d0cba81d6d0acb5af4ed8f1365baf",
+    "renderer": "NVIDIA GB10/PCIe"
+  }
+}

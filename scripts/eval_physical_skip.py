@@ -1,5 +1,6 @@
 """Evaluate actual full rope revolutions, geometry, contacts and landing."""
 import argparse
+import hashlib
 import json
 import pathlib
 import sys
@@ -30,6 +31,9 @@ def main():
     p.add_argument('--settle-seconds',type=float,default=1.)
     p.add_argument('--rope-initial-phase',type=float,default=0.)
     p.add_argument('--rope-velocity-limit',type=float,default=40.,help='zero disables legacy numerical clipping')
+    p.add_argument('--fixed-turn-rate',action='store_true',help='jumper follows rope; disable legacy turner PLL and rate tracking')
+    p.add_argument('--no-hop-feedback',action='store_true',help='ablation: zero height command, collisions remain enabled')
+    p.add_argument('--max-turn-hz',type=float,help='cap turner rate tracking while retaining geometric phase feedback')
     p.add_argument('--video',type=pathlib.Path,help='diagnostic video with physical score, including failures')
     p.add_argument('--output',type=pathlib.Path,required=True)
     args = p.parse_args()
@@ -54,6 +58,10 @@ def main():
     result['settle_seconds'] = args.settle_seconds
     result['rope_initial_phase'] = args.rope_initial_phase
     result['rope_velocity_limit'] = args.rope_velocity_limit
+    result['fixed_turn_rate'] = args.fixed_turn_rate
+    result['hop_feedback'] = not args.no_hop_feedback
+    result['max_turn_hz'] = args.max_turn_hz
+    result['hop_sha256'] = hashlib.sha256(args.hop.read_bytes()).hexdigest()
     def pass_time():
         value = observer.last_underfoot_crossing
         return value-round(args.settle_seconds*50)/50 if value is not None else None
@@ -70,7 +78,8 @@ def main():
         score = observer.scorer.result()
         draw.rectangle((0,0,1000,48),fill='black')
         draw.text((10,6),f'PHYSICAL CONTACT TEST | {args.hop.name} | t={t:.2f}s',fill='white')
-        draw.text((10,27),f'Clean cycles {score["clean_skips"]}/{score["full_revolutions"]} | collisions ON | diagnostic, not accepted delivery',fill='white')
+        status = 'PASS' if score['passed'] else 'PENDING / FAIL'
+        draw.text((10,27),f'Clean cycles {score["clean_skips"]}/{score["full_revolutions"]} | collisions ON | audit: {status}',fill='white')
         frame = np.asarray(im)
         writer.append_data(frame)
         return frame
@@ -90,6 +99,9 @@ def main():
             settle_seconds=args.settle_seconds,
             rope_initial_phase=args.rope_initial_phase,
             rope_velocity_limit=args.rope_velocity_limit,
+            fixed_turn_rate=args.fixed_turn_rate,
+            hop_feedback=not args.no_hop_feedback,
+            max_turn_hz=args.max_turn_hz,
             physics_observer=observer,model_setup=setup)
         result.update(completed=True,legacy_timing=metrics)
     except RuntimeError as exc:
