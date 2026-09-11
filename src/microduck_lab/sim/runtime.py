@@ -59,12 +59,22 @@ def quat_rotate_inverse(quat: np.ndarray, vec: np.ndarray) -> np.ndarray:
     return vec - w * t + np.cross(xyz, t)
 
 
+def hop_centering_command(pose: np.ndarray, target: np.ndarray) -> np.ndarray:
+    """Match training's v1 feedback command; pose/target are world x,y,yaw."""
+    delta = target-pose
+    c,s = math.cos(pose[2]),math.sin(pose[2])
+    return np.array([np.clip(2*(c*delta[0]+s*delta[1]),-.25,.25),
+                     np.clip(2*(-s*delta[0]+c*delta[1]),-.25,.25),
+                     np.clip(2*math.atan2(math.sin(delta[2]),math.cos(delta[2])),-1.,1.)],dtype=np.float32)
+
+
 @dataclass
 class PolicyBank:
     """Lazy ONNX policy registry. All policies share the 61D obs contract."""
 
     paths: dict[str, str]
     _sessions: dict[str, object] = field(default_factory=dict)
+    _centering: dict[str, str | None] = field(default_factory=dict)
 
     def get(self, name: str):
         if name not in self._sessions:
@@ -84,6 +94,14 @@ class PolicyBank:
             {sess.get_inputs()[0].name: obs.reshape(1, -1)},
         )[0]
         return out.squeeze(0).astype(np.float32)
+
+    def uses_hop_centering(self, name: str) -> bool:
+        if name not in self._centering:
+            value = self.get(name).get_modelmeta().custom_metadata_map.get('hop_centering')
+            if value not in (None,'v1'):
+                raise ValueError(f'unsupported hop centering version: {value}')
+            self._centering[name] = value
+        return self._centering[name] == 'v1'
 
 
 XL330_CURRENT_LIMIT_A = 1.75   # firmware current limit
@@ -243,6 +261,15 @@ class DuckRuntime:
 
     def step(self):
         """One 50 Hz policy step: infer, apply, advance physics 4 substeps."""
+        if self.bank.uses_hop_centering(self.active_policy):
+            pose = np.array([*self.trunk_pos()[:2],self.trunk_yaw()])
+            if getattr(self,'_centering_policy',None) != self.active_policy:
+                self._centering_target = pose.copy()
+            self._centering_policy = self.active_policy
+            self.command[:3] = hop_centering_command(pose,self._centering_target)
+        elif getattr(self,'_centering_policy',None) is not None:
+            self._centering_policy = None
+            self.command[:3] = 0.
         obs = self.get_obs()
         assert obs.shape == (61,), obs.shape
         action = self.bank.infer(self.active_policy, obs)

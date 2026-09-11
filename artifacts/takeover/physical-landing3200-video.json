@@ -1,0 +1,108 @@
+{
+  "hop": "artifacts/takeover/ropehop_landing_3200.onnx",
+  "seed": 0,
+  "seconds": 12.0,
+  "contacts": "full",
+  "solver": "Newton",
+  "connect_timeconst": 0.004,
+  "corrected_rope_root": true,
+  "mujoco": "3.12.0",
+  "rope_floor_timeconst": 0.002,
+  "integrator": "Euler",
+  "physics_dt": 0.0005,
+  "completed": true,
+  "legacy_timing": {
+    "passes": 10,
+    "skips": 6,
+    "trips": 4
+  },
+  "full_revolutions": 6,
+  "clean_skips": 0,
+  "physical_success_rate": 0.0,
+  "startup_before_warmup": true,
+  "passed": false,
+  "criteria": {
+    "warmup_s": 9.0,
+    "minimum_cycles": 20,
+    "sole_clearance_m": 0.001,
+    "landing_support_s": 0.05,
+    "attachment_limit_m": 0.01,
+    "min_upright_cos": 0.8,
+    "max_rope_floor_penetration_m": 0.002
+  },
+  "cycles": [
+    {
+      "start": 9.117499999999652,
+      "end": 9.459000000000069,
+      "clean": false,
+      "reasons": [
+        "did_not_clear_both_feet",
+        "insufficient_sole_clearance",
+        "no_clean_landing",
+        "rope_below_floor",
+        "rope_duck_contact"
+      ]
+    },
+    {
+      "start": 9.459000000000069,
+      "end": 9.663000000000318,
+      "clean": false,
+      "reasons": [
+        "did_not_clear_both_feet",
+        "fallen_turner",
+        "insufficient_sole_clearance",
+        "no_clean_landing",
+        "rope_duck_contact"
+      ]
+    },
+    {
+      "start": 9.663000000000318,
+      "end": 10.01600000000075,
+      "clean": false,
+      "reasons": [
+        "did_not_clear_both_feet",
+        "fallen_turner",
+        "insufficient_sole_clearance",
+        "loose_attachment",
+        "no_clean_landing",
+        "rope_duck_contact"
+      ]
+    },
+    {
+      "start": 10.01600000000075,
+      "end": 10.116000000000872,
+      "clean": false,
+      "reasons": [
+        "body_ground_contact",
+        "did_not_clear_both_feet",
+        "fallen_turner",
+        "loose_attachment",
+        "no_clean_landing"
+      ]
+    },
+    {
+      "start": 10.116000000000872,
+      "end": 10.378500000001193,
+      "clean": false,
+      "reasons": [
+        "body_ground_contact",
+        "did_not_clear_both_feet",
+        "fallen_turner",
+        "no_clean_landing",
+        "no_overhead_crossing"
+      ]
+    },
+    {
+      "start": 10.378500000001193,
+      "end": 10.504500000001347,
+      "clean": false,
+      "reasons": [
+        "body_ground_contact",
+        "did_not_clear_both_feet",
+        "fallen_turner",
+        "no_clean_landing",
+        "no_overhead_crossing"
+      ]
+    }
+  ]
+}

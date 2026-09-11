@@ -39,22 +39,63 @@ def run_honest_classic_skip(
     turner_onnx=None,
     hop_onnx=None,
     seed: int = 0,
+    render: bool = True,
+    rope_contacts: str | None = None,
+    physics_observer=None,
+    model_setup=None,
+    legacy_rope_offset: bool = True,
+    connect_timeconst: float = 0.04,
+    rope_floor_timeconst: float | None = None,
+    physics_dt: float = .001,
+    hop_start_delay: float = 8.,
+    rope_joint_type: str = "hinge",
+    rope_radius: float = .003,
+    rope_pass_time_fn=None,
+    jumper_y: float = -.10,
+    rope_phase_bias: float = 0.,
+    settle_seconds: float = 1.,
+    rope_initial_phase: float = 0.,
+    rope_velocity_limit: float = 40.,
 ):
-    """Run + render the honest classic skip. Returns (metrics, frames)."""
+    """Return (legacy timing counters, frames), NOT physical skip success.
+
+    ``render=False`` runs without a GL context. ``rope_contacts=None`` keeps
+    the historical contactless dynamics; full enables floor + jumper contacts
+    from initialization. ``physics_observer`` receives every physics step,
+    including the one-second warmup; ``model_setup`` runs before any stepping.
+    """
     assert turner_onnx and hop_onnx, "needs the turner + hop policies"
+    if not 0 <= hop_start_delay <= 8:
+        raise ValueError("hop_start_delay must be between 0 and the legacy 8 second gate")
+    if settle_seconds < 0:
+        raise ValueError("settle_seconds must be nonnegative")
+    if rope_velocity_limit < 0:
+        raise ValueError("rope_velocity_limit must be nonnegative; zero disables clipping")
     bank = PolicyBank({
         "stand": str(POL / "alpha_stand.onnx"),
         "walk": str(POL / "alpha_walking.onnx"),
         "turn": str(turner_onnx),
         "jump": str(hop_onnx),
     })
-    SUB = 20
+    if physics_dt <= 0 or not np.isclose(.02/physics_dt,round(.02/physics_dt)):
+        raise ValueError("physics_dt must divide the 20 ms policy period")
+    SUB = round(.02/physics_dt)
 
     m, d, info = build_classic_world(
         rope_length=rope_length, rope_density=rope_density,
-        timestep=0.001, carrier_height=0.20, rope_kind="triple",
+        timestep=physics_dt, carrier_height=0.20, rope_kind="triple",
         connect_to="handles", turner_sep=0.448,
+        rope_contacts=rope_contacts,
+        legacy_rope_offset=legacy_rope_offset,
+        connect_timeconst=connect_timeconst,
+        rope_floor_timeconst=rope_floor_timeconst,
+        rope_joint_type=rope_joint_type,
+        rope_radius=rope_radius,
+        jumper_y=jumper_y,
+        rope_initial_phase=rope_initial_phase,
     )
+    if model_setup is not None:
+        model_setup(m, d, info)
     for g in range(m.ngeom):
         nm = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
         if nm.startswith("rope/"):
@@ -97,11 +138,8 @@ def run_honest_classic_skip(
         for j in range(m.njnt)
         if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, j) or "").startswith("rope/")])
 
-    # rope↔jumper contact stays off (a chain clipping the hopper explodes the
-    # solver, measured); rope↔turner excluded pairwise in the builder. The
-    # skip is scored by TIMING.
-    rope_geoms = {g for g in range(m.ngeom)
-                  if (mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_GEOM, g) or "").startswith("rope/")}
+    # Legacy counters below score TIMING, even when contacts are enabled.
+    # They do not prove passage below the feet or a clean landing.
 
     def feet_z():
         return min(rt["sky"].site_pos("left_foot")[2], rt["sky"].site_pos("right_foot")[2])
@@ -116,7 +154,7 @@ def run_honest_classic_skip(
         near = pts[np.abs(pts[:, 0]) < 0.15]
         return float(np.max(near[:, 2])) if len(near) else 0.0
 
-    ren = mujoco.Renderer(m, height=540, width=960)
+    ren = mujoco.Renderer(m, height=540, width=960) if render else None
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_FREE
     camera.lookat = [0, 0, 0.13]
@@ -127,17 +165,21 @@ def run_honest_classic_skip(
     # settle: 1 s to absorb the connect's initial transient, then the turners
     # circle from t=0 — in-phase 3.1 Hz circles spin the rope up with NO seed
     # (measured: two-pin probe, r=0.05-0.06, locks at the drive rate)
-    for _ in range(int(1 * 50)):
+    for _ in range(round(settle_seconds * 50)):
         for dd in rt.values():
             dd.step()
         for _ in range(SUB):
-            d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -40.0, 40.0)
+            if rope_velocity_limit:
+                d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -rope_velocity_limit, rope_velocity_limit)
             mujoco.mj_step(m, d)
+            if physics_observer is not None:
+                physics_observer(m, d, info, False)
 
 
     frames = []
     metrics = dict(passes=0, skips=0, trips=0)
     last_apex_t = None
+    last_feedback_pass = None
     prev_rope_z = 1.0
     pass_enter_t = None
     airborne = False
@@ -163,6 +205,11 @@ def run_honest_classic_skip(
     NPOL = int(seconds * 50)
     for pi in range(NPOL):
         t = pi * 0.02
+        if hop_start_delay < 8. and not hopping and hop_start_t is None and hop_retries == 0 and t >= hop_start_delay:
+            rt["sky"].active_policy = "jump"
+            rt["sky"].set_command()
+            hopping = True
+            hop_start_t = t
         # rope rotation rate (belly wraps about the drive axis)
         _bp = np.array([d.xpos[b] for b in ids])
         _belly = _bp[np.argmin(_bp[:, 2])]
@@ -206,8 +253,11 @@ def run_honest_classic_skip(
         for dd in rt.values():
             dd.step()
         for _ in range(SUB):
-            d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -40.0, 40.0)
+            if rope_velocity_limit:
+                d.qvel[rope_vadr] = np.clip(d.qvel[rope_vadr], -rope_velocity_limit, rope_velocity_limit)
             mujoco.mj_step(m, d)
+            if physics_observer is not None:
+                physics_observer(m, d, info, hopping)
 
         fz = feet_z()
         if airborne and fz < 0.01:
@@ -232,10 +282,13 @@ def run_honest_classic_skip(
             last_apex_t = t - 0.02
         rising = air and fz >= prev_feet
 
+        feedback_pass = None
         if prev_rope_z > PASS_Z >= rz:
             pass_enter_t = t
         if prev_rope_z <= PASS_Z < rz and pass_enter_t is not None:
             last_pass_t = 0.5 * (pass_enter_t + t)
+            if rope_pass_time_fn is None:
+                feedback_pass = last_pass_t
             pass_enter_t = None
             mid_idx = int((last_pass_t - t) / 0.02)
             air_mid = air_hist[mid_idx] if -len(air_hist) <= mid_idx < 0 else air
@@ -246,12 +299,18 @@ def run_honest_classic_skip(
                     metrics["skips"] += 1
                 else:
                     metrics["trips"] += 1
+        if rope_pass_time_fn is not None:
+            observed_pass = rope_pass_time_fn()
+            if observed_pass is not None and observed_pass != last_feedback_pass:
+                feedback_pass = observed_pass
+                last_feedback_pass = observed_pass
+        if feedback_pass is not None:
             # timing PLL (classic structure): EMA the pass-vs-apex error and
             # integrate the shared drive clock's phase offset at 25%/cycle —
             # the raw-gain version limit-cycled (measured in the carrier demo)
             if last_apex_t is not None:
                 P = 1.0 / rt["lavender"].turn_frequency
-                e = (last_pass_t - last_apex_t + P / 2) % P - P / 2
+                e = (feedback_pass - last_apex_t - rope_phase_bias + P / 2) % P - P / 2
                 e_filt = 0.5 * e + 0.5 * e_filt
                 for nm in ("lavender", "cream"):
                     rt[nm].phase_offset_s += e_filt * 0.25
@@ -260,7 +319,7 @@ def run_honest_classic_skip(
         prev_feet = fz
         prev_rope_z = rz
 
-        if pi % 2 == 0:
+        if render and pi % max(1, round(50 / render_fps)) == 0:
             sp = rt["sky"].trunk_pos()
             camera.lookat = [0.9 * camera.lookat[0] + 0.1 * sp[0],
                              0.9 * camera.lookat[1] + 0.1 * sp[1], 0.13]
@@ -269,4 +328,6 @@ def run_honest_classic_skip(
             if overlay_fn is not None:
                 img = overlay_fn(img, t, metrics)
             frames.append(img)
+    if ren is not None:
+        ren.close()
     return metrics, frames

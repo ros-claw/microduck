@@ -1,5 +1,13 @@
 # Microduck Circus — ROSClaw × Pollen Microduck
 
+> **Takeover status (2026-09-11): three-duck physical skipping has not passed acceptance.**
+> The new centered single-duck policy completed 372/376 clean hops across four
+> held-out 30-second runs, with no body-ground contact or falls and about 3.2 cm
+> maximum drift. This is a **no-rope test**, not rope-skipping success.
+> See [measured recovery progress](docs/RECOVERY_PROGRESS.md) and
+> [the original delivery audit](docs/TAKEOVER_AUDIT.md).
+> The prototype descriptions and historical scores below are not current acceptance evidence.
+
 **Tell the ducks what you want. They act, fail, practice, and get better.**
 
 Three [Pollen Robotics Microduck](https://github.com/pollen-robotics/microduck)
@@ -108,16 +116,32 @@ spun up and held rotating *by the ducks' own learned whole-body motion*.
 - **The rope really locks to the duck's rate: 3.10 Hz measured in deployment.**
 - **Timing is a real PLL**: the drive rate tracks the hopper's measured hop
   rate (a learned hopper is no metronome) and the pass-vs-apex phase error
-  integrates into the shared drive clock — the belly passes under the jumper's
-  feet at apex.
+  integrates into the shared drive clock to align low rope sweeps with airborne
+  foot sites. This does not verify actual passage under the feet.
 - **The jumper is the trained rope-hop policy** (`policies/ropehop_classic.onnx`),
-  hopping in place and clearing the belly.
+  attempting periodic hops. Clean landings are not verified by the legacy score.
 
-**Result: 122/131 clean skips (93%) over a single unbroken 50 s run** — spin-up
-from rest, then continuous skipping, no falls, no resets, all three ducks up at
-the end. This supersedes the v3 floor-sweep "snake": the ducks now do the real
-overhead thing, and the "the neck servos can't spin the rope up" limit turned
-out to be a *scripted-motion* limit — the learned whole-body turn does it.
+**Historical result: 122/131 timing hits (93%), not clean skips.** The v4 rope
+has no floor or jumper collisions. The September 10 takeover audit reproduced
+those counters, but also measured 17.960 seconds with non-foot jumper/floor
+contact and over 45° trunk tilt during 30.7% of the hopping phase. The previous
+claim of "no falls" was unsupported and has been withdrawn. Physical success
+rate remains unmeasured; the 80% acceptance target is **not met**.
+
+See [the takeover audit](docs/TAKEOVER_AUDIT.md) for collision-enabled experiments,
+raw evidence, and the next acceptance gates. Reproduce the baseline or run with
+collisions enabled from initialization (no rendering required):
+
+```bash
+.venv/bin/python scripts/audit_honest_skip.py --contacts off --output artifacts/baseline.json
+.venv/bin/python scripts/audit_honest_skip.py --contacts full --output artifacts/contacts.json
+```
+
+The [September 11 repair results](docs/RECOVERY_PROGRESS.md) cover the corrected
+rope attachment geometry, strict hop evaluation, and a new training environment
+with proper spawn height and physical landing requirements. The first candidate
+policy still fails the acceptance criteria and has not replaced the historical
+weights.
 
 ## Roadmap
 

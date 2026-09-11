@@ -43,17 +43,34 @@ def build_classic_world(
     connect_to: str = "carriers",   # "carriers" (mocap idealization) | "handles"
                                     # (rope ends ride the turners' handle bodies —
                                     # the ducks' bodies really drive the rope)
+    rope_contacts: str | None = None,
+    legacy_rope_offset: bool = False,
+    connect_timeconst: float = 0.04,
+    rope_floor_timeconst: float | None = None,
+    rope_joint_type: str = "hinge",
+    jumper_y: float = -.10,
+    rope_initial_phase: float = 0.,
 ):
     """3 ducks + an elastic-cable rope on mocap carriers, one MuJoCo world.
 
     Returns (model, data, info) with info = {rope_body_ids, mocap_a, mocap_b,
     carrier_centers}.
     """
+    if rope_contacts not in (None, "off", "floor", "jumper", "full"):
+        raise ValueError("rope_contacts must be off, floor, jumper, full, or None")
+    if rope_radius <= 0 or rope_density <= 0 or rope_length <= 0:
+        raise ValueError("rope radius, density and length must be positive")
+    if rope_joint_type not in ("hinge", "ball") or (rope_joint_type == "ball" and rope_kind != "triple"):
+        raise ValueError("rope_joint_type supports hinge or ball on the triple geometry")
+    if rope_contacts is not None and rope_kind != "triple":
+        raise ValueError("explicit rope_contacts currently supports only the triple rope")
+    if connect_timeconst < 2 * timestep:
+        raise ValueError("connect_timeconst must be at least two physics steps")
     if ducks is None:
         ducks = [
             DuckSpec("lavender", (-turner_sep / 2, 0.0), yaw=0.0, color=DUCK_COLORS["lavender"]),
             DuckSpec("cream", (turner_sep / 2, 0.0), yaw=math.pi, color=DUCK_COLORS["cream"]),
-            DuckSpec("sky", (0.0, -0.10), yaw=math.pi / 2, color=DUCK_COLORS["sky"]),
+            DuckSpec("sky", (0.0, jumper_y), yaw=math.pi / 2, color=DUCK_COLORS["sky"]),
         ]
     cA = np.array([-turner_sep / 2, 0.0, carrier_height])
     cB = np.array([turner_sep / 2, 0.0, carrier_height])
@@ -156,7 +173,8 @@ def build_classic_world(
         # per-segment relative y-pitch quats (MuJoCo quat w,x,y,z; pitch about
         # -y by alpha maps +x to (cos a, 0, sin a)-style descent)
         parts = ['<mujoco model="rope"><worldbody>',
-                 f'<body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}"><freejoint/>',
+                 f'<body name="ropewrap" pos="{cA[0]} {cA[1]} {cA[2]}" '
+                 f'quat="{math.cos(rope_initial_phase/2)} {math.sin(rope_initial_phase/2)} 0 0"><freejoint/>',
                  '<geom type="sphere" size="0.004" contype="0" conaffinity="0" rgba="1 1 0 0"/>']
         prev_alpha = 0.0
         for i in range(n_seg):
@@ -171,11 +189,14 @@ def build_classic_world(
             # rel rotation about y by (alpha_i - alpha_{i-1}) with sign so the
             # chain sags: measured by the FK above; quat about +y of angle rel
             qw, qy = math.cos(rel / 2), -math.sin(rel / 2)
+            joints = (f'<joint name="rball{i}" type="ball" damping="0.0002"/>'
+                      if rope_joint_type == "ball" else
+                      f'<joint name="rty{i}" type="hinge" axis="0 1 0" damping="0.0002"/>'
+                      f'<joint name="rtz{i}" type="hinge" axis="0 0 1" damping="0.0002"/>'
+                      f'<joint name="rtx{i}" type="hinge" axis="1 0 0" damping="0.0002" armature="1e-5"/>')
             parts.append(
-                f'<body name="seg_{i}" pos="{seg:.5f} 0 0" quat="{qw:.6f} 0 {qy:.6f} 0">'
-                f'<joint name="rty{i}" type="hinge" axis="0 1 0" damping="0.0002"/>'
-                f'<joint name="rtz{i}" type="hinge" axis="0 0 1" damping="0.0002"/>'
-                f'<joint name="rtx{i}" type="hinge" axis="1 0 0" damping="0.0002" armature="1e-5"/>'
+                f'<body name="seg_{i}" pos="{seg if i or legacy_rope_offset else 0:.5f} 0 0" quat="{qw:.6f} 0 {qy:.6f} 0">'
+                + joints +
                 f'<geom name="rope_s{i}" type="capsule" size="{rope_radius}" fromto="0 0 0 {seg:.5f} 0 0" '
                 # CONTACTLESS: the rope-turner policy trained with a contactless
                 # rope (Warp stability); floor contact changes the yank dynamics
@@ -263,7 +284,7 @@ def build_classic_world(
             # SOFT: matches the training env's far-end connect (solref 0.04);
             # a hard connect yanks the beak harder than the policy was
             # hardened against (measured: turners fall instantly on CPU).
-            eq.solref = [0.04, 1.0]
+            eq.solref = [connect_timeconst, 1.0]
             eq.solimp = [0.8, 0.95, 0.01, 0.0, 2.0]
 
     # The turner ducks brace the rope they're holding — exclude rope↔turner
@@ -282,6 +303,31 @@ def build_classic_world(
             ex.bodyname1 = rb
             ex.bodyname2 = tb
 
+    # A dedicated bit preserves the robot's existing collision groups. Set
+    # this before compilation so body-level broadphase masks agree with geoms.
+    if rope_contacts is not None:
+        for geom in spec.geoms:
+            name = geom.name or ""
+            if name.startswith("rope/"):
+                geom.contype = 8 if "rope_s" in name and rope_contacts != "off" else 0
+                geom.conaffinity = 0
+            elif name == "floor" and rope_contacts in ("floor", "full"):
+                geom.conaffinity |= 8
+            elif (geom.parent.name or "").startswith("sky/") and rope_contacts in ("jumper", "full"):
+                if geom.contype or geom.conaffinity:
+                    geom.conaffinity |= 8
+
+    if rope_floor_timeconst is not None:
+        if rope_contacts not in ("floor", "full") or rope_floor_timeconst < 2*timestep:
+            raise ValueError("rope_floor_timeconst requires floor contacts and at least two physics steps")
+        # Explicit pairs stiffen only rope/floor; duck contacts keep their
+        # original response. Raising rope geom priority also stiffens impacts
+        # against the duck, which proved unstable during spin-up.
+        for geom in spec.geoms:
+            if (geom.name or "").startswith("rope/rope_s"):
+                spec.add_pair(geomname1=geom.name, geomname2="floor", condim=3,
+                    friction=[.01,.01,.005,.0001,.0001],
+                    solref=[rope_floor_timeconst,1.], solimp=[.95,.99,.001,.5,2.])
     model = spec.compile()
     # MuJoCo's compiler AUTO-COMPUTES the connect anchor from the rest pose:
     # the cable rests 0.86 m along +x from ropewrap, so B_last's auto-anchor

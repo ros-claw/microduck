@@ -30,9 +30,10 @@ OUT = MD / "honest_skip_full.mp4"
 def overlay(img, t, m):
     im = Image.fromarray(img)
     dr = ImageDraw.Draw(im)
-    dr.rectangle([0, 0, 330, 44], fill=(0, 0, 0))
+    dr.rectangle([0, 0, 470, 60], fill=(0, 0, 0))
     dr.text((8, 6), f"t={t:4.1f}s  passes={m['passes']}", fill=(255, 255, 255))
-    dr.text((8, 24), f"SKIPS={m['skips']}  trips={m['trips']}", fill=(120, 255, 120))
+    dr.text((8, 24), f"TIMING hits={m['skips']}  misses={m['trips']}", fill=(255, 220, 120))
+    dr.text((8, 42), "Rope collisions OFF - physical success NOT measured", fill=(255, 220, 120))
     return np.array(im)
 
 
