@@ -59,6 +59,8 @@ def run_honest_classic_skip(
     fixed_turn_rate: bool = False,
     hop_feedback: bool = True,
     max_turn_hz: float | None = None,
+    asset_colors: bool = False,
+    presentation: str = "lab",
 ):
     """Return (legacy timing counters, frames), NOT physical skip success.
 
@@ -100,6 +102,8 @@ def run_honest_classic_skip(
         rope_radius=rope_radius,
         jumper_y=jumper_y,
         rope_initial_phase=rope_initial_phase,
+        asset_colors=asset_colors,
+        presentation=presentation,
     )
     if model_setup is not None:
         model_setup(m, d, info)

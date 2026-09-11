@@ -50,6 +50,8 @@ def build_classic_world(
     rope_joint_type: str = "hinge",
     jumper_y: float = -.10,
     rope_initial_phase: float = 0.,
+    asset_colors: bool = False,
+    presentation: str = "lab",
 ):
     """3 ducks + an elastic-cable rope on mocap carriers, one MuJoCo world.
 
@@ -58,6 +60,8 @@ def build_classic_world(
     """
     if rope_contacts not in (None, "off", "floor", "jumper", "full"):
         raise ValueError("rope_contacts must be off, floor, jumper, full, or None")
+    if presentation not in ('lab', 'studio'):
+        raise ValueError('presentation must be lab or studio')
     if rope_radius <= 0 or rope_density <= 0 or rope_length <= 0:
         raise ValueError("rope radius, density and length must be positive")
     if rope_joint_type not in ("hinge", "ball") or (rope_joint_type == "ball" and rope_kind != "triple"):
@@ -98,6 +102,33 @@ def build_classic_world(
     gmat.texrepeat = [4, 4]
     floor = spec.worldbody.add_geom(name="floor", type=mujoco.mjtGeom.mjGEOM_PLANE, size=[0, 0, 0.05])
     floor.material = "gp"
+    if presentation == 'studio':
+        # Render-only settings. No extra bodies, collision shapes or contacts.
+        spec.visual.global_.offwidth = 2048
+        spec.visual.global_.offheight = 2048
+        spec.visual.quality.shadowsize = 4096
+        spec.visual.quality.offsamples = 4
+        spec.visual.headlight.diffuse = [.25, .25, .25]
+        spec.visual.headlight.ambient = [.18, .18, .18]
+        spec.visual.headlight.specular = [.05, .05, .05]
+        spec.add_texture(name='studio_sky', type=mujoco.mjtTexture.mjTEXTURE_SKYBOX,
+            builtin=mujoco.mjtBuiltin.mjBUILTIN_GRADIENT,
+            rgb1=[.035,.055,.08], rgb2=[.16,.20,.24], width=512, height=3072)
+        studio_floor = spec.add_material(name='studio_floor', rgba=[.18,.21,.25,1],
+            specular=.12, shininess=.2, reflectance=0.)
+        floor.material = studio_floor.name
+        light.pos = [0,0,3.5]
+        light.dir = [0,0,-1]
+        light.diffuse = [.65,.61,.55]
+        light.ambient = [.08,.08,.08]
+        light.specular = [.18,.18,.18]
+        for name,pos,direction,diffuse in (
+            ('fill',[1,-.3,1.5],[-.6,.2,-1],[.25,.32,.40]),
+            ('rim',[0,1,1.4],[0,-.6,-1],[.45,.48,.52])):
+            extra = spec.worldbody.add_light(name=name,pos=pos,dir=direction)
+            extra.type = mujoco.mjtLightType.mjLIGHT_DIRECTIONAL
+            extra.diffuse = diffuse
+            extra.castshadow = False
     # contact bits: rope(2,1) ⟂ floor(1,7) collide; jumper(4, 5→7) ghosts the
     # rope until the skip starts (a duck IN the sweep during spin-up bleeds the
     # build — measured), while jumper⟂floor always collide
@@ -112,7 +143,7 @@ def build_classic_world(
         turner_set = {ducks[0].name, ducks[1].name}
     for d in ducks:
         child = mujoco.MjSpec.from_file(robot_xml)
-        if d.color:
+        if d.color and not asset_colors:
             _tint_duck(child, d.color)
         if d.name in turner_set:
             _add_handle(child)

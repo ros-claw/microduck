@@ -1,0 +1,82 @@
+{
+  "videos": [
+    {
+      "path": "out/microduck_studio_full.mp4",
+      "fps": 50.0,
+      "frames": 1000,
+      "duration_s": 20.0,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "ce20f9829594f5a2e0cba02d5d7f0c6eafe25c601cd6b1dec61840be73a03670",
+      "audio_codec": null
+    },
+    {
+      "path": "out/microduck_social_silent.mp4",
+      "fps": 50.0,
+      "frames": 740,
+      "duration_s": 14.8,
+      "size": [
+        1080,
+        1920
+      ],
+      "sha256": "7bdc17b74f96f4c8d328047565bdd19ee3bda47011d28923a5b47a2e1444a328",
+      "audio_codec": null
+    },
+    {
+      "path": "out/microduck_social.mp4",
+      "fps": 50.0,
+      "frames": 740,
+      "duration_s": 14.8,
+      "size": [
+        1080,
+        1920
+      ],
+      "sha256": "7def7465c04ebf02bfbccc8b92936f1dcce6d73f543a8340fdea40beb19d0f17",
+      "audio_codec": "aac"
+    }
+  ],
+  "native_asset_materials": true,
+  "physics_cycles_identical_to_reference": true,
+  "trajectory_hz": 200,
+  "joint_interpolation": false,
+  "edit": [
+    {
+      "output_s": [
+        0,
+        4
+      ],
+      "source_s": [
+        9,
+        13
+      ],
+      "speed": 1
+    },
+    {
+      "output_s": [
+        4,
+        8
+      ],
+      "source_s": [
+        12.16,
+        13.16
+      ],
+      "speed": 0.25
+    },
+    {
+      "output_s": [
+        8,
+        14.8
+      ],
+      "source_s": [
+        13.2,
+        20
+      ],
+      "speed": 1
+    }
+  ],
+  "audio": "Original procedural post-production foley, not recorded simulation audio",
+  "audit": "artifacts/presentation/audit.json",
+  "regression_tests": "tests/test_rope_contacts.py: 10 passed"
+}
