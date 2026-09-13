@@ -21,7 +21,7 @@ import numpy as np
 from .composer import DuckSpec, DUCK_COLORS, _yaw_quat, _tint_duck, _add_handle
 from ..sim.runtime import PolicyBank, DuckRuntime
 
-_ROOT = pathlib.Path("~/workspace/microduck").expanduser()
+from ..paths import ASSET_ROOT as _ROOT
 ROBOT = _ROOT / "microduck_rl/src/mjlab_microduck/robot/microduck/robot_allcollisions.xml"
 
 

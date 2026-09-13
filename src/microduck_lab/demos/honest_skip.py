@@ -21,7 +21,7 @@ import numpy as np
 from ..sim.classic_rope import build_classic_world
 from ..sim.runtime import PolicyBank, DuckRuntime, TurnerDuckRuntime, RopeTurnerDuckRuntime
 
-ROOT = pathlib.Path("~/workspace/microduck").expanduser()
+from ..paths import ASSET_ROOT as ROOT
 POL = ROOT / "microduck/policies"
 
 AIR_Z = 0.015

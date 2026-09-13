@@ -4,6 +4,7 @@
 
 | 文件 | 用途 |
 | --- | --- |
+| `out/microduck_closeups.mp4` | 1280 × 720、50 fps、18 秒：嘴部、双脚、完整起跳三个跟随特写，均为 0.25× 慢动作 |
 | `out/microduck_social.mp4` | 1080 × 1920、50 fps、14.8 秒竖版，含后期拟音 |
 | `out/microduck_social_silent.mp4` | 同一竖版的无声版本，便于自行配乐 |
 | `out/microduck_studio_full.mp4` | 1920 × 1080、50 fps、20 秒连续实速完整演示 |
@@ -41,5 +42,7 @@ MUJOCO_GL=egl PYOPENGL_PLATFORM=egl OPENBLAS_NUM_THREADS=1 \
 需要仓库依赖、EGL 和 Noto Sans CJK 字体。第一次捕获将保存本地模型与 200 Hz 状态缓存；后续不带 `--capture` 可直接重新渲染。大型缓存被 `.gitignore` 排除。
 
 `artifacts/presentation/audit.json` 保存本次核验：全部计分圈与 `artifacts/takeover/contact-final-video.json` 逐项一致，启动后 33/33 圈合格。回放直接读取仿真状态，不插值关节、不修改动作。多组成绩来源为 `artifacts/takeover/contact-summary.json`，不以这条成功演示替代多组验证。
+
+新增特写使用同一轨迹的 12–13.5 秒，分别从嘴部连接、双脚和跳跃者整体三个角度以 0.25× 重放，每段 6 秒，共 18 秒，无声。镜头跟随目标的实际身体位置。捕获后运行 `.venv/bin/python scripts/render_closeups.py` 即可生成；参数与视频哈希见 `artifacts/presentation/closeups.json`。
 
 原实验的默认外观保持兼容；新外观由 `asset_colors=True, presentation="studio"` 显式开启。

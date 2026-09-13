@@ -16,15 +16,23 @@ LOCK = ROOT / "upstream.lock.yaml"
 def main():
     root = pathlib.Path(os.environ.get("MICRODUCK_ROOT", ROOT.parent)).expanduser()
     need = {
-        "microduck_rl": "https://github.com/pollen-robotics/microduck_rl",
-        "microduck": "https://github.com/pollen-robotics/microduck",
+        "microduck_rl": ("microduck_rl", "https://github.com/pollen-robotics/microduck_rl"),
+        "microduck": ("microduck_runtime", "https://github.com/pollen-robotics/microduck"),
     }
     import re
     lock = LOCK.read_text()
-    for name, url in need.items():
+    root.mkdir(parents=True, exist_ok=True)
+    for name, (lock_key, url) in need.items():
         dest = root / name
-        m = re.search(rf"{name}:.*?commit: ([0-9a-f]{{40}})", lock, re.S)
+        m = re.search(rf"^{lock_key}:.*?commit: ([0-9a-f]{{40}})", lock, re.S | re.M)
+        if m is None:
+            raise ValueError(f"Missing pinned commit for {lock_key}")
         sha = m.group(1)
+        if dest.exists():
+            # Existing training checkouts may contain valuable local work.
+            head = subprocess.check_output(["git", "-C", str(dest), "rev-parse", "HEAD"], text=True).strip()
+            print(f"{name}: keeping existing checkout @ {head[:8]} (pin {sha[:8]})")
+            continue
         if not dest.exists():
             print(f"cloning {url} → {dest}")
             subprocess.run(["git", "clone", url, str(dest)], check=True)
