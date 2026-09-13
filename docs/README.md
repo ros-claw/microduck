@@ -2,7 +2,7 @@
 
 | 阅读目的 | 当前文档 |
 | --- | --- |
-| 看演示、安装与运行 | [项目首页](../README.md) |
+| 看演示、安装与运行 | [中文首页](../README.zh-CN.md) · [English](../README.md) |
 | 下载发布素材、复制文案 | [PUBLICATION](PUBLICATION.md) |
 | 理解真实接触结果与失败种子 | [SWEEP_TRAINING](SWEEP_TRAINING.md) |
 | 获取训练实现 | [训练源码包](../training/README.md) |
