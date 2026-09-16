@@ -12,6 +12,8 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 ## Demonstration
 
+[English overview: method, close-ups, and results](out/microduck_youtube_en.mp4) · [English video description](docs/YOUTUBE_EN.md)
+
 [![Three robots skipping a physically simulated rope](docs/media/skipping.gif)](out/microduck_studio_full.mp4)
 
 [Continuous 20-second rollout](out/microduck_studio_full.mp4) · [Mouth attachment and foot-clearance close-ups](out/microduck_closeups.mp4) · [Vertical demonstration](out/microduck_social.mp4)

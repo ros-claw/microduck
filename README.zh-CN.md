@@ -12,6 +12,8 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 ## 演示
 
+[全英文演示：方法、特写与结果](out/microduck_youtube_en.mp4) · [英文视频说明](docs/YOUTUBE_EN.md)
+
 [![三机器人柔性绳跳跃仿真](docs/media/skipping.gif)](out/microduck_studio_full.mp4)
 
 [连续 20 秒完整回放](out/microduck_studio_full.mp4) · [嘴部连接与脚下净空特写](out/microduck_closeups.mp4) · [竖版演示](out/microduck_social.mp4)
