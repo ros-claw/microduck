@@ -24,7 +24,7 @@ The continuous rollout includes startup. Close-ups replay the same trajectory at
 
 ### 1. Shared physical environment
 
-Three copies of the official Microduck model and a segmented flexible rope are simulated in one MuJoCo world. Rope endpoints are connected to mouth-held handles using equality constraints. Ball joints allow the rope segments to bend and twist. The current configuration enables rope–robot and rope–ground collisions from initialization, with no mocap carriers driving the rope and no rope-velocity clipping.
+Three copies of the official Microduck model and a segmented flexible rope are simulated in one MuJoCo world. Rope endpoints are connected to mouth-held handles using equality constraints. Ball joints allow the rope segments to bend and twist. The current configuration enables rope–jumper and rope–ground collisions from initialization; rope–turner collisions are explicitly excluded, while mouth-handle constraints transmit endpoint forces, with no mocap carriers driving the rope and no rope-velocity clipping.
 
 | Component | Current configuration |
 | --- | --- |
@@ -78,7 +78,7 @@ The [evaluator](src/microduck_lab/sim/skip_metrics.py) checks every physics step
 - A clean, upright landing with at least **50 ms of continuous foot support** after both feet have been cleared.
 - Upright robots, mouth-attachment error no greater than **10 mm**, and rope–ground numerical penetration no greater than **2 mm**.
 
-A run passes only if rotation starts within the 9-second startup window, at least 20 post-startup cycles are counted, and at least 80% are clean. Contact simulation has numerical tolerances; “collision enabled” does not mean mathematically zero penetration.
+A run passes only if rotation starts within the 9-second startup window, at least 20 post-startup cycles are counted, and at least 80% are clean. Contact simulation has numerical tolerances, but the four-duck follow-up also found **substantial 23–37 mm impact penetration**, not just negligible error. Rope–turner and rope self-collisions are disabled. See the [physical fidelity audit](docs/PHYSICAL_FIDELITY_AUDIT.md).
 
 ### Measured results
 
@@ -192,6 +192,8 @@ An executable first-stage prototype adds Graphite, a 5 / 3 / 5 relay state machi
 [Implementation and commands](docs/CIRCUS_DIRECTOR.md) · [Measured results and failure analysis (Chinese)](docs/CIRCUS_RESULTS_2026-09-17.md) · [Machine-readable evidence](artifacts/circus/summary.json)
 
 Matching rope length to the wider formation produced **258/260 shared clean cycles across four independent 30-second static-duo runs; all four passed**, excluding the first 9 seconds of startup in each run. Moving entry still fails on rope contact. [Collision and timing analysis, including failed configurations](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [Full static-duo video](out/circus_matched_duo.mp4).
+
+**New: [1:48 film with head-follow cameras and slow motion](docs/CIRCUS_POV_VIDEO.md).** The [physical fidelity audit](docs/PHYSICAL_FIDELITY_AUDIT.md) documents substantial impact penetration and excluded rope–turner collisions.
 
 [3:20 slow-motion detail film: mouth connections, both jumpers' feet, formation and entry failure](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) · [Video guide and subtitles](docs/CIRCUS_DETAILS_VIDEO.md)
 

@@ -20,3 +20,6 @@
 - [Four-duck collision and timing follow-up / 四鸭碰撞与节奏复盘](CIRCUS_GEOMETRY_AND_TIMING.md)
 
 - [Long slow-motion detail video / 长版慢动作细节视频](CIRCUS_DETAILS_VIDEO.md)
+
+- [1:48 head-follow film / 1 分 48 秒跟随视角短片](CIRCUS_POV_VIDEO.md)
+- [Physical fidelity audit / 穿模与碰撞范围复核](PHYSICAL_FIDELITY_AUDIT.md)

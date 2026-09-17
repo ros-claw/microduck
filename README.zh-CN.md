@@ -24,7 +24,7 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 ### 1. 共享物理环境
 
-三份官方 Microduck 模型与一条分段柔性绳位于同一个 MuJoCo 世界中。绳端通过等式约束连接嘴部把手，球关节允许绳段弯曲与扭转。当前配置从初始化开始启用绳—机器人和绳—地面碰撞，不使用 mocap 载具驱动绳子，也不钳制绳关节速度。
+三份官方 Microduck 模型与一条分段柔性绳位于同一个 MuJoCo 世界中。绳端通过等式约束连接嘴部把手，球关节允许绳段弯曲与扭转。当前配置从初始化开始启用绳—跳跃鸭和绳—地面碰撞；绳—甩绳鸭碰撞被明确排除，绳端仍通过嘴部把手约束传力，不使用 mocap 载具驱动绳子，也不钳制绳关节速度。
 
 | 组成 | 当前配置 |
 | --- | --- |
@@ -78,7 +78,7 @@ flowchart LR
 - 绳子经过双脚后，完成直立、无碰撞落地，并维持至少 **50 ms 连续脚部支撑**。
 - 三只机器人保持直立，嘴部连接误差不超过 **10 mm**，绳—地面数值穿透不超过 **2 mm**。
 
-单次运行只有在前 9 秒内完成起旋、启动后至少计入 20 圈且合格率达到 80% 时才通过。接触求解存在数值容差；启用碰撞并不等于数学意义上的零穿透。
+单次运行只有在前 9 秒内完成起旋、启动后至少计入 20 圈且合格率达到 80% 时才通过。四鸭后续复核发现，碰绳时存在 **23–37 mm 的明显穿入**，不能仅解释为微小数值误差；绳—甩绳鸭和绳自碰撞被关闭。详见[物理真实性复核](docs/PHYSICAL_FIDELITY_AUDIT.md)。
 
 ### 实测结果
 
@@ -192,6 +192,8 @@ uv run --with pytest pytest tests/test_clean_ropehop_cfg.py tests/test_sweep_rop
 [实现与命令](docs/CIRCUS_DIRECTOR.md) · [实测结果与失败分析](docs/CIRCUS_RESULTS_2026-09-17.md) · [机器可读证据](artifacts/circus/summary.json)
 
 后续空间对照中，匹配绳长与宽队形后，原地双跳在四组独立 30 秒验证中达到 **258/260 个共同合格圈，四组全部通过**；每组均排除前 9 秒启动窗口。移动入场仍因碰绳未通过。[碰撞与节奏分析（保留失败配置）](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [完整双跳录像](out/circus_matched_duo.mp4)。
+
+**新增：[1 分 48 秒头部跟随视角与慢动作短片](docs/CIRCUS_POV_VIDEO.md)。** [物理真实性复核](docs/PHYSICAL_FIDELITY_AUDIT.md)明确记录了碰绳时的明显穿入，以及绳—甩绳鸭碰撞被排除的限制。
 
 [3 分 20 秒慢动作细节版：嘴部连接、双鸭脚下过绳、队形与入场失败特写](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) · [视频说明及中文字幕](docs/CIRCUS_DETAILS_VIDEO.md)
 

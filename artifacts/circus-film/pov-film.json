@@ -1,0 +1,157 @@
+{
+  "video": "out/microduck_circus_pov_en.mp4",
+  "sha256": "4c6bb501721a0740642b191e9557e40faa7668878288cd6096c3c7e3ddcb396b",
+  "duration_s": 108,
+  "fps": 50,
+  "frames": 5400,
+  "size": [
+    1920,
+    1080
+  ],
+  "language": "en",
+  "chapters": [
+    {
+      "start_s": 0,
+      "end_s": 8,
+      "source": "duo",
+      "source_start_s": 11,
+      "speed": 0.5,
+      "camera": "wide",
+      "title": "TWO JUMPERS. ONE PHYSICAL ROPE."
+    },
+    {
+      "start_s": 8,
+      "end_s": 16,
+      "source": "duo",
+      "source_start_s": 11,
+      "speed": 1,
+      "camera": "front",
+      "title": "WATCH THE RHYTHM / REAL TIME"
+    },
+    {
+      "start_s": 16,
+      "end_s": 28,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.25,
+      "camera": "pov_sky",
+      "title": "JUMP ALONG / HEAD-FOLLOW CAMERA"
+    },
+    {
+      "start_s": 28,
+      "end_s": 38,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "mouth_left",
+      "title": "HOW THE ROPE IS DRIVEN"
+    },
+    {
+      "start_s": 38,
+      "end_s": 50,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "feet_sky",
+      "title": "SKY / FOLLOW THE ROPE UNDER BOTH FEET"
+    },
+    {
+      "start_s": 50,
+      "end_s": 62,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "feet_graphite",
+      "title": "GRAPHITE / CLEARANCE AND LANDING"
+    },
+    {
+      "start_s": 62,
+      "end_s": 70,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.5,
+      "camera": "top",
+      "title": "ROOM TO JUMP TOGETHER"
+    },
+    {
+      "start_s": 70,
+      "end_s": 80,
+      "source": "relay",
+      "source_start_s": 13,
+      "speed": 0.25,
+      "camera": "pov_entry",
+      "title": "ENTERING THE ROPE / HEAD-FOLLOW VIEW"
+    },
+    {
+      "start_s": 80,
+      "end_s": 90,
+      "source": "relay",
+      "source_start_s": 14.5,
+      "speed": 0.25,
+      "camera": "entry",
+      "title": "THE ENTRY IS NOT YET CLEAN"
+    },
+    {
+      "start_s": 90,
+      "end_s": 100,
+      "source": "relay",
+      "source_start_s": 15.3,
+      "speed": 0.125,
+      "camera": "entry_jaw",
+      "title": "CONTACT IS REAL. PENETRATION IS ALSO REAL."
+    },
+    {
+      "start_s": 100,
+      "end_s": 108,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.5,
+      "camera": "wide",
+      "title": "WHAT WORKS / WHAT REMAINS"
+    }
+  ],
+  "source_capture_hz": 200,
+  "interpolation": false,
+  "simulation_only": true,
+  "rope_color": "Orange for visibility; radius and geometry unchanged",
+  "audio": "Original synthesized background ambience, not simulated contact audio",
+  "static_duo_holdout": {
+    "clean": 258,
+    "total": 260,
+    "runs_passed": 4,
+    "runs": 4,
+    "warmup_excluded_s": 9
+  },
+  "relay_passed": false,
+  "sources": {
+    "duo": {
+      "hz": 200,
+      "reference": "artifacts/circus-analysis/matched-video/duo-seed0.json",
+      "cycles_identical": true,
+      "interpolation": false,
+      "files": {
+        "scene.mjb": "12e70cdc38528974c26027c062b98d1e2421ec873fb974ad4c32994743b6ad54",
+        "trajectory.npz": "fb0f6e8a2f7284acdf484c33f0738244e1851d7462b4dd88e897fd3aef38a9ec"
+      }
+    },
+    "relay": {
+      "hz": 200,
+      "reference": "artifacts/circus-analysis/relay-roomy/relay-seed0.json",
+      "cycles_identical": true,
+      "interpolation": false,
+      "files": {
+        "scene.mjb": "a97bfc616ab5c7df432de9768765b850fe2f127e3915cd78b03f695dae5164c4",
+        "trajectory.npz": "49c3b22426a28ff282c3314788aff039f2f151a819c160387ddf69cadac1116b"
+      }
+    }
+  },
+  "validation": {
+    "full_decode": true,
+    "frames": 5400,
+    "duration_s": 108,
+    "tests_passed": 50
+  },
+  "camera_semantics": "World-offset head-follow camera with look-at target; not onboard vision or neck orientation",
+  "contact_limitations": "Visible soft-contact penetration; rope-turner and rope self-collision excluded; relay fails",
+  "download_url": "https://github.com/ros-claw/microduck/releases/download/circus-pov-2026-09-17/microduck_circus_pov_en.mp4"
+}
