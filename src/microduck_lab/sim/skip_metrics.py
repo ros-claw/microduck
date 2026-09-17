@@ -113,7 +113,8 @@ class SkipCycles:
 
 class PhysicalSkipAudit:
     """Observer for run_honest_classic_skip; inspects every physics step."""
-    def __init__(self):
+    def __init__(self, jumper="sky"):
+        self.jumper = jumper
         self.scorer = SkipCycles()
         self.previous_points = [None, None]
         self.last_underfoot_crossing = None
@@ -125,11 +126,11 @@ class PhysicalSkipAudit:
         names = [mujoco.mj_id2name(m,mujoco.mjtObj.mjOBJ_GEOM,g) or '' for g in range(m.ngeom)]
         bodies = [mujoco.mj_id2name(m,mujoco.mjtObj.mjOBJ_BODY,int(b)) or '' for b in m.geom_bodyid]
         self.rope = np.array([n.startswith('rope/rope_s') for n in names])
-        self.sky = np.array([b.startswith('sky/') for b in bodies])
+        self.sky = np.array([b.startswith(self.jumper + '/') for b in bodies])
         self.rope_ids = np.flatnonzero(self.rope)
-        self.feet = [names.index('sky/left_foot_collision'), names.index('sky/right_foot_collision')]
+        self.feet = [names.index(self.jumper + '/left_foot_collision'), names.index(self.jumper + '/right_foot_collision')]
         self.floor = names.index('floor')
-        self.trunk = mujoco.mj_name2id(m,mujoco.mjtObj.mjOBJ_BODY,'sky/trunk_base')
+        self.trunk = mujoco.mj_name2id(m,mujoco.mjtObj.mjOBJ_BODY,self.jumper + '/trunk_base')
         self.turner_trunks = [mujoco.mj_name2id(m,mujoco.mjtObj.mjOBJ_BODY,n+'/trunk_base') for n in ('lavender','cream')]
         self.handles = [mujoco.mj_name2id(m,mujoco.mjtObj.mjOBJ_SITE,n+'/handle_tip') for n in ('lavender','cream')]
         self.vertices = {}

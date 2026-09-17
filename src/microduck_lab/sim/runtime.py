@@ -293,7 +293,12 @@ class DuckRuntime:
             if getattr(self,'_centering_policy',None) != self.active_policy:
                 self._centering_target = pose.copy()
             self._centering_policy = self.active_policy
-            self.command[:3] = hop_centering_command(pose,self._centering_target)
+            target = getattr(self, 'hop_target', None)
+            if target is not None:
+                target = np.asarray(target, dtype=float)
+                if target.shape != (3,) or not np.isfinite(target).all():
+                    raise ValueError('hop_target must be finite world x, y, yaw')
+            self.command[:3] = hop_centering_command(pose,self._centering_target if target is None else target)
         elif getattr(self,'_centering_policy',None) is not None:
             self._centering_policy = None
             self.command[:3] = 0.

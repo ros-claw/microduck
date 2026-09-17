@@ -185,6 +185,12 @@ The contact-training task is `Mjlab-SweepRopeHop-Flat-MicroDuck`. Follow the tra
 
 The [documentation index](docs/README.md) separates current evidence from historical experiments. The earlier ROSClaw practice/evolution prototypes remain in the repository, but they are not the reference method or acceptance evidence described here.
 
+## Experimental: Circus Director
+
+An executable first-stage prototype adds Graphite, a 5 / 3 / 5 relay state machine, per-jumper contact auditing, and an evidence-gated speed curriculum. **The full relay, clean moving-rope entry, and the requested 30% speed increase have not passed.** Planning currently uses a bounded bilingual grammar; Practice searches controller parameters rather than automatically retraining PPO.
+
+[Implementation and commands](docs/CIRCUS_DIRECTOR.md) · [Measured results and failure analysis (Chinese)](docs/CIRCUS_RESULTS_2026-09-17.md) · [Machine-readable evidence](artifacts/circus/summary.json)
+
 ## Limitations and development priorities
 
 - **Startup and perturbation robustness:** three evaluated seeds remain below the target. Rope contact, insufficient clearance, and short landing support remain failure modes.

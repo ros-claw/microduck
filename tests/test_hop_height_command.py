@@ -52,3 +52,22 @@ def test_runtime_writes_body_z_and_clears_it_on_policy_switch():
     duck.active_policy = 'stand'
     duck.step()
     assert not observations[-1].any()
+
+
+def test_hop_target_changes_velocity_command_without_teleporting():
+    duck = object.__new__(DuckRuntime)
+    duck.bank = SimpleNamespace(uses_hop_height_command=lambda _: False,
+        uses_hop_centering=lambda _: True,infer=lambda name,obs: np.zeros(14))
+    duck.active_policy='hop';duck.command=np.zeros(13,dtype=np.float32)
+    duck.trunk_pos=lambda: np.array([0.,-.3,.12]);duck.trunk_yaw=lambda: math.pi/2
+    duck.hop_target=np.array([0.,0.,math.pi/2])
+    duck.get_obs=lambda:np.concatenate([np.zeros(48),duck.command])
+    duck.default_pose=np.zeros(14);duck.action_scale=1.
+    duck.head_override=duck.leg_override=duck.bam_drive=None
+    duck.data=SimpleNamespace(ctrl=np.zeros(14),qpos=np.array([0.,-.3,.12]))
+    duck.act_ids=np.arange(14);before=duck.data.qpos.copy()
+    duck.step()
+    assert duck.command[0]==pytest.approx(.25)
+    np.testing.assert_array_equal(before,duck.data.qpos)
+    duck.hop_target=np.array([0.,float('nan'),0.])
+    with pytest.raises(ValueError,match='hop_target'):duck.step()

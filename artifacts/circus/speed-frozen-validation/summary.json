@@ -1,0 +1,68 @@
+{
+  "kind": "speed",
+  "backend": "physical parameter search; not PPO retraining",
+  "training_seeds": [
+    0
+  ],
+  "holdout_seeds": [
+    801,
+    802,
+    803,
+    804
+  ],
+  "promoted": true,
+  "attempts": [
+    {
+      "candidate": 0,
+      "config": {
+        "kind": "speed",
+        "seed": 0,
+        "seconds": 20.0,
+        "dx": 0.075,
+        "span": 0.448,
+        "rope_length": 0.58,
+        "duo_y": 0.0,
+        "graphite_y": -0.32,
+        "entry_phase": 0.0,
+        "entry_controller": "walk",
+        "walk_speed": 0.3,
+        "switch_y": -0.04,
+        "turn_hz": 3.1260657042246325,
+        "sky_cycles": 5,
+        "duo_cycles": 3,
+        "graphite_cycles": 5
+      },
+      "practice_passed": true
+    }
+  ],
+  "status": "CHAMPION",
+  "gate": {
+    "promoted": true,
+    "reasons": [],
+    "seeds": [
+      801,
+      802,
+      803,
+      804
+    ]
+  },
+  "validated_config": {
+    "kind": "speed",
+    "seed": 0,
+    "seconds": 20.0,
+    "dx": 0.075,
+    "span": 0.448,
+    "rope_length": 0.58,
+    "duo_y": 0.0,
+    "graphite_y": -0.32,
+    "entry_phase": 0.0,
+    "entry_controller": "walk",
+    "walk_speed": 0.3,
+    "switch_y": -0.04,
+    "turn_hz": 3.1260657042246325,
+    "sky_cycles": 5,
+    "duo_cycles": 3,
+    "graphite_cycles": 5
+  },
+  "requested_speed_reached": false
+}

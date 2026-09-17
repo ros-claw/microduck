@@ -170,6 +170,10 @@ def build_classic_world(
         # buildup kills it); the tips (0.27) clear it.
         cA = np.array([-0.138, 0.0, 0.270])    # lavender handle tip
         cB = np.array([0.138, 0.0, 0.270])     # cream handle tip
+        # Translate the reference handle locations with custom turner spawns.
+        # The accepted .448 m layout has exactly zero offset.
+        cA[:2] += np.array(ducks[0].pos) - np.array([-.224, 0.])
+        cB[:2] += np.array(ducks[1].pos) - np.array([.224, 0.])
     if rope_kind == "triple":
         # Hinge-TRIPLE chain (bend y/z + axial twist with armature) — the exact
         # rope the CR-05 rope-turner policy trains on. The twist DOF is
@@ -344,7 +348,8 @@ def build_classic_world(
                 geom.conaffinity = 0
             elif name == "floor" and rope_contacts in ("floor", "full"):
                 geom.conaffinity |= 8
-            elif (geom.parent.name or "").startswith("sky/") and rope_contacts in ("jumper", "full"):
+            elif any((geom.parent.name or "").startswith(duck.name + "/")
+                     for duck in ducks[2:]) and rope_contacts in ("jumper", "full"):
                 if geom.contype or geom.conaffinity:
                     geom.conaffinity |= 8
 

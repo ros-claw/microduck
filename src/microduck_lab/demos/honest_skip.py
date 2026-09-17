@@ -61,6 +61,9 @@ def run_honest_classic_skip(
     max_turn_hz: float | None = None,
     asset_colors: bool = False,
     presentation: str = "lab",
+    ducks=None,
+    policy_observer=None,
+    spawn_jitter: float = .02,
 ):
     """Return (legacy timing counters, frames), NOT physical skip success.
 
@@ -91,6 +94,7 @@ def run_honest_classic_skip(
     SUB = round(.02/physics_dt)
 
     m, d, info = build_classic_world(
+        ducks=ducks,
         rope_length=rope_length, rope_density=rope_density,
         timestep=physics_dt, carrier_height=0.20, rope_kind="triple",
         connect_to="handles", turner_sep=0.448,
@@ -134,17 +138,24 @@ def run_honest_classic_skip(
                     for nm in ('lavender', 'cream')]
     if min(handle_sites) < 0:
         raise ValueError('Missing rope handle sites')
-    def measured_rope_phase():
+    def measured_rope_phase(name='sky'):
         if not hop_feedback:
             return float(np.pi)  # explicit ablation: zero height delta, same physics
         belly = d.xpos[middle_body]
-        foot_y = .5*(rt['sky'].site_pos('left_foot')[1]+rt['sky'].site_pos('right_foot')[1])
+        foot_y = .5*(rt[name].site_pos('left_foot')[1]+rt[name].site_pos('right_foot')[1])
         axis_z = float(np.mean(d.site_xpos[handle_sites, 2]))
         return float(np.arctan2(belly[1]-foot_y, axis_z-belly[2]))
     rt['sky'].hop_phase_source = measured_rope_phase
+    for duck in (ducks or [])[3:]:
+        rt[duck.name] = DuckRuntime(m, d, bank, prefix=duck.name+'/', name=duck.name)
+        rt[duck.name].active_policy = 'stand'
+        rt[duck.name].set_command()
+        rt[duck.name].hop_phase_source = lambda name=duck.name: measured_rope_phase(name)
 
     # Seeded spawn jitter exposes the chain's startup sensitivity. Evaluation
     # reports unsuccessful seeds as well as the seed shown in the video.
+    if not 0 <= spawn_jitter <= .1:
+        raise ValueError('spawn_jitter must be in [0, .1] radians')
     rng = np.random.default_rng(seed)
     # Spawn the ducks at the DEFAULT_POSE (home crouch), NOT the XML's
     # straight-leg qpos0: the policies' joint_pos_rel obs is relative to home,
@@ -152,7 +163,7 @@ def run_honest_classic_skip(
     # policy's robustness but NOT the specialist turner's (measured: the turner
     # policy fires violent actions on the offset obs and throws the duck).
     for dd in rt.values():
-        d.qpos[dd.joint_qpos_idx] = dd.default_pose + rng.uniform(-0.02, 0.02, 14)
+        d.qpos[dd.joint_qpos_idx] = dd.default_pose + rng.uniform(-spawn_jitter, spawn_jitter, 14)
         d.qvel[dd.joint_qvel_idx] = 0.0
     mujoco.mj_forward(m, d)
 
@@ -190,11 +201,18 @@ def run_honest_classic_skip(
     camera.distance = 1.15
     camera.azimuth = 115
     camera.elevation = -12
+    if ducks is not None and len(ducks) > 3:
+        camera.lookat = [0, -.08, .25]
+        camera.distance = 1.6
+        camera.azimuth = -70
+        camera.elevation = -25
 
     # settle: 1 s to absorb the connect's initial transient, then the turners
     # circle from t=0 — in-phase 3.1 Hz circles spin the rope up with NO seed
     # (measured: two-pin probe, r=0.05-0.06, locks at the drive rate)
     for _ in range(round(settle_seconds * 50)):
+        if policy_observer is not None:
+            policy_observer(m, d, info, rt)
         for dd in rt.values():
             dd.step()
         for _ in range(SUB):
@@ -279,6 +297,8 @@ def run_honest_classic_skip(
             rt["sky"].set_command()
             hopping = True
             hop_start_t = t
+        if policy_observer is not None:
+            policy_observer(m, d, info, rt)
         for dd in rt.values():
             dd.step()
         for _ in range(SUB):

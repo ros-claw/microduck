@@ -185,6 +185,12 @@ uv run --with pytest pytest tests/test_clean_ropehop_cfg.py tests/test_sweep_rop
 
 [文档索引](docs/README.md) 区分当前证据与历史实验。仓库保留了早期 ROSClaw 练习和演化原型，但它们不是本文所述参考方法，也不是当前验收依据。
 
+## 实验阶段：Circus Director
+
+第一阶段原型新增 Graphite、5 / 3 / 5 接力状态机、逐跳跃者接触审计和由证据控制晋级的加速课程。**完整接力、无碰撞入绳和加速 30% 尚未通过。** 当前使用有界中英文语法解析任务，Practice 搜索控制参数，尚不自动重训 PPO。
+
+[实现与命令](docs/CIRCUS_DIRECTOR.md) · [实测结果与失败分析](docs/CIRCUS_RESULTS_2026-09-17.md) · [机器可读证据](artifacts/circus/summary.json)
+
 ## 局限与后续方向
 
 - **起旋与扰动鲁棒性：** 3 个已评估种子仍低于目标。擦绳、净空不足和落地支撑过短仍是失败原因。

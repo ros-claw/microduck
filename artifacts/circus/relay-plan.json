@@ -1,0 +1,65 @@
+{
+  "kind": "relay",
+  "request": {
+    "sky_cycles": 5,
+    "duo_cycles": 3,
+    "graphite_cycles": 5
+  },
+  "status": "NEEDS_PRACTICE",
+  "planner": "bounded bilingual command grammar",
+  "stages": [
+    {
+      "id": "sky_solo",
+      "skill": "rope_skip",
+      "cycles": 5,
+      "status": "REHEARSE",
+      "depends_on": []
+    },
+    {
+      "id": "entry",
+      "skill": "enter_moving_rope",
+      "cycles": null,
+      "status": "PRACTICE",
+      "depends_on": [
+        "sky_solo"
+      ]
+    },
+    {
+      "id": "duo",
+      "skill": "synchronized_jump",
+      "cycles": 3,
+      "status": "PRACTICE",
+      "depends_on": [
+        "entry"
+      ]
+    },
+    {
+      "id": "exit",
+      "skill": "exit_moving_rope",
+      "cycles": null,
+      "status": "PRACTICE",
+      "depends_on": [
+        "duo"
+      ]
+    },
+    {
+      "id": "graphite_solo",
+      "skill": "rope_skip",
+      "cycles": 5,
+      "status": "REHEARSE",
+      "depends_on": [
+        "exit"
+      ]
+    },
+    {
+      "id": "finale",
+      "skill": "team_bow",
+      "cycles": null,
+      "status": "REHEARSE",
+      "depends_on": [
+        "graphite_solo"
+      ]
+    }
+  ],
+  "promotion": "Independent full-mission physical verification on disjoint holdout seeds"
+}
