@@ -175,3 +175,17 @@ def test_local_phase_distinguishes_twisted_rope_at_two_jumper_slots():
     assert local_rope_phase(m,d,audit)==pytest.approx(math.pi/4)
     d.geom_xpos[3:,0]=.6
     assert local_rope_phase(m,d,audit)==pytest.approx(-math.pi/4)
+
+
+def test_saved_slow_motion_states_preserve_physical_trial(tmp_path):
+    from microduck_lab.circus.trial import TrialConfig,run_trial
+    cfg=TrialConfig(kind='duo',seconds=.06,span=.8,rope_length=.86,dx=.14)
+    original=run_trial(cfg);captured=run_trial(cfg,capture_dir=tmp_path)
+    assert original['positions']==captured['positions']
+    assert original['jumpers']==captured['jumpers']
+    states=np.load(tmp_path/'trajectory.npz')
+    assert len(states['time'])==12
+    np.testing.assert_allclose(np.diff(states['time']),.005,atol=1e-10)
+    model=mujoco.MjModel.from_binary_path(str(tmp_path/'scene.mjb'))
+    assert states['qpos'].shape==(12,model.nq)
+    assert states['ctrl'].shape==(12,model.nu)

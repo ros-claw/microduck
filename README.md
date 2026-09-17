@@ -193,6 +193,8 @@ An executable first-stage prototype adds Graphite, a 5 / 3 / 5 relay state machi
 
 Matching rope length to the wider formation produced **258/260 shared clean cycles across four independent 30-second static-duo runs; all four passed**, excluding the first 9 seconds of startup in each run. Moving entry still fails on rope contact. [Collision and timing analysis, including failed configurations](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [Full static-duo video](out/circus_matched_duo.mp4).
 
+[3:20 slow-motion detail film: mouth connections, both jumpers' feet, formation and entry failure](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) · [Video guide and subtitles](docs/CIRCUS_DETAILS_VIDEO.md)
+
 [![Four robots performing the validated static-duo configuration](docs/media/circus_duo.gif)](out/circus_matched_duo.mp4)
 
 ## Limitations and development priorities

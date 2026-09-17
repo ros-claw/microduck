@@ -193,6 +193,8 @@ uv run --with pytest pytest tests/test_clean_ropehop_cfg.py tests/test_sweep_rop
 
 后续空间对照中，匹配绳长与宽队形后，原地双跳在四组独立 30 秒验证中达到 **258/260 个共同合格圈，四组全部通过**；每组均排除前 9 秒启动窗口。移动入场仍因碰绳未通过。[碰撞与节奏分析（保留失败配置）](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [完整双跳录像](out/circus_matched_duo.mp4)。
 
+[3 分 20 秒慢动作细节版：嘴部连接、双鸭脚下过绳、队形与入场失败特写](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) · [视频说明及中文字幕](docs/CIRCUS_DETAILS_VIDEO.md)
+
 [![通过独立验证的四鸭原地双跳配置](docs/media/circus_duo.gif)](out/circus_matched_duo.mp4)
 
 ## 局限与后续方向

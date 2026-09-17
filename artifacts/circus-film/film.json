@@ -1,0 +1,155 @@
+{
+  "video": "out/microduck_circus_details_en.mp4",
+  "sha256": "1da3eacb546f6781c3ac6cc86516cd807c0f7f12e6a28f89be9ce026ae5dfbb5",
+  "duration_s": 200,
+  "fps": 50,
+  "frames": 10000,
+  "size": [
+    1920,
+    1080
+  ],
+  "language": "en",
+  "chapters": [
+    {
+      "start_s": 0,
+      "end_s": 8,
+      "source": "duo",
+      "source_start_s": 11,
+      "speed": 0.5,
+      "camera": "wide",
+      "title": "FOUR ROBOTS. TWO JUMPERS."
+    },
+    {
+      "start_s": 8,
+      "end_s": 28,
+      "source": "duo",
+      "source_start_s": 0,
+      "speed": 1,
+      "camera": "wide",
+      "title": "ONE COMPLETE PHYSICAL RUN"
+    },
+    {
+      "start_s": 28,
+      "end_s": 48,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "mouth_left",
+      "title": "01 / THE LEFT MOUTH CONNECTION"
+    },
+    {
+      "start_s": 48,
+      "end_s": 68,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "mouth_right",
+      "title": "02 / THE RIGHT MOUTH CONNECTION"
+    },
+    {
+      "start_s": 68,
+      "end_s": 92,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "feet_sky",
+      "title": "03 / SKY: TAKEOFF, CLEARANCE, LANDING"
+    },
+    {
+      "start_s": 92,
+      "end_s": 116,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.125,
+      "camera": "feet_graphite",
+      "title": "04 / GRAPHITE: WATCH BOTH SOLES"
+    },
+    {
+      "start_s": 116,
+      "end_s": 136,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.25,
+      "camera": "front",
+      "title": "05 / TWO ROBOTS, THE SAME ROPE"
+    },
+    {
+      "start_s": 136,
+      "end_s": 152,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.25,
+      "camera": "top",
+      "title": "06 / SPACE FOR EVERY ROBOT"
+    },
+    {
+      "start_s": 152,
+      "end_s": 176,
+      "source": "relay",
+      "source_start_s": 12,
+      "speed": 0.25,
+      "camera": "entry",
+      "title": "07 / MOVING ENTRY: STILL UNSOLVED"
+    },
+    {
+      "start_s": 176,
+      "end_s": 188,
+      "source": "relay",
+      "source_start_s": 15.1,
+      "speed": 0.125,
+      "camera": "entry_jaw",
+      "title": "08 / WHY ENTRY FAILS: JAW CONTACT"
+    },
+    {
+      "start_s": 188,
+      "end_s": 200,
+      "source": "duo",
+      "source_start_s": 12,
+      "speed": 0.5,
+      "camera": "wide",
+      "title": "258 / 260 SHARED CLEAN CYCLES"
+    }
+  ],
+  "source_capture_hz": 200,
+  "interpolation": false,
+  "simulation_only": true,
+  "rope_color": "Orange for visibility; radius and geometry unchanged",
+  "audio": "Original synthesized background ambience, not simulated contact audio",
+  "static_duo_holdout": {
+    "clean": 258,
+    "total": 260,
+    "runs_passed": 4,
+    "runs": 4,
+    "warmup_excluded_s": 9
+  },
+  "relay_passed": false,
+  "sources": {
+    "duo": {
+      "hz": 200,
+      "reference": "artifacts/circus-analysis/matched-video/duo-seed0.json",
+      "cycles_identical": true,
+      "interpolation": false,
+      "files": {
+        "scene.mjb": "12e70cdc38528974c26027c062b98d1e2421ec873fb974ad4c32994743b6ad54",
+        "trajectory.npz": "fb0f6e8a2f7284acdf484c33f0738244e1851d7462b4dd88e897fd3aef38a9ec"
+      }
+    },
+    "relay": {
+      "hz": 200,
+      "reference": "artifacts/circus-analysis/relay-roomy/relay-seed0.json",
+      "cycles_identical": true,
+      "interpolation": false,
+      "files": {
+        "scene.mjb": "a97bfc616ab5c7df432de9768765b850fe2f127e3915cd78b03f695dae5164c4",
+        "trajectory.npz": "49c3b22426a28ff282c3314788aff039f2f151a819c160387ddf69cadac1116b"
+      }
+    }
+  },
+  "validation": {
+    "full_decode_passed": true,
+    "frame_count": 10000,
+    "tests_passed": 49,
+    "source_checksums_verified": true
+  },
+  "download_url": "https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4"
+}

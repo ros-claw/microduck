@@ -39,6 +39,7 @@ class TrialConfig:
     entry_phase: float = 0.
     entry_controller: str = 'walk'
     entry_phase_reference: str = 'local'
+    entry_head_tuck: float = 0.
     entry_speed: float = 0.  # 0 preserves the original direct-target probe
     entry_prehop: float = 0.
     walk_speed: float = .30
@@ -55,19 +56,21 @@ class TrialConfig:
             raise ValueError('Invalid duration, cadence, or walking command')
         if not 0<=self.dx<=.20:raise ValueError('Unsupported horizontal spacing')
         if abs(self.graphite_y)<.25:raise ValueError('Entry spawn must be outside the rope region')
+        if not 0<=self.entry_head_tuck<=.65:raise ValueError('Head tuck exceeds tested joint range')
         if not 0<=self.entry_speed<=.25 or not 0<=self.entry_prehop<=4:raise ValueError('Invalid entry ramp or preparation duration')
         if self.entry_phase_reference not in ('local','leader','shared'):raise ValueError('Unknown phase reference')
         if self.entry_controller not in ('walk','hop'):raise ValueError('Unknown entry controller')
         RelayRequest(self.sky_cycles,self.duo_cycles,self.graphite_cycles)
 
 
-def run_trial(cfg:TrialConfig,*,video=None):
+def run_trial(cfg:TrialConfig,*,video=None,capture_dir=None):
     names=('sky',) if cfg.kind=='speed' else ('sky','graphite')
     audits={name:PhysicalSkipAudit(name) for name in names}
     relay=RelayGate(RelayRequest(cfg.sky_cycles,cfg.duo_cycles,cfg.graphite_cycles))
     state=dict(steps=0,contacts=[],robot_contacts=[],positions=[],entry_started=None,entry_inside=None,
                entry_clean=0,last_entry_cycle=-1.,entry_faults=set(),bow_seen=False,supported_since=None)
     diagnostic=FormationDiagnostics() if cfg.diagnostics else None
+    captured=[];capture_model=None
     writer=None
     if video:
         import imageio.v2 as imageio
@@ -75,6 +78,8 @@ def run_trial(cfg:TrialConfig,*,video=None):
         writer=imageio.get_writer(str(video),fps=25,macro_block_size=1,codec='libx264')
 
     def setup(m,d,info):
+        nonlocal capture_model
+        capture_model=m
         m.opt.solver=mujoco.mjtSolver.mjSOL_NEWTON;m.opt.integrator=mujoco.mjtIntegrator.mjINT_EULER
         if m.nmocap:raise ValueError('Mocap is forbidden for rehearsal')
         for audit in audits.values():audit.setup(m,d,info)
@@ -110,6 +115,8 @@ def run_trial(cfg:TrialConfig,*,video=None):
                 if physical and cfg.kind=='relay':relay.fault('entry:'+','.join(sorted(physical)),d.time)
         if state['steps']%100==0:
             state['positions'].append(dict(t=float(d.time),positions={n:d.body(n+'/trunk_base').xpos.tolist() for n in names}))
+        if capture_dir is not None and state['steps']%25==0:
+            captured.append((float(d.time),d.qpos.copy(),d.qvel.copy(),d.ctrl.copy()))
         state['steps']+=1
 
     def policy(m,d,info,rt):
@@ -156,6 +163,11 @@ def run_trial(cfg:TrialConfig,*,video=None):
                 state['supported_since']=state['supported_since'] or now if stable else None
                 supported=dt>2.5 and state['bow_seen'] and state['supported_since'] is not None and now-state['supported_since']>.5
             relay.consume(last['sky'],last['graphite'],t=now,graphite_inside=inside,sky_outside=outside,finale_supported=supported)
+        if cfg.entry_head_tuck and cfg.kind in ('entry','relay'):
+            prep_start=(max(11.,relay.stage_started+cfg.entry_prehop)-cfg.entry_prehop) if cfg.kind=='relay' else 11-cfg.entry_prehop
+            blend=float(np.clip((now-prep_start)/.6,0,1)) if state['entry_inside'] is None else max(0.,1-(now-state['entry_inside'])/.8)
+            target=g.default_pose[5:9].copy();target[:2]+=cfg.entry_head_tuck*blend
+            g.head_override=target
         stage=relay.stage if cfg.kind=='relay' else ('duo' if cfg.kind=='duo' else 'entry')
         if stage=='sky_solo':g.active_policy='stand';g.set_command()
         elif stage=='entry':
@@ -224,10 +236,14 @@ def run_trial(cfg:TrialConfig,*,video=None):
             hop_start_delay=0,rope_joint_type='ball',rope_radius=.0015,rope_length=cfg.rope_length,jumper_y=0,settle_seconds=0,
             rope_initial_phase=math.pi/2,rope_velocity_limit=0,rope_pass_time_fn=lambda:audits['sky'].last_underfoot_crossing,
             fixed_turn_rate=cfg.fixed_turn_rate,max_turn_hz=cfg.turn_hz,turn_hz=cfg.turn_hz,model_setup=setup,physics_observer=physics,policy_observer=policy,
-            asset_colors=True,presentation='studio' if writer else 'lab')
+            asset_colors=True,presentation='studio' if writer or capture_dir is not None else 'lab')
     except (RuntimeError,ValueError) as exc:error=str(exc)
     finally:
         if writer:writer.close()
+    if capture_dir is not None and captured:
+        directory=Path(capture_dir);directory.mkdir(parents=True,exist_ok=True)
+        mujoco.mj_saveModel(capture_model,str(directory/'scene.mjb'),None)
+        np.savez_compressed(directory/'trajectory.npz',time=np.array([v[0] for v in captured]),qpos=np.stack([v[1] for v in captured]),qvel=np.stack([v[2] for v in captured]),ctrl=np.stack([v[3] for v in captured]))
     scores={n:a.scorer.result() for n,a in audits.items()}
     cycles=scores['sky']['cycles'];measured=len(cycles)/(cycles[-1]['end']-cycles[0]['start']) if cycles else None
     joint=joint_cycle_result(scores['sky'],scores['graphite']) if 'graphite' in scores else None
