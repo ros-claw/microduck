@@ -4,6 +4,8 @@ The design input is `~/workspace/tennis/更酷的demo尝试.md`. Work remains in
 
 ## Scope and acceptance
 
+Latest follow-up: [formation geometry, timing, and independently validated static duo](CIRCUS_GEOMETRY_AND_TIMING.md). `rehearse --config configs/circus/duo_matched.json` runs the selected configuration; `--config` also accepts a saved trial result and uses its `config` field.
+
 **Measured status:** [September 17 results](CIRCUS_RESULTS_2026-09-17.md). Full relay and the 30% increase remain unpassed.
 
 The first stage follows the document's priority: a four-duck **5 / 3 / 5 relay**, plus a measured **30% speed challenge**. Double-under, travelling rope, seesaw, assisted jumping, and cooperative transport remain subsequent research stages. The document's example success percentages and frequencies are illustrative, not measurements.

@@ -16,3 +16,5 @@
 - [接手审计](TAKEOVER_AUDIT.md)：为何旧 93% 不是物理成功率。
 - [第一阶段修复](RECOVERY_PROGRESS.md)：稳定跳跃与接触修复过程。
 - [原 README 存档](README_LEGACY.md)：历史产品叙述，不作为现状说明。
+
+- [Four-duck collision and timing follow-up / 四鸭碰撞与节奏复盘](CIRCUS_GEOMETRY_AND_TIMING.md)

@@ -1,0 +1,610 @@
+[
+  {
+    "path": "artifacts/circus-analysis/entry-controls/entry_direct/entry_direct.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.1,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.6,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.0,
+      "entry_prehop": 0.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.839999999999083,
+      "inside": null,
+      "clean_cycles": 0,
+      "faults": [
+        "body_ground_contact",
+        "rope_duck_contact",
+        "tilted"
+      ]
+    },
+    "measured_hz": 3.126090496692176,
+    "scores": {
+      "sky": {
+        "clean": 42,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 1,
+          "insufficient_sole_clearance": 1,
+          "no_clean_landing": 1,
+          "rope_duck_contact": 1
+        }
+      },
+      "graphite": {
+        "clean": 0,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 43,
+          "no_clean_landing": 43,
+          "no_overhead_crossing": 41,
+          "body_ground_contact": 32,
+          "insufficient_sole_clearance": 2,
+          "rope_duck_contact": 2,
+          "tilted": 32
+        }
+      }
+    },
+    "joint_clean": 0,
+    "longest_joint_clean_streak": 0,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 12.729999999997009,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s12",
+          ""
+        ],
+        "penetration_m": 0.000163862233407925,
+        "normal_force_n": 0.09343913977898412
+      },
+      "rope/sky": {
+        "t": 13.421199999995398,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s3",
+          ""
+        ],
+        "penetration_m": 6.067886723202902e-06,
+        "normal_force_n": 0.02628314194441875
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": 12.979999999996426
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/entry-controls/entry_integrated_clock/entry_integrated_clock.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.1,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "continuous_turn_phase": true,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.6,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.839999999999083,
+      "inside": 16.71999999998771,
+      "clean_cycles": 2,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.134979075844637,
+    "scores": {
+      "sky": {
+        "clean": 39,
+        "cycles": 43,
+        "reasons": {
+          "rope_duck_contact": 4,
+          "did_not_clear_both_feet": 2,
+          "insufficient_sole_clearance": 2,
+          "no_clean_landing": 2
+        }
+      },
+      "graphite": {
+        "clean": 15,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 24,
+          "no_clean_landing": 24,
+          "no_overhead_crossing": 16,
+          "rope_duck_contact": 14,
+          "insufficient_sole_clearance": 5
+        }
+      }
+    },
+    "joint_clean": 15,
+    "longest_joint_clean_streak": 12,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 13.679599999994796,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s13",
+          ""
+        ],
+        "penetration_m": 6.822743175392831e-07,
+        "normal_force_n": 0.029878378619033027
+      },
+      "rope/sky": {
+        "t": 14.682799999992458,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s5",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00037865911896071643,
+        "normal_force_n": 0.04050630930457909
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/entry-controls/entry_prepared/entry_prepared.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.1,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.6,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.839999999999083,
+      "inside": 16.739999999987663,
+      "clean_cycles": 14,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.1316000291384616,
+    "scores": {
+      "sky": {
+        "clean": 39,
+        "cycles": 43,
+        "reasons": {
+          "rope_duck_contact": 4,
+          "did_not_clear_both_feet": 2,
+          "insufficient_sole_clearance": 2,
+          "no_clean_landing": 2
+        }
+      },
+      "graphite": {
+        "clean": 16,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 24,
+          "no_clean_landing": 24,
+          "no_overhead_crossing": 16,
+          "rope_duck_contact": 13,
+          "insufficient_sole_clearance": 5
+        }
+      }
+    },
+    "joint_clean": 16,
+    "longest_joint_clean_streak": 14,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 13.679599999994796,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s13",
+          ""
+        ],
+        "penetration_m": 4.72055465680285e-07,
+        "normal_force_n": 0.029879970230636127
+      },
+      "rope/sky": {
+        "t": 14.682799999992458,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s5",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00030512806541715585,
+        "normal_force_n": 0.022161907684234372
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/entry-controls/entry_prepared_pi/entry_prepared_pi.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.1,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.6,
+      "entry_phase": 3.141592653589793,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.060000000000901,
+      "inside": 15.879999999989668,
+      "clean_cycles": 20,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.130505685879251,
+    "scores": {
+      "sky": {
+        "clean": 40,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 3,
+          "insufficient_sole_clearance": 3,
+          "no_clean_landing": 3,
+          "rope_duck_contact": 3
+        }
+      },
+      "graphite": {
+        "clean": 21,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 21,
+          "no_clean_landing": 21,
+          "no_overhead_crossing": 14,
+          "rope_duck_contact": 9,
+          "insufficient_sole_clearance": 4
+        }
+      }
+    },
+    "joint_clean": 20,
+    "longest_joint_clean_streak": 20,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 13.03839999999629,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s13",
+          ""
+        ],
+        "penetration_m": 0.000444849420585737,
+        "normal_force_n": 0.056413766556127024
+      },
+      "rope/sky": {
+        "t": 14.039999999993956,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s5",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.0007871123132259304,
+        "normal_force_n": 0.04186637861317239
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/entry-controls/entry_ramp/entry_ramp.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.1,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.6,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 0.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.839999999999083,
+      "inside": 16.499999999988223,
+      "clean_cycles": 15,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.131052761887094,
+    "scores": {
+      "sky": {
+        "clean": 39,
+        "cycles": 43,
+        "reasons": {
+          "rope_duck_contact": 4,
+          "did_not_clear_both_feet": 2,
+          "insufficient_sole_clearance": 2,
+          "no_clean_landing": 2
+        }
+      },
+      "graphite": {
+        "clean": 17,
+        "cycles": 43,
+        "reasons": {
+          "did_not_clear_both_feet": 23,
+          "no_clean_landing": 23,
+          "no_overhead_crossing": 16,
+          "rope_duck_contact": 11,
+          "insufficient_sole_clearance": 7
+        }
+      }
+    },
+    "joint_clean": 16,
+    "longest_joint_clean_streak": 15,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 13.99539999999406,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s15",
+          ""
+        ],
+        "penetration_m": 0.0012460475118369384,
+        "normal_force_n": 0.10472249496289993
+      },
+      "rope/sky": {
+        "t": 14.38979999999314,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s3",
+          "sky/left_foot_collision"
+        ],
+        "penetration_m": 0.00034473517152659814,
+        "normal_force_n": 0.035265902432324345
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/entry-controls/old_entry_chronology/old_entry_chronology.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "dx": 0.0,
+      "span": 0.448,
+      "rope_length": 0.58,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.16,
+      "graphite_y": 0.5,
+      "entry_phase": 3.141592653589793,
+      "entry_controller": "hop",
+      "entry_phase_reference": "leader",
+      "entry_speed": 0.0,
+      "entry_prehop": 0.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.080000000000854,
+      "inside": 12.079999999998524,
+      "clean_cycles": 0,
+      "faults": [
+        "body_ground_contact",
+        "fallen_turner",
+        "inter_jumper_contact",
+        "rope_duck_contact",
+        "tilted"
+      ]
+    },
+    "measured_hz": 2.9059370529395334,
+    "scores": {
+      "sky": {
+        "clean": 8,
+        "cycles": 13,
+        "reasons": {
+          "inter_jumper_contact": 4,
+          "did_not_clear_both_feet": 3,
+          "insufficient_sole_clearance": 2,
+          "no_clean_landing": 3,
+          "rope_duck_contact": 3,
+          "tilted": 3,
+          "body_ground_contact": 2,
+          "fallen_turner": 2
+        }
+      },
+      "graphite": {
+        "clean": 0,
+        "cycles": 13,
+        "reasons": {
+          "did_not_clear_both_feet": 13,
+          "no_clean_landing": 13,
+          "no_overhead_crossing": 10,
+          "body_ground_contact": 3,
+          "rope_duck_contact": 5,
+          "tilted": 5,
+          "inter_jumper_contact": 4,
+          "insufficient_sole_clearance": 2,
+          "fallen_turner": 2
+        }
+      }
+    },
+    "joint_clean": 0,
+    "longest_joint_clean_streak": 0,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 11.608199999999623,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s10",
+          ""
+        ],
+        "penetration_m": 0.0010966508406015053,
+        "normal_force_n": 0.012223606567773184
+      },
+      "graphite/sky": {
+        "t": 11.86699999999902,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/left_foot_collision",
+          ""
+        ],
+        "penetration_m": 7.424287083698652e-05,
+        "normal_force_n": 3.688006103432464
+      },
+      "cream/graphite": {
+        "t": 12.252199999998123,
+        "pair": "cream/graphite",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 1.1102484503038367e-05,
+        "normal_force_n": 9.861573034025415
+      },
+      "rope/sky": {
+        "t": 12.48519999999758,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s21",
+          ""
+        ],
+        "penetration_m": 0.00036599952747438805,
+        "normal_force_n": 0.013618188171792939
+      },
+      "cream/sky": {
+        "t": 12.955399999996484,
+        "pair": "cream/sky",
+        "geoms": [
+          "",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00015239799416094115,
+        "normal_force_n": 2.91396305203061
+      },
+      "graphite/lavender": {
+        "t": 14.164199999993667,
+        "pair": "graphite/lavender",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 5.126838383021335e-05,
+        "normal_force_n": 2.615520654257676
+      }
+    },
+    "first_tilt": {
+      "sky": 12.619999999997265,
+      "graphite": 11.499999999999876
+    }
+  }
+]

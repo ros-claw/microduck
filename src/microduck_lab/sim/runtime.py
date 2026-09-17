@@ -359,6 +359,19 @@ class TurnerDuckRuntime(DuckRuntime):
     def reset_clock(self):
         self.clock_t = 0.0
         self.tip_rest = None
+        self._drive_clock = None
+
+    def drive_phase(self) -> float:
+        """Optional integrated cadence: changing Hz must not rewrite elapsed phase."""
+        if not getattr(self, 'continuous_turn_phase', False):
+            return 2.0 * math.pi * self.turn_frequency * (self.clock_t + self.phase_offset_s)
+        previous = getattr(self, '_drive_clock', None)
+        if previous is None or self.clock_t < previous[0]:
+            cycles = self.turn_frequency * self.clock_t
+        else:
+            cycles = previous[2] + previous[1] * (self.clock_t - previous[0])
+        self._drive_clock = (self.clock_t, self.turn_frequency, cycles)
+        return 2.0 * math.pi * (cycles + self.turn_frequency * self.phase_offset_s)
 
     def get_obs(self) -> np.ndarray:
         base = super().get_obs()  # 61D: [ang_vel, grav, jp, jv, last_action, cmd13]
@@ -374,7 +387,7 @@ class TurnerDuckRuntime(DuckRuntime):
         twist = cmd13[0:3]
         head_cmd = cmd13[3:7]
         body_cmd = cmd13[7:13]
-        phase = 2.0 * math.pi * self.turn_frequency * (self.clock_t + self.phase_offset_s)
+        phase = self.drive_phase()
         phase_obs = np.array([math.sin(phase), math.cos(phase)], dtype=np.float32)
         tip_rel = self.tip_rel()
         return np.concatenate([

@@ -191,6 +191,10 @@ An executable first-stage prototype adds Graphite, a 5 / 3 / 5 relay state machi
 
 [Implementation and commands](docs/CIRCUS_DIRECTOR.md) · [Measured results and failure analysis (Chinese)](docs/CIRCUS_RESULTS_2026-09-17.md) · [Machine-readable evidence](artifacts/circus/summary.json)
 
+Matching rope length to the wider formation produced **258/260 shared clean cycles across four independent 30-second static-duo runs; all four passed**, excluding the first 9 seconds of startup in each run. Moving entry still fails on rope contact. [Collision and timing analysis, including failed configurations](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [Full static-duo video](out/circus_matched_duo.mp4).
+
+[![Four robots performing the validated static-duo configuration](docs/media/circus_duo.gif)](out/circus_matched_duo.mp4)
+
 ## Limitations and development priorities
 
 - **Startup and perturbation robustness:** three evaluated seeds remain below the target. Rope contact, insufficient clearance, and short landing support remain failure modes.

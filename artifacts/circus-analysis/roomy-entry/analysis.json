@@ -1,0 +1,299 @@
+[
+  {
+    "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_direct/roomy_entry_direct.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.65,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.0,
+      "entry_prehop": 0.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.380000000000155,
+      "inside": null,
+      "clean_cycles": 0,
+      "faults": [
+        "body_ground_contact",
+        "inter_robot_contact",
+        "loose_attachment",
+        "rope_duck_contact",
+        "tilted"
+      ]
+    },
+    "measured_hz": 2.5833118057409727,
+    "scores": {
+      "sky": {
+        "clean": 5,
+        "cycles": 40,
+        "reasons": {
+          "did_not_clear_both_feet": 35,
+          "insufficient_sole_clearance": 34,
+          "no_clean_landing": 35,
+          "rope_duck_contact": 35,
+          "inter_robot_contact": 2,
+          "loose_attachment": 2,
+          "no_overhead_crossing": 6
+        }
+      },
+      "graphite": {
+        "clean": 0,
+        "cycles": 40,
+        "reasons": {
+          "did_not_clear_both_feet": 40,
+          "no_clean_landing": 40,
+          "no_overhead_crossing": 32,
+          "body_ground_contact": 29,
+          "insufficient_sole_clearance": 4,
+          "rope_duck_contact": 10,
+          "tilted": 30,
+          "inter_robot_contact": 2,
+          "loose_attachment": 2
+        }
+      }
+    },
+    "joint_clean": 0,
+    "longest_joint_clean_streak": 0,
+    "first_relevant_contacts": {
+      "rope/sky": {
+        "t": 11.693999999999424,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s9",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00023707396932098196,
+        "normal_force_n": 0.035935825824248
+      },
+      "graphite/rope": {
+        "t": 12.289999999998034,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s17",
+          "graphite/jaw_soft#geom303"
+        ],
+        "penetration_m": 0.0014986516831525674,
+        "normal_force_n": 0.1649647010631233
+      },
+      "cream/graphite": {
+        "t": 12.658199999997176,
+        "pair": "cream/graphite",
+        "geoms": [
+          "cream/left_foot_collision",
+          "graphite/jaw_soft#geom294"
+        ],
+        "penetration_m": 5.2729563853633126e-05,
+        "normal_force_n": 7.876144145815811
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": 12.459999999997638
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_pi/roomy_entry_pi.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.65,
+      "entry_phase": 3.141592653589793,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.240000000000482,
+      "inside": 16.499999999988223,
+      "clean_cycles": 0,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.095376281686456,
+    "scores": {
+      "sky": {
+        "clean": 0,
+        "cycles": 48,
+        "reasons": {
+          "did_not_clear_both_feet": 48,
+          "insufficient_sole_clearance": 48,
+          "no_clean_landing": 48,
+          "rope_duck_contact": 48
+        }
+      },
+      "graphite": {
+        "clean": 12,
+        "cycles": 48,
+        "reasons": {
+          "did_not_clear_both_feet": 35,
+          "no_clean_landing": 35,
+          "no_overhead_crossing": 14,
+          "rope_duck_contact": 24,
+          "insufficient_sole_clearance": 18
+        }
+      }
+    },
+    "joint_clean": 0,
+    "longest_joint_clean_streak": 0,
+    "first_relevant_contacts": {
+      "rope/sky": {
+        "t": 11.374600000000168,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s8",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.0002347309556773869,
+        "normal_force_n": 0.05336144190380429
+      },
+      "graphite/rope": {
+        "t": 13.240799999995819,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s14",
+          "graphite/jaw_soft#geom294"
+        ],
+        "penetration_m": 7.51858033495882e-05,
+        "normal_force_n": 0.02708670327313507
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  },
+  {
+    "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_prepared/roomy_entry_prepared.json",
+    "config": {
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.65,
+      "entry_phase": 0.0,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 11.380000000000155,
+      "inside": 16.59999999998799,
+      "clean_cycles": 4,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.090314439501421,
+    "scores": {
+      "sky": {
+        "clean": 12,
+        "cycles": 48,
+        "reasons": {
+          "did_not_clear_both_feet": 36,
+          "insufficient_sole_clearance": 36,
+          "no_clean_landing": 36,
+          "rope_duck_contact": 36
+        }
+      },
+      "graphite": {
+        "clean": 14,
+        "cycles": 48,
+        "reasons": {
+          "did_not_clear_both_feet": 33,
+          "no_clean_landing": 33,
+          "no_overhead_crossing": 14,
+          "rope_duck_contact": 21,
+          "insufficient_sole_clearance": 16
+        }
+      }
+    },
+    "joint_clean": 4,
+    "longest_joint_clean_streak": 4,
+    "first_relevant_contacts": {
+      "rope/sky": {
+        "t": 11.693999999999424,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s9",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00023707396932098196,
+        "normal_force_n": 0.035935825824248
+      },
+      "graphite/rope": {
+        "t": 13.554199999995088,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s14",
+          "graphite/jaw_soft#geom294"
+        ],
+        "penetration_m": 0.0006269460574236542,
+        "normal_force_n": 0.02492996345946
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  }
+]

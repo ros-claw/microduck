@@ -121,3 +121,57 @@ def test_duo_requires_success_on_matching_cycles_not_separate_averages():
     result=joint_cycle_result(sky,graphite)
     assert result['success_rate']==.6 and not result['passed']
     assert joint_cycle_result(sky,sky)['passed']
+
+
+def test_integrated_turner_clock_does_not_rephase_when_cadence_changes():
+    from microduck_lab.sim.runtime import TurnerDuckRuntime
+    r=object.__new__(TurnerDuckRuntime)
+    r.clock_t=10.;r.turn_frequency=3.;r.phase_offset_s=0.;r.continuous_turn_phase=True
+    first=r.drive_phase()
+    r.turn_frequency=2.8
+    assert r.drive_phase()==pytest.approx(first)  # no retroactive change to 10 seconds
+    r.clock_t+=.02
+    assert r.drive_phase()-first==pytest.approx(2*math.pi*2.8*.02)
+    r.phase_offset_s=.01
+    assert r.drive_phase()-first==pytest.approx(2*math.pi*2.8*.03)
+    r.clock_t=0.
+    assert r.drive_phase()==pytest.approx(2*math.pi*2.8*.01)
+
+
+def test_diagnostics_are_read_only_and_record_solver_contact():
+    from microduck_lab.circus.diagnostics import FormationDiagnostics
+    ducks=[DuckSpec('lavender',(-.3,0),0),DuckSpec('cream',(.3,0),math.pi),
+           DuckSpec('sky',(0,0),math.pi/2),DuckSpec('graphite',(.02,0),math.pi/2)]
+    m,d,info=build_classic_world(ducks=ducks,rope_kind='triple',connect_to='handles',rope_contacts='full')
+    mujoco.mj_forward(m,d)
+    observer=FormationDiagnostics();observer.setup(m,d,info)
+    before=[v.copy() for v in (d.qpos,d.qvel,d.ctrl)]
+    observer.physics(m,d)
+    assert any(e['pair']=='graphite/sky' for e in observer.events)
+    for a,b in zip(before,(d.qpos,d.qvel,d.ctrl)):np.testing.assert_array_equal(a,b)
+
+
+def test_diagnostics_do_not_change_rollout():
+    from dataclasses import replace
+    from microduck_lab.circus.trial import TrialConfig,run_trial
+    base=TrialConfig(kind='duo',seconds=.06,span=.8,rope_length=.93,dx=.14)
+    a=run_trial(base);b=run_trial(replace(base,diagnostics=True))
+    assert a['error'] is None and b['error'] is None
+    assert a['positions']==b['positions']
+    assert a['jumpers']==b['jumpers']
+    assert a['inter_robot_contacts']==b['inter_robot_contacts']
+    assert a['diagnostics'] is None and b['diagnostics']['samples']
+
+
+def test_local_phase_distinguishes_twisted_rope_at_two_jumper_slots():
+    from types import SimpleNamespace
+    from microduck_lab.circus.geometry import local_rope_phase
+    rotation=np.array([[0.,0.,1.],[0.,1.,0.],[-1.,0.,0.]])
+    m=SimpleNamespace(geom_size=np.array([[.001,.3,0]]*3))
+    d=SimpleNamespace(geom_xmat=np.tile(rotation.reshape(1,9),(5,1)),
+        geom_xpos=np.array([[-.6,.2,.1],[0.,0.,.1],[.6,-.2,.1],[-.6,0.,0.],[-.6,0.,0.]]),
+        site_xpos=np.array([[-1.,0.,.3],[1.,0.,.3]]))
+    audit=SimpleNamespace(rope_ids=np.array([0,1,2]),feet=[3,4],handles=[0,1])
+    assert local_rope_phase(m,d,audit)==pytest.approx(math.pi/4)
+    d.geom_xpos[3:,0]=.6
+    assert local_rope_phase(m,d,audit)==pytest.approx(-math.pi/4)

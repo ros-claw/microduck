@@ -1,0 +1,513 @@
+{
+  "scope": "Geometry, timing, and moving-entry investigation; no new neural policy trained",
+  "investigation_complete": true,
+  "static_duo_validation": {
+    "shared_clean_cycles": 258,
+    "full_cycles": 260,
+    "run_passes": 4,
+    "runs": 4,
+    "seeds": [
+      1101,
+      1102,
+      1103,
+      1104
+    ],
+    "seconds_per_run": 30,
+    "warmup_excluded_s": 9,
+    "evidence": "artifacts/circus-analysis/matched-holdout/holdout-verdict.json"
+  },
+  "relay_passed": false,
+  "relay_failure": "entry:rope_duck_contact",
+  "tests_passed": 48,
+  "verified_receipts": 41,
+  "three_duck_reference_cycles_identical": true,
+  "rendered_duo_cycles_identical": true,
+  "videos": [
+    {
+      "path": "out/circus_roomy_duo.mp4",
+      "sha256": "68a8de087f78650daa713fad4392c9601df1faf10675fdaa5c66fc53b922a6bc",
+      "frames": 450,
+      "fps": 25.0,
+      "duration_s": 18.0,
+      "size": [
+        960,
+        540
+      ]
+    },
+    {
+      "path": "out/circus_matched_duo.mp4",
+      "sha256": "296c1c8825f2a2f4702d805d0640804d07eb59a4870df5a25fe31fe2648d2fd8",
+      "frames": 500,
+      "fps": 25.0,
+      "duration_s": 20.0,
+      "size": [
+        960,
+        540
+      ]
+    },
+    {
+      "path": "out/circus_relay_roomy_attempt.mp4",
+      "sha256": "b7147c24ccebaa64464293220773519dd943326526d4bbb7e82e054ce0a0acea",
+      "frames": 675,
+      "fps": 25.0,
+      "duration_s": 27.0,
+      "size": [
+        960,
+        540
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "path": "artifacts/circus-analysis/entry-controls/entry_direct/entry_direct.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 43,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/entry-controls/entry_integrated_clock/entry_integrated_clock.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 15,
+      "full_cycles": 43,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/entry-controls/entry_prepared/entry_prepared.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 16,
+      "full_cycles": 43,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/entry-controls/entry_prepared_pi/entry_prepared_pi.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 20,
+      "full_cycles": 43,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/entry-controls/entry_ramp/entry_ramp.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 16,
+      "full_cycles": 43,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/entry-controls/old_entry_chronology/old_entry_chronology.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 23.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 13,
+      "protocol_sha256": "a02199ca4e2b9cdb2c4933b02b790adb3b528f6b39886a873025fec63b31115c"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/longer_only/longer_only.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 0,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/original/original.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 0,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/roomy_fixed_rate/roomy_fixed_rate.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 16,
+      "full_cycles": 27,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/roomy_slow/roomy_slow.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 1,
+      "full_cycles": 25,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/roomy_spacing/roomy_spacing.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 27,
+      "full_cycles": 27,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/tandem_roomy/tandem_roomy.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 24,
+      "full_cycles": 27,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/wider_and_longer/wider_and_longer.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 27,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/geometry-cadence/wider_only/wider_only.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 29,
+      "protocol_sha256": "c9b23b531de81f8a6232b5fa83fe89ae5e8e984421ba1ae364f11a496651de82"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.82-seed0/length0.82-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 7,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.82-seed1/length0.82-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.86-seed0/length0.86-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.86-seed1/length0.86-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.90-seed0/length0.90-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 10,
+      "full_cycles": 22,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/length-tuning/length0.90-seed1/length0.90-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 32,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/integrated-seed0/integrated-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/integrated-seed1/integrated-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 34,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/local-seed0/local-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 15,
+      "full_cycles": 21,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/local-seed1/local-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 34,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/midpoint-seed0/midpoint-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/local-phase/midpoint-seed1/midpoint-seed1.json",
+      "kind": "duo",
+      "seed": 1,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 34,
+      "protocol_sha256": "5ccd19de7f1a62649890b7425f55c9376f15d3ba1ca34e5f998da0d7503298b3"
+    },
+    {
+      "path": "artifacts/circus-analysis/matched-holdout/matched-seed1101/matched-seed1101.json",
+      "kind": "duo",
+      "seed": 1101,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 65,
+      "full_cycles": 65,
+      "protocol_sha256": "9e75a4b9831824467aca863d932c2beb7b553b05d91988961b91de0a0119c63a"
+    },
+    {
+      "path": "artifacts/circus-analysis/matched-holdout/matched-seed1102/matched-seed1102.json",
+      "kind": "duo",
+      "seed": 1102,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 64,
+      "full_cycles": 65,
+      "protocol_sha256": "9e75a4b9831824467aca863d932c2beb7b553b05d91988961b91de0a0119c63a"
+    },
+    {
+      "path": "artifacts/circus-analysis/matched-holdout/matched-seed1103/matched-seed1103.json",
+      "kind": "duo",
+      "seed": 1103,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 65,
+      "full_cycles": 65,
+      "protocol_sha256": "9e75a4b9831824467aca863d932c2beb7b553b05d91988961b91de0a0119c63a"
+    },
+    {
+      "path": "artifacts/circus-analysis/matched-holdout/matched-seed1104/matched-seed1104.json",
+      "kind": "duo",
+      "seed": 1104,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 64,
+      "full_cycles": 65,
+      "protocol_sha256": "9e75a4b9831824467aca863d932c2beb7b553b05d91988961b91de0a0119c63a"
+    },
+    {
+      "path": "artifacts/circus-analysis/matched-video/duo-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 20.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 33,
+      "full_cycles": 33,
+      "protocol_sha256": "0c1833d2b88cc38e698c10ddfd4e63a19d0b9febda2df47000a20592c06dd59d"
+    },
+    {
+      "path": "artifacts/circus-analysis/relay-roomy/relay-seed0.json",
+      "kind": "relay",
+      "seed": 0,
+      "seconds": 27,
+      "passed": false,
+      "error": null,
+      "joint_clean": 28,
+      "full_cycles": 55,
+      "protocol_sha256": "0c1833d2b88cc38e698c10ddfd4e63a19d0b9febda2df47000a20592c06dd59d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_direct/roomy_entry_direct.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 40,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_pi/roomy_entry_pi.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 48,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-entry/roomy_entry_prepared/roomy_entry_prepared.json",
+      "kind": "entry",
+      "seed": 0,
+      "seconds": 25.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 4,
+      "full_cycles": 48,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-holdout/roomy-seed1001/roomy-seed1001.json",
+      "kind": "duo",
+      "seed": 1001,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 53,
+      "full_cycles": 65,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-holdout/roomy-seed1002/roomy-seed1002.json",
+      "kind": "duo",
+      "seed": 1002,
+      "seconds": 30.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 60,
+      "full_cycles": 65,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-holdout/roomy-seed1003/roomy-seed1003.json",
+      "kind": "duo",
+      "seed": 1003,
+      "seconds": 30.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 37,
+      "full_cycles": 65,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-holdout/roomy-seed1004/roomy-seed1004.json",
+      "kind": "duo",
+      "seed": 1004,
+      "seconds": 30.0,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 19,
+      "protocol_sha256": "03d12815987e1fcd6101fb985e6d5b0d4b98f5b9a472dbc42249b5ed5b19328d"
+    },
+    {
+      "path": "artifacts/circus-analysis/roomy-video/duo-seed0.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "passed": true,
+      "error": null,
+      "joint_clean": 27,
+      "full_cycles": 27,
+      "protocol_sha256": "0d7fe761014cb44615f6a12e3f8956c128cb90e2538ee9fd88dbe296d5941955"
+    },
+    {
+      "path": "artifacts/circus-analysis/startup-contact-detail/original.json",
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 0.5,
+      "passed": false,
+      "error": null,
+      "joint_clean": 0,
+      "full_cycles": 0,
+      "protocol_sha256": "381ae4868304501a27242d19275c3aae6b88ceeed04934a11a08c1beb841b24c"
+    }
+  ]
+}

@@ -32,6 +32,7 @@ def main():
     subs=parser.add_subparsers(dest='command',required=True)
     plan=subs.add_parser('plan');plan.add_argument('request');plan.add_argument('--output',type=Path,required=True)
     run=subs.add_parser('rehearse');run.add_argument('--kind',choices=['relay','entry','duo','speed'],default='relay')
+    run.add_argument('--config',type=Path,help='Replay a TrialConfig JSON or the config from a trial result; overrides simulation flags')
     run.add_argument('--plan',type=Path,help='Execute the counts from a compiled relay request')
     run.add_argument('--seed',type=int,default=0);run.add_argument('--seconds',type=float,default=30)
     run.add_argument('--dx',type=float,default=.075);run.add_argument('--span',type=float,default=.448)
@@ -54,14 +55,17 @@ def main():
     if args.command=='rehearse':
         cfg=TrialConfig(kind=args.kind,seed=args.seed,seconds=args.seconds,dx=args.dx,span=args.span,rope_length=args.rope_length,
             entry_phase_reference=args.entry_phase_reference,graphite_goal_y=args.graphite_goal_y,graphite_y=args.graphite_y,entry_controller=args.entry_controller,duo_y=args.duo_y,turn_hz=args.turn_hz,entry_phase=args.entry_phase)
+        if args.config:
+            config_data=json.loads(args.config.read_text())
+            cfg=TrialConfig(**config_data.get('config',config_data))
         if args.plan:
             plan_data=json.loads(args.plan.read_text())
-            if plan_data.get('kind')!='relay' or args.kind!='relay':parser.error('--plan currently requires a relay mission')
+            if plan_data.get('kind')!='relay' or cfg.kind!='relay':parser.error('--plan currently requires a relay mission')
             from microduck_lab.circus.mission import RelayRequest
             request=RelayRequest(**plan_data['request'])
             cfg=replace(cfg,**request.__dict__)
-        result,_=record_trial(cfg,args.output_dir,f'{args.kind}-seed{args.seed}',args.video)
-        write(args.output_dir/'rehearsal.json',dict(passed=result['passed'],kind=args.kind,evidence=f'{args.kind}-seed{args.seed}.json'))
+        result,_=record_trial(cfg,args.output_dir,f'{cfg.kind}-seed{cfg.seed}',args.video)
+        write(args.output_dir/'rehearsal.json',dict(passed=result['passed'],kind=cfg.kind,evidence=f'{cfg.kind}-seed{cfg.seed}.json'))
         return
     train=[int(s) for s in args.seeds.split(',')];holdout=[int(s) for s in args.holdout_seeds.split(',')]
     if not train or len(set(train))!=len(train) or len(set(holdout))!=len(holdout) or set(train)&set(holdout) or len(holdout)<4:

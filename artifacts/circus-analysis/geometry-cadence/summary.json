@@ -1,0 +1,2210 @@
+{
+  "original": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.075,
+      "span": 0.448,
+      "rope_length": 0.58,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": null,
+    "joint": {
+      "clean_cycles": 0,
+      "full_cycles": 0,
+      "success_rate": null,
+      "passed": false,
+      "cycles": []
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 0,
+        "clean_skips": 0,
+        "physical_success_rate": null,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 0,
+        "clean_skips": 0,
+        "physical_success_rate": null,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.2726230687192602,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.15044943651477755,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.14972559576918462,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.27180004766396687,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.1381217457493726,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.013929471075517404,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.013125739009207504,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.13630576777082887,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.09484351519560758,
+      "lavender/sky": 0.10256562264169115,
+      "lavender/graphite": 0.1441181041881811,
+      "cream/sky": 0.05813231612592385,
+      "cream/graphite": 0.08212576784497277,
+      "sky/graphite": 0.11428118174715676
+    },
+    "first_contact_by_pair": {
+      "cream/graphite": {
+        "t": 0.16160000000000257,
+        "pair": "cream/graphite",
+        "geoms": [
+          "",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 0.0001236807312261273,
+        "normal_force_n": 15.157993863776644
+      },
+      "cream/lavender": {
+        "t": 4.724800000001122,
+        "pair": "cream/lavender",
+        "geoms": [
+          "",
+          "cream/right_foot_collision"
+        ],
+        "penetration_m": 6.336965409689124e-05,
+        "normal_force_n": 4.5716132587263925
+      },
+      "cream/sky": {
+        "t": 0.9127999999999321,
+        "pair": "cream/sky",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 4.907467762990194e-05,
+        "normal_force_n": 8.42731376218156
+      },
+      "graphite/lavender": {
+        "t": 6.094400000004012,
+        "pair": "graphite/lavender",
+        "geoms": [
+          "",
+          "graphite/left_foot_collision"
+        ],
+        "penetration_m": 5.372436985395202e-05,
+        "normal_force_n": 2.708555611701819
+      },
+      "graphite/rope": {
+        "t": 0.10800000000000104,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s21",
+          ""
+        ],
+        "penetration_m": 4.294452393897906e-06,
+        "normal_force_n": 0.001132910991732761
+      },
+      "graphite/sky": {
+        "t": 0.20320000000000377,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/right_foot_collision",
+          ""
+        ],
+        "penetration_m": 0.00010479814555494915,
+        "normal_force_n": 9.470389837515839
+      },
+      "lavender/sky": {
+        "t": 0.2566000000000044,
+        "pair": "lavender/sky",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 0.00010985821990720504,
+        "normal_force_n": 5.111460803699192
+      },
+      "rope/sky": {
+        "t": 0.09320000000000062,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s2",
+          ""
+        ],
+        "penetration_m": 0.0001591016515076532,
+        "normal_force_n": 0.008445365394157543
+      }
+    }
+  },
+  "longer_only": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.075,
+      "span": 0.448,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": null,
+    "joint": {
+      "clean_cycles": 0,
+      "full_cycles": 0,
+      "success_rate": null,
+      "passed": false,
+      "cycles": []
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 0,
+        "clean_skips": 0,
+        "physical_success_rate": null,
+        "startup_before_warmup": false,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 0,
+        "clean_skips": 0,
+        "physical_success_rate": null,
+        "startup_before_warmup": false,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.2726230687192602,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.15044943651477755,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.14972559576918462,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.27180004766396687,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.1381217457493726,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.013929471075517404,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.013125739009207504,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.13630576777082887,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.14913383835465913,
+      "lavender/sky": 0.10321537755945394,
+      "lavender/graphite": 0.15465540764682134,
+      "cream/sky": 0.10309899426498262,
+      "cream/graphite": 0.05010900228442891,
+      "sky/graphite": 0.10746714688975126
+    },
+    "first_contact_by_pair": {
+      "cream/graphite": {
+        "t": 0.1622000000000026,
+        "pair": "cream/graphite",
+        "geoms": [
+          "",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 0.00022778534793260752,
+        "normal_force_n": 15.211105078565536
+      },
+      "cream/lavender": {
+        "t": 1.4971999999998677,
+        "pair": "cream/lavender",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 4.710404141107586e-05,
+        "normal_force_n": 9.152908760203083
+      },
+      "cream/sky": {
+        "t": 0.986799999999924,
+        "pair": "cream/sky",
+        "geoms": [
+          "cream/right_foot_collision",
+          ""
+        ],
+        "penetration_m": 0.00018862153475950868,
+        "normal_force_n": 3.3003184564740042
+      },
+      "graphite/lavender": {
+        "t": 7.493200000006964,
+        "pair": "graphite/lavender",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 0.00023619157835689706,
+        "normal_force_n": 18.28328690105473
+      },
+      "graphite/rope": {
+        "t": 0.3035999999999992,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s21",
+          ""
+        ],
+        "penetration_m": 1.608446091469354e-05,
+        "normal_force_n": 0.007742942869421557
+      },
+      "graphite/sky": {
+        "t": 0.20360000000000378,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/right_foot_collision",
+          ""
+        ],
+        "penetration_m": 0.00016811396391869815,
+        "normal_force_n": 9.477914220311114
+      },
+      "lavender/sky": {
+        "t": 0.2564000000000044,
+        "pair": "lavender/sky",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 1.8561472937584305e-05,
+        "normal_force_n": 5.210214907801104
+      },
+      "rope/sky": {
+        "t": 0.10180000000000086,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s2",
+          ""
+        ],
+        "penetration_m": 6.92214983636526e-05,
+        "normal_force_n": 0.017307493383216382
+      }
+    }
+  },
+  "wider_only": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.075,
+      "span": 0.6,
+      "rope_length": 0.58,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": 3.2860445089139723,
+    "joint": {
+      "clean_cycles": 0,
+      "full_cycles": 29,
+      "success_rate": 0.0,
+      "passed": false,
+      "cycles": [
+        {
+          "start": 9.087600000005498,
+          "end": 9.327600000004939,
+          "clean": false
+        },
+        {
+          "start": 9.327600000004939,
+          "end": 9.46880000000461,
+          "clean": false
+        },
+        {
+          "start": 9.46880000000461,
+          "end": 9.643600000004202,
+          "clean": false
+        },
+        {
+          "start": 9.643600000004202,
+          "end": 9.801000000003835,
+          "clean": false
+        },
+        {
+          "start": 9.801000000003835,
+          "end": 10.237800000002817,
+          "clean": false
+        },
+        {
+          "start": 10.237800000002817,
+          "end": 10.432000000002365,
+          "clean": false
+        },
+        {
+          "start": 10.432000000002365,
+          "end": 10.900000000001274,
+          "clean": false
+        },
+        {
+          "start": 10.900000000001274,
+          "end": 11.697399999999416,
+          "clean": false
+        },
+        {
+          "start": 11.697399999999416,
+          "end": 11.901999999998939,
+          "clean": false
+        },
+        {
+          "start": 11.901999999998939,
+          "end": 12.260999999998102,
+          "clean": false
+        },
+        {
+          "start": 12.260999999998102,
+          "end": 12.45099999999766,
+          "clean": false
+        },
+        {
+          "start": 12.45099999999766,
+          "end": 12.800999999996844,
+          "clean": false
+        },
+        {
+          "start": 12.800999999996844,
+          "end": 13.009799999996357,
+          "clean": false
+        },
+        {
+          "start": 13.009799999996357,
+          "end": 13.423199999995393,
+          "clean": false
+        },
+        {
+          "start": 13.423199999995393,
+          "end": 13.637999999994893,
+          "clean": false
+        },
+        {
+          "start": 13.637999999994893,
+          "end": 14.035799999993966,
+          "clean": false
+        },
+        {
+          "start": 14.035799999993966,
+          "end": 14.264799999993432,
+          "clean": false
+        },
+        {
+          "start": 14.264799999993432,
+          "end": 14.635599999992568,
+          "clean": false
+        },
+        {
+          "start": 14.635599999992568,
+          "end": 14.931599999991878,
+          "clean": false
+        },
+        {
+          "start": 14.931599999991878,
+          "end": 15.20079999999125,
+          "clean": false
+        },
+        {
+          "start": 15.20079999999125,
+          "end": 15.571399999990387,
+          "clean": false
+        },
+        {
+          "start": 15.571399999990387,
+          "end": 15.87459999998968,
+          "clean": false
+        },
+        {
+          "start": 15.87459999998968,
+          "end": 16.145999999989048,
+          "clean": false
+        },
+        {
+          "start": 16.145999999989048,
+          "end": 16.504399999988212,
+          "clean": false
+        },
+        {
+          "start": 16.504399999988212,
+          "end": 16.768399999987597,
+          "clean": false
+        },
+        {
+          "start": 16.768399999987597,
+          "end": 17.108399999986805,
+          "clean": false
+        },
+        {
+          "start": 17.108399999986805,
+          "end": 17.374399999986185,
+          "clean": false
+        },
+        {
+          "start": 17.374399999986185,
+          "end": 17.66019999998552,
+          "clean": false
+        },
+        {
+          "start": 17.66019999998552,
+          "end": 17.91279999998493,
+          "clean": false
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 29,
+        "clean_skips": 0,
+        "physical_success_rate": 0.0,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 29,
+        "clean_skips": 2,
+        "physical_success_rate": 0.06896551724137931,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.3486230687192601,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.22644943651477745,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.22572559576918458,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.3478000476639668,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.1381217457493726,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.013929471075517404,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.013125739009207504,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.13630576777082887,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.3981472467462751,
+      "lavender/sky": 0.08186989343303659,
+      "lavender/graphite": 0.22850613429166275,
+      "cream/sky": 0.2715691959285709,
+      "cream/graphite": 0.1099788731464399,
+      "sky/graphite": 0.08992309896160441
+    },
+    "first_contact_by_pair": {
+      "cream/graphite": {
+        "t": 1.0973999999999118,
+        "pair": "cream/graphite",
+        "geoms": [
+          "cream/left_foot_collision",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 0.0002221294256450186,
+        "normal_force_n": 4.076742540845447
+      },
+      "graphite/rope": {
+        "t": 0.17220000000000288,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s14",
+          "graphite/left_foot_collision"
+        ],
+        "penetration_m": 3.1819110753218216e-05,
+        "normal_force_n": 0.014086538113355172
+      },
+      "graphite/sky": {
+        "t": 0.24020000000000483,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/right_foot_collision",
+          ""
+        ],
+        "penetration_m": 5.8024394152870765e-06,
+        "normal_force_n": 9.384813235319198
+      },
+      "lavender/sky": {
+        "t": 0.47799999999998,
+        "pair": "lavender/sky",
+        "geoms": [
+          "lavender/left_foot_collision",
+          "sky/left_foot_collision"
+        ],
+        "penetration_m": 0.00020519130062758228,
+        "normal_force_n": 5.639839879511065
+      },
+      "rope/sky": {
+        "t": 0.1312000000000017,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s5",
+          ""
+        ],
+        "penetration_m": 7.160745799341815e-05,
+        "normal_force_n": 0.006894316798946455
+      }
+    }
+  },
+  "wider_and_longer": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.075,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": 3.13203257314606,
+    "joint": {
+      "clean_cycles": 0,
+      "full_cycles": 27,
+      "success_rate": 0.0,
+      "passed": false,
+      "cycles": [
+        {
+          "start": 9.151800000005348,
+          "end": 9.439000000004679,
+          "clean": false
+        },
+        {
+          "start": 9.439000000004679,
+          "end": 9.78580000000387,
+          "clean": false
+        },
+        {
+          "start": 9.78580000000387,
+          "end": 10.086000000003171,
+          "clean": false
+        },
+        {
+          "start": 10.086000000003171,
+          "end": 10.422600000002387,
+          "clean": false
+        },
+        {
+          "start": 10.422600000002387,
+          "end": 10.722400000001688,
+          "clean": false
+        },
+        {
+          "start": 10.722400000001688,
+          "end": 11.059000000000903,
+          "clean": false
+        },
+        {
+          "start": 11.059000000000903,
+          "end": 11.363800000000193,
+          "clean": false
+        },
+        {
+          "start": 11.363800000000193,
+          "end": 11.694199999999423,
+          "clean": false
+        },
+        {
+          "start": 11.694199999999423,
+          "end": 12.00879999999869,
+          "clean": false
+        },
+        {
+          "start": 12.00879999999869,
+          "end": 12.332999999997934,
+          "clean": false
+        },
+        {
+          "start": 12.332999999997934,
+          "end": 12.650999999997193,
+          "clean": false
+        },
+        {
+          "start": 12.650999999997193,
+          "end": 12.96999999999645,
+          "clean": false
+        },
+        {
+          "start": 12.96999999999645,
+          "end": 13.293199999995696,
+          "clean": false
+        },
+        {
+          "start": 13.293199999995696,
+          "end": 13.606199999994967,
+          "clean": false
+        },
+        {
+          "start": 13.606199999994967,
+          "end": 13.934599999994202,
+          "clean": false
+        },
+        {
+          "start": 13.934599999994202,
+          "end": 14.247999999993471,
+          "clean": false
+        },
+        {
+          "start": 14.247999999993471,
+          "end": 14.57439999999271,
+          "clean": false
+        },
+        {
+          "start": 14.57439999999271,
+          "end": 14.888799999991978,
+          "clean": false
+        },
+        {
+          "start": 14.888799999991978,
+          "end": 15.21419999999122,
+          "clean": false
+        },
+        {
+          "start": 15.21419999999122,
+          "end": 15.528799999990486,
+          "clean": false
+        },
+        {
+          "start": 15.528799999990486,
+          "end": 15.852599999989732,
+          "clean": false
+        },
+        {
+          "start": 15.852599999989732,
+          "end": 16.171599999988988,
+          "clean": false
+        },
+        {
+          "start": 16.171599999988988,
+          "end": 16.49279999998824,
+          "clean": false
+        },
+        {
+          "start": 16.49279999998824,
+          "end": 16.8097999999875,
+          "clean": false
+        },
+        {
+          "start": 16.8097999999875,
+          "end": 17.13159999998675,
+          "clean": false
+        },
+        {
+          "start": 17.13159999998675,
+          "end": 17.450599999986007,
+          "clean": false
+        },
+        {
+          "start": 17.450599999986007,
+          "end": 17.772399999985257,
+          "clean": false
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 27,
+        "clean_skips": 27,
+        "physical_success_rate": 1.0,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 27,
+        "clean_skips": 0,
+        "physical_success_rate": 0.0,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.3486230687192601,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.22644943651477745,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.22572559576918458,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.3478000476639668,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.1381217457493726,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.013929471075517404,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.013125739009207504,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.13630576777082887,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.4508341719738925,
+      "lavender/sky": 0.11791007258110513,
+      "lavender/graphite": 0.1540637191402684,
+      "cream/sky": 0.21487227656764246,
+      "cream/graphite": 0.1165426433797003,
+      "sky/graphite": 0.10131518084275662
+    },
+    "first_contact_by_pair": {
+      "cream/graphite": {
+        "t": 3.013399999999701,
+        "pair": "cream/graphite",
+        "geoms": [
+          "cream/left_foot_collision",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 0.00010591217116859659,
+        "normal_force_n": 5.444916227960967
+      },
+      "graphite/lavender": {
+        "t": 5.517800000002795,
+        "pair": "graphite/lavender",
+        "geoms": [
+          "",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 6.501402328365067e-05,
+        "normal_force_n": 9.443207447991306
+      },
+      "graphite/rope": {
+        "t": 0.33399999999999586,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s15",
+          ""
+        ],
+        "penetration_m": 0.0002784607800096527,
+        "normal_force_n": 0.0284814602619124
+      },
+      "graphite/sky": {
+        "t": 0.24160000000000487,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/right_foot_collision",
+          ""
+        ],
+        "penetration_m": 6.556224405222618e-05,
+        "normal_force_n": 9.693582846977716
+      },
+      "lavender/sky": {
+        "t": 0.5639999999999705,
+        "pair": "lavender/sky",
+        "geoms": [
+          "",
+          ""
+        ],
+        "penetration_m": 0.00012622301431396106,
+        "normal_force_n": 5.521444434088491
+      },
+      "rope/sky": {
+        "t": 0.34959999999999414,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s7",
+          ""
+        ],
+        "penetration_m": 2.5198297451909822e-05,
+        "normal_force_n": 0.023074227772434786
+      }
+    }
+  },
+  "roomy_spacing": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": true,
+    "error": null,
+    "measured_hz": 3.122903606382628,
+    "joint": {
+      "clean_cycles": 27,
+      "full_cycles": 27,
+      "success_rate": 1.0,
+      "passed": true,
+      "cycles": [
+        {
+          "start": 9.122600000005416,
+          "end": 9.444600000004666,
+          "clean": true
+        },
+        {
+          "start": 9.444600000004666,
+          "end": 9.763200000003923,
+          "clean": true
+        },
+        {
+          "start": 9.763200000003923,
+          "end": 10.091200000003159,
+          "clean": true
+        },
+        {
+          "start": 10.091200000003159,
+          "end": 10.401200000002436,
+          "clean": true
+        },
+        {
+          "start": 10.401200000002436,
+          "end": 10.733600000001662,
+          "clean": true
+        },
+        {
+          "start": 10.733600000001662,
+          "end": 11.045800000000934,
+          "clean": true
+        },
+        {
+          "start": 11.045800000000934,
+          "end": 11.366800000000186,
+          "clean": true
+        },
+        {
+          "start": 11.366800000000186,
+          "end": 11.680599999999455,
+          "clean": true
+        },
+        {
+          "start": 11.680599999999455,
+          "end": 12.007399999998693,
+          "clean": true
+        },
+        {
+          "start": 12.007399999998693,
+          "end": 12.324399999997954,
+          "clean": true
+        },
+        {
+          "start": 12.324399999997954,
+          "end": 12.645199999997207,
+          "clean": true
+        },
+        {
+          "start": 12.645199999997207,
+          "end": 12.965999999996459,
+          "clean": true
+        },
+        {
+          "start": 12.965999999996459,
+          "end": 13.279599999995728,
+          "clean": true
+        },
+        {
+          "start": 13.279599999995728,
+          "end": 13.592599999994999,
+          "clean": true
+        },
+        {
+          "start": 13.592599999994999,
+          "end": 13.921599999994232,
+          "clean": true
+        },
+        {
+          "start": 13.921599999994232,
+          "end": 14.242399999993484,
+          "clean": true
+        },
+        {
+          "start": 14.242399999993484,
+          "end": 14.558999999992746,
+          "clean": true
+        },
+        {
+          "start": 14.558999999992746,
+          "end": 14.890199999991975,
+          "clean": true
+        },
+        {
+          "start": 14.890199999991975,
+          "end": 15.203599999991244,
+          "clean": true
+        },
+        {
+          "start": 15.203599999991244,
+          "end": 15.530399999990482,
+          "clean": true
+        },
+        {
+          "start": 15.530399999990482,
+          "end": 15.849399999989739,
+          "clean": true
+        },
+        {
+          "start": 15.849399999989739,
+          "end": 16.167399999988998,
+          "clean": true
+        },
+        {
+          "start": 16.167399999988998,
+          "end": 16.485799999988256,
+          "clean": true
+        },
+        {
+          "start": 16.485799999988256,
+          "end": 16.803799999987515,
+          "clean": true
+        },
+        {
+          "start": 16.803799999987515,
+          "end": 17.12739999998676,
+          "clean": true
+        },
+        {
+          "start": 17.12739999998676,
+          "end": 17.443799999986023,
+          "clean": true
+        },
+        {
+          "start": 17.443799999986023,
+          "end": 17.768399999985267,
+          "clean": true
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 27,
+        "clean_skips": 27,
+        "physical_success_rate": 1.0,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 27,
+        "clean_skips": 27,
+        "physical_success_rate": 1.0,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.44862306871926017,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.3264494365147775,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.3257255957691846,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.44780004766396686,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.20312174574937264,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.07892947107551743,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.07812573900920752,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.20130576777082893,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.6626789636546404,
+      "lavender/sky": 0.16894238791679986,
+      "lavender/graphite": 0.4536054044054279,
+      "cream/sky": 0.44653390410680616,
+      "cream/graphite": 0.15698123383691753,
+      "sky/graphite": 0.23192400906547272
+    },
+    "first_contact_by_pair": {
+      "graphite/rope": {
+        "t": 0.350599999999994,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s16",
+          ""
+        ],
+        "penetration_m": 0.00020444885317933825,
+        "normal_force_n": 0.03031685448486928
+      },
+      "rope/sky": {
+        "t": 0.33939999999999526,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s9",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00024907743334531287,
+        "normal_force_n": 0.03458971429807757
+      }
+    }
+  },
+  "roomy_slow": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 2.8,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": 2.851797773322945,
+    "joint": {
+      "clean_cycles": 1,
+      "full_cycles": 25,
+      "success_rate": 0.04,
+      "passed": false,
+      "cycles": [
+        {
+          "start": 9.11700000000543,
+          "end": 9.47740000000459,
+          "clean": false
+        },
+        {
+          "start": 9.47740000000459,
+          "end": 9.841200000003742,
+          "clean": false
+        },
+        {
+          "start": 9.841200000003742,
+          "end": 10.196400000002914,
+          "clean": true
+        },
+        {
+          "start": 10.196400000002914,
+          "end": 10.555600000002077,
+          "clean": false
+        },
+        {
+          "start": 10.555600000002077,
+          "end": 10.911000000001248,
+          "clean": false
+        },
+        {
+          "start": 10.911000000001248,
+          "end": 11.246600000000466,
+          "clean": false
+        },
+        {
+          "start": 11.246600000000466,
+          "end": 11.580999999999687,
+          "clean": false
+        },
+        {
+          "start": 11.580999999999687,
+          "end": 11.9183999999989,
+          "clean": false
+        },
+        {
+          "start": 11.9183999999989,
+          "end": 12.34359999999791,
+          "clean": false
+        },
+        {
+          "start": 12.34359999999791,
+          "end": 12.652799999997189,
+          "clean": false
+        },
+        {
+          "start": 12.652799999997189,
+          "end": 13.031999999996305,
+          "clean": false
+        },
+        {
+          "start": 13.031999999996305,
+          "end": 13.366199999995526,
+          "clean": false
+        },
+        {
+          "start": 13.366199999995526,
+          "end": 13.718799999994705,
+          "clean": false
+        },
+        {
+          "start": 13.718799999994705,
+          "end": 14.064799999993898,
+          "clean": false
+        },
+        {
+          "start": 14.064799999993898,
+          "end": 14.380999999993161,
+          "clean": false
+        },
+        {
+          "start": 14.380999999993161,
+          "end": 14.740799999992323,
+          "clean": false
+        },
+        {
+          "start": 14.740799999992323,
+          "end": 15.15359999999136,
+          "clean": false
+        },
+        {
+          "start": 15.15359999999136,
+          "end": 15.469399999990625,
+          "clean": false
+        },
+        {
+          "start": 15.469399999990625,
+          "end": 15.852199999989733,
+          "clean": false
+        },
+        {
+          "start": 15.852199999989733,
+          "end": 16.182799999988962,
+          "clean": false
+        },
+        {
+          "start": 16.182799999988962,
+          "end": 16.545999999988116,
+          "clean": false
+        },
+        {
+          "start": 16.545999999988116,
+          "end": 16.903399999987283,
+          "clean": false
+        },
+        {
+          "start": 16.903399999987283,
+          "end": 17.20959999998657,
+          "clean": false
+        },
+        {
+          "start": 17.20959999998657,
+          "end": 17.5397999999858,
+          "clean": false
+        },
+        {
+          "start": 17.5397999999858,
+          "end": 17.883399999985,
+          "clean": false
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 25,
+        "clean_skips": 5,
+        "physical_success_rate": 0.2,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 25,
+        "clean_skips": 6,
+        "physical_success_rate": 0.24,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.44862306871926017,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.3264494365147775,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.3257255957691846,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.44780004766396686,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.20312174574937264,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.07892947107551743,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.07812573900920752,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.20130576777082893,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.6759143454928143,
+      "lavender/sky": 0.1724187643219134,
+      "lavender/graphite": 0.4454927892730076,
+      "cream/sky": 0.45736110548794806,
+      "cream/graphite": 0.18517805283061378,
+      "sky/graphite": 0.21534951130686397
+    },
+    "first_contact_by_pair": {
+      "graphite/rope": {
+        "t": 0.36039999999999295,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s16",
+          ""
+        ],
+        "penetration_m": 0.00019283494980812561,
+        "normal_force_n": 0.011178751844474233
+      },
+      "rope/sky": {
+        "t": 0.305599999999999,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s6",
+          "sky/left_foot_collision"
+        ],
+        "penetration_m": 1.7411404781567802e-05,
+        "normal_force_n": 0.002219638521782101
+      }
+    }
+  },
+  "roomy_fixed_rate": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.93,
+      "sky_y": 0.0,
+      "fixed_turn_rate": true,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": 3.1098825155566603,
+    "joint": {
+      "clean_cycles": 16,
+      "full_cycles": 27,
+      "success_rate": 0.5925925925925926,
+      "passed": false,
+      "cycles": [
+        {
+          "start": 9.170200000005305,
+          "end": 9.478400000004587,
+          "clean": false
+        },
+        {
+          "start": 9.478400000004587,
+          "end": 9.792600000003855,
+          "clean": false
+        },
+        {
+          "start": 9.792600000003855,
+          "end": 10.10380000000313,
+          "clean": false
+        },
+        {
+          "start": 10.10380000000313,
+          "end": 10.422400000002387,
+          "clean": false
+        },
+        {
+          "start": 10.422400000002387,
+          "end": 10.74260000000164,
+          "clean": false
+        },
+        {
+          "start": 10.74260000000164,
+          "end": 11.065400000000889,
+          "clean": true
+        },
+        {
+          "start": 11.065400000000889,
+          "end": 11.397800000000114,
+          "clean": true
+        },
+        {
+          "start": 11.397800000000114,
+          "end": 11.70839999999939,
+          "clean": true
+        },
+        {
+          "start": 11.70839999999939,
+          "end": 12.044199999998607,
+          "clean": true
+        },
+        {
+          "start": 12.044199999998607,
+          "end": 12.36939999999785,
+          "clean": true
+        },
+        {
+          "start": 12.36939999999785,
+          "end": 12.692799999997096,
+          "clean": true
+        },
+        {
+          "start": 12.692799999997096,
+          "end": 13.007999999996361,
+          "clean": true
+        },
+        {
+          "start": 13.007999999996361,
+          "end": 13.331199999995608,
+          "clean": true
+        },
+        {
+          "start": 13.331199999995608,
+          "end": 13.651599999994861,
+          "clean": true
+        },
+        {
+          "start": 13.651599999994861,
+          "end": 13.975199999994107,
+          "clean": true
+        },
+        {
+          "start": 13.975199999994107,
+          "end": 14.301999999993345,
+          "clean": true
+        },
+        {
+          "start": 14.301999999993345,
+          "end": 14.6217999999926,
+          "clean": true
+        },
+        {
+          "start": 14.6217999999926,
+          "end": 14.937199999991865,
+          "clean": true
+        },
+        {
+          "start": 14.937199999991865,
+          "end": 15.275799999991076,
+          "clean": false
+        },
+        {
+          "start": 15.275799999991076,
+          "end": 15.581799999990363,
+          "clean": true
+        },
+        {
+          "start": 15.581799999990363,
+          "end": 15.912399999989592,
+          "clean": true
+        },
+        {
+          "start": 15.912399999989592,
+          "end": 16.241599999988825,
+          "clean": false
+        },
+        {
+          "start": 16.241599999988825,
+          "end": 16.564399999988073,
+          "clean": false
+        },
+        {
+          "start": 16.564399999988073,
+          "end": 16.87859999998734,
+          "clean": false
+        },
+        {
+          "start": 16.87859999998734,
+          "end": 17.20419999998658,
+          "clean": true
+        },
+        {
+          "start": 17.20419999998658,
+          "end": 17.528799999985825,
+          "clean": false
+        },
+        {
+          "start": 17.528799999985825,
+          "end": 17.85219999998507,
+          "clean": false
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 27,
+        "clean_skips": 18,
+        "physical_success_rate": 0.6666666666666666,
+        "startup_before_warmup": true,
+        "passed": false,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 27,
+        "clean_skips": 23,
+        "physical_success_rate": 0.8518518518518519,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.44862306871926017,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.3264494365147775,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.3257255957691846,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.44780004766396686,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.20312174574937264,
+          -0.0481414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          -0.07892947107551743,
+          0.07421789149776159,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          0.07812573900920752,
+          -0.04833824160151871,
+          0.001935252360646269
+        ],
+        "max": [
+          0.20130576777082893,
+          0.07343624373653651,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.6528410983664908,
+      "lavender/sky": 0.17207964890012056,
+      "lavender/graphite": 0.4574931290115198,
+      "cream/sky": 0.4373710824312944,
+      "cream/graphite": 0.13981412173455962,
+      "sky/graphite": 0.24220673079419955
+    },
+    "first_contact_by_pair": {
+      "graphite/rope": {
+        "t": 0.350599999999994,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s16",
+          ""
+        ],
+        "penetration_m": 0.00020444885317933825,
+        "normal_force_n": 0.03031685448486928
+      },
+      "rope/sky": {
+        "t": 0.33939999999999526,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s9",
+          "sky/right_foot_collision"
+        ],
+        "penetration_m": 0.00024907743334531287,
+        "normal_force_n": 0.03458971429807757
+      }
+    }
+  },
+  "tandem_roomy": {
+    "config": {
+      "kind": "duo",
+      "seed": 0,
+      "seconds": 18.0,
+      "dx": 0,
+      "span": 0.6,
+      "rope_length": 0.73,
+      "sky_y": -0.12,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.12,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.5,
+      "entry_phase": 0.0,
+      "entry_controller": "walk",
+      "entry_phase_reference": "local",
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "measured_hz": 3.1271716469843556,
+    "joint": {
+      "clean_cycles": 24,
+      "full_cycles": 27,
+      "success_rate": 0.8888888888888888,
+      "passed": true,
+      "cycles": [
+        {
+          "start": 9.15500000000534,
+          "end": 9.485000000004572,
+          "clean": false
+        },
+        {
+          "start": 9.485000000004572,
+          "end": 9.789400000003862,
+          "clean": false
+        },
+        {
+          "start": 9.789400000003862,
+          "end": 10.12080000000309,
+          "clean": true
+        },
+        {
+          "start": 10.12080000000309,
+          "end": 10.42940000000237,
+          "clean": true
+        },
+        {
+          "start": 10.42940000000237,
+          "end": 10.756600000001608,
+          "clean": true
+        },
+        {
+          "start": 10.756600000001608,
+          "end": 11.06500000000089,
+          "clean": true
+        },
+        {
+          "start": 11.06500000000089,
+          "end": 11.391800000000128,
+          "clean": true
+        },
+        {
+          "start": 11.391800000000128,
+          "end": 11.705799999999396,
+          "clean": true
+        },
+        {
+          "start": 11.705799999999396,
+          "end": 12.031799999998636,
+          "clean": true
+        },
+        {
+          "start": 12.031799999998636,
+          "end": 12.349599999997896,
+          "clean": true
+        },
+        {
+          "start": 12.349599999997896,
+          "end": 12.671999999997144,
+          "clean": false
+        },
+        {
+          "start": 12.671999999997144,
+          "end": 12.990399999996402,
+          "clean": true
+        },
+        {
+          "start": 12.990399999996402,
+          "end": 13.310399999995656,
+          "clean": true
+        },
+        {
+          "start": 13.310399999995656,
+          "end": 13.633599999994903,
+          "clean": true
+        },
+        {
+          "start": 13.633599999994903,
+          "end": 13.951599999994162,
+          "clean": true
+        },
+        {
+          "start": 13.951599999994162,
+          "end": 14.275399999993407,
+          "clean": true
+        },
+        {
+          "start": 14.275399999993407,
+          "end": 14.588999999992676,
+          "clean": true
+        },
+        {
+          "start": 14.588999999992676,
+          "end": 14.91339999999192,
+          "clean": true
+        },
+        {
+          "start": 14.91339999999192,
+          "end": 15.224999999991194,
+          "clean": true
+        },
+        {
+          "start": 15.224999999991194,
+          "end": 15.553599999990428,
+          "clean": true
+        },
+        {
+          "start": 15.553599999990428,
+          "end": 15.862999999989707,
+          "clean": true
+        },
+        {
+          "start": 15.862999999989707,
+          "end": 16.19579999998893,
+          "clean": true
+        },
+        {
+          "start": 16.19579999998893,
+          "end": 16.50559999998821,
+          "clean": true
+        },
+        {
+          "start": 16.50559999998821,
+          "end": 16.83619999998744,
+          "clean": true
+        },
+        {
+          "start": 16.83619999998744,
+          "end": 17.146599999986716,
+          "clean": true
+        },
+        {
+          "start": 17.146599999986716,
+          "end": 17.476199999985948,
+          "clean": true
+        },
+        {
+          "start": 17.476199999985948,
+          "end": 17.78899999998522,
+          "clean": true
+        }
+      ]
+    },
+    "scores": {
+      "sky": {
+        "full_revolutions": 27,
+        "clean_skips": 25,
+        "physical_success_rate": 0.9259259259259259,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      },
+      "graphite": {
+        "full_revolutions": 27,
+        "clean_skips": 24,
+        "physical_success_rate": 0.8888888888888888,
+        "startup_before_warmup": true,
+        "passed": true,
+        "criteria": {
+          "warmup_s": 9.0,
+          "minimum_cycles": 20,
+          "sole_clearance_m": 0.001,
+          "landing_support_s": 0.05,
+          "attachment_limit_m": 0.01,
+          "min_upright_cos": 0.8,
+          "max_rope_floor_penetration_m": 0.002
+        }
+      }
+    },
+    "initial_collision_bounds": {
+      "lavender": {
+        "min": [
+          -0.3486230687192601,
+          -0.06140135767756598,
+          0.0009974166339143473
+        ],
+        "max": [
+          -0.22644943651477745,
+          0.061652687931185196,
+          0.27492644345866535
+        ]
+      },
+      "cream": {
+        "min": [
+          0.22572559576918458,
+          -0.06142845869811428,
+          0.0022068457024724177
+        ],
+        "max": [
+          0.3478000476639668,
+          0.062062867796106126,
+          0.27549036839025326
+        ]
+      },
+      "sky": {
+        "min": [
+          -0.0631217457493726,
+          -0.1681414855052365,
+          0.0018501964221975834
+        ],
+        "max": [
+          0.061070528924482594,
+          -0.04578210850223841,
+          0.2747821491502395
+        ]
+      },
+      "graphite": {
+        "min": [
+          -0.06187426099079249,
+          0.0716617583984813,
+          0.001935252360646269
+        ],
+        "max": [
+          0.06130576777082888,
+          0.1934362437365365,
+          0.27571540935134936
+        ]
+      }
+    },
+    "minimum_separation": {
+      "lavender/cream": 0.4821286025582682,
+      "lavender/sky": 0.225601315480687,
+      "lavender/graphite": 0.2504368923006034,
+      "cream/sky": 0.2499633287284991,
+      "cream/graphite": 0.22791990361521178,
+      "sky/graphite": 0.1942854249903853
+    },
+    "first_contact_by_pair": {
+      "graphite/rope": {
+        "t": 0.1622000000000026,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s10",
+          "graphite/left_foot_collision"
+        ],
+        "penetration_m": 3.596966143998726e-05,
+        "normal_force_n": 0.004076734356534677
+      },
+      "graphite/sky": {
+        "t": 8.64480000000653,
+        "pair": "graphite/sky",
+        "geoms": [
+          "sky/left_foot_collision",
+          "graphite/right_foot_collision"
+        ],
+        "penetration_m": 2.7605848573653277e-05,
+        "normal_force_n": 0.8256749630769658
+      },
+      "rope/sky": {
+        "t": 1.5165999999998656,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s6",
+          ""
+        ],
+        "penetration_m": 0.00017489183594814875,
+        "normal_force_n": 0.025810335602097827
+      }
+    }
+  }
+}

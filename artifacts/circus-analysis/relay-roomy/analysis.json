@@ -1,0 +1,95 @@
+[
+  {
+    "path": "artifacts/circus-analysis/relay-roomy/relay-seed0.json",
+    "config": {
+      "kind": "relay",
+      "seed": 0,
+      "seconds": 27,
+      "dx": 0.14,
+      "span": 0.8,
+      "rope_length": 0.86,
+      "sky_y": 0.0,
+      "hop_phase_mode": "midpoint",
+      "continuous_turn_phase": false,
+      "fixed_turn_rate": false,
+      "diagnostics": true,
+      "duo_y": 0.0,
+      "graphite_goal_y": 0.0,
+      "graphite_y": -0.65,
+      "entry_phase": 3.141592653589793,
+      "entry_controller": "hop",
+      "entry_phase_reference": "shared",
+      "entry_speed": 0.12,
+      "entry_prehop": 2.0,
+      "walk_speed": 0.3,
+      "switch_y": -0.04,
+      "turn_hz": 3.1,
+      "sky_cycles": 5,
+      "duo_cycles": 3,
+      "graphite_cycles": 5
+    },
+    "passed": false,
+    "error": null,
+    "entry": {
+      "started_outside": true,
+      "started": 12.959999999996473,
+      "inside": 18.219999999984214,
+      "clean_cycles": 27,
+      "faults": [
+        "rope_duck_contact"
+      ]
+    },
+    "measured_hz": 3.1293384009722676,
+    "scores": {
+      "sky": {
+        "clean": 53,
+        "cycles": 55,
+        "reasons": {
+          "did_not_clear_both_feet": 1,
+          "insufficient_sole_clearance": 1,
+          "no_clean_landing": 1,
+          "rope_duck_contact": 2
+        }
+      },
+      "graphite": {
+        "clean": 28,
+        "cycles": 55,
+        "reasons": {
+          "did_not_clear_both_feet": 27,
+          "no_clean_landing": 27,
+          "no_overhead_crossing": 22,
+          "rope_duck_contact": 7,
+          "insufficient_sole_clearance": 4
+        }
+      }
+    },
+    "joint_clean": 28,
+    "longest_joint_clean_streak": 28,
+    "first_relevant_contacts": {
+      "graphite/rope": {
+        "t": 15.595399999990331,
+        "pair": "graphite/rope",
+        "geoms": [
+          "rope/rope_s15",
+          "graphite/jaw_soft#geom294"
+        ],
+        "penetration_m": 0.0010836682520728594,
+        "normal_force_n": 0.07689385072249008
+      },
+      "rope/sky": {
+        "t": 16.31279999998866,
+        "pair": "rope/sky",
+        "geoms": [
+          "rope/rope_s3",
+          "sky/left_foot_collision"
+        ],
+        "penetration_m": 0.00014794227491947767,
+        "normal_force_n": 0.006064909205546175
+      }
+    },
+    "first_tilt": {
+      "sky": null,
+      "graphite": null
+    }
+  }
+]
