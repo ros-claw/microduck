@@ -1,0 +1,117 @@
+{
+  "summary": {
+    "requests": 1,
+    "successes": 1,
+    "errors": 0,
+    "concurrency": 1,
+    "wall_seconds": 0.7832607366144657,
+    "latency_ms": {
+      "p50": 782.5467679649591,
+      "p90": 782.5467679649591,
+      "p95": 782.5467679649591,
+      "p99": 782.5467679649591
+    },
+    "input_tokens": 588,
+    "models": [
+      "jev-1.13.0"
+    ]
+  },
+  "state": {
+    "robot": {
+      "speed_m_s": 0.4,
+      "upright": true,
+      "airborne": false
+    },
+    "hazards": [
+      {
+        "type": "bar",
+        "distance_m": 0.7,
+        "height_m": 0.14
+      }
+    ],
+    "left_lane": "blocked",
+    "right_lane": "clear",
+    "skills": {
+      "jump": "ready",
+      "roulade": "ready"
+    },
+    "objective": "reach_finish_safely"
+  },
+  "candidates": [
+    "KEEP_RUNNING",
+    "JUMP",
+    "ROULADE",
+    "DODGE_RIGHT",
+    "BRAKE"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "ok": true,
+      "action": "JUMP",
+      "probabilities": {
+        "BRAKE": 0.05,
+        "JUMP": 0.51,
+        "ROULADE": 0.08,
+        "KEEP_RUNNING": 0.07,
+        "DODGE_RIGHT": 0.29
+      },
+      "confidence": 0.38,
+      "act_now": 0.57,
+      "need_system_two": 0.28,
+      "risk": 1.37,
+      "model": "jev-1.13.0",
+      "usage": {
+        "input_tokens": 588,
+        "output_tokens": 114
+      },
+      "latency_ms": 782.5467679649591,
+      "raw": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "next_action": {
+            "type": "choice",
+            "choice": "JUMP",
+            "confidence": 0.38,
+            "probabilities": {
+              "BRAKE": 0.05,
+              "JUMP": 0.51,
+              "ROULADE": 0.08,
+              "KEEP_RUNNING": 0.07,
+              "DODGE_RIGHT": 0.29
+            }
+          },
+          "situation_risk": {
+            "type": "score",
+            "score": 1.37,
+            "confidence": 0.33,
+            "legend": {
+              "0": "safe",
+              "1": "mild",
+              "2": "high",
+              "3": "critical"
+            },
+            "probabilities": {
+              "0": 0.15,
+              "1": 0.39,
+              "2": 0.39,
+              "3": 0.07
+            }
+          },
+          "act_now": {
+            "type": "noul",
+            "noul": 0.57
+          },
+          "need_system_two": {
+            "type": "noul",
+            "noul": 0.28
+          }
+        },
+        "usage": {
+          "input_tokens": 588,
+          "output_tokens": 114
+        }
+      }
+    }
+  ]
+}

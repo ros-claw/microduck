@@ -20,6 +20,12 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
+## Neon Escape: independent physical arcade prototype
+
+[Gameplay and methods](docs/NEON_ESCAPE.md): real Jev tactical decisions drive existing motor policies through a seeded obstacle course, including a verified forward roll. One recorded run finishes cleanly in 39.98 seconds; failures and baseline comparisons are published alongside it. Gap jumping and general fall recovery remain unvalidated.
+
+[![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
+
 ## Method
 
 ### 1. Shared physical environment

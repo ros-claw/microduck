@@ -20,6 +20,12 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 完整回放包含启动阶段。特写以 0.25× 速度重放同一段轨迹，不代表额外独立测试。渲染使用模型原生材质，外观调整前后的逐圈判定记录已核对一致。参见 [轨迹审计](artifacts/presentation/audit.json) 与 [渲染元数据](artifacts/presentation/manifest.json)。
 
+## Neon Escape：独立物理游戏原型
+
+[游戏录像与方法说明](docs/NEON_ESCAPE.md)：真实 Jev 战术决策调用现有运动策略，控制鸭子翻滚、换道并穿过程序生成的障碍场景。已有 39.98 秒无碰撞通关记录，失败种子和规则基线对照也完整公开；跨沟跳跃与通用跌倒恢复仍未验证。
+
+[![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
+
 ## 方法
 
 ### 1. 共享物理环境

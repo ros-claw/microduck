@@ -23,3 +23,5 @@
 
 - [1:48 head-follow film / 1 分 48 秒跟随视角短片](CIRCUS_POV_VIDEO.md)
 - [Physical fidelity audit / 穿模与碰撞范围复核](PHYSICAL_FIDELITY_AUDIT.md)
+
+- [Neon Escape / Jev 物理游戏原型与复现实验](NEON_ESCAPE.md)
