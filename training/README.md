@@ -24,3 +24,33 @@ uv run --with pytest pytest tests/test_clean_ropehop_cfg.py tests/test_sweep_rop
 训练任务 `Mjlab-SweepRopeHop-Flat-MicroDuck` 的命令、奖励、环境偏移修复和消融结果见 [SWEEP_TRAINING](../docs/SWEEP_TRAINING.md)。长训练前先运行 64 环境、5 iteration 的 smoke。
 
 此包提供完整训练源码与部署 ONNX，**不包含用于继续训练的原始 `.pt` 检查点或全部日志**。文档中的 resume 命令需要相应检查点；没有检查点时可从头训练，但不保证得到相同权重或成绩。现成 ONNX 的评估与视频复现不依赖这些训练检查点。
+
+## Parkour V2 / 跑酷训练
+
+`parkour_v2.patch` 是叠加在上述 `18052aa` 交付源码上的增量，不含本地 `uv.lock` 修改。
+增加真实地形缺口任务、站立 ONNX 初始化、出生姿态验证和配置测试。
+
+```bash
+git apply --check "$DELIVERY_ROOT/training/parkour_v2.patch"
+git apply "$DELIVERY_ROOT/training/parkour_v2.patch"
+uv run --with pytest pytest tests/test_parkour_cfg.py
+uv run python scripts/verify_parkour_spawn.py
+```
+
+The incremental patch adds `Mjlab-ParkourGap-Flat-MicroDuck`. The actor retains
+the shared 61-dimensional observation, 50 Hz control and normalized ONNX export.
+The selected deployment model and evidence are described in
+[NEON_ESCAPE_V2](../docs/NEON_ESCAPE_V2.md). Training checkpoints are separate from
+the deployment ONNX; a specific weight reproduction requires its original checkpoint.
+
+`Mjlab-ParkourRoll-Flat-MicroDuck` is an additional hard-contact transfer
+experiment based on the official roulade task. It uses XML PD servos for this
+simulation runtime, 0.6405 Nm limits, 1 ms training physics / 50 Hz actions,
+native robot geometry and 2 ms ground/self contact references. Warp's current
+mesh multi-contact implementation rejects nonzero contact margin; this training
+profile therefore uses **zero margin**, which must also be used in its deployment
+comparison. It is not certified by the earlier positive-margin batteries.
+
+硬接触翻滚训练是独立实验，不能拿旧策略测试结果替代新配置验证。训练前已完成
+4 个扰动初态的 3 秒站立检查、64 环境 / 5 轮短测、标准 ONNX 导出，以及官方
+翻滚 ONNX 初始化的数值一致性检查。训练日志位于 V2 evidence 的 `training/`。

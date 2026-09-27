@@ -1,0 +1,419 @@
+diff --git a/src/mjlab_microduck/tasks/__init__.py b/src/mjlab_microduck/tasks/__init__.py
+index a626408..b55a46d 100644
+--- a/src/mjlab_microduck/tasks/__init__.py
++++ b/src/mjlab_microduck/tasks/__init__.py
+@@ -383,3 +383,22 @@ register_mjlab_task(
+     rl_cfg=MicroduckRopeHopRlCfg,
+     runner_cls=MicroduckOnPolicyRunner,
+ )
++
++# V2 real-gap development; deployment batteries, not training reward, certify it.
++from .microduck_parkour_env_cfg import make_microduck_parkour_env_cfg, MicroduckParkourRlCfg
++register_mjlab_task(
++    task_id='Mjlab-ParkourGap-Flat-MicroDuck',
++    env_cfg=make_microduck_parkour_env_cfg(),
++    play_env_cfg=make_microduck_parkour_env_cfg(play=True),
++    rl_cfg=MicroduckParkourRlCfg,
++    runner_cls=MicroduckOnPolicyRunner,
++)
++
++from .microduck_parkour_roll_env_cfg import make_microduck_parkour_roll_env_cfg, MicroduckParkourRollRlCfg
++register_mjlab_task(
++    task_id='Mjlab-ParkourRoll-Flat-MicroDuck',
++    env_cfg=make_microduck_parkour_roll_env_cfg(),
++    play_env_cfg=make_microduck_parkour_roll_env_cfg(play=True),
++    rl_cfg=MicroduckParkourRollRlCfg,
++    runner_cls=MicroduckOnPolicyRunner,
++)
+diff --git a/src/mjlab_microduck/tasks/mdp.py b/src/mjlab_microduck/tasks/mdp.py
+index 960c014..d1f9f9b 100644
+--- a/src/mjlab_microduck/tasks/mdp.py
++++ b/src/mjlab_microduck/tasks/mdp.py
+@@ -8176,3 +8176,72 @@ def sweep_height_tracking(env):
+     target = sweep_body_command(env)[:, 2]
+     good = ropehop_clean_posture(env) & ~_sensor_any_contact(env, "sweep_contact")
+     return torch.exp(-((height-target)/.025).square()) * good.float()
++
++
++# ── Parkour: real gap development experiment ─────────────────────────────────
++def parkour_progress(env: ManagerBasedRlEnv) -> torch.Tensor:
++    """One-time forward frontier, capped beyond the gap; no walking annuity."""
++    robot = env.scene['robot']
++    xy = robot.data.root_link_pos_w[:, :2] - env.scene.terrain.env_origins[:, :2]
++    x = torch.nan_to_num(xy[:, 0], nan=0.).clamp(0., .32)
++    if not hasattr(env, '_parkour_frontier'):
++        env._parkour_frontier = x.clone()
++    fresh = env.episode_length_buf <= 1
++    env._parkour_frontier[fresh] = x[fresh]
++    delta = (x-env._parkour_frontier).clamp(0., .5*env.step_dt)
++    env._parkour_frontier = torch.maximum(env._parkour_frontier,x)
++    upright = (-robot.data.projected_gravity_b[:, 2]).clamp(0., 1.)
++    return delta/env.step_dt * upright
++
++
++def parkour_landing(env: ManagerBasedRlEnv) -> torch.Tensor:
++    """Pay only supported upright landings beyond the far edge, after real air.
++
++    Both sole sites must clear the ground while upright. The CPU deployment
++    battery additionally audits all sole vertices and the entire contact stream.
++    """
++    robot=env.scene['robot']
++    if not hasattr(env,'_parkour_foot_ids'):
++        env._parkour_foot_ids=robot.find_sites(['left_foot','right_foot'],preserve_order=True)[0]
++        env._parkour_air=torch.zeros(env.num_envs,device=env.device,dtype=torch.bool)
++    feet=robot.data.site_pos_w[:,env._parkour_foot_ids]-env.scene.terrain.env_origins[:,None,:]
++    upright=-robot.data.projected_gravity_b[:,2]
++    fresh=env.episode_length_buf<=1
++    env._parkour_air[fresh]=False
++    grounded = _sensor_any_contact(env, 'feet_ground_contact')
++    env._parkour_air |= (feet[:,:,2].min(dim=1).values>.035)&(upright>.8)&(~grounded)
++    beyond=(feet[:,:,0].min(dim=1).values>.26)
++    low=(feet[:,:,2].min(dim=1).values<.02)
++    xy=robot.data.root_link_pos_w[:,:2]-env.scene.terrain.env_origins[:,:2]
++    speed=robot.data.root_link_lin_vel_w.norm(dim=-1)
++    pose = standing_composite_score(env, target_height=.115, height_std=.065,
++        upright_std=.4, pose_std=.9, joint_indices=[0,1,2,3,4,9,10,11,12,13])
++    quat=robot.data.root_link_quat_w
++    yaw=torch.atan2(2*(quat[:,0]*quat[:,3]+quat[:,1]*quat[:,2]),1-2*(quat[:,2].square()+quat[:,3].square()))
++    heading=torch.exp(-yaw.square()/1.44)
++    return (env._parkour_air & beyond & low & grounded & (upright>.95)).float()*pose*heading*torch.exp(-xy[:,1].square()/.01)*torch.exp(-speed.square()/.25)
++
++
++def parkour_sideways(env: ManagerBasedRlEnv) -> torch.Tensor:
++    xy=env.scene['robot'].data.root_link_pos_w[:,:2]-env.scene.terrain.env_origins[:,:2]
++    return -torch.nan_to_num(xy[:,1].square(),nan=0.).clamp(max=1.)
++
++
++def parkour_below_platform(env: ManagerBasedRlEnv) -> torch.Tensor:
++    z=env.scene['robot'].data.root_link_pos_w[:,2]-env.scene.terrain.env_origins[:,2]
++    return z < -.12
++
++
++def parkour_apex(env: ManagerBasedRlEnv, target_height=.06, max_paid_rate=.5) -> torch.Tensor:
++    """Upright, unsupported sole-height progress; falling cannot earn apex credit."""
++    robot=env.scene['robot']
++    ids=robot.find_sites(['left_foot','right_foot'],preserve_order=True)[0]
++    z=robot.data.site_pos_w[:,ids,2].min(dim=1).values-env.scene.terrain.env_origins[:,2]-.015
++    valid=(-robot.data.projected_gravity_b[:,2]>.8)&(~_sensor_any_contact(env,'feet_ground_contact'))
++    height=torch.where(valid,z.clamp(0.,target_height),torch.zeros_like(z))
++    if not hasattr(env,'_parkour_apex_frontier'):
++        env._parkour_apex_frontier=torch.zeros_like(z)
++    env._parkour_apex_frontier[env.episode_length_buf<=1]=0.
++    delta=(height-env._parkour_apex_frontier).clamp(0.,max_paid_rate*env.step_dt)
++    env._parkour_apex_frontier=torch.maximum(env._parkour_apex_frontier,height)
++    return delta/(env.step_dt*target_height)
+diff --git a/src/mjlab_microduck/tasks/microduck_parkour_env_cfg.py b/src/mjlab_microduck/tasks/microduck_parkour_env_cfg.py
+new file mode 100644
+index 0000000..70fd2bc
+--- /dev/null
++++ b/src/mjlab_microduck/tasks/microduck_parkour_env_cfg.py
+@@ -0,0 +1,75 @@
++"""Real-gap long-jump candidate. Not a validated skill until CPU gap batteries pass.
++
++50 Hz PD deployment contract, 0.64 Nm current limit, native collision meshes.
++The two terrain boxes have no supporting plane between them. Initial development
++uses a 15 cm gap; no mid-episode root pose or velocity interventions are used.
++"""
++from copy import deepcopy
++from dataclasses import dataclass
++import mujoco
++import numpy as np
++from mjlab.managers import RewardTermCfg, TerminationTermCfg
++from mjlab.terrains.terrain_generator import SubTerrainCfg, TerrainGeneratorCfg, TerrainOutput, TerrainGeometry
++from .microduck_jump_env_cfg import make_microduck_jump_env_cfg, MicroduckJumpRlCfg
++from . import mdp as microduck_mdp
++from mjlab_microduck.robot.microduck_constants import get_standup_spec
++
++
++@dataclass(kw_only=True)
++class ParkourGapTerrainCfg(SubTerrainCfg):
++    gap: float = .15
++    edge: float = .10
++
++    def function(self,difficulty,spec,rng):
++        del difficulty,rng
++        body=spec.body('terrain');ox,oy=self.size[0]/2,self.size[1]/2
++        geometries=[]
++        for lo,hi in [(0,ox+self.edge),(ox+self.edge+self.gap,self.size[0])]:
++            g=body.add_geom(type=mujoco.mjtGeom.mjGEOM_BOX,pos=[(lo+hi)/2,oy,-.04],size=[(hi-lo)/2,.40,.04],friction=[1,.005,.0001])
++            geometries.append(TerrainGeometry(geom=g,color=(.08,.10,.15,1)))
++        return TerrainOutput(origin=np.array([ox,oy,0.]),geometries=geometries)
++
++
++def parkour_robot_spec():
++    spec=get_standup_spec()
++    for actuator in spec.actuators:
++        actuator.forcerange=[-.3660*1.75,.3660*1.75];actuator.forcelimited=True
++    return spec
++
++
++def make_microduck_parkour_env_cfg(play=False):
++    cfg=make_microduck_jump_env_cfg(play=play,pd_actuators=True)
++    cfg.scene.entities['robot']=deepcopy(cfg.scene.entities['robot'])
++    cfg.scene.entities['robot'].spec_fn=parkour_robot_spec
++    cfg.scene.entities['robot'].init_state.pos=(0.,0.,.12)
++    cfg.scene.entities['robot'].collisions=()  # Preserve the actual deployment XML.
++    cfg.sim.mujoco.timestep=.002
++    cfg.decimation=10
++    cfg.episode_length_s=2.0
++    cfg.scene.terrain.terrain_type='generator'
++    cfg.scene.terrain.terrain_generator=TerrainGeneratorCfg(size=(3.,2.),num_rows=1,num_cols=1,
++        sub_terrains={'gap':ParkourGapTerrainCfg()},border_width=0.,color_scheme='none')
++    cfg.events['reset_base'].params['pose_range']={'x':(-.015,.015),'y':(-.005,.005),'z':(0.,.005),'yaw':(-.035,.035)}
++    cfg.events['reset_base'].params['velocity_range']={'x':(0.,.15)}
++    cfg.rewards.pop('jump_stay_in_place')
++    cfg.rewards.pop('jump_landing_composite')
++    cfg.rewards['jump_apex_progress'].weight=2.
++    cfg.rewards['jump_apex_progress'].func=microduck_mdp.parkour_apex
++    cfg.rewards['jump_apex_progress'].params['target_height']=.06
++    cfg.rewards['parkour_progress']=RewardTermCfg(func=microduck_mdp.parkour_progress,weight=4.)
++    cfg.rewards['parkour_landing']=RewardTermCfg(func=microduck_mdp.parkour_landing,weight=8.)
++    cfg.rewards['parkour_sideways']=RewardTermCfg(func=microduck_mdp.parkour_sideways,weight=20.)
++    cfg.terminations['fell_into_gap']=TerminationTermCfg(func=microduck_mdp.parkour_below_platform)
++    cfg.rewards['action_rate_l2'].weight=-.005
++    cfg.curriculum['action_rate_weight'].params['weight_stages']=[
++        {'step':0,'weight':-.005},{'step':500*24,'weight':-.02},{'step':1000*24,'weight':-.05}]
++    # Introduce smoothness after discovery; this experiment
++    # changes the task, not its 61-D observation or action order.
++    return cfg
++
++
++MicroduckParkourRlCfg=deepcopy(MicroduckJumpRlCfg)
++MicroduckParkourRlCfg.experiment_name='microduck_parkour'
++MicroduckParkourRlCfg.run_name='real_gap_landing_v2'
++MicroduckParkourRlCfg.max_iterations=1500
++MicroduckParkourRlCfg.save_interval=100
+diff --git a/src/mjlab_microduck/tasks/microduck_parkour_roll_env_cfg.py b/src/mjlab_microduck/tasks/microduck_parkour_roll_env_cfg.py
+new file mode 100644
+index 0000000..a5e98c9
+--- /dev/null
++++ b/src/mjlab_microduck/tasks/microduck_parkour_roll_env_cfg.py
+@@ -0,0 +1,67 @@
++"""Running roulade transfer to bounded, hard ground/self contacts.
++
++Built from the official roulade task; simulation-only PD deployment target.
++No root intervention is used after reset. Native collision geometry is retained.
++"""
++from copy import deepcopy
++from dataclasses import dataclass
++import mujoco
++import numpy as np
++from mjlab.terrains.terrain_generator import SubTerrainCfg, TerrainGeneratorCfg, TerrainOutput, TerrainGeometry
++from mjlab_microduck.robot.microduck_constants import MICRODUCK_STANDUP_PD_ROBOT_CFG
++from .microduck_parkour_env_cfg import parkour_robot_spec
++from .microduck_roulade_env_cfg import make_microduck_roulade_env_cfg, MicroduckRouladeRlCfg
++
++
++def hard_roll_spec():
++    spec=parkour_robot_spec()
++    for geom in spec.geoms:
++        if geom.contype:
++            geom.solref=[.002,1.]
++            geom.solimp=[.9,.95,.001,.5,2.]
++            geom.margin=0.
++    return spec
++
++
++@dataclass(kw_only=True)
++class HardFloorCfg(SubTerrainCfg):
++    def function(self,difficulty,spec,rng):
++        del difficulty,rng
++        ox,oy=self.size[0]/2,self.size[1]/2
++        geom=spec.body('terrain').add_geom(type=mujoco.mjtGeom.mjGEOM_BOX,
++            pos=[ox,oy,-.04],size=[ox,oy,.04],friction=[1,.005,.0001],
++            priority=1,solref=[.002,1.],solimp=[.9,.95,.001,.5,2.],margin=0.)
++        return TerrainOutput(origin=np.array([ox,oy,0.]),geometries=[TerrainGeometry(geom=geom,color=(.08,.10,.15,1))])
++
++
++def make_microduck_parkour_roll_env_cfg(play=False):
++    cfg=make_microduck_roulade_env_cfg(play=play)
++    cfg.scene.entities['robot']=deepcopy(MICRODUCK_STANDUP_PD_ROBOT_CFG)
++    cfg.scene.entities['robot'].spec_fn=hard_roll_spec
++    cfg.scene.entities['robot'].init_state.pos=(0.,0.,.12)
++    cfg.scene.entities['robot'].collisions=()
++    cfg.sim.mujoco.timestep=.001
++    cfg.decimation=20
++    cfg.episode_length_s=3.
++    cfg.scene.terrain.terrain_type='generator'
++    cfg.scene.terrain.terrain_generator=TerrainGeneratorCfg(size=(4.,4.),num_rows=1,num_cols=1,
++        sub_terrains={'hard_floor':HardFloorCfg()},border_width=0.,color_scheme='none')
++    cfg.events.pop('randomize_joint_friction',None)
++    cfg.events.pop('randomize_motor_gains',None)
++    spawn=cfg.events['set_roulade_state'].params
++    spawn.update(standing_prob=.8,midroll_prob=.2,standing_z_min=.12,standing_z_max=.125,
++                 forward_vel_range=(0.,.55),joint_noise_std=.025)
++    cfg.curriculum.pop('roulade_spawn_mix',None)
++    # Deployment supplies current joint velocity, unlike the gap policy.
++    cfg.observations['actor'].terms['joint_vel'].delay_min_lag=0
++    cfg.observations['actor'].terms['joint_vel'].delay_max_lag=0
++    for name in ('roulade_landing_composite','roulade_height_after_roll','roulade_landing_sharp','roulade_stand_tax'):
++        cfg.rewards[name].params['target_height']=.117
++    return cfg
++
++
++MicroduckParkourRollRlCfg=deepcopy(MicroduckRouladeRlCfg)
++MicroduckParkourRollRlCfg.experiment_name='microduck_parkour_roll'
++MicroduckParkourRollRlCfg.run_name='hard_contact_transfer'
++MicroduckParkourRollRlCfg.save_interval=100
++MicroduckParkourRollRlCfg.max_iterations=601
+diff --git a/scripts/seed_parkour_from_onnx.py b/scripts/seed_parkour_from_onnx.py
+new file mode 100644
+index 0000000..ba7b4aa
+--- /dev/null
++++ b/scripts/seed_parkour_from_onnx.py
+@@ -0,0 +1,37 @@
++"""Initialize PPO's actor from an existing normalized ONNX; not a policy export.
++
++The resulting actor is checked numerically against ONNX before any training.
++Final trained policies must still use scripts/export.py to bake normalization.
++"""
++import argparse
++from pathlib import Path
++import numpy as np
++import onnx
++from onnx import numpy_helper
++import onnxruntime as ort
++import torch
++from torch import nn
++
++p=argparse.ArgumentParser();p.add_argument('--template',required=True);p.add_argument('--policy',required=True);p.add_argument('--output',required=True);a=p.parse_args()
++checkpoint=torch.load(a.template,map_location='cpu',weights_only=False)
++weights={x.name:torch.from_numpy(numpy_helper.to_array(x).copy()) for x in onnx.load(a.policy).graph.initializer}
++actor=checkpoint['actor_state_dict']
++for name in list(actor):
++    if name in weights:actor[name]=weights[name]
++divisors=[v for k,v in weights.items() if k.startswith('onnx::Div')]
++if len(divisors)!=1:raise ValueError('Unexpected normalization graph')
++actor['obs_normalizer._std']=divisors[0]-.01
++if (actor['obs_normalizer._std']<0).any():raise ValueError('Unexpected normalization epsilon')
++actor['obs_normalizer._var']=actor['obs_normalizer._std'].square()
++actor['obs_normalizer.count'].fill_(100000)
++actor['distribution.std_param'].fill_(.5)
++mlp=nn.Sequential(nn.Linear(61,512),nn.ELU(),nn.Linear(512,256),nn.ELU(),nn.Linear(256,128),nn.ELU(),nn.Linear(128,14))
++mlp.load_state_dict({k.removeprefix('mlp.'):v for k,v in actor.items() if k.startswith('mlp.')})
++obs=np.random.default_rng(7).normal(size=(128,61)).astype(np.float32)
++with torch.no_grad():actual=mlp((torch.from_numpy(obs)-actor['obs_normalizer._mean'])/(actor['obs_normalizer._std']+.01)).numpy()
++session=ort.InferenceSession(a.policy);expected=session.run(None,{session.get_inputs()[0].name:obs})[0] if session.get_inputs()[0].shape[0]!=1 else np.concatenate([session.run(None,{session.get_inputs()[0].name:x[None]})[0] for x in obs])
++np.testing.assert_allclose(actual,expected,rtol=2e-4,atol=2e-4)
++checkpoint['optimizer_state_dict']['state']={}
++checkpoint['iter']=0;checkpoint['infos']=None
++Path(a.output).parent.mkdir(parents=True,exist_ok=True);torch.save(checkpoint,a.output)
++print('seed parity max absolute error',float(np.abs(actual-expected).max()),'saved',a.output)
+diff --git a/scripts/verify_parkour_spawn.py b/scripts/verify_parkour_spawn.py
+new file mode 100644
+index 0000000..1799c47
+--- /dev/null
++++ b/scripts/verify_parkour_spawn.py
+@@ -0,0 +1,21 @@
++import torch,mujoco,onnxruntime as ort
++import numpy as np
++from mjlab_microduck.tasks.microduck_parkour_env_cfg import make_microduck_parkour_env_cfg
++from mjlab.envs import ManagerBasedRlEnv
++cfg=make_microduck_parkour_env_cfg();cfg.scene.num_envs=1
++cfg.events['reset_base'].params['pose_range']={}
++cfg.events['reset_base'].params['velocity_range']={}
++cfg.observations['actor'].enable_corruption=False
++cfg.terminations.clear()
++env=ManagerBasedRlEnv(cfg=cfg,device='cpu')
++obs,_=env.reset();session=ort.InferenceSession('../microduck/policies/alpha_stand.onnx');a=torch.zeros((1,14))
++print('ORIGIN',env.scene.terrain.env_origins)
++assert env.scene['robot'].data.root_link_pos_w[0,2] > .11
++for i in range(151):
++ if i%25==0:
++  r=env.scene['robot'];print('STATE',i,r.data.root_link_pos_w,r.data.projected_gravity_b,r.data.site_pos_w[:,r.find_sites(['left_foot','right_foot'],preserve_order=True)[0]],flush=True)
++ a=torch.from_numpy(session.run(None,{session.get_inputs()[0].name:obs['actor'].numpy().astype(np.float32)})[0])
++ obs,reward,term,trunc,info=env.step(a)
++assert float(-env.scene['robot'].data.projected_gravity_b[0,2]) > .95
++assert float(env.scene['robot'].data.root_link_pos_w[0,2]) > .10
++env.close()
+diff --git a/scripts/verify_parkour_roll_spawn.py b/scripts/verify_parkour_roll_spawn.py
+new file mode 100644
+index 0000000..611d453
+--- /dev/null
++++ b/scripts/verify_parkour_roll_spawn.py
+@@ -0,0 +1,24 @@
++"""Measure standing equilibrium before training the hard-contact roll task."""
++import json
++import numpy as np
++import onnxruntime as ort
++import torch
++from mjlab.envs import ManagerBasedRlEnv
++from mjlab_microduck.tasks.microduck_parkour_roll_env_cfg import make_microduck_parkour_roll_env_cfg
++cfg=make_microduck_parkour_roll_env_cfg()
++cfg.scene.num_envs=4
++cfg.events['set_roulade_state'].params.update(standing_prob=1.,midroll_prob=0.,standing_z_min=.12,standing_z_max=.122,standing_tilt_max=.01,forward_vel_range=(0.,0.))
++cfg.observations['actor'].enable_corruption=False
++cfg.terminations.clear()
++env=ManagerBasedRlEnv(cfg=cfg,device='cuda:0')
++obs,_=env.reset()
++session=ort.InferenceSession('../microduck/policies/alpha_stand.onnx')
++for i in range(150):
++    x=obs['actor'].cpu().numpy().astype(np.float32)
++    actions=np.concatenate([session.run(None,{session.get_inputs()[0].name:row[None]})[0] for row in x])
++    obs,*_=env.step(torch.tensor(actions,device=env.device))
++r=env.scene['robot'];up=-r.data.projected_gravity_b[:,2];height=r.data.root_link_pos_w[:,2]
++result=dict(up=up.tolist(),height=height.tolist(),passed=bool(torch.all(up>.95)&torch.all(height>.10)),duration_s=3.)
++print('EQUILIBRIUM',json.dumps(result),flush=True)
++assert result['passed']
++env.close()
+diff --git a/tests/test_parkour_cfg.py b/tests/test_parkour_cfg.py
+new file mode 100644
+index 0000000..eebdd9c
+--- /dev/null
++++ b/tests/test_parkour_cfg.py
+@@ -0,0 +1,24 @@
++import mujoco
++import numpy as np
++from mjlab_microduck.tasks.microduck_parkour_env_cfg import make_microduck_parkour_env_cfg, ParkourGapTerrainCfg, parkour_robot_spec
++
++
++def test_real_gap_and_no_support_plane():
++    spec=mujoco.MjSpec();spec.worldbody.add_body(name='terrain')
++    cfg=ParkourGapTerrainCfg(size=(3.,2.));cfg.function(0.,spec,np.random.default_rng(0))
++    m=spec.compile();d=mujoco.MjData(m);mujoco.mj_forward(m,d)
++    out=np.array([-1],dtype=np.int32)
++    assert mujoco.mj_ray(m,d,np.array([1.675,1.,1.]),np.array([0.,0.,-1.]),None,1,-1,out)==-1
++    assert mujoco.mj_ray(m,d,np.array([1.9,1.,1.]),np.array([0.,0.,-1.]),None,1,-1,out)>0
++
++
++def test_current_limit_and_observation_contract():
++    m=parkour_robot_spec().compile()
++    assert np.allclose(m.actuator_forcerange,[-.6405,.6405])
++    cfg=make_microduck_parkour_env_cfg()
++    assert cfg.decimation*cfg.sim.mujoco.timestep==.02
++    assert cfg.scene.entities['robot'].init_state.pos[2] == .12
++    assert 'base_lin_vel' not in cfg.observations['actor'].terms
++    assert list(cfg.observations['actor'].terms)==['base_ang_vel','projected_gravity','joint_pos','joint_vel','actions','command','head_command','body_command']
++    assert cfg.rewards['parkour_sideways'].weight>0
++    assert 'jump_stay_in_place' not in cfg.rewards
+diff --git a/tests/test_parkour_roll_cfg.py b/tests/test_parkour_roll_cfg.py
+new file mode 100644
+index 0000000..072b816
+--- /dev/null
++++ b/tests/test_parkour_roll_cfg.py
+@@ -0,0 +1,25 @@
++import mujoco
++import numpy as np
++from mjlab_microduck.tasks.microduck_parkour_roll_env_cfg import make_microduck_parkour_roll_env_cfg, hard_roll_spec, HardFloorCfg
++
++
++def test_contact_profile_and_current_limit():
++    model=hard_roll_spec().compile()
++    ids=model.geom_contype!=0
++    assert np.allclose(model.geom_solref[ids],[.002,1.])
++    assert np.allclose(model.geom_margin[ids],0.)
++    assert np.allclose(model.actuator_forcerange,[-.6405,.6405])
++    spec=mujoco.MjSpec();spec.worldbody.add_body(name='terrain')
++    HardFloorCfg(size=(4.,4.)).function(0.,spec,np.random.default_rng(0))
++    floor=spec.compile()
++    assert floor.geom_priority[0]==1
++    assert np.allclose(floor.geom_solref[0],[.002,1.])
++
++
++def test_running_start_and_61d_contract():
++    cfg=make_microduck_parkour_roll_env_cfg()
++    assert cfg.decimation*cfg.sim.mujoco.timestep==.02
++    assert cfg.scene.entities['robot'].init_state.pos[2]==.12
++    assert cfg.events['set_roulade_state'].params['forward_vel_range']==(0.,.55)
++    assert cfg.events['set_roulade_state'].params['standing_z_min']==.12
++    assert list(cfg.observations['actor'].terms)==['base_ang_vel','projected_gravity','joint_pos','joint_vel','actions','command','head_command','body_command']

@@ -26,6 +26,8 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 [![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
 
+[V2 开发与物理验收](docs/NEON_ESCAPE_V2.md)：独立开发窄跑道、真坑、行进翻滚、倒地恢复、有限驱动力障碍与关卡级决策。V2 仍是实验版本：在线开发录制完成了真实 15 cm 跨坑和击倒恢复，但全接触审计发现原生地面／自身接触穿透过大，正式成片发布已暂停，正在修复接触和技能迁移。文档保留固定六个未见种子的结果及失败记录。
+
 ## 方法
 
 ### 1. 共享物理环境

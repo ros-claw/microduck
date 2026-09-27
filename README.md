@@ -26,6 +26,8 @@ The continuous rollout includes startup. Close-ups replay the same trajectory at
 
 [![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
 
+[V2 development and physical validation](docs/NEON_ESCAPE_V2.md): a separate, narrower real-gap course, moving rolls, recovery batteries, finite-force hazards, and encounter-level planning. V2 is experimental: a live development run includes a real 15 cm jump and knockdown recovery, but a full contact audit found excessive native ground/self penetration. Publication is paused while those contacts and skill transfer are repaired. The frozen six-seed cohort and failures are included.
+
 ## Method
 
 ### 1. Shared physical environment
