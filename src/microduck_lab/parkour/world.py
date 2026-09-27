@@ -79,6 +79,7 @@ def build_world(
     recovery_bay=None,
     start=-1.5,
     duck_floor_ref=None,
+    hard_contacts=False,
 ):
     spec = mujoco.MjSpec()
     spec.option.timestep = 0.0002
@@ -90,7 +91,17 @@ def build_world(
     spec.worldbody.add_light(
         pos=[0, 0, 4], dir=[0, 0, -1], type=mujoco.mjtLightType.mjLIGHT_DIRECTIONAL
     )
-    spec.attach(robot_spec(), prefix="duck/", frame=spec.worldbody.add_frame())
+    robot = robot_spec()
+    if hard_contacts:
+        if duck_floor_ref not in (None, 0.002):
+            raise ValueError("Hard-contact profile fixes ground reference at .002 s")
+        duck_floor_ref = 0.002
+        for geom in robot.geoms:
+            if geom.contype & 1:
+                geom.solref = [0.0012, 1.0]
+                geom.solimp = [0.9, 0.95, 0.001, 0.5, 2.0]
+                geom.margin = 0.0
+    spec.attach(robot, prefix="duck/", frame=spec.worldbody.add_frame())
     # Measure the actual standing collision shell, not the head height.
     m0 = spec.compile()
     d0 = mujoco.MjData(m0)

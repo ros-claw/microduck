@@ -26,7 +26,13 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 [![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
 
-[V2 开发与物理验收](docs/NEON_ESCAPE_V2.md)：独立开发窄跑道、真坑、行进翻滚、倒地恢复、有限驱动力障碍与关卡级决策。V2 仍是实验版本：在线开发录制完成了真实 15 cm 跨坑和击倒恢复，但全接触审计发现原生地面／自身接触穿透过大，正式成片发布已暂停，正在修复接触和技能迁移。文档保留固定六个未见种子的结果及失败记录。
+[V2 方法与物理验收](docs/NEON_ESCAPE_V2.md)：真实 15 cm 坑、行进翻滚、有限力道具、巨球追逐和电机策略起身。精选的**规则控制物理基线**通过全接触审计及精确输入回放；在线 Jev 稳定性、20 cm／1.2 秒快闪仍未完成，属于实验分支。
+
+[![Physical baseline — rule-based tactics](out/microduck_neon_escape_v2_physical_baseline_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4)
+
+[26 s physical baseline](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4) · [60 s technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_technical.mp4) · [Replay evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_evidence.tar.gz)
+
+两支英文视频展示同一条仿真轨迹；音效为后期合成，各自最多三段慢动作。画面明确标注规则控制，不能作为在线 Jev 成功案例。
 
 ## 方法
 

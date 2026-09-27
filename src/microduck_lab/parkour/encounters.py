@@ -22,6 +22,37 @@ class EncounterBrain:
             level,
             driver,
         )
+        envelopes = json.loads(
+            Path(__file__).with_name("route_envelopes.json").read_text()
+        )
+        profile = envelopes.get("_profile", {})
+        if mode == "jev":
+            matched = abs(profile.get("lane_width_m", -1.0) - track.lane_width) < 1e-5
+            foot = m.geom("duck/left_foot_collision").id
+            matched &= np.allclose(
+                m.geom_solref[foot], [profile.get("duck_self_reference_s", -1.0), 1.0]
+            )
+            ground_pairs = [
+                i
+                for i in range(m.npair)
+                if foot in (m.pair_geom1[i], m.pair_geom2[i])
+                and any(
+                    m.geom(g).name.startswith("floor/")
+                    for g in (m.pair_geom1[i], m.pair_geom2[i])
+                )
+            ]
+            matched &= bool(ground_pairs) and all(
+                np.allclose(
+                    m.pair_solref[i], [profile.get("duck_floor_reference_s", -1.0), 1.0]
+                )
+                and abs(m.pair_margin[i] - profile.get("ground_margin_m", -1.0)) < 1e-8
+                for i in ground_pairs
+            )
+            if not matched:
+                raise ValueError(
+                    "Route envelopes do not match this physical profile. Requalify before live Jev; the current envelopes require --hard-contacts."
+                )
+        self.route_envelopes = envelopes
         self.loop = RollingHorizon(TacticalClient()) if mode == "jev" else None
         self.selected = {}
         self.events = []
@@ -58,9 +89,28 @@ class EncounterBrain:
             # Predict the whole 1.3 s lane transition. The falling crate is
             # handled by its measured release ETA and gravity model.
             for action, side in [("TAKE_LEFT_ROUTE", 1), ("TAKE_RIGHT_ROUTE", -1)]:
-                measured = json.loads(
-                    Path(__file__).with_name("route_envelopes.json").read_text()
-                )[action]
+                entries = self.route_envelopes[action]["entries"]
+                expected_vx = 0.05 if remaining > 0 else float(r.trunk_linvel()[0])
+                eligible = [
+                    e
+                    for e in entries
+                    if abs(pos[1] - e["entry_y_m"]) <= e["entry_y_tolerance_m"]
+                    and e["entry_vx_range_mps"][0]
+                    <= expected_vx
+                    <= e["entry_vx_range_mps"][1]
+                ]
+                if not eligible:
+                    checks[action] = {
+                        "rejected": "entry state outside measured route envelope"
+                    }
+                    continue
+                measured = min(
+                    eligible,
+                    key=lambda e: (
+                        abs(pos[1] - e["entry_y_m"]),
+                        abs(expected_vx - e.get("entry_vx_mps", expected_vx)),
+                    ),
+                )
                 path = [
                     (
                         t,
@@ -73,22 +123,27 @@ class EncounterBrain:
                     s for s in states if s.kind in ("crate", "boulder", "sweeper")
                 ]
                 hits = conflicts(path, relevant, time_offset=remaining)
+                within_track = all(
+                    low[1] >= -self.track.width / 2 and high[1] <= self.track.width / 2
+                    for _, low, high in path
+                )
                 checks[action] = {
                     "conflicts": hits,
-                    "duration_s": 1.3,
-                    "model": "10-seed measured swept envelope + transfer margin, rechecked at handoff",
+                    "duration_s": measured["duration_s"],
+                    "within_track": within_track,
+                    "model": "hard-contact, entry-state-conditioned measured swept envelope; rechecked at handoff",
                 }
-                if not hits:
+                if not hits and within_track:
                     legal.append(action)
             legal.append("BRAKE_AND_WAIT")
         elif encounter == "gap":
             width = self.level.gaps[0][1] - self.level.gaps[0][0]
-            if 0.12 <= width <= 0.20:
+            if 0.12 <= width <= 0.18:
                 legal.append("JUMP_CENTER")
             legal.append("BRAKE_AND_WAIT")
             checks["JUMP_CENTER"] = {
                 "gap_width_m": width,
-                "launch_distance_m": [0.06, 0.14],
+                "launch_distance_m": [0.04, 0.08],
                 "requires_upright": True,
                 "max_entry_speed_mps": 0.08,
                 "local_trigger_required": True,

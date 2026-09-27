@@ -26,7 +26,7 @@ def generate(
     rng = np.random.default_rng(seed)
     jitter = lambda: float(rng.uniform(-0.025, 0.025))
     hazards = (
-        Hazard("bar", "push_bar", 0.9 + jitter()),
+        Hazard("bar", "push_bar", 0.9 + jitter(), z=0.27),
         Hazard("crate", "crate", 1.85 + jitter(), z=0.65),
         Hazard(
             "sweeper",
@@ -45,7 +45,7 @@ def generate(
     return Level(seed, hazards, ((3.0, 3.15),), 5.8)
 
 
-def build_level(seed=0, duck_floor_ref=None, **kwargs):
+def build_level(seed=0, duck_floor_ref=None, hard_contacts=False, **kwargs):
     level = generate(seed, **kwargs)
     return (
         *build_world(
@@ -56,6 +56,7 @@ def build_level(seed=0, duck_floor_ref=None, **kwargs):
             recovery_bay=(3.5, 5.2, 0.9),
             start=-3.2,
             duck_floor_ref=duck_floor_ref,
+            hard_contacts=hard_contacts,
         ),
         level,
     )

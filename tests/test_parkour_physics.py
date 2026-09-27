@@ -48,11 +48,11 @@ def test_roll_timeout_is_failure_not_success():
     assert not roll.inverted
 
 
-def test_unvalidated_jump_is_not_executable():
+def test_jump_requires_the_audited_jump_executor():
     import pytest
 
     m, d, r, _ = build_world()
-    with pytest.raises(ValueError, match="No long-jump"):
+    with pytest.raises(ValueError, match="requires CandidateJump"):
         Maneuver("JUMP_CENTER", 0).update(m, d, r)
 
 
@@ -172,3 +172,31 @@ def test_publication_rejects_ground_penetration_even_when_hazards_pass():
     rows["duck_self"]["p99_penetration_m"] = 0.0035
     assert not contact_gate(rows, [0])["passed"]
     assert not contact_gate({}, [0])["passed"]
+
+
+def test_hard_contact_deployment_has_explicit_ground_and_self_limits():
+    m, d, r, track = build_world(hard_contacts=True)
+    native = (m.geom_contype & 1) != 0
+    native &= np.array(
+        [m.body(m.geom_bodyid[g]).name.startswith("duck/") for g in range(m.ngeom)]
+    )
+    assert np.allclose(m.geom_solref[native], [0.0012, 1.0])
+    assert np.allclose(m.geom_margin[native], 0.0)
+    for pair in range(m.npair):
+        names = [m.geom(g).name for g in (m.pair_geom1[pair], m.pair_geom2[pair])]
+        if any(n.startswith("duck/") for n in names) and any(
+            n.startswith("floor/") for n in names
+        ):
+            assert np.allclose(m.pair_solref[pair], [0.002, 1.0])
+            assert m.pair_margin[pair] == 0.00020
+
+
+def test_live_envelopes_reject_native_soft_ground():
+    import pytest
+    from microduck_lab.parkour.level import build_level
+    from microduck_lab.parkour.encounters import EncounterBrain
+
+    m, d, r, track, level = build_level()
+    driver = HazardDriver(level.hazards)
+    with pytest.raises(ValueError, match="physical profile"):
+        EncounterBrain(m, d, r, track, level, driver, mode="jev")

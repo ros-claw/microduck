@@ -19,7 +19,12 @@ def trial(args):
     policy, gap, seed, *extra = args
     edge = extra[0] if extra else 0.10
     floor_ref = extra[1] if len(extra) > 1 else None
-    m, d, r, tr = build_world(gaps=((edge, edge + gap),), duck_floor_ref=floor_ref)
+    hard_contacts = bool(extra[2]) if len(extra) > 2 else False
+    m, d, r, tr = build_world(
+        gaps=((edge, edge + gap),),
+        duck_floor_ref=floor_ref,
+        hard_contacts=hard_contacts,
+    )
     r.bank.paths["jump"] = policy
     rng = np.random.default_rng(seed)
     d.qpos[r.joint_qpos_idx] += rng.uniform(-0.005, 0.005, 14)
@@ -64,6 +69,7 @@ def trial(args):
         if r.trunk_pos()[2] < -0.3:
             break
     return dict(
+        hard_contacts=hard_contacts,
         policy=policy,
         policy_sha256=hashlib.sha256(Path(policy).read_bytes()).hexdigest(),
         gap=gap,

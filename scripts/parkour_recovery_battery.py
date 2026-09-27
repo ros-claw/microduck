@@ -12,8 +12,8 @@ sys.path.insert(0, str(ROOT / "src"))
 from microduck_lab.parkour.world import build_world, foot_support, duck_bounds
 
 
-def trial(kind, seed):
-    m, d, r, tr = build_world()
+def trial(kind, seed, hard_contacts=False):
+    m, d, r, tr = build_world(hard_contacts=hard_contacts)
     rng = np.random.default_rng(seed)
     if kind != "moving_impact":
         axis = (
@@ -78,7 +78,8 @@ def trial(kind, seed):
         seed=seed,
         initial=initial,
         completion=completion,
-        passed=completion is not None and completion <= 2.0,
+        passed=initial["up"] < 0.5 and completion is not None and completion <= 2.0,
+        hard_contacts=hard_contacts,
         samples=samples,
         warnings=d.warning.number.tolist(),
     )

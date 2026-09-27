@@ -30,6 +30,7 @@ class GapAudit:
     previous_contact: set = field(default_factory=set)
     flight: dict | None = None
     flights: list = field(default_factory=list)
+    short_same_platform_flights: int = 0
 
     def sample(self, m, d, r):
         contacts = floor_contacts(m, d)
@@ -57,7 +58,15 @@ class GapAudit:
                     and self.flight["duration"] >= 0.04
                     and self.flight["min_upright"] > 0.8
                 )
-                self.flights.append(self.flight)
+                if (
+                    self.flight["duration"] >= 0.01
+                    or self.flight["from_floors"] != self.flight["to_floors"]
+                ):
+                    self.flights.append(self.flight)
+                else:
+                    # Summarize sub-10 ms contact chatter; every cross-platform
+                    # transition remains explicit, including failed crossings.
+                    self.short_same_platform_flights += 1
                 self.flight = None
         if contacts:
             self.previous_contact = contacts
@@ -96,7 +105,7 @@ class CandidateJump:
         if not floor_contacts(m, d) and up > 0.8:
             self.airborne = True
             self.phase = "FLIGHT"
-        if self.airborne and support and up > 0.85 and r.trunk_pos()[0] > self.far_edge:
+        if self.airborne and support and up > 0.85 and audit.crossed:
             self.landed = True
             self.phase = "ALIGN"
         r.set_command()
@@ -124,6 +133,7 @@ class CandidateJump:
             r.active_policy = "jump"
         good = (
             self.landed
+            and r.trunk_pos()[0] >= self.far_edge
             and audit.crossed
             and up > 0.95
             and support
@@ -133,12 +143,12 @@ class CandidateJump:
         self.stable = self.stable + dt if good else 0.0
         if good:
             self.phase = "STABLE"
-        if self.stable >= 0.10:
-            self.status = "SUCCESS"
-            self.phase = "SUCCESS"
-        elif d.time - self.started > 3.0 or r.trunk_pos()[2] < -0.15:
+        if d.time - self.started > 3.0 + 1e-8 or r.trunk_pos()[2] < -0.15:
             self.status = "FAILED"
             self.phase = "TIMEOUT"
+        elif self.stable >= 0.10:
+            self.status = "SUCCESS"
+            self.phase = "SUCCESS"
         if self.status != "RUNNING":
             self.events.append(
                 dict(

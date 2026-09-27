@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 import math
+import mujoco
 import numpy as np
 from .world import foot_support
 
@@ -13,11 +14,33 @@ def lane_command(r, target_y, vx=0.7):
     return (vx, 0.0, float(np.clip(5 * (target_yaw - r.trunk_yaw()), -3.0, 3.0)))
 
 
+def roll_entry_ready(m, d, r, bar_x):
+    """Enter during a measured left stance/upward phase; never alter root state."""
+    distance = bar_x - float(r.trunk_pos()[0])
+    if not (
+        0.24 < distance < 0.50
+        and 0.1 < r.trunk_linvel()[2] < 0.3
+        and d.xmat[r.trunk_body_id, 8] > 0.95
+    ):
+        return False
+    force = np.zeros(6)
+    for ci, contact in enumerate(d.contact):
+        names = [m.geom(g).name for g in (contact.geom1, contact.geom2)]
+        if "duck/left_foot_collision" in names and any(
+            n.startswith("floor/") for n in names
+        ):
+            mujoco.mj_contactForce(m, d, ci, force)
+            if force[0] > 1e-5:
+                return True
+    return False
+
+
 @dataclass
 class Maneuver:
     name: str
     started: float
     target_y: float = 0.0
+    forward_speed: float = 0.7
     phase: str = "PREPARE"
     status: str = "RUNNING"
     stable: float = 0.0
@@ -40,7 +63,7 @@ class Maneuver:
             if self.phase == "PREPARE":
                 r.bank.mirror_run = self.name == "TAKE_RIGHT_ROUTE"
             r.active_policy = "run"
-            r.command[:3] = lane_command(r, self.target_y)
+            r.command[:3] = lane_command(r, self.target_y, self.forward_speed)
             error = abs(r.trunk_pos()[1] - self.target_y)
             self.phase = "CROSS" if error > 0.025 else "ALIGN"
             good = (
@@ -72,15 +95,15 @@ class Maneuver:
             self.inverted |= up < -0.8
             self.phase = "CROSS" if abs(self.rotation) < 5.7 else "ALIGN"
             r.active_policy = "roulade" if abs(self.rotation) < 5.7 else "stand"
-            if (
-                abs(self.rotation) > 5.7
-                and up > 0.95
-                and r.trunk_pos()[2] > 0.10
-                and abs(r.trunk_yaw()) > 0.15
-            ):
+            if abs(self.rotation) > 5.7 and up > 0.95 and r.trunk_pos()[2] > 0.10:
+                # Keep one controller through alignment; toggling stand/run at
+                # the success yaw threshold can repeatedly break the dwell.
                 r.active_policy = "run"
-                r.command[2] = -np.sign(r.trunk_yaw()) * np.clip(
-                    3 * abs(r.trunk_yaw()), 0.55, 1.5
+                yaw = r.trunk_yaw()
+                r.command[2] = (
+                    0.0
+                    if abs(yaw) < 0.04
+                    else -np.sign(yaw) * np.clip(3 * abs(yaw), 0.55, 1.5)
                 )
             good = (
                 abs(self.rotation) > 5.7
@@ -105,7 +128,7 @@ class Maneuver:
             timeout = 2.0
         elif self.name == "JUMP_CENTER":
             raise ValueError(
-                "No long-jump candidate has passed the real-gap battery yet"
+                "JUMP_CENTER requires CandidateJump and its full-rate gap audit"
             )
         else:
             raise ValueError(self.name)

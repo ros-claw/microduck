@@ -90,8 +90,12 @@ def render(source, output, cut="hero", preview=False, blur=4):
         raise ValueError(
             "This cut requires all core physical gates, including real recovery"
         )
+    contacts = (
+        json.loads((source / "all-contacts.json").read_text())
+        if (source / "all-contacts.json").exists()
+        else {}
+    )
     if not preview:
-        contacts = json.loads((source / "all-contacts.json").read_text())
         if contacts.get("capture") != report["capture"]:
             raise ValueError("Contact audit must match this exact capture")
         if not contacts.get("publication_gate", {}).get("passed", False):
@@ -243,6 +247,15 @@ def render(source, output, cut="hero", preview=False, blur=4):
         draw.text(
             (1680, 52), f"COMBO x{combo}", font=font(24, True), fill=(64, 225, 241)
         )
+        if report["brain"] != "jev":
+            draw.text(
+                (60, 92),
+                "PHYSICAL BASELINE / RULE-BASED TACTICS",
+                font=font(20, True),
+                fill=(240, 204, 133),
+                stroke_width=2,
+                stroke_fill=(5, 10, 18),
+            )
         if cut == "hero":
             recent = [
                 e for e in prior if e["type"] == "JEV_DECISION" and t - e["t"] < 0.65
@@ -251,7 +264,8 @@ def render(source, output, cut="hero", preview=False, blur=4):
                 action = recent[-1]["action"].replace("_", " ")
                 draw.text(
                     (60, 125),
-                    "JEV  /  " + action,
+                    ("JEV  /  " if report["brain"] == "jev" else "RULE CONTROLLER  /  ")
+                    + action,
                     font=font(26, True),
                     fill=(57, 235, 222),
                     stroke_width=2,
@@ -367,6 +381,10 @@ def render(source, output, cut="hero", preview=False, blur=4):
                         f"Duck/hazard penetration: max {report['audit']['max_penetration_m'] * 1000:.3f} mm; P99 {report['audit']['p99_penetration_m'] * 1000:.3f} mm",
                         28,
                     ),
+                    (
+                        f"Ground/self max overlap: {contacts['categories']['duck_floor']['max_penetration_m'] * 1000:.3f} / {contacts['categories'].get('duck_self', {}).get('max_penetration_m', 0) * 1000:.3f} mm",
+                        28,
+                    ),
                     ("Real void. Finite-force props. Motor-policy recovery.", 28),
                     (
                         "Selected development run; see README for unseen-seed outcomes.",
@@ -382,7 +400,7 @@ def render(source, output, cut="hero", preview=False, blur=4):
                         font=font(size, size == 42),
                         fill=(55, 239, 210) if size == 42 else "white",
                     )
-                    yy += 65
+                    yy += 55
         if clip.speed != 1 and not clip.hold:
             draw.text(
                 (1620, 1020),
@@ -512,6 +530,14 @@ def render(source, output, cut="hero", preview=False, blur=4):
             resolution=[width, height],
             brain=report["brain"],
             core_physical_gates=report["passed"],
+            contact_publication_gate=contacts.get("publication_gate"),
+            full_contact_audit_sha256=hashlib.sha256(
+                (source / "all-contacts.json").read_bytes()
+            ).hexdigest(),
+            input_replay_sha256=hashlib.sha256(
+                (source / "replay.json").read_bytes()
+            ).hexdigest(),
+            qualification_scope="Selected full-stunt simulation, not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim",
             clips=rendered,
             motion_blur="4 nearest actual 200 Hz states at -6/-2/+2/+6 ms; no joint interpolation"
             if blur == 4

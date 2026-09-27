@@ -4,13 +4,14 @@ No hero-run claims are made by this runner. Candidate jumps must be explicitly
 supplied; reports preserve contact, skill failure and whole-run outcomes.
 """
 
-import argparse, json, hashlib, time
+import argparse, json, hashlib, time, tarfile
 from pathlib import Path
 from dataclasses import asdict
 import mujoco, numpy as np
 from ..parkour.level import build_level
+from ..parkour.world import foot_support
 from ..parkour.hazards import HazardDriver
-from ..parkour.skills import Maneuver, lane_command
+from ..parkour.skills import Maneuver, lane_command, roll_entry_ready
 from ..parkour.jump import CandidateJump, GapAudit
 from ..parkour.audit import Audit, PropAudit
 from ..parkour.encounters import EncounterBrain
@@ -26,16 +27,34 @@ def run(
     sweeper_mass=0.20,
     brain="rule",
     duck_floor_ref=None,
+    hard_contacts=False,
+    roll_policy=None,
     sweeper_y=0.0,
     sweeper_height=0.16,
     sweeper_speed=-3.0,
     sweeper_torque=0.10,
 ):
     output = Path(output)
+    if (output / "audit.json").exists():
+        raise FileExistsError(
+            "Choose a fresh output directory; existing evidence is immutable"
+        )
     output.mkdir(parents=True, exist_ok=True)
+    repository = Path(__file__).resolve().parents[3]
+    source_files = sorted((repository / "src").rglob("*.py")) + sorted(
+        (repository / "src/microduck_lab/parkour").glob("*.json")
+    )
+    source_hashes = {
+        str(p.relative_to(repository)): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in source_files
+    }
+    with tarfile.open(output / "source.tar.gz", "w:gz") as snapshot:
+        for path in source_files:
+            snapshot.add(path, arcname=str(path.relative_to(repository)))
     m, d, r, track, level = build_level(
         seed,
         duck_floor_ref=duck_floor_ref,
+        hard_contacts=hard_contacts,
         sweeper_phase=sweeper_phase,
         sweeper_mass=sweeper_mass,
         sweeper_y=sweeper_y,
@@ -44,6 +63,8 @@ def run(
         sweeper_torque=sweeper_torque,
     )
     r.bank.paths["jump"] = str(Path(policy).resolve())
+    if roll_policy:
+        r.bank.paths["roulade"] = str(Path(roll_policy).resolve())
     driver = HazardDriver(level.hazards)
     audit = Audit()
     props = PropAudit()
@@ -63,10 +84,16 @@ def run(
     results = []
     return_stage = None
     finished = False
+    launch_stable = 0.0
+    launch_settling = False
+    launch_pulse_until = 0.0
+    launch_brake_until = 0.0
 
-    def start(name, target_y=0.0):
+    def start(name, target_y=0.0, forward_speed=0.7):
         nonlocal skill
-        skill = Maneuver(name, float(d.time), target_y=target_y)
+        skill = Maneuver(
+            name, float(d.time), target_y=target_y, forward_speed=forward_speed
+        )
         skill.launch_position = r.trunk_pos().copy()
         events.append(dict(type="SKILL_START", t=float(d.time), skill=name))
 
@@ -86,12 +113,24 @@ def run(
                 start("RECOVER")
             if skill is not None:
                 if stage == "ROLL":
-                    tactical.prepare(
-                        "crate",
-                        remaining=max(0.0, 1.30 - (d.time - skill.started)),
-                        predicted_position=skill.launch_position
-                        + np.array([0.60, 0.0, 0.0]),
-                    )
+                    if hard_contacts:
+                        if (
+                            skill.phase in ("ALIGN", "STABLE")
+                            and d.xmat[r.trunk_body_id, 8] > 0.95
+                        ):
+                            tactical.prepare(
+                                "crate",
+                                remaining=0.7,
+                                predicted_position=r.trunk_pos()
+                                + np.array([0.04, 0.0, 0.0]),
+                            )
+                    else:
+                        tactical.prepare(
+                            "crate",
+                            remaining=max(0.0, 1.30 - (d.time - skill.started)),
+                            predicted_position=skill.launch_position
+                            + np.array([0.60, 0.0, 0.0]),
+                        )
                 elif stage == "RETURN":
                     tactical.prepare(
                         "gap", remaining=max(0.0, 1.20 - (d.time - skill.started))
@@ -105,6 +144,11 @@ def run(
                     results.append(
                         dict(
                             stage=stage,
+                            displacement_m=(
+                                r.trunk_pos() - skill.launch_position
+                            ).tolist()
+                            if hasattr(skill, "launch_position")
+                            else None,
                             skill=skill.name,
                             status=status,
                             t=float(d.time),
@@ -174,30 +218,77 @@ def run(
                             )
                             stage = "DODGE"
                             start(action, route_y)
-                elif stage == "BAR" and x >= hazards["push_bar"].x - 0.37:
+                elif stage == "BAR" and (
+                    roll_entry_ready(m, d, r, hazards["push_bar"].x)
+                    if hard_contacts
+                    else x >= hazards["push_bar"].x - 0.37
+                ):
                     stage = "ROLL"
                     start("ROLL_CENTER")
                 elif stage == "PASS_CRATE" and x >= hazards["crate"].x + 0.22:
                     stage = "RETURN"
-                    start("TAKE_RIGHT_ROUTE" if route_y > 0 else "TAKE_LEFT_ROUTE", 0.0)
+                    start(
+                        "TAKE_RIGHT_ROUTE" if route_y > 0 else "TAKE_LEFT_ROUTE",
+                        0.0,
+                        forward_speed=0.45 if hard_contacts else 0.7,
+                    )
                 elif stage == "GAP_APPROACH" and x >= level.gaps[0][0] - 0.26:
                     stage = "BRAKE"
                     start("BRAKE_AND_WAIT")
                 elif stage == "GAP_POSITION":
-                    error = level.gaps[0][0] - 0.10 - x
-                    r.command[:3] = [
-                        0.0
-                        if 0.06 <= level.gaps[0][0] - x <= 0.14
-                        else np.sign(error) * np.clip(3 * abs(error), 0.25, 0.4),
-                        np.clip(-2 * y, -0.1, 0.1),
-                        np.clip(-3 * r.trunk_yaw(), -1.5, 1.5),
-                    ]
-                    if (
-                        0.06 <= level.gaps[0][0] - x <= 0.14
-                        and abs(y) < 0.04
-                        and abs(r.trunk_yaw()) < 0.1
-                        and np.linalg.norm(r.trunk_linvel()[:2]) < 0.08
-                    ):
+                    distance = level.gaps[0][0] - x
+                    orientation_ready = abs(y) < 0.08 and abs(r.trunk_yaw()) < 0.1
+                    speed = float(np.linalg.norm(r.trunk_linvel()[:2]))
+                    inner_lo, inner_hi = (
+                        (0.040, 0.085) if hard_contacts else (0.060, 0.140)
+                    )
+                    in_launch_window = (
+                        inner_lo <= distance <= inner_hi and orientation_ready
+                    )
+                    # Short forward pulses, followed by physical braking. Stand
+                    # is a balance policy, not a moving-body brake. Sustained
+                    # position commands near the ledge can walk into the void.
+                    r.set_command()
+                    if launch_settling and in_launch_window:
+                        r.active_policy = "stand"
+                    elif float(d.time) < launch_pulse_until:
+                        r.command[0] = 0.45
+                    elif speed > 0.025 or float(d.time) < launch_brake_until:
+                        r.active_policy = "run"
+                    elif in_launch_window:
+                        launch_settling = True
+                        r.active_policy = "stand"
+                    elif inner_lo <= distance <= inner_hi:
+                        launch_settling = False
+                        r.active_policy = "run"
+                    elif distance > inner_hi:
+                        launch_settling = False
+                        launch_pulse_until = float(d.time) + 0.16
+                        launch_brake_until = float(d.time) + 0.80
+                        r.command[0] = 0.45
+                    else:
+                        # No unqualified backward gait at the edge: terminate
+                        # this attempt with an explicit safety failure.
+                        stage = "UNSAFE_LAUNCH_STATE"
+                        events.append(
+                            dict(
+                                type="LAUNCH_ABORT",
+                                t=float(d.time),
+                                distance_m=float(distance),
+                            )
+                        )
+                    if not launch_settling:
+                        r.command[2] = np.clip(-3 * r.trunk_yaw(), -1.5, 1.5)
+                    ready = (
+                        in_launch_window
+                        and foot_support(m, d)
+                        and r.trunk_pos()[2] > 0.10
+                        and float(d.xmat[r.trunk_body_id, 8]) > 0.97
+                        and np.linalg.norm(r.trunk_linvel()) < 0.04
+                        and np.max(np.abs(d.qvel[r.joint_qvel_idx])) < 0.5
+                    )
+                    launch_stable = launch_stable + 0.02 if ready else 0.0
+                    if launch_stable >= 0.12:
                         stage = "JUMP"
                         skill = CandidateJump(
                             float(d.time),
@@ -218,7 +309,7 @@ def run(
                     stage = "CELEBRATE"
                     start("BRAKE_AND_WAIT")
                     events.append(dict(type="FINISH", t=float(d.time)))
-                elif stage in ("CELEBRATE", "FAILED"):
+                elif stage in ("CELEBRATE", "FAILED", "UNSAFE_LAUNCH_STATE"):
                     r.active_policy = "stand"
                     r.set_command()
         driver.step(m, d, float(x))
@@ -271,6 +362,8 @@ def run(
                 r.trunk_pos().round(3).tolist(),
                 flush=True,
             )
+        if stage == "UNSAFE_LAUNCH_STATE":
+            break
         if r.trunk_pos()[2] < -0.3:
             stage = "VOID_FALL"
             break
@@ -282,10 +375,20 @@ def run(
     tactical.close()
     report = dict(
         seed=seed,
+        source_hashes=source_hashes,
+        source_archive_sha256=hashlib.sha256(
+            (output / "source.tar.gz").read_bytes()
+        ).hexdigest(),
+        hard_contacts=hard_contacts,
+        roll_policy_sha256=hashlib.sha256(
+            Path(r.bank.paths["roulade"]).read_bytes()
+        ).hexdigest(),
         ground_contact=dict(
-            reference_s=duck_floor_ref,
-            impedance=[0.9, 0.95, 0.001, 0.5, 2.0] if duck_floor_ref else None,
-            margin_m=0.0002 if duck_floor_ref else 0.0,
+            reference_s=0.002 if hard_contacts else duck_floor_ref,
+            impedance=[0.9, 0.95, 0.001, 0.5, 2.0]
+            if (duck_floor_ref or hard_contacts)
+            else None,
+            margin_m=0.0002 if (duck_floor_ref or hard_contacts) else 0.0,
         ),
         publication_status="requires_full_contact_audit_and_matching_input_replay",
         level=asdict(level),
@@ -295,6 +398,10 @@ def run(
         requests=tactical.requests,
         wall_seconds=time.monotonic() - wall_start,
         policy_sha256=hashlib.sha256(Path(policy).read_bytes()).hexdigest(),
+        policy_hashes={
+            name: hashlib.sha256(Path(path).read_bytes()).hexdigest()
+            for name, path in r.bank.paths.items()
+        },
         finished=finished,
         stage=stage,
         sweeper_phase=sweeper_phase,
@@ -302,6 +409,7 @@ def run(
         trace=trace,
         skills=results,
         gap_flights=gap_audit.flights,
+        short_same_platform_flights=gap_audit.short_same_platform_flights,
         audit=audit.report(),
         props=dict(contacts=props.contacts, longest_chase_s=props.longest_chase),
         events=sorted(
@@ -390,4 +498,6 @@ if __name__ == "__main__":
     p.add_argument("--sweeper-speed", type=float, default=-3.0)
     p.add_argument("--sweeper-torque", type=float, default=0.10)
     p.add_argument("--duck-floor-ref", type=float, default=None)
+    p.add_argument("--hard-contacts", action="store_true")
+    p.add_argument("--roll-policy")
     run(**vars(p.parse_args()))

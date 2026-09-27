@@ -28,5 +28,41 @@
     "Requires a settled upright launch; running launch is not certified.",
     "Lateral landing drift is allowed within the physical three-lane corridor.",
     "The 40/40 battery used native compliant ground and the earlier 0.524 m track. Hard-contact transfer and current 0.60 m track require separate qualification."
-  ]
+  ],
+  "hard_contact_development_tests": {
+    "profile": {
+      "floor_solref_s": 0.002,
+      "floor_margin_m": 0.0002,
+      "self_solref_s": 0.0012,
+      "self_margin_m": 0,
+      "track_width_m": 0.6
+    },
+    "settled_launch_distance_m": 0.06,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "gap_widths_m": [
+      0.12,
+      0.15,
+      0.18,
+      0.2
+    ],
+    "passed_per_10": [
+      9,
+      10,
+      9,
+      3
+    ],
+    "evidence": "artifacts/neon-escape-v2/gap500-hard-self12-edge06.json",
+    "scope": "Isolated settled starts, not whole-course approach qualification."
+  }
 }

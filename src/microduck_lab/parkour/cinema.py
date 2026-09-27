@@ -85,7 +85,11 @@ class CinematicEventTimeline:
                 2.0,
                 2.0,
                 shot="wide",
-                title="A TACTICAL MODEL. A PHYSICAL BODY.",
+                title=(
+                    "A TACTICAL MODEL. A PHYSICAL BODY."
+                    if self.report["brain"] == "jev"
+                    else "PHYSICAL BASELINE / RULE-BASED TACTICS"
+                ),
                 hold=4.0,
             ),
             Clip(0.0002, self.stop, title="CONTINUOUS RECORDED RUN"),
@@ -99,7 +103,7 @@ class CinematicEventTimeline:
             Clip(
                 da - 0.1,
                 db + 0.15,
-                0.5,
+                1.0,
                 "dodge",
                 "LANE CHANGE / feedback steering, no root translation",
             ),
@@ -107,14 +111,14 @@ class CinematicEventTimeline:
             Clip(
                 self.fall - 0.5,
                 self.recover + 0.4,
-                0.4,
+                1.0,
                 "impact",
                 "IMPACT → RECOVER / physical contact remains enabled",
             ),
             Clip(
                 bar - 0.3,
                 bar + 0.8,
-                0.5,
+                1.0,
                 "boss",
                 "BOSS / opens a hinged obstacle with contact force",
             ),

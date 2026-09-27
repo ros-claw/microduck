@@ -30,7 +30,8 @@ def trial(args):
         rotor_mass=mass,
         drive_torque=torque,
     )
-    m, d, r, tr = build_world(hazards=[h], rails=True)
+    hard_contacts = bool(extra[3]) if len(extra) > 3 else False
+    m, d, r, tr = build_world(hazards=[h], rails=True, hard_contacts=hard_contacts)
     driver = HazardDriver([h])
     d.qpos[m.jnt_qposadr[m.joint("sweep/joint").id]] = phase
     mujoco.mj_forward(m, d)
@@ -82,6 +83,7 @@ def trial(args):
         if r.trunk_pos()[2] < -0.3:
             break
     return dict(
+        hard_contacts=hard_contacts,
         height=height,
         y=y,
         speed=speed,

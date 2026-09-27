@@ -1,230 +1,181 @@
-# Neon Escape V2 — physical development / 物理能力开发
+# Neon Escape V2 — methods and evidence / 方法与证据
 
-V2 is under development. **There is no certified V2 hero run yet.** V1 remains
-unchanged at `a1219f309bbfd4f2edb6ffb3b8ecba0cd3eb8d64`; its implementation,
-failures and released video are checksummed in
-[`v1-freeze.json`](../artifacts/neon-escape-v2/v1-freeze.json).
+**Experimental. The physical baseline passes replay and contact checks; the full
+V2 specification is not complete.** A selected rule-controlled run rolls under
+a bar, changes lane, jumps a real 15 cm void, is knocked down by a sweeper,
+recovers in **1.08 s**, escapes and leaves the pursuing sphere behind a physical
+door. It is not a live-Jev demonstration or a quick-dodge certificate.
 
-V2 正在开发，**尚无通过验收的 V2 完整宣传片**。这里记录可复现的物理实验，
-不把训练奖励、单次成功或录制剪辑当作整关成功率。
+**实验版本，尚未完成全部 V2 验收。** 已有规则控制的完整物理基线通过输入回放和
+全接触审计：行进翻滚、换道、跨越真实 15 cm 坑、被扫杆击倒、1.08 秒起身、逃生，
+巨球由真实门板挡住。不能把这条记录说成在线 Jev 成功，也不能当作快速闪避已达标。
 
-## Current blocker / 当前阻塞
+V1 remains unchanged at `a1219f309bbfd4f2edb6ffb3b8ecba0cd3eb8d64`:
+[51-file freeze](../artifacts/neon-escape-v2/v1-freeze.json).
+V2 lives separately in `microduck_lab.parkour`.
 
-A live Jev development run completed roll → dodge → real-gap jump → actual
-knockdown/recovery → finish in 21.14 s. Its 5,832 saved states replayed exactly
-from actuator inputs. **This is not a release-qualified run.** A subsequent
-5 kHz audit of *all* contacts found large native duck/floor and self-contact
-compliance that the earlier hazard-only gate missed:
+## What changed / 实施内容
 
-| Contact category | Maximum penetration | P99 |
+- **Scale and gap:** standing visual width 0.142 m; lanes 0.20 m; track 0.60 m.
+  Separate floor boxes and interrupted rails leave an actual void. A visible
+  0.90 m recovery bay provides space around the sweeper. Original asset materials
+  are retained. Dimensions come from the asset rather than guessed body length.
+- **Physical props:** a hinged bar, free-joint crate released from a weld after
+  an 0.85 s warning, torque-limited sweeper, force-driven sphere and a sliding
+  door limited to 6 N. Raising the bar hinge lever from 0.22 to 0.32 m lets the
+  sphere push it open; the bar remains low enough to obstruct a standing duck.
+- **Control:** learned motor policies at 50 Hz; MuJoCo at 5 kHz; joint torque
+  limit 0.6405 Nm. Maneuvers finish on observed rotation, support, orientation
+  and velocity. Timeouts mean failure. Moving roll entry uses measured left-foot
+  contact and upward body velocity. Recovery uses motors, without root resets.
+- **Planning:** Jev selects the next encounter maneuver, with a 2–4 s tactical
+  horizon; the executor controls exact roll and jump timing. Responses are
+  prefetched and revalidated at handoff. Actual execution can still pause when
+  a predicted route becomes invalid; this remains a limitation.
+- **Rendering:** recorded 200 Hz states, event-driven cameras, 0.72 m lookahead,
+  original robot colors, and optional four-sample motion blur. Each cut has at
+  most three slow-motion segments. Audio is synthesized Foley, not a microphone.
+
+缩窄跑道、真坑、自由落箱、有限扭矩扫杆和有限力巨球已落地。所有动作通过电机策略
+执行，初始化后不写入机器人根姿态。镜头读取记录姿态仅用于渲染；物理真实性另由
+记录电机输入重新推进仿真的回放证明。Jev 不是 50 Hz 反射控制器。
+
+## Contact audit / 接触真实性
+
+The publication gate checks **every force-bearing contact category** at 5 kHz:
+maximum geometric penetration <1.5 mm, P99 <1 mm, no solver warnings, matching
+capture hashes and successful input replay. Hazard-only numbers are insufficient.
+
+| Selected physical baseline | Maximum | P99 |
 |---|---:|---:|
-| Duck × hazard | 0.013 mm | 0 mm |
-| Duck × ground | **17.684 mm** | **6.165 mm** |
-| Duck self-contact | **3.785 mm** | **3.458 mm** |
-| Props × ground | 0.855 mm | 0 mm |
-| Props × props | 0.420 mm | 0.139 mm |
+| Duck × floor | 1.467 mm | 0 mm |
+| Duck self-contact | 0.259 mm | 0.234 mm |
+| Duck × hazard | 0 mm | 0 mm |
+| Props × floor | 0.863 mm | 0 mm |
+| Props × props | 0.260 mm | See raw audit |
 
-[Full contact evidence](../artifacts/neon-escape-v2/live-development-8/all-contacts.json).
-These are geometric overlaps, not an explanation that makes the visual defect
-acceptable. The two rendered cuts are retained locally as **native-ground
-diagnostics** and are not published as successful V2 films. The renderer now
-requires a matching input-replay proof and full contact audit before export.
+[Full contact audit](../artifacts/neon-escape-v2/hard-floor/full-stunts/all-contacts.json)
+· [input replay: 5,732 states, zero position/velocity error](../artifacts/neon-escape-v2/hard-floor/full-stunts/replay.json)
+· [run and source hashes](../artifacts/neon-escape-v2/hard-floor/full-stunts/audit.json).
 
-真实在线开发录制完成了全套动作，但全接触审计发现原生地面和自身接触过软。
-因此暂停正式成片发布，保留失败证据。不能用障碍碰撞的低穿透数字代表所有物理接触。
-目前正修复硬地面上的技能迁移；这会改变翻滚和着陆后的交接状态，旧电机策略不能
-未经测试直接沿用。
+A positive contact margin can generate force before geometric overlap: zero
+negative distance does not mean no collision. Impulses, damage, falls and recovery
+are recorded separately. These are compliant contacts, not a proof of zero overlap
+under arbitrary conditions. The floor maximum is close to the threshold.
 
-A frozen six-seed live Jev cohort (101–106) produced **4/6 escapes**, **6/6
-real-gap crossings**, and **1/6 passes of the earlier four-stunt gate**. That
-older gate did not include native ground/self penetration, so none of those
-counts certifies the stricter publication gate. No failed seed was rerun or
-removed. The exact controller/policy snapshot and hashes are retained in
-[`unseen`](../artifacts/neon-escape-v2/unseen).
+Native ground and self geometry are preserved. Massless per-body boxes expanded
+by 0.2 mm are used only for hazard contact; they preserve robot mass and inertia.
+Explicit floor pairs use a 2 ms reference time and 0.2 mm margin. The filmed
+baseline used 2 ms self-contact; current development uses 1.2 ms self-contact
+with zero margin. Those profiles must not be pooled into one success rate.
 
-## Design / 方法
+完整审计同时检查鸭子—地面、自身、障碍，以及道具接触。通过的基线地面最大重叠
+1.467 mm，接近阈值，并非“绝不穿模”。正 margin 中也有真实接触力；击倒和起身
+必须有真实事件证据。当前开发参数与基线略有不同，历史结果不能直接算到新配置上。
 
-The new `microduck_lab.parkour` package is isolated from V1. The track width is
-three times a lane width derived from 1.4 × the actual standing asset width,
-rounded up to a centimetre. The current model measures **0.142 m visual footprint
-width, 0.20 m lane width, 0.60 m track width**. Earlier evidence used the native
-collision footprint (0.125 / 0.175 / 0.524 m); those batteries are historical
-results, not certification of the wider-lane controller. Height and footprint length are different quantities;
-we report speed in m/s instead of inflating a “body lengths per second” number.
-Floor boxes stop at each gap. Neither rail nor decorative geometry bridges the
-void. Native asset materials are preserved.
+## Skills and remaining gates / 技能与未完成项
 
-场地按实测碰撞外壳缩放，而不是照抄估计值。真坑由分离的平台构成，没有隐藏地面；
-侧护栏也在坑边截断。保留原生模型配色。地面和自身接触保持原生几何；高速障碍接触
-使用逐刚体贴合的无质量盒状外壳，额外外扩 0.2 mm。碰撞位掩码将两套接触分开，
-回归测试确认机器人质量和惯量不变。撞击区有明确可见的 0.9 m 宽恢复平台。
+| Requirement | Evidence and limitation |
+|---|---|
+| Real long jump | Current hard profile, settled launch 6 cm before edge: 12/15/18/20 cm gaps passed **9/10, 10/10, 9/10, 3/10** development trials. Whole-course approach remains sensitive. |
+| Moving roll | Foot-phase entry works in component tests; lateral drift at handoff remains significant. The filmed baseline completes a full inversion and returns to supported upright motion. |
+| Quick dodge | **Not passed.** A full 20 cm lane generally takes about 1.6–2.3 s. Short integrated dodges can start close to the destination lane; duration without displacement is misleading. |
+| Recovery | Selected genuine sweeper knockdown recovers in **1.08 s**. Static pose batteries do not certify arbitrary moving impacts. |
+| Chase | Baseline records **20.676 s** continuous pursuit and a real closed-door impact. |
+| Running | Commands and observed speed are recorded separately. End-to-end pace still suffers from alignment and braking. |
+| Live Jev | Real API runs and failures are retained. One complete live run failed the strict self-contact gate (1.554 mm maximum, 1.179 mm P99). It is not published as qualified. |
+| Generalization | Frozen hard-contact live cohort **201–206: 2/6 valid escapes, 0/6 full-stunt publication passes**. No reruns. Historical native-ground cohort 101–106 had 4/6 escapes; that is a different configuration. |
 
-Props use physical mechanisms: a hinged crossbar; a free-joint crate held by a
-releasable weld with an 0.85 s warning; a torque-limited velocity-controlled
-sweeper; a driven rolling sphere; and a bounded-force sliding finish door.
-Duck joints remain torque limited to 0.6405 Nm. Simulation uses 0.2 ms steps
-and 50 Hz policy execution. Root pose writes are restricted to experiment
-initialization; recovery and maneuvers use motor policies.
+硬地面长跳单项已有进展，但从跑步制动切到起跳仍然不稳定。20 cm／1.2 s 快闪没有
+通过；不能拿翻滚后只剩 5–7 cm 的小幅换道冒充完整一车道快闪。在线 Jev、动作交接
+与动态击倒的稳定性仍需继续解决，不能宣传整关高成功率。
 
-横杆可被推开；箱子解除焊接约束后完全自由；扫杆只接受有限扭矩；巨球通过力驱动滚动。
-翻滚、刹车、换道和恢复采用状态完成条件，计时器只能导致超时失败。右向换道可使用
-上游 61 维观测的左右镜像映射；它改变策略输入输出，不改变仿真姿态。
+### Frozen hard-contact evaluation / 冻结配置测试
 
-## Evidence / 验收记录
+[Seeds 201–206, exact snapshot and complete results](../artifacts/neon-escape-v2/unseen-hard-201-206/summary.json):
 
-The table below records the earlier native-ground component configuration.
-Full-course and held-out results are reported separately above. Development
-sweeps retain failures; changing contact parameters invalidates transfer claims.
-
-| Capability | Current evidence | Gate status |
+| Seed | Outcome | Full contact gate |
 |---|---|---|
-| V1 freeze | 51 tracked implementation/evidence files unchanged | Passed |
-| Real gap | Downward ray sees no floor in the gap; executable regression test | Passed |
-| Moving roll | 10/10 perturbed starts; 1.28–1.32 s to full rotation + upright foot support; zero bar contacts | Passed in this battery |
-| Recovery | 12/12 static face-up/down/left/right starts, 0.8–1.5 s | Static battery passed; live development recovery 1.98 s, but native ground failed |
-| Quick dodge | One 17.5 cm lane: mirrored right 1.06–1.08 s; left 1.20–1.22 s | Borderline left; 20–30 cm gate not certified |
-| Rotating impact | 36/36 tested speed/height/angle combinations; max geometric penetration ≈0.023 mm | Component gate passed |
-| Boss vs props | Real contact opens bar and moves released crate; physical rails keep ball on course | Component passed; one live run maintained 9.21 s continuous chase and hit the closed door |
-| Old `jump.onnx` | Initial 80 gap/launch/duration combinations: 0 successful crossings | Not certified |
-| New long jump | 12/15/18/20 cm gaps: 40/40 full-rate airborne-crossing + stable-handoff trials; another 20/20 launch-window trials | Development component passed |
-| Tactical prefetch | Live development run: Jev chose roll, left route and jump, 711–752 ms; all three executed through the finish | Integrated development run; frozen unseen results above |
-| Films | No V2 hero/technical film released | Pending physical gates |
+| 201 | Fell into gap; recovery failed | Failed |
+| 202 | Fell into gap | Failed |
+| 203 | Valid escape, no actual knockdown/recovery | Passed |
+| 204 | Reached finish but exhausted HP | Passed |
+| 205 | Valid escape, no actual knockdown/recovery | Passed |
+| 206 | Fell into gap | Failed |
 
-对应证据见 [`artifacts/neon-escape-v2`](../artifacts/neon-escape-v2)。
-恢复测试的 `moving_impact` 初始轻推没有真正击倒鸭子，**不能计入倒地恢复通过数**。
-早期扫参只检查站稳等宽松指标，不作为技能认证；最终必须验证整个空中轨迹和对岸支撑。
+All six input replays passed. These seeds vary obstacle placement; they are a
+small test, not a broad distributional benchmark. API timing also affects physical
+handoffs. Failures include excessive self-contact during falls, so low penetration
+in the selected film must not be generalized to every episode.
 
-### Collision finding / 碰撞根因
+新六种子在线测试仅 2/6 有效逃生，0/6 满足全套动作发布门槛。六条输入回放均通过，
+但掉坑时仍可能出现超阈值自身接触。这个结果说明当前整合不稳定；两条逃生记录也
+不能补拍或拼接倒地恢复，伪装成完整在线成功。
 
-The rotating impact test initially reached **2.91 mm** penetration. Explicit
-Duck × Hazard contact pairs prevent the softer native duck/floor contact
-reference from being mixed into obstacle contact. Sweeper pairs use a 0.8 ms
-reference time, impedance `[.99,.999,.0005,.5,2]`, a 0.2 mm collision margin,
-and bounded friction. The resulting maximum measured *geometric penetration*
-is about **0.023 mm**; most impacts are resolved inside the positive margin.
-Normal impulse still records those contacts: zero negative distance does **not**
-mean zero physical interaction. The solver is compliant, not mathematically rigid.
+## Failure analysis / 从失败中得到的结论
 
-接触参数按障碍类型单独设置，地面接触保持原生。正的接触 margin 也可能产生真实接触力，
-因此审计同时记录法向冲量与几何穿透，不能拿“没有负距离”冒充“没有碰撞”。
-此结果覆盖试验所列速度、角度和姿态，不能外推到任意高速冲击。
+1. **Soft native contacts hid a major defect.** Earlier live development finished
+   in 21.14 s, but full auditing found ground penetration 17.684 mm/P99 6.165 mm
+   and self-contact 3.785 mm/P99 3.458 mm. Diagnostic videos remain local.
+2. **Harder contact changes skills.** Reusing old roll timing or launch distance
+   failed. With current contact, a 15 cm jump passed 10/10 at launch distance
+   4 or 6 cm, 9/10 at 8 cm and 4/10 at 10 cm. These are development sweeps.
+3. **Stand is not a brake.** Switching a still-moving body to the standing policy
+   near the edge allowed continued drift. The executor now separates short
+   positioning pulses, zero-speed locomotion braking and standing stabilization;
+   an unsafe launch aborts explicitly. The approach is still experimental.
+4. **Geometry before solver tuning.** An early 8 cm rail intersected the sweeper
+   at reset; those tests are invalid. Current rails are 2.5 cm. A low bar hinge
+   blocked the boss; raising its pivot corrected the physical leverage.
+5. **Old jump reuse failed.** The historical task initialized the root at z=0,
+   placing soles below the floor. The new task starts at z=.12, verifies standing
+   physics, initializes PPO from the official standing actor and uses normalized
+   export. The selected checkpoint is `model_500.pt`.
+6. **Roll retraining was not adopted.** A short hard-contact PPO transfer used a
+   zero-margin training profile required by its Warp collision configuration.
+   CPU deployment checkpoints failed transfer tests; increasing training reward
+   alone would not qualify them. The original rollout policy remains selected.
+7. **Planner envelopes must match physics.** Current route envelopes contain 52
+   qualified entry-state buckets from 162 development trials, including failures.
+   The live executor rejects mismatched lane/contact profiles and rechecks the
+   swept path against obstacles and track boundaries at handoff.
 
-See MuJoCo’s [solver parameters](https://mujoco.readthedocs.io/en/stable/modeling.html#solver-parameters)
-and [explicit contact pairs](https://mujoco.readthedocs.io/en/stable/XMLreference.html#contact-pair).
-`nativeccd` denotes convex collision detection; it is not a continuous-time
-anti-tunneling switch.
-
-### Jump investigation / 旧跳跃问题
-
-The old checkpoint’s saved training configuration has root initialization at
-`z=0`. The current inherited factory reproduces sole sites approximately
-**0.117 m below the floor** at reset. This is incompatible with a standing
-parkour launch. Our first development training inherited that defect; it was
-stopped and retained as a failed experiment. The V2 factory explicitly starts
-at `z=.12`; the official standing policy then remains upright in a 3 s Warp
-rehearsal. PPO is initialized from the official standing ONNX with numerical
-actor-output parity, and final exports still use the upstream normalized
-exporter.
-
-旧策略并未被删除，但它的历史腾空数字不能直接作为跑酷能力证明。尤其翻倒时脚也会升高；
-新的奖励和部署验证要求身体直立、无地面支撑的腾空以及对岸稳定落脚。新训练不会把原地
-跳绳的“禁止前移”惩罚带进长跳任务。
-
-### Jev measurements / Jev 实测
-
-A matched 90-request benchmark uses three **synthetic encounter fixtures**, not
-live gameplay. All three profiles returned valid responses and matched the
-fixture preference in 30/30 requests each:
-
-| Profile | p50 | p95 |
-|---|---:|---:|
-| Choice | 719 ms | 913 ms |
-| Choice + uncertainty Noul | 712 ms | 851 ms |
-| Four questions | 714 ms | 785 ms |
-
-This small sample does **not** show a latency advantage for Choice-only. V2
-uses Choice + one uncertainty question because the latter participates in
-handoff rejection; unused risk/act-now questions are omitted. Jev chooses the
-next encounter maneuver; the physical executor controls exact launch timing.
-No claim of 50 Hz model inference is made.
-
-这次实测不支持“问题更少就一定更快”。保留真正参与执行判断的不确定性问项，
-通过提前请求与交接时重验来处理约 700 ms 的响应时间。`live-development-3` 完成在线翻滚、
-闪避、跨坑、进门，但没有真实击倒恢复，因此仍未通过完整 Hero 验收。
+这些失败记录保留在仓库。没有删除失败种子、改写策略输出姿态或降低接触门槛来取得
+好看的视频。训练、单项扫参、整关和未见种子分别报告。
 
 ## Reproduce / 复现
 
-From the delivery repository with its asset checkouts and Python environment:
+Use the repository environment and asset checkouts. API credentials stay outside
+Git (`TYPESAFE_API_KEY` or `~/.config/microduck/typesafe.key`). Jev runs incur API
+usage. Outputs refuse to overwrite an existing run audit.
 
 ```bash
 export OPENBLAS_NUM_THREADS=1
 .venv/bin/python scripts/freeze_neon_v1.py
-.venv/bin/python -m pytest tests/test_parkour_physics.py -q
-.venv/bin/python scripts/parkour_runtime_battery.py
-.venv/bin/python scripts/parkour_recovery_battery.py
-.venv/bin/python scripts/parkour_dodge_moving.py
-.venv/bin/python scripts/parkour_sweeper_lab.py
-.venv/bin/python scripts/parkour_boss_lab.py
-# Requires TYPESAFE_API_KEY or ~/.config/microduck/typesafe.key; incurs API usage.
-.venv/bin/python scripts/benchmark_parkour_jev.py
-```
-
-Legacy gap screening:
-
-```bash
-.venv/bin/python scripts/parkour_gap_battery.py
-```
-
-The API key stays outside the repository. `policies/parkour_long_jump_v2.json`
-records the normalized ONNX provenance and development qualification scope.
-
-```bash
+.venv/bin/python -m pytest tests/test_parkour_physics.py tests/test_neon_arcade.py -q
 .venv/bin/python -m microduck_lab.demos.parkour_rehearsal \
-  --policy policies/parkour_long_jump_v2.onnx --brain jev --capture \
-  --output artifacts/neon-escape-v2/local-run
-.venv/bin/python scripts/replay_parkour_run.py artifacts/neon-escape-v2/local-run
+  --policy policies/parkour_long_jump_v2.onnx --brain jev --hard-contacts \
+  --sweeper-mass .4 --sweeper-torque .2 --sweeper-phase .9 --capture \
+  --output artifacts/neon-escape-v2/local-new-run
+.venv/bin/python scripts/replay_parkour_run.py artifacts/neon-escape-v2/local-new-run
+.venv/bin/python scripts/audit_parkour_contacts.py artifacts/neon-escape-v2/local-new-run
 ```
 
-The rehearsal is a development tool: its `passed` field requires a true recovery,
-continuous boss pursuit, door impact, surviving HP, a supported finish, validated
-gap flight and bounded hazard penetration. It is an encounter/stunt gate, not
-a full contact certificate. Publication additionally requires `all-contacts.json`. A finished route alone is insufficient.
-
-### Further failure analysis / 后续根因
-
-The former 8 cm side rails intersected a 5 cm sweeper **at initialization**.
-Those tests are invalid scene configurations, not desirable knockdown stunts.
-Lowering the rails to 2.5 cm eliminated that initial overlap. A 30-case running
-contact battery then measured max 0.141 mm, worst per-trial P99 0.036 mm.
-The dropped boss additionally required explicit prop/floor contact pairs:
-its peak floor penetration fell from 12.97 mm to 0.565 mm in the live development
-run. Duck/floor contact parameters were kept unchanged.
-
-不能靠调求解器掩盖出生时的几何相交。旧失败数据保留，但不会用于宣传“精彩碰撞”。
-正接触 margin 内仍然可以有实际接触力，所有这类接触都会扣血并记录冲量。
-
-Input replay initializes the state once, then advances physics using recorded
-actuator commands, equality releases and bounded forces. An audited development
-capture matched all 5,100 saved states with zero position/velocity error. This
-is distinct from the renderer reading poses to display the already recorded run.
-
-
-## Hard-contact transfer / 硬接触迁移
-
-A controlled 18-trial moving-roll comparison on the current 20 cm lanes varied
-only ground solver parameters. Keeping native impedance `[.9,.95,.001,.5,2]`
-and setting a 2 ms reference with 0.2 mm margin gave 3/3 component completions
-(max ground penetration 0.716 mm); the higher-impedance 2 ms profile gave 1/3.
-The integrated run still failed its roll timeout, so **3/3 is not a robustness
-claim**. The evidence is in `floor-transfer-visual-footprint.json`.
-
-硬接触配置改善穿透，却改变已有策略的运动结果。正在基于官方 Roulade 任务微调，
-使用原生几何、有限力矩和运动起步；训练结果必须重新经过 CPU 部署和整关验证。
-20 cm 快闪、连续动作交接、硬地面倒地恢复和可靠整关仍是未完成项。
+This runs the **current experimental controller**, not a guarantee of reproducing
+the older selected baseline. Exact historical source archives and physical model
+hashes accompany each run. `audit.json:passed` is the encounter/stunt gate;
+publication also requires matching `all-contacts.json` and `replay.json`.
 
 ```bash
-.venv/bin/python scripts/parkour_floor_transfer.py \
-  --output /tmp/floor-transfer.json
-.venv/bin/python scripts/audit_parkour_contacts.py \
-  artifacts/neon-escape-v2/local-run
+.venv/bin/python scripts/render_parkour.py \
+  --source artifacts/neon-escape-v2/hard-floor/full-stunts \
+  --output out/microduck_neon_escape_v2_physical_baseline_hero.mp4 --cut hero
+.venv/bin/python scripts/render_parkour.py \
+  --source artifacts/neon-escape-v2/hard-floor/full-stunts \
+  --output out/microduck_neon_escape_v2_physical_baseline_technical.mp4 \
+  --cut technical --blur 1
 ```
+
+See [evidence index](../artifacts/neon-escape-v2/README.md),
+[policy provenance](../policies/parkour_long_jump_v2.json), and
+[training reconstruction](../training/README.md).

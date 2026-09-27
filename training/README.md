@@ -54,3 +54,17 @@ comparison. It is not certified by the earlier positive-margin batteries.
 硬接触翻滚训练是独立实验，不能拿旧策略测试结果替代新配置验证。训练前已完成
 4 个扰动初态的 3 秒站立检查、64 环境 / 5 轮短测、标准 ONNX 导出，以及官方
 翻滚 ONNX 初始化的数值一致性检查。训练日志位于 V2 evidence 的 `training/`。
+
+The hard-contact roll training was stopped after deployment tests of checkpoints
+100 and 200 did not qualify. Its zero-margin profile does not match the selected
+positive-margin course; these weights are not shipped as successful skills.
+
+硬接触翻滚微调已停止：100／200 轮检查点未通过部署验证，没有替代官方策略。
+失败结果与日志保留，训练奖励不作为技能成功证明。
+
+The V2 physical-baseline experimental release separately includes the selected
+long-jump `model_500.pt` checkpoint in its evidence bundle. The older rope policies'
+training checkpoints are still not included.
+
+V2 物理基线实验预发布的证据包单独附带所选长跳 `model_500.pt`；这不改变旧跳绳
+训练检查点未随仓库交付的限制。

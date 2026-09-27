@@ -30,7 +30,7 @@ class Hazard:
         )
         if self.kind == "push_bar":
             # Raised pivot: the ball pushes the hanging crossbar forward/up.
-            b.pos = [self.x, self.y, self.z + 0.22]
+            b.pos = [self.x, self.y, self.z + 0.32]
             b.add_joint(
                 name=self.name + "/joint",
                 type=mujoco.mjtJoint.mjJNT_HINGE,
@@ -40,7 +40,7 @@ class Hazard:
             )
             b.add_geom(
                 type=mujoco.mjtGeom.mjGEOM_CAPSULE,
-                fromto=[0, -self.half_width, -0.22, 0, self.half_width, -0.22],
+                fromto=[0, -self.half_width, -0.32, 0, self.half_width, -0.32],
                 size=[0.009],
                 mass=0.035,
                 **common,

@@ -1,0 +1,109 @@
+{
+  "source": "artifacts/neon-escape-v2/hard-floor/full-stunts",
+  "source_audit_sha256": "8362e4d064f093a138e1ddd37a98b2d4c2c951aaa7c04ee9d060bd08572e7fa7",
+  "video_sha256": "b484ea66a8dcb397ec9ba3046f68aff0ef198be3a7d3b52784b585bd318cbe77",
+  "cut": "technical",
+  "fps": 50,
+  "frames": 3004,
+  "duration_s": 60.08,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "rule",
+  "core_physical_gates": true,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "2526801e38184e0d23044f1d7610755a86b6fe58afc35f19d312c5a038115575",
+  "input_replay_sha256": "c58742d65d1392846efa5cc0554508ecd16fb021515b7c1a581b76b6e4b705ac",
+  "qualification_scope": "Selected full-stunt simulation, not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim",
+  "clips": [
+    {
+      "start": 2.0,
+      "stop": 2.0,
+      "speed": 1.0,
+      "shot": "wide",
+      "title": "PHYSICAL BASELINE / RULE-BASED TACTICS",
+      "output_start": 0.0,
+      "frames": 200
+    },
+    {
+      "start": 0.0002,
+      "stop": 22.852999999976678,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "CONTINUOUS RECORDED RUN",
+      "output_start": 4.0,
+      "frames": 1143
+    },
+    {
+      "start": 2.9699999999996893,
+      "stop": 5.54000000000242,
+      "speed": 0.35,
+      "shot": "roll",
+      "title": "MOVING ROLL / completion from rotation + foot support",
+      "output_start": 26.86,
+      "frames": 368
+    },
+    {
+      "start": 5.2400000000024205,
+      "stop": 6.450000000004446,
+      "speed": 1.0,
+      "shot": "dodge",
+      "title": "LANE CHANGE / feedback steering, no root translation",
+      "output_start": 34.22,
+      "frames": 61
+    },
+    {
+      "start": 10.580000000001554,
+      "stop": 12.459999999998104,
+      "speed": 0.35,
+      "shot": "jump",
+      "title": "LONG JUMP / a real 15 cm void",
+      "output_start": 35.44,
+      "frames": 269
+    },
+    {
+      "start": 14.460399999991811,
+      "stop": 16.459999999989247,
+      "speed": 1.0,
+      "shot": "impact",
+      "title": "IMPACT \u2192 RECOVER / physical contact remains enabled",
+      "output_start": 40.82,
+      "frames": 100
+    },
+    {
+      "start": 8.366800000006478,
+      "stop": 9.46680000000648,
+      "speed": 1.0,
+      "shot": "boss",
+      "title": "BOSS / opens a hinged obstacle with contact force",
+      "output_start": 42.82,
+      "frames": 56
+    },
+    {
+      "start": 20.95299999997668,
+      "stop": 22.25299999997668,
+      "speed": 0.4,
+      "shot": "finish",
+      "title": "CLOSED DOOR / sphere stopped by a real contact",
+      "output_start": 43.94,
+      "frames": 163
+    },
+    {
+      "start": 22.852999999976678,
+      "stop": 22.852999999976678,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "REPRODUCIBLE INPUT REPLAY",
+      "output_start": 47.199999999999996,
+      "frames": 644
+    }
+  ],
+  "motion_blur": "off",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained."
+}
