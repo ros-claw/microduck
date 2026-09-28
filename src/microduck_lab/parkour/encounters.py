@@ -119,18 +119,56 @@ class EncounterBrain:
                     )
                     for t, low, high in measured["path"]
                 ]
+                support_path = [
+                    (
+                        t,
+                        (pos + np.asarray(low)).tolist(),
+                        (pos + np.asarray(high)).tolist(),
+                    )
+                    for t, low, high in measured.get("support_path", measured["path"])
+                ]
+                # The encounter continues after lane-change completion. Check
+                # holding that lane until the robot has passed the falling box,
+                # rather than declaring a lane safe while still upstream of it.
+                crate = next(h for h in self.level.hazards if h.kind == "crate")
+                end_t, end_low, end_high = path[-1]
+                low, high = np.asarray(end_low), np.asarray(end_high)
+                center_x = float((low[0] + high[0]) / 2)
+                follow = min(2.5, max(0.0, (crate.x + 0.30 - center_x) / 0.55))
+                support_low, support_high = map(np.asarray, support_path[-1][1:])
+                for dt in np.arange(0.02, follow + 0.02001, 0.02):
+                    shift = np.array([0.55 * dt, 0.0, 0.0])
+                    padding = np.array([0.025 * dt, 0.003 * dt, 0.0])
+                    path.append(
+                        (
+                            float(end_t + dt),
+                            (low + shift - padding).tolist(),
+                            (high + shift + padding).tolist(),
+                        )
+                    )
+                    support_path.append(
+                        (
+                            float(end_t + dt),
+                            (support_low + shift - padding).tolist(),
+                            (support_high + shift + padding).tolist(),
+                        )
+                    )
                 relevant = [
                     s for s in states if s.kind in ("crate", "boulder", "sweeper")
                 ]
                 hits = conflicts(path, relevant, time_offset=remaining)
                 within_track = all(
                     low[1] >= -self.track.width / 2 and high[1] <= self.track.width / 2
-                    for _, low, high in path
+                    for _, low, high in support_path
                 )
                 checks[action] = {
                     "conflicts": hits,
                     "duration_s": measured["duration_s"],
+                    "encounter_forecast_s": path[-1][0],
                     "within_track": within_track,
+                    "support_model": "measured foot envelope"
+                    if "support_path" in measured
+                    else "conservative full-body fallback",
                     "model": "hard-contact, entry-state-conditioned measured swept envelope; rechecked at handoff",
                 }
                 if not hits and within_track:
@@ -188,6 +226,10 @@ class EncounterBrain:
         if encounter == "crate" and self.r.trunk_pos()[1] < -0.03:
             default = "TAKE_RIGHT_ROUTE"
         if self.loop is None:
+            if default not in legal:
+                default = next(
+                    (a for a in legal if a != "BRAKE_AND_WAIT"), "BRAKE_AND_WAIT"
+                )
             if handoff:
                 self.selected[encounter] = default
             return default if handoff else None

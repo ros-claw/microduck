@@ -27,6 +27,8 @@ def trial(job):
         seconds=35,
         output=output,
         hard_contacts=options["hard_contacts"],
+        predictive=options["predictive"],
+        difficulty=options["difficulty"],
         roll_policy=options["roll_policy"],
     )
     replay(output)
@@ -36,6 +38,8 @@ def trial(job):
         seed=seed,
         stunt_gate=report["passed"],
         publication_passed=report["passed"] and contacts["publication_gate"]["passed"],
+        escape_publication_passed=report["component_course_passed"]
+        and contacts["escape_contact_gate"]["passed"],
         component_course_passed=report["component_course_passed"],
         stage=report["stage"],
         finished=report["finished"],
@@ -66,6 +70,8 @@ if __name__ == "__main__":
     p.add_argument("--sweeper-mass", type=float, default=0.4)
     p.add_argument("--sweeper-torque", type=float, default=0.2)
     p.add_argument("--hard-contacts", action="store_true")
+    p.add_argument("--predictive", action="store_true")
+    p.add_argument("--difficulty", choices=["classic", "chase"], default="classic")
     p.add_argument("--workers", type=int, default=3)
     a = p.parse_args()
     target = Path(a.output).resolve()
@@ -115,6 +121,7 @@ if __name__ == "__main__":
         total=len(rows),
         escape_passed=sum(r["component_course_passed"] for r in rows),
         publication_passed=sum(r["publication_passed"] for r in rows),
+        escape_publication_passed=sum(r["escape_publication_passed"] for r in rows),
         scope="Fixed source/policies and explicit new seeds; no retries. Every run includes matching input replay and all-contact audit. Not a hardware safety guarantee.",
     )
     (target / "summary.json").write_text(json.dumps(result, indent=2) + "\n")

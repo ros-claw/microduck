@@ -37,8 +37,16 @@ class CinematicEventTimeline:
             ):
                 self.skills[e["skill"]][1] = e["t"]
         self.flight = next(f for f in report["gap_flights"] if f["crossed"])
-        self.fall = next(e["t"] for e in self.events if e["type"] == "FALL")
-        self.recover = next(e["t"] for e in self.events if e["type"] == "RECOVER")
+        self.fall = next(
+            (e["t"] for e in self.events if e["type"] == "FALL"), float("inf")
+        )
+        self.recover = next(
+            (e["t"] for e in self.events if e["type"] == "RECOVER"), float("inf")
+        )
+        self.route = next(
+            (e["t"] for e in self.events if e["type"] == "ROUTE_PREVIEW"),
+            self.skills["JUMP_CENTER"][1],
+        )
 
     def hero(self):
         a, b = self.skills["ROLL_CENTER"]
@@ -63,7 +71,13 @@ class CinematicEventTimeline:
         if cursor < self.stop:
             clips.append(Clip(cursor, self.stop))
         clips.append(
-            Clip(self.stop, self.stop, title="ESCAPED.", shot="finish", hold=1.5)
+            Clip(
+                self.stop,
+                self.stop,
+                title="ESCAPED.",
+                shot="finish",
+                hold=max(1.5, 25 - sum(c.duration for c in clips)),
+            )
         )
         return clips
 
@@ -109,11 +123,15 @@ class CinematicEventTimeline:
             ),
             Clip(ja - 0.2, jb + 0.2, 0.35, "jump", "LONG JUMP / a real 15 cm void"),
             Clip(
-                self.fall - 0.5,
-                self.recover + 0.4,
+                self.fall - 0.5 if np.isfinite(self.fall) else self.route,
+                self.recover + 0.4
+                if np.isfinite(self.recover)
+                else min(self.route + 3.5, self.finish),
                 1.0,
-                "impact",
-                "IMPACT → RECOVER / physical contact remains enabled",
+                "impact" if np.isfinite(self.fall) else "dodge",
+                "IMPACT → RECOVER / physical contact remains enabled"
+                if np.isfinite(self.fall)
+                else "LOCAL PHYSICS PREVIEW / choose a route around the moving arm",
             ),
             Clip(
                 bar - 0.3,

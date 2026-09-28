@@ -40,7 +40,17 @@ class HazardState:
                 center[2] = max(extent[2], center[2])
         # Model uncertainty grows with forecast horizon; it is not a guarantee.
         extent += 0.003 + 0.005 * t * t
-        return center - extent, center + extent
+        low, high = center - extent, center + extent
+        if (
+            self.kind == "crate"
+            and self.held
+            and self.warning_remaining is None
+            and t > 0
+        ):
+            # An untriggered hanging crate is not guaranteed to remain aloft.
+            # Before release timing is observed, reserve its whole drop column.
+            low[2] = min(low[2], 0.0)
+        return low, high
 
     def crossing_eta(self, lane_y, robot_half_width=0.065, horizon=4.0):
         for t in np.arange(0, horizon + 0.02, 0.02):

@@ -79,14 +79,21 @@ def sound(path, duration, events):
         w.writeframes(pcm.tobytes())
 
 
-def render(source, output, cut="hero", preview=False, blur=4):
+def render(
+    source, output, cut="hero", preview=False, blur=4, style="classic", goal="stunts"
+):
+    from microduck_lab.parkour.art_direction import industrial
+
     source = Path(source)
     output = Path(output)
     report = json.loads((source / "audit.json").read_text())
     for name, sha in report["capture"].items():
         if hashlib.sha256((source / name).read_bytes()).hexdigest() != sha:
             raise ValueError("Capture checksum mismatch: " + name)
-    if not report["passed"]:
+    core_passed = (
+        report["passed"] if goal == "stunts" else report["component_course_passed"]
+    )
+    if not core_passed:
         raise ValueError(
             "This cut requires all core physical gates, including real recovery"
         )
@@ -95,13 +102,13 @@ def render(source, output, cut="hero", preview=False, blur=4):
         if (source / "all-contacts.json").exists()
         else {}
     )
+    gate_key = "publication_gate" if goal == "stunts" else "escape_contact_gate"
     if not preview:
         if contacts.get("capture") != report["capture"]:
             raise ValueError("Contact audit must match this exact capture")
-        if not contacts.get("publication_gate", {}).get("passed", False):
+        if not contacts.get(gate_key, {}).get("passed", False):
             raise ValueError(
-                "Full contact audit blocks publication: "
-                + str(contacts.get("publication_gate"))
+                "Full contact audit blocks publication: " + str(contacts.get(gate_key))
             )
         proof = json.loads((source / "replay.json").read_text())
         if proof.get("capture") != report["capture"]:
@@ -153,6 +160,15 @@ def render(source, output, cut="hero", preview=False, blur=4):
         for g in range(m.ngeom):
             if m.geom(g).name.startswith("floor/"):
                 m.geom_rgba[g, :3] = [0.12, 0.18, 0.26]
+        if style == "industrial":
+            for g in range(m.ngeom):
+                name = m.geom(g).name
+                if name.startswith("floor/"):
+                    m.geom_rgba[g, :3] = [0.065, 0.095, 0.14]
+                elif name == "boss/geom":
+                    m.geom_rgba[g, :3] = [0.27, 0.06, 0.09]
+                elif name == "crate/geom":
+                    m.geom_rgba[g, :3] = [0.28, 0.13, 0.045]
         for g in posts:
             m.geom_group[g] = 0
         mujoco.mj_forward(m, d)
@@ -210,12 +226,24 @@ def render(source, output, cut="hero", preview=False, blur=4):
                         np.zeros(3),
                         np.zeros(3),
                         np.eye(3).ravel(),
-                        np.array([0.82, 0.62, 1.0, 1.0]),
+                        np.array(
+                            [1.0, 0.12, 0.20, 1.0]
+                            if style == "industrial"
+                            else [0.82, 0.62, 1.0, 1.0]
+                        ),
                     )
-                    mujoco.mjv_connector(g, mujoco.mjtGeom.mjGEOM_LINE, 1.5, a, b)
+                    mujoco.mjv_connector(
+                        g,
+                        mujoco.mjtGeom.mjGEOM_LINE,
+                        2.8 if style == "industrial" else 1.5,
+                        a,
+                        b,
+                    )
                     g.emission = 0.2
                     g.category = int(mujoco.mjtCatBit.mjCAT_DECOR)
                     renderer.scene.ngeom += 1
+            if style == "industrial":
+                industrial(renderer.scene, m, d, report, camera_position)
             pictures.append(renderer.render().astype(np.float32))
         im = Image.fromarray(np.uint8(np.clip(np.mean(pictures, axis=0), 0, 255)))
         draw = ImageDraw.Draw(im, "RGBA")
@@ -233,7 +261,9 @@ def render(source, output, cut="hero", preview=False, blur=4):
         draw.rounded_rectangle((38, 32, 554, 101), radius=14, fill=(6, 14, 25, 205))
         draw.text(
             (60, 50),
-            "MICRODUCK / NEON ESCAPE II",
+            "MICRODUCK / REACTIVE CHASE"
+            if report.get("predictive")
+            else "MICRODUCK / NEON ESCAPE II",
             font=font(25, True),
             fill=(233, 242, 250),
         )
@@ -268,6 +298,19 @@ def render(source, output, cut="hero", preview=False, blur=4):
                     + action,
                     font=font(26, True),
                     fill=(57, 235, 222),
+                    stroke_width=2,
+                    stroke_fill=(5, 10, 18),
+                )
+            route_events = [
+                e for e in prior if e["type"] == "ROUTE_PREVIEW" and t - e["t"] < 0.9
+            ]
+            if route_events:
+                side = "LEFT" if route_events[-1]["target_y"] > 0 else "RIGHT"
+                draw.text(
+                    (60, 165),
+                    "LOCAL PLAN / PASS " + side,
+                    font=font(25, True),
+                    fill=(65, 230, 210),
                     stroke_width=2,
                     stroke_fill=(5, 10, 18),
                 )
@@ -367,6 +410,19 @@ def render(source, output, cut="hero", preview=False, blur=4):
                     font=font(21),
                     fill=(207, 222, 235),
                 )
+            if "LOCAL PHYSICS PREVIEW" in clip.title:
+                predictions = [
+                    p for p in report.get("forecasts", []) if p["kind"] == "sweeper"
+                ]
+                if predictions:
+                    ms = sum(c["wall_ms"] for c in predictions[-1]["candidates"])
+                    draw.rectangle((50, 975, 1870, 1035), fill=(5, 14, 26, 255))
+                    draw.text(
+                        (62, 984),
+                        f"Privileged simulator state + local physics model / {ms:.0f} ms planning / not camera perception",
+                        font=font(22),
+                        fill=(207, 222, 235),
+                    )
             if clip.title == "REPRODUCIBLE INPUT REPLAY":
                 draw.rounded_rectangle(
                     (280, 220, 1640, 690), radius=24, fill=(5, 14, 26, 235)
@@ -385,7 +441,15 @@ def render(source, output, cut="hero", preview=False, blur=4):
                         f"Ground/self max overlap: {contacts['categories']['duck_floor']['max_penetration_m'] * 1000:.3f} / {contacts['categories'].get('duck_self', {}).get('max_penetration_m', 0) * 1000:.3f} mm",
                         28,
                     ),
-                    ("Real void. Finite-force props. Motor-policy recovery.", 28),
+                    (
+                        "Real void. Finite-force props. "
+                        + (
+                            "Motor-policy recovery."
+                            if goal == "stunts"
+                            else "Reactive escape; no staged knockdown."
+                        ),
+                        26,
+                    ),
                     (
                         "Selected development run; see README for unseen-seed outcomes.",
                         25,
@@ -420,7 +484,9 @@ def render(source, output, cut="hero", preview=False, blur=4):
                 (3.0, "chase"),
                 (sum(timeline.skills["ROLL_CENTER"]) / 2, "roll"),
                 (timeline.flight["start"] + 0.08, "jump"),
-                (timeline.fall + 0.4, "impact"),
+                (timeline.fall + 0.4, "impact")
+                if np.isfinite(timeline.fall)
+                else (timeline.route + 1.2, "dodge"),
                 (timeline.door + 0.2, "finish"),
             ]
             sheet = Image.new("RGB", (1920, 1080))
@@ -524,20 +590,23 @@ def render(source, output, cut="hero", preview=False, blur=4):
             ).hexdigest(),
             video_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
             cut=cut,
+            style=style,
             fps=fps,
             frames=frames,
             duration_s=frames / fps,
             resolution=[width, height],
             brain=report["brain"],
-            core_physical_gates=report["passed"],
-            contact_publication_gate=contacts.get("publication_gate"),
+            evaluation_goal=goal,
+            core_physical_gates=core_passed,
+            full_stunt_gate=report["passed"],
+            contact_publication_gate=contacts.get(gate_key),
             full_contact_audit_sha256=hashlib.sha256(
                 (source / "all-contacts.json").read_bytes()
             ).hexdigest(),
             input_replay_sha256=hashlib.sha256(
                 (source / "replay.json").read_bytes()
             ).hexdigest(),
-            qualification_scope="Selected full-stunt simulation, not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim",
+            qualification_scope="Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
             clips=rendered,
             motion_blur="4 nearest actual 200 Hz states at -6/-2/+2/+6 ms; no joint interpolation"
             if blur == 4
@@ -558,4 +627,6 @@ if __name__ == "__main__":
     p.add_argument("--cut", choices=["hero", "technical"], default="hero")
     p.add_argument("--preview", action="store_true")
     p.add_argument("--blur", type=int, choices=[1, 4], default=4)
+    p.add_argument("--style", choices=["classic", "industrial"], default="classic")
+    p.add_argument("--goal", choices=["stunts", "escape"], default="stunts")
     render(**vars(p.parse_args()))

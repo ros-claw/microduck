@@ -111,7 +111,9 @@ def test_prefetch_holds_answer_until_completion_and_revalidates():
     assert loop.poll("crate1", ["TAKE_LEFT_ROUTE"], completed=False) is None
     # The route became obstructed while the current skill was still executing.
     assert loop.poll("crate1", ["BRAKE_AND_WAIT"], completed=True) is None
-    assert loop.records[-1]["status"] == "invalid_at_handoff"
+    assert loop.records[-1]["status"] == "deferred_at_handoff"
+    assert loop.poll("crate1", ["TAKE_LEFT_ROUTE"], completed=True) == "TAKE_LEFT_ROUTE"
+    assert loop.records[-1]["status"] == "accepted"
     loop.close()
 
 
@@ -200,3 +202,19 @@ def test_live_envelopes_reject_native_soft_ground():
     driver = HazardDriver(level.hazards)
     with pytest.raises(ValueError, match="physical profile"):
         EncounterBrain(m, d, r, track, level, driver, mode="jev")
+
+
+def test_deferred_tactic_expires_and_cannot_cross_encounters():
+    import time
+    from microduck_lab.parkour.tactics import RollingHorizon
+
+    loop = RollingHorizon(None)
+    result = {"action": "TAKE_LEFT_ROUTE"}
+    loop.ready = (result, "crate", time.monotonic() - 0.5)
+    assert loop.poll("crate", ["BRAKE_AND_WAIT"], completed=True) is None
+    assert loop.ready is None
+    assert loop.records[-1]["status"] == "invalid_at_handoff"
+    loop.ready = (result, "crate", time.monotonic())
+    assert loop.poll("gap", ["TAKE_LEFT_ROUTE"], completed=True) is None
+    assert loop.ready is None
+    loop.close()

@@ -15,6 +15,12 @@ from ..parkour.skills import Maneuver, lane_command, roll_entry_ready
 from ..parkour.jump import CandidateJump, GapAudit
 from ..parkour.audit import Audit, PropAudit
 from ..parkour.encounters import EncounterBrain
+from ..parkour.preview import (
+    GapSequence,
+    choose_gap_sequence,
+    choose_sweeper_route,
+    sweeper_command,
+)
 
 
 def run(
@@ -33,6 +39,8 @@ def run(
     sweeper_height=0.16,
     sweeper_speed=-3.0,
     sweeper_torque=0.10,
+    predictive=False,
+    difficulty="classic",
 ):
     output = Path(output)
     if (output / "audit.json").exists():
@@ -53,6 +61,7 @@ def run(
             snapshot.add(path, arcname=str(path.relative_to(repository)))
     m, d, r, track, level = build_level(
         seed,
+        difficulty=difficulty,
         duck_floor_ref=duck_floor_ref,
         hard_contacts=hard_contacts,
         sweeper_phase=sweeper_phase,
@@ -82,6 +91,8 @@ def run(
     trace = []
     trajectory = []
     results = []
+    forecasts = []
+    gap_planned = False
     return_stage = None
     finished = False
     launch_stable = 0.0
@@ -137,7 +148,7 @@ def run(
                     )
                 status = (
                     skill.update(m, d, r, gap_audit)
-                    if isinstance(skill, CandidateJump)
+                    if isinstance(skill, (CandidateJump, GapSequence))
                     else skill.update(m, d, r)
                 )
                 if status != "RUNNING":
@@ -169,6 +180,26 @@ def run(
                         stage = "GAP_POSITION"
                     elif stage == "JUMP":
                         stage = "SWEEPER"
+                        if predictive:
+                            escape_y, candidates = choose_sweeper_route(
+                                m, d, r, driver, hazards["sweeper"].x
+                            )
+                            forecasts.append(
+                                dict(
+                                    t=float(d.time),
+                                    kind="sweeper",
+                                    candidates=candidates,
+                                    accepted=any(c["passed"] for c in candidates),
+                                )
+                            )
+                            events.append(
+                                dict(
+                                    type="ROUTE_PREVIEW",
+                                    t=float(d.time),
+                                    target_y=escape_y,
+                                    accepted=any(c["passed"] for c in candidates),
+                                )
+                            )
                     elif stage == "RECOVER":
                         stage = return_stage
                         escape_y = (
@@ -188,6 +219,9 @@ def run(
                     else 0.0,
                     0.7,
                 )
+                if predictive and stage == "SWEEPER":
+                    r.bank.mirror_run = escape_y < 0
+                    r.command[:3] = sweeper_command(r, escape_y)
                 if stage in ("PLAN_BAR", "PLAN_CRATE", "PLAN_GAP"):
                     encounter = {
                         "PLAN_BAR": "bar",
@@ -211,10 +245,11 @@ def run(
                         elif encounter == "gap":
                             stage = "GAP_APPROACH"
                         else:
-                            route_y = (
+                            route_y = tactical.route_envelopes[action].get(
+                                "target_y_m",
                                 track.lane_width
                                 if action == "TAKE_LEFT_ROUTE"
-                                else -track.lane_width
+                                else -track.lane_width,
                             )
                             stage = "DODGE"
                             start(action, route_y)
@@ -232,6 +267,36 @@ def run(
                         0.0,
                         forward_speed=0.45 if hard_contacts else 0.7,
                     )
+                elif (
+                    predictive
+                    and stage == "GAP_APPROACH"
+                    and not gap_planned
+                    and x >= level.gaps[0][0] - 0.30
+                ):
+                    gap_planned = True
+                    plan, candidates = choose_gap_sequence(m, d, r, level.gaps[0][1])
+                    forecasts.append(
+                        dict(
+                            t=float(d.time),
+                            kind="gap",
+                            candidates=candidates,
+                            accepted=plan is not None,
+                        )
+                    )
+                    events.append(
+                        dict(
+                            type="PHYSICAL_FORECAST",
+                            t=float(d.time),
+                            accepted=plan is not None,
+                            wall_ms=sum(c["wall_ms"] for c in candidates),
+                        )
+                    )
+                    if plan is not None:
+                        stage = "JUMP"
+                        skill = GapSequence(
+                            float(d.time), level.gaps[0][1], plan, r.trunk_pos()
+                        )
+                        skill.update(m, d, r, gap_audit)
                 elif stage == "GAP_APPROACH" and x >= level.gaps[0][0] - 0.26:
                     stage = "BRAKE"
                     start("BRAKE_AND_WAIT")
@@ -379,6 +444,9 @@ def run(
         source_archive_sha256=hashlib.sha256(
             (output / "source.tar.gz").read_bytes()
         ).hexdigest(),
+        predictive=predictive,
+        difficulty=difficulty,
+        forecasts=forecasts,
         hard_contacts=hard_contacts,
         roll_policy_sha256=hashlib.sha256(
             Path(r.bank.paths["roulade"]).read_bytes()
@@ -500,4 +568,6 @@ if __name__ == "__main__":
     p.add_argument("--duck-floor-ref", type=float, default=None)
     p.add_argument("--hard-contacts", action="store_true")
     p.add_argument("--roll-policy")
+    p.add_argument("--predictive", action="store_true")
+    p.add_argument("--difficulty", choices=["classic", "chase"], default="classic")
     run(**vars(p.parse_args()))

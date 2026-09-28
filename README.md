@@ -20,6 +20,16 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
+## Reactive Chase: state-dependent routes
+
+[Methods and complete evaluation](docs/REACTIVE_CHASE.md): Jev selects encounters; a local physics model previews gap transitions and sweeper routes; existing learned motor policies execute them. Drop-zone positions vary and the sphere pursues more closely. Two selected live records choose opposite routes and escape in 17.6/17.9 simulation seconds with full HP.
+
+Frozen six-seed test: **5/6 valid escapes; 3/6 meet all publication contact limits**. Preview uses privileged simulator state, not vision. Local planning took up to about 5 seconds in the selected run; films show simulation time and do not certify real-time hardware performance. A 20 cm / 1.2 s quick dodge is still unqualified.
+
+[![Reactive Chase — live Jev and model-based execution](out/microduck_neon_escape_v3_reactive_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4)
+
+[Action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4) · [Technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_evidence.tar.gz)
+
 ## Neon Escape: independent physical arcade prototype
 
 [Gameplay and methods](docs/NEON_ESCAPE.md): real Jev tactical decisions drive existing motor policies through a seeded obstacle course, including a verified forward roll. One recorded run finishes cleanly in 39.98 seconds; failures and baseline comparisons are published alongside it. Gap jumping and general fall recovery remain unvalidated.

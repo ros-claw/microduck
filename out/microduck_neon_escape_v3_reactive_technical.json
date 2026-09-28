@@ -1,0 +1,113 @@
+{
+  "source": "artifacts/neon-escape-v3/final-dev-12",
+  "source_audit_sha256": "6ab16c38d14cdd6bbe8ac7fb3e8b578ae3e5c7fd130e2e2bdad33c8a6d8a5860",
+  "video_sha256": "c8bc4bbf922ce662bd39c76d707d6eff4e83aded14293688669834fe65813ccf",
+  "cut": "technical",
+  "style": "industrial",
+  "fps": 50,
+  "frames": 3004,
+  "duration_s": 60.08,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "jev",
+  "evaluation_goal": "escape",
+  "core_physical_gates": true,
+  "full_stunt_gate": false,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "a44664d7a5c66525021aab2450a8f01d6e1ab49d8394a6d64a3637796cc813a5",
+  "input_replay_sha256": "99526bb3a8601a7efeadfed85e47c5cc5e56201402f5c17f15f00b4da4f187d7",
+  "qualification_scope": "Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
+  "clips": [
+    {
+      "start": 2.0,
+      "stop": 2.0,
+      "speed": 1.0,
+      "shot": "wide",
+      "title": "A TACTICAL MODEL. A PHYSICAL BODY.",
+      "output_start": 0.0,
+      "frames": 200
+    },
+    {
+      "start": 0.0002,
+      "stop": 20.249399999982746,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "CONTINUOUS RECORDED RUN",
+      "output_start": 4.0,
+      "frames": 1013
+    },
+    {
+      "start": 2.9699999999996893,
+      "stop": 5.520000000002378,
+      "speed": 0.35,
+      "shot": "roll",
+      "title": "MOVING ROLL / completion from rotation + foot support",
+      "output_start": 24.26,
+      "frames": 365
+    },
+    {
+      "start": 7.840000000007907,
+      "stop": 9.49000000000491,
+      "speed": 1.0,
+      "shot": "dodge",
+      "title": "LANE CHANGE / feedback steering, no root translation",
+      "output_start": 31.560000000000002,
+      "frames": 83
+    },
+    {
+      "start": 10.460000000001834,
+      "stop": 12.49999999999801,
+      "speed": 0.35,
+      "shot": "jump",
+      "title": "LONG JUMP / a real 15 cm void",
+      "output_start": 33.22,
+      "frames": 292
+    },
+    {
+      "start": 12.299999999998011,
+      "stop": 15.799999999998011,
+      "speed": 1.0,
+      "shot": "dodge",
+      "title": "LOCAL PHYSICS PREVIEW / choose a route around the moving arm",
+      "output_start": 39.06,
+      "frames": 175
+    },
+    {
+      "start": 6.970200000006494,
+      "stop": 8.070200000006494,
+      "speed": 1.0,
+      "shot": "boss",
+      "title": "BOSS / opens a hinged obstacle with contact force",
+      "output_start": 42.56,
+      "frames": 56
+    },
+    {
+      "start": 18.349399999982747,
+      "stop": 19.649399999982748,
+      "speed": 0.4,
+      "shot": "finish",
+      "title": "CLOSED DOOR / sphere stopped by a real contact",
+      "output_start": 43.68,
+      "frames": 163
+    },
+    {
+      "start": 20.249399999982746,
+      "stop": 20.249399999982746,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "REPRODUCIBLE INPUT REPLAY",
+      "output_start": 46.94,
+      "frames": 657
+    }
+  ],
+  "motion_blur": "off",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained."
+}

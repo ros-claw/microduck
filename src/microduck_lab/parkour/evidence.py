@@ -17,10 +17,12 @@ def verify_capture(source, manifest):
             raise ValueError("Capture checksum mismatch: " + name)
 
 
-def contact_gate(categories, warnings):
+def contact_gate(categories, warnings, require_hazard_contact=True):
     """Conservative publication gate: no ignored native-floor/self contacts."""
     failures = []
-    for name in ("duck_floor", "duck_hazard"):
+    for name in (
+        ("duck_floor", "duck_hazard") if require_hazard_contact else ("duck_floor",)
+    ):
         if name not in categories or categories[name]["samples"] == 0:
             failures.append(name + ": missing force-bearing contact evidence")
     for name, row in categories.items():
@@ -39,5 +41,6 @@ def contact_gate(categories, warnings):
     return dict(
         passed=not failures,
         failures=failures,
+        requires_hazard_contact=require_hazard_contact,
         scope="Every force-bearing contact category, including native ground and self-contact",
     )

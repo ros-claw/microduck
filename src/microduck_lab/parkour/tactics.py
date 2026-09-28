@@ -108,9 +108,11 @@ class TacticalClient(JevClient):
 
 
 class RollingHorizon:
-    def __init__(self, client, deadline=1.5):
+    def __init__(self, client, deadline=1.5, handoff_grace=0.35):
         self.client = client
         self.deadline = deadline
+        self.handoff_grace = handoff_grace
+        self.deferred = False
         self.pool = ThreadPoolExecutor(max_workers=1)
         self.future = None
         self.ready = None
@@ -142,6 +144,7 @@ class RollingHorizon:
                     status = "uncertain"
                 if status == "ready":
                     self.ready = (result, self.encounter_id, now)
+                    self.deferred = False
                 self.records.append(
                     dict(
                         status=status,
@@ -158,6 +161,24 @@ class RollingHorizon:
         if self.ready is None or not completed:
             return None
         result, requested_id, received = self.ready
+        # A gait transition can briefly leave a measured entry envelope. Keep
+        # the existing answer for a bounded window, rechecking every handoff;
+        # never execute it while illegal or extend the freshness deadline.
+        if (
+            requested_id == encounter_id
+            and result["action"] not in legal
+            and now - received < self.handoff_grace
+        ):
+            if not self.deferred:
+                self.records.append(
+                    dict(
+                        status="deferred_at_handoff",
+                        encounter=encounter_id,
+                        action=result["action"],
+                    )
+                )
+                self.deferred = True
+            return None
         self.ready = None
         valid = (
             requested_id == encounter_id

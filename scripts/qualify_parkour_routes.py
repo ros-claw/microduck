@@ -7,13 +7,19 @@ import argparse, hashlib, itertools, json
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import mujoco, numpy as np
-from microduck_lab.parkour.world import build_world, geom_vertices, foot_support
+from microduck_lab.parkour.world import (
+    build_world,
+    geom_vertices,
+    foot_support,
+    duck_bounds,
+)
 from microduck_lab.parkour.hazards import Hazard
 from microduck_lab.parkour.skills import Maneuver, lane_command
 
 
 def trial(job):
-    y0, vcommand, side, seed = job
+    y0, vcommand, side, seed, *extra = job
+    target_offset = extra[0] if extra else 0.20
     m, d, r, tr = build_world(
         hard_contacts=True, hazards=[Hazard("distant", "sweeper", 9.0, z=0.2)]
     )
@@ -30,9 +36,10 @@ def trial(job):
     start = r.trunk_pos().copy()
     velocity = r.trunk_linvel().copy()
     action = "TAKE_LEFT_ROUTE" if side > 0 else "TAKE_RIGHT_ROUTE"
-    skill = Maneuver(action, float(d.time), target_y=side * tr.lane_width)
+    skill = Maneuver(action, float(d.time), target_y=side * target_offset)
     geometry = [g for g in range(m.ngeom) if m.geom(g).name.endswith("/hazard_proxy")]
     path = []
+    support_path = []
     minup = 1.0
     done = None
     for i in range(160):
@@ -45,6 +52,10 @@ def trial(job):
                 (points.max(0) - start).tolist(),
             ]
         )
+        foot_low, foot_high = duck_bounds(m, d, feet_only=True)
+        support_path.append(
+            [i * 0.02, (foot_low - start).tolist(), (foot_high - start).tolist()]
+        )
         minup = min(minup, float(d.xmat[r.trunk_body_id, 8]))
         if status != "RUNNING":
             done = float(d.time) - skill.started
@@ -54,6 +65,7 @@ def trial(job):
         if r.trunk_pos()[2] < -0.2:
             break
     return dict(
+        target_y_m=side * target_offset,
         entry_y=y0,
         entry_command=vcommand,
         side=side,
@@ -67,6 +79,7 @@ def trial(job):
         min_up=minup,
         end=r.trunk_pos().tolist(),
         path=path,
+        support_path=support_path,
     )
 
 
@@ -102,6 +115,18 @@ def build(rows):
                 low = np.min([b[1] for b in box], axis=0) - 0.015
                 high = np.max([b[2] for b in box], axis=0) + 0.015
                 path.append([round(i * 0.02, 3), low.tolist(), high.tolist()])
+            support_path = []
+            for i in range(n):
+                box = [
+                    r["support_path"][min(i, len(r["support_path"]) - 1)] for r in group
+                ]
+                support_path.append(
+                    [
+                        round(i * 0.02, 3),
+                        (np.min([b[1] for b in box], axis=0) - 0.015).tolist(),
+                        (np.max([b[2] for b in box], axis=0) + 0.015).tolist(),
+                    ]
+                )
             entries.append(
                 dict(
                     entry_y_m=y,
@@ -118,9 +143,17 @@ def build(rows):
                     development_seeds=3,
                     transfer_margin_m=0.015,
                     path=path,
+                    support_path=support_path,
                 )
             )
-        out[action] = dict(entries=entries)
+        targets = {
+            r.get("target_y_m", 0.2 if action == "TAKE_LEFT_ROUTE" else -0.2)
+            for r in rows
+            if r["action"] == action
+        }
+        if len(targets) != 1:
+            raise ValueError("Mixed route targets")
+        out[action] = dict(entries=entries, target_y_m=targets.pop())
     return out
 
 
@@ -129,13 +162,17 @@ if __name__ == "__main__":
     p.add_argument("--output", required=True)
     p.add_argument("--entry-ys", nargs="+", type=float, default=[-0.15, 0.0, 0.15])
     p.add_argument("--entry-speeds", nargs="+", type=float, default=[0.0, 0.7])
+    p.add_argument("--target-offset", type=float, default=0.2)
     a = p.parse_args()
     target = Path(a.output)
     target.mkdir(parents=True, exist_ok=False)
     rows = []
     with ProcessPoolExecutor(max_workers=4) as pool:
         for row in pool.map(
-            trial, itertools.product(a.entry_ys, a.entry_speeds, [-1, 1], range(3))
+            trial,
+            itertools.product(
+                a.entry_ys, a.entry_speeds, [-1, 1], range(3), [a.target_offset]
+            ),
         ):
             rows.append(row)
             print(

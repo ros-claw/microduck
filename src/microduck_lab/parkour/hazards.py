@@ -18,6 +18,7 @@ class Hazard:
     rotor_mass: float = 0.04
     drive_torque: float = 0.025
     phase: float = 0.0
+    centering_force: float = 0.0
 
     def add_to(self, spec):
         b = spec.worldbody.add_body(name=self.name, pos=[self.x, self.y, self.z])
@@ -214,3 +215,10 @@ class HazardDriver:
                 adr = m.jnt_dofadr[m.joint(h.name + "/free").id]
                 # A bounded physical drive force; collisions and gravity determine motion.
                 d.xfrc_applied[bid, 0] = np.clip(4 * (h.speed - d.qvel[adr]), -0.5, 1.0)
+                # Bounded lateral traction recenters the sphere after impacts;
+                # without it the narrowing bay can trap an off-center boss.
+                d.xfrc_applied[bid, 1] = np.clip(
+                    -2 * d.body(h.name).xpos[1] - 1.2 * d.qvel[adr + 1],
+                    -h.centering_force,
+                    h.centering_force,
+                )

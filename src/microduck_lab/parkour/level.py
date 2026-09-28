@@ -22,12 +22,16 @@ def generate(
     sweeper_height=0.16,
     sweeper_speed=-3.0,
     sweeper_torque=0.10,
+    difficulty="classic",
 ):
+    if difficulty not in ("classic", "chase"):
+        raise ValueError("Unknown difficulty")
     rng = np.random.default_rng(seed)
+    crate_y = float(rng.choice([-0.12, 0.12])) if difficulty == "chase" else 0.0
     jitter = lambda: float(rng.uniform(-0.025, 0.025))
     hazards = (
         Hazard("bar", "push_bar", 0.9 + jitter(), z=0.27),
-        Hazard("crate", "crate", 1.85 + jitter(), z=0.65),
+        Hazard("crate", "crate", 1.85 + jitter(), y=crate_y, z=0.65),
         Hazard(
             "sweeper",
             "sweeper",
@@ -39,7 +43,14 @@ def generate(
             phase=sweeper_phase,
             drive_torque=sweeper_torque,
         ),
-        Hazard("boss", "boulder", -2.7, z=0.8, speed=0.40),
+        Hazard(
+            "boss",
+            "boulder",
+            -2.4 if difficulty == "chase" else -2.7,
+            z=0.8,
+            speed=0.44 if difficulty == "chase" else 0.40,
+            centering_force=0.35 if difficulty == "chase" else 0.0,
+        ),
         Hazard("portal", "finish_gate", 5.5, z=0.905),
     )
     return Level(seed, hazards, ((3.0, 3.15),), 5.8)

@@ -80,6 +80,9 @@ def audit(source):
     )
     result["capture"] = report["capture"]
     result["publication_gate"] = contact_gate(result["categories"], result["warnings"])
+    result["escape_contact_gate"] = contact_gate(
+        result["categories"], result["warnings"], require_hazard_contact=False
+    )
     (source / "all-contacts.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result["categories"], indent=2))
 
