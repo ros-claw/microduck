@@ -34,12 +34,21 @@ def trial(job):
     replay(output)
     audit(output)
     contacts = json.loads((output / "all-contacts.json").read_text())
+    causal = None
+    if options["difficulty"] == "arcade":
+        from audit_arcade_causality import audit as causal_audit
+
+        causal = causal_audit(output)
     return dict(
+        bowling=report.get("bowling"),
+        encounter_combo=report.get("encounter_combo"),
+        causal_passed=causal["passed"] if causal else None,
         seed=seed,
         stunt_gate=report["passed"],
         publication_passed=report["passed"] and contacts["publication_gate"]["passed"],
         escape_publication_passed=report["component_course_passed"]
-        and contacts["escape_contact_gate"]["passed"],
+        and contacts["escape_contact_gate"]["passed"]
+        and (causal is None or causal["passed"]),
         component_course_passed=report["component_course_passed"],
         stage=report["stage"],
         finished=report["finished"],
@@ -71,7 +80,9 @@ if __name__ == "__main__":
     p.add_argument("--sweeper-torque", type=float, default=0.2)
     p.add_argument("--hard-contacts", action="store_true")
     p.add_argument("--predictive", action="store_true")
-    p.add_argument("--difficulty", choices=["classic", "chase"], default="classic")
+    p.add_argument(
+        "--difficulty", choices=["classic", "chase", "arcade"], default="classic"
+    )
     p.add_argument("--workers", type=int, default=3)
     a = p.parse_args()
     target = Path(a.output).resolve()
@@ -87,6 +98,7 @@ if __name__ == "__main__":
             "validate_parkour_unseen.py",
             "audit_parkour_contacts.py",
             "replay_parkour_run.py",
+            "audit_arcade_causality.py",
         ]
     ]
     manifest = digest(files)

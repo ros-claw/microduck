@@ -14,6 +14,36 @@ from .world import foot_support
 from .skills import lane_command
 
 
+class SelfContactPreview:
+    def __init__(self, m):
+        self.duck = tuple(
+            m.body(m.geom_bodyid[g]).name.startswith("duck/") for g in range(m.ngeom)
+        )
+        self.depths = []
+        self.force = np.zeros(6)
+
+    def sample(self, m, d):
+        for i, c in enumerate(d.contact):
+            if self.duck[c.geom1] and self.duck[c.geom2]:
+                mujoco.mj_contactForce(m, d, i, self.force)
+                if self.force[0] > 1e-7:
+                    self.depths.append(max(0, -float(c.dist)))
+
+    def report(self):
+        return dict(
+            samples=len(self.depths),
+            max_penetration_m=max(self.depths, default=0),
+            p99_penetration_m=float(np.quantile(self.depths, 0.99))
+            if self.depths
+            else 0,
+            sampling_step_s=0.0002,
+        )
+
+    def passed(self):
+        row = self.report()
+        return row["max_penetration_m"] < 0.0015 and row["p99_penetration_m"] < 0.001
+
+
 def preview_jump(
     m,
     d,
@@ -24,6 +54,7 @@ def preview_jump(
     forward_speed=0.45,
     brake_s=0.0,
     settle_s=0.0,
+    strict_self=False,
 ):
     started = time.perf_counter()
     predicted = copy.copy(d)
@@ -34,12 +65,22 @@ def preview_jump(
         setattr(runtime, name, getattr(r, name).copy())
     runtime.bank.mirror_run = False
     runtime.joint_vel_delay = 0
+    self_contact = SelfContactPreview(m) if strict_self else None
+
+    def advance():
+        if self_contact is None:
+            mujoco.mj_step(m, predicted, 100)
+        else:
+            for _ in range(100):
+                mujoco.mj_step(m, predicted)
+                self_contact.sample(m, predicted)
+
     for _ in range(round(prepare_s / 0.02)):
         runtime.active_policy = "run"
         runtime.set_command()
         runtime.command[:3] = lane_command(runtime, 0.0, forward_speed)
         runtime.step()
-        mujoco.mj_step(m, predicted, 100)
+        advance()
     for policy, seconds in [("run", brake_s), ("stand", settle_s)]:
         for _ in range(round(seconds / 0.02)):
             runtime.active_policy = policy
@@ -47,7 +88,7 @@ def preview_jump(
             if policy == "run":
                 runtime.command[2] = np.clip(-4 * runtime.trunk_yaw(), -2.5, 2.5)
             runtime.step()
-            mujoco.mj_step(m, predicted, 100)
+            advance()
     launch_position = runtime.trunk_pos().copy()
     floor_id = m.geom("floor/0").id
     near_edge = float(predicted.geom_xpos[floor_id, 0] + m.geom_size[floor_id, 0])
@@ -76,7 +117,7 @@ def preview_jump(
         runtime.step()
         # Known currently applied machinery forces are held over this short
         # gap-local forecast. No future hazard event or seed is inspected.
-        mujoco.mj_step(m, predicted, 100)
+        advance()
         audit.sample(m, predicted, runtime)
         min_up = min(min_up, float(predicted.xmat[r.trunk_body_id, 8]))
         max_side = max(max_side, abs(float(runtime.trunk_pos()[1])))
@@ -90,6 +131,7 @@ def preview_jump(
         and audit.crossed
         and max_side < 0.20
         and foot_support(m, predicted, "floor/1")
+        and (self_contact is None or self_contact.passed())
     )
     return dict(
         passed=passed,
@@ -103,6 +145,7 @@ def preview_jump(
         max_abs_y_m=max_side,
         final_position=runtime.trunk_pos().tolist(),
         predicted_duration_s=float(predicted.time - d.time),
+        self_contact=self_contact.report() if self_contact else None,
         wall_ms=1000 * (time.perf_counter() - started),
     )
 
@@ -158,7 +201,7 @@ class GapSequence:
         return self.status
 
 
-def choose_gap_sequence(m, d, r, far_edge):
+def choose_gap_sequence(m, d, r, far_edge, expanded=False):
     """Bounded candidate set; stop at first acceptable physical prediction."""
     trials = []
     candidates = [
@@ -175,6 +218,22 @@ def choose_gap_sequence(m, d, r, far_edge):
     candidates = (
         longer + candidates if r.trunk_linvel()[0] < 0.2 else candidates + longer
     )
+    if expanded:
+        stable = [
+            (0.36, 0.6, 0.5),
+            (0.40, 0.6, 0.5),
+            (0.44, 0.6, 0.5),
+            (0.48, 0.6, 0.5),
+            (0.32, 0.6, 0.5),
+            (0.56, 0.6, 0.5),
+            (0.64, 0.6, 0.5),
+            (0.72, 0.6, 0.5),
+            (0.40, 0.4, 0.8),
+            (0.48, 0.4, 0.8),
+            (0.56, 0.4, 0.8),
+            (0.32, 0.4, 0.8),
+        ]
+        candidates = candidates + stable
     for advance, brake, settle in candidates:
         result = preview_jump(
             m,
@@ -185,6 +244,7 @@ def choose_gap_sequence(m, d, r, far_edge):
             forward_speed=0.45,
             brake_s=brake,
             settle_s=settle,
+            strict_self=expanded,
         )
         trials.append(result)
         if result["passed"]:
@@ -284,3 +344,130 @@ def sweeper_command(r, target):
     return lane_command(
         r, waypoint, 0.55 if abs(r.trunk_pos()[1] - waypoint) > 0.08 else 0.7
     )
+
+
+class RollSequence:
+    name = "ROLL_CENTER"
+
+    def __init__(self, started, plan, position):
+        self.started = started
+        self.plan = plan
+        self.launch_position = position.copy()
+        self.tick = 0
+        self.roll = None
+        self.status = "RUNNING"
+        self.phase = "BRAKE"
+        self.events = []
+
+    def update(self, m, d, r):
+        from .skills import Maneuver
+
+        brake = round(self.plan["brake_s"] / 0.02)
+        settle = round(self.plan["settle_s"] / 0.02)
+        r.bank.mirror_run = False
+        r.joint_vel_delay = 0
+        r.set_command()
+        if self.tick < brake + settle:
+            if self.tick < brake:
+                self.phase = "BRAKE"
+                r.active_policy = "run"
+                r.command[2] = np.clip(-4 * r.trunk_yaw(), -2.5, 2.5)
+            else:
+                self.phase = "SETTLE"
+                r.active_policy = "stand"
+            self.tick += 1
+            return self.status
+        if self.roll is None:
+            self.roll = Maneuver(self.name, float(d.time))
+            self.events.append(
+                dict(type="SKILL_START", skill=self.name, t=float(d.time))
+            )
+        self.status = self.roll.update(m, d, r)
+        self.phase = self.roll.phase
+        if self.status != "RUNNING":
+            self.events.extend(self.roll.events)
+        return self.status
+
+
+def preview_roll(m, d, r, driver, bar_x, brake_s=0, settle_s=0, strict_self=False):
+    """Validate a roll transition, including its already committed run tick."""
+    started = time.perf_counter()
+    model = copy.copy(m)
+    predicted = copy.copy(d)
+    runtime = copy.copy(r)
+    runtime.model, runtime.data = model, predicted
+    runtime.bank = copy.copy(r.bank)
+    for name in ("last_action", "command", "_jv_prev", "default_pose"):
+        setattr(runtime, name, getattr(r, name).copy())
+    machinery = copy.deepcopy(driver)
+    self_contact = SelfContactPreview(model) if strict_self else None
+    roll = RollSequence(
+        float(predicted.time),
+        dict(brake_s=brake_s, settle_s=settle_s),
+        runtime.trunk_pos(),
+    )
+    max_y = abs(float(runtime.trunk_pos()[1]))
+    max_depth = 0.0
+    for tick in range(153 + round((brake_s + settle_s) / 0.02)):
+        if tick:
+            roll.update(model, predicted, runtime)
+        machinery.step(model, predicted, float(runtime.trunk_pos()[0]))
+        runtime.step()
+        for _ in range(100):
+            mujoco.mj_step(model, predicted)
+            if self_contact:
+                self_contact.sample(model, predicted)
+            if hasattr(machinery, "sample"):
+                machinery.sample(model, predicted)
+            for i, c in enumerate(predicted.contact):
+                if c.dist >= -0.0015:
+                    continue
+                force = np.zeros(6)
+                mujoco.mj_contactForce(model, predicted, i, force)
+                if force[0] > 1e-7:
+                    max_depth = max(max_depth, -float(c.dist))
+        max_y = max(max_y, abs(float(runtime.trunk_pos()[1])))
+        if roll.status != "RUNNING" or runtime.trunk_pos()[2] < 0.03:
+            break
+    p = runtime.trunk_pos()
+    passed = bool(
+        roll.status == "SUCCESS"
+        and p[0] > bar_x + 0.12
+        and abs(p[1]) < 0.18
+        and max_y < 0.32
+        and p[2] > 0.10
+        and predicted.xmat[r.trunk_body_id, 8] > 0.95
+        and max_depth < 0.0015
+        and (self_contact is None or self_contact.passed())
+    )
+    return dict(
+        passed=passed,
+        status=roll.status,
+        final_position=p.tolist(),
+        brake_s=brake_s,
+        settle_s=settle_s,
+        max_abs_y_m=max_y,
+        max_penetration_m=max_depth,
+        rotation=roll.roll.rotation if roll.roll else 0.0,
+        self_contact=self_contact.report() if self_contact else None,
+        wall_ms=1000 * (time.perf_counter() - started),
+    )
+
+
+def choose_roll_sequence(m, d, r, driver, bar_x, strict_self=False):
+    trials = []
+    for brake, settle in [
+        (0, 0),
+        (0.4, 0.2),
+        (0.6, 0.2),
+        (0.4, 0.5),
+        (0.6, 0.5),
+        (0.8, 0.5),
+    ]:
+        result = preview_roll(
+            m, d, r, driver, bar_x, brake, settle, strict_self=strict_self
+        )
+        trials.append(result)
+        if result["passed"]:
+            return result, trials
+    return None, trials

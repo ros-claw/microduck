@@ -13,8 +13,8 @@ def replay(source):
             raise ValueError("Capture hash mismatch: " + name)
     m = mujoco.MjModel.from_binary_path(str(source / "scene.mjb"))
     d = mujoco.MjData(m)
-    inputs = np.load(source / "inputs.npz")
-    states = np.load(source / "trajectory.npz")
+    inputs = dict(np.load(source / "inputs.npz"))
+    states = dict(np.load(source / "trajectory.npz"))
     d.qpos[:] = inputs["initial_qpos"]
     d.qvel[:] = inputs["initial_qvel"]
     mujoco.mj_forward(m, d)

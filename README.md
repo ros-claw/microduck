@@ -20,6 +20,16 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
+## Strike & Escape: combined skills and a physical puzzle
+
+Roll through a bar, dodge a falling crate, jump a real void, survive a rotating arm, push a ball into three targets, then roll again through the unlocked exit. Measured physical contact changes the game state; the pursuer can knock alley guides loose. Jev selects encounters, four existing learned policies execute them, and local physics previews compare jump and exit-roll transitions.
+
+The selected historical record completes six encounters in **27.08 simulation seconds, HP 2/3**, with exact input replay, full-contact limits and independent unlock-causality proof. Initial frozen cohort: **2/6 escapes, 1/6 strict publication passes**. The final default cohort yields **2/6 strict passes**; intermediate revisions and failures are reported separately. Bowling uses physical guides; previews use privileged simulator state. A 35 s capture took 77.41 wall seconds, so this is not a real-time vision or hardware demonstration.
+
+[![Strike & Escape: physical duck–ball–target interaction](out/microduck_neon_escape_v4_strike_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4)
+
+[35 s action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [54 s details and slow motion](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_technical.mp4) · [Full replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_evidence.tar.gz) · [Bilingual methods](docs/STRIKE_ESCAPE.md) · [All cohorts and failures](artifacts/neon-escape-v4/README.md)
+
 ## Reactive Chase: state-dependent routes
 
 [Methods and complete evaluation](docs/REACTIVE_CHASE.md): Jev selects encounters; a local physics model previews gap transitions and sweeper routes; existing learned motor policies execute them. Drop-zone positions vary and the sphere pursues more closely. Two selected live records choose opposite routes and escape in 17.6/17.9 simulation seconds with full HP.

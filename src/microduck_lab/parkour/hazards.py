@@ -132,6 +132,53 @@ class Hazard:
             a.biastype = mujoco.mjtBias.mjBIAS_AFFINE
             a.forcelimited = True
             a.forcerange = [-6.0, 6.0]
+        elif self.kind == "guide":
+            b.add_freejoint(name=self.name + "/free")
+            eq = spec.add_equality(
+                name=self.name + "/hold",
+                type=mujoco.mjtEq.mjEQ_WELD,
+                objtype=mujoco.mjtObj.mjOBJ_BODY,
+                name1=self.name,
+                name2="world",
+            )
+            eq.solref = [0.002, 1.0]
+            common["rgba"] = [0.10, 0.42, 0.5, 1.0]
+            b.add_geom(
+                type=mujoco.mjtGeom.mjGEOM_CAPSULE,
+                fromto=[-self.half_width, 0, 0, self.half_width, 0, 0],
+                size=[0.012],
+                mass=0.02,
+                **common,
+            )
+        elif self.kind == "bowling_ball":
+            b.add_freejoint(name=self.name + "/free")
+            common["rgba"] = [0.08, 0.8, 0.95, 1.0]
+            common["friction"] = [0.25, 0.001, 0.00002]
+            b.add_geom(
+                type=mujoco.mjtGeom.mjGEOM_SPHERE,
+                size=[0.085],
+                mass=0.025,
+                **common,
+            )
+        elif self.kind == "pin":
+            b.add_freejoint(name=self.name + "/free")
+            common["rgba"] = [0.95, 0.94, 0.85, 1.0]
+            b.add_geom(
+                type=mujoco.mjtGeom.mjGEOM_BOX,
+                size=[0.015, 0.015, 0.065],
+                mass=0.008,
+                **common,
+            )
+            b.add_geom(
+                name=self.name + "/stripe",
+                type=mujoco.mjtGeom.mjGEOM_BOX,
+                pos=[0, 0, 0.035],
+                size=[0.0153, 0.0153, 0.008],
+                rgba=[1.0, 0.08, 0.18, 1.0],
+                mass=0.0,
+                contype=0,
+                conaffinity=0,
+            )
         elif self.kind == "boulder":
             b.add_freejoint(name=self.name + "/free")
             common["rgba"] = [0.65, 0.12, 1.0, 1.0]

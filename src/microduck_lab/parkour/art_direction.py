@@ -44,7 +44,7 @@ def industrial(scene, m, d, report, camera):
     # Only the far side is dressed with tall scenery, keeping every physical
     # obstacle visible from the active camera. Heights are deterministic art.
     far_side = -1 if camera[1] > 0 else 1
-    for i, x in enumerate(np.arange(-2.8, 7.0, 0.65)):
+    for i, x in enumerate(np.arange(-2.8, report["track"]["end"], 0.65)):
         y = far_side * (0.85 + 0.12 * (i % 3))
         h = 0.35 + 0.12 * (i % 4)
         box(scene, [x, y, h / 2], [0.10, 0.10, h / 2], [0.09, 0.12, 0.17, 1.0])
@@ -104,3 +104,23 @@ def industrial(scene, m, d, report, camera):
                 v[axis] = 0.0652
                 u[others] = v[others] = [a * 0.0652, b * 0.0652]
                 line(scene, center + R @ u, center + R @ v, (1.0, 0.48, 0.04, 1.0), 2.0)
+    if report.get("difficulty") == "arcade":
+        # Purely visual arrows sit on the existing bowling platform.
+        for x in [5.05, 5.25, 5.45]:
+            line(
+                scene, [x - 0.05, -0.035, 0.001], [x, 0, 0.001], (0.1, 0.95, 0.9, 1), 3
+            )
+            line(scene, [x, 0, 0.001], [x - 0.05, 0.035, 0.001], (0.1, 0.95, 0.9, 1), 3)
+        for i, pin in enumerate(["pin0", "pin1", "pin2"]):
+            down = any(
+                e["type"] == "PIN_DOWN" and e["pin"] == pin and e["t"] <= d.time
+                for e in report["events"]
+            )
+            color = (0.1, 0.95, 0.55, 1) if down else (0.9, 0.55, 0.08, 1)
+            line(
+                scene,
+                [6.32, -0.075 + i * 0.075, 0.001],
+                [6.37, -0.075 + i * 0.075, 0.001],
+                color,
+                7,
+            )

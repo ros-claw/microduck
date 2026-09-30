@@ -1,7 +1,7 @@
-"""V2 integration rehearsal. Rule-based development controller, not live Jev.
+"""Live/rule Neon Escape integration with actuator-only compound maneuvers.
 
-No hero-run claims are made by this runner. Candidate jumps must be explicitly
-supplied; reports preserve contact, skill failure and whole-run outcomes.
+Immutable captures retain skill outcomes, physical contacts and input-replay
+proofs. Predictive plans advance clones; they never write poses into the robot.
 """
 
 import argparse, json, hashlib, time, tarfile
@@ -20,7 +20,10 @@ from ..parkour.preview import (
     choose_gap_sequence,
     choose_sweeper_route,
     sweeper_command,
+    choose_roll_sequence,
+    RollSequence,
 )
+from ..parkour.arcade import ArcadeDriver, EncounterCombo, bowling_command
 
 
 def run(
@@ -41,6 +44,8 @@ def run(
     sweeper_torque=0.10,
     predictive=False,
     difficulty="classic",
+    legacy_handoffs=False,
+    forecast_entry_roll=False,
 ):
     output = Path(output)
     if (output / "audit.json").exists():
@@ -74,8 +79,13 @@ def run(
     r.bank.paths["jump"] = str(Path(policy).resolve())
     if roll_policy:
         r.bank.paths["roulade"] = str(Path(roll_policy).resolve())
-    driver = HazardDriver(level.hazards)
-    audit = Audit()
+    arcade = difficulty == "arcade"
+    combo_planning = arcade and not legacy_handoffs
+    driver = ArcadeDriver(level.hazards) if arcade else HazardDriver(level.hazards)
+    audit = Audit(
+        interactive_props=("playball", "pin0", "pin1", "pin2") if arcade else ()
+    )
+    combo = EncounterCombo() if arcade else None
     props = PropAudit()
     gap_audit = GapAudit()
     skill = None
@@ -85,7 +95,8 @@ def run(
     escape_y = 0.0
     inputs = []
     initial = dict(qpos=d.qpos.copy(), qvel=d.qvel.copy())
-    hazards = {h.kind: h for h in level.hazards}
+    hazards = {h.kind: h for h in reversed(level.hazards)}
+    named_hazards = {h.name: h for h in level.hazards}
     stage = "SETTLE"
     events = [dict(type="BOSS_SPAWN", t=0.0)]
     trace = []
@@ -99,6 +110,9 @@ def run(
     launch_settling = False
     launch_pulse_until = 0.0
     launch_brake_until = 0.0
+    bowl_watch_started = None
+    exit_roll_planned = False
+    first_roll_planned = False
 
     def start(name, target_y=0.0, forward_speed=0.7):
         nonlocal skill
@@ -200,6 +214,8 @@ def run(
                                     accepted=any(c["passed"] for c in candidates),
                                 )
                             )
+                    elif stage == "EXIT_ROLL":
+                        stage = "FINISH"
                     elif stage == "RECOVER":
                         stage = return_stage
                         escape_y = (
@@ -222,13 +238,53 @@ def run(
                 if predictive and stage == "SWEEPER":
                     r.bank.mirror_run = escape_y < 0
                     r.command[:3] = sweeper_command(r, escape_y)
-                if stage in ("PLAN_BAR", "PLAN_CRATE", "PLAN_GAP"):
+                if arcade and stage in ("BOWLING", "EXIT_BAR"):
+                    r.command[:3] = bowling_command(r, m, d)
+                if arcade and stage == "BOWL_OBSERVE":
+                    r.bank.mirror_run = False
+                    r.set_command()
+                    if np.linalg.norm(r.trunk_linvel()[:2]) < 0.04:
+                        r.active_policy = "stand"
+                if arcade and stage == "RECENTER_CRATE":
+                    r.bank.mirror_run = y > 0
+                    r.command[:3] = lane_command(r, 0.0, 0.40)
+                    if abs(y) < 0.10 and abs(r.trunk_yaw()) < 0.25:
+                        stage = "PLAN_CRATE"
+                        r.set_command()
+                if arcade and stage == "SWEEPER" and x > hazards["sweeper"].x - 0.12:
+                    tactical.prepare("bowling", remaining=0.7)
+                if (
+                    arcade
+                    and stage == "BOWL_OBSERVE"
+                    and len(driver.bowling.toppled) >= 2
+                ):
+                    tactical.prepare("exit_bar", remaining=0.7)
+                if stage in (
+                    "PLAN_BAR",
+                    "PLAN_CRATE",
+                    "PLAN_GAP",
+                    "PLAN_BOWL",
+                    "PLAN_EXIT_BAR",
+                ):
                     encounter = {
                         "PLAN_BAR": "bar",
                         "PLAN_CRATE": "crate",
                         "PLAN_GAP": "gap",
+                        "PLAN_BOWL": "bowling",
+                        "PLAN_EXIT_BAR": "exit_bar",
                     }[stage]
-                    action = tactical.prepare(encounter, handoff=True)
+                    if arcade and encounter == "crate" and abs(y) > 0.17:
+                        stage = "RECENTER_CRATE"
+                        events.append(
+                            dict(
+                                type="HANDOFF_REALIGN",
+                                t=float(d.time),
+                                entry_y=float(y),
+                            )
+                        )
+                        action = None
+                    else:
+                        action = tactical.prepare(encounter, handoff=True)
                     r.command[:3] = 0.0
                     if action == "BRAKE_AND_WAIT":
                         events.append(
@@ -240,7 +296,18 @@ def run(
                         )
                         tactical.selected.pop(encounter, None)
                     elif action is not None:
-                        if encounter == "bar":
+                        if encounter == "exit_bar":
+                            stage = "EXIT_BAR"
+                        elif encounter == "bowling":
+                            stage = "BOWLING"
+                            events.append(
+                                dict(
+                                    type="SKILL_START",
+                                    t=float(d.time),
+                                    skill="PUSH_BALL",
+                                )
+                            )
+                        elif encounter == "bar":
                             stage = "BAR"
                         elif encounter == "gap":
                             stage = "GAP_APPROACH"
@@ -253,10 +320,41 @@ def run(
                             )
                             stage = "DODGE"
                             start(action, route_y)
-                elif stage == "BAR" and (
-                    roll_entry_ready(m, d, r, hazards["push_bar"].x)
-                    if hard_contacts
-                    else x >= hazards["push_bar"].x - 0.37
+                elif (
+                    combo_planning
+                    and forecast_entry_roll
+                    and stage == "BAR"
+                    and not first_roll_planned
+                    and x >= hazards["push_bar"].x - 0.40
+                ):
+                    first_roll_planned = True
+                    plan, candidates = choose_roll_sequence(
+                        m, d, r, driver, hazards["push_bar"].x, strict_self=True
+                    )
+                    forecasts.append(
+                        dict(
+                            t=float(d.time),
+                            kind="entry_roll",
+                            candidates=candidates,
+                            accepted=plan is not None,
+                        )
+                    )
+                    if plan is None:
+                        stage = "ROLL_ABORT"
+                        events.append(
+                            dict(type="ROLL_ABORT", t=float(d.time), encounter="bar")
+                        )
+                    else:
+                        stage = "ROLL"
+                        skill = RollSequence(float(d.time), plan, r.trunk_pos())
+                elif (
+                    (not combo_planning or not forecast_entry_roll)
+                    and stage == "BAR"
+                    and (
+                        roll_entry_ready(m, d, r, hazards["push_bar"].x)
+                        if hard_contacts
+                        else x >= hazards["push_bar"].x - 0.37
+                    )
                 ):
                     stage = "ROLL"
                     start("ROLL_CENTER")
@@ -274,7 +372,9 @@ def run(
                     and x >= level.gaps[0][0] - 0.30
                 ):
                     gap_planned = True
-                    plan, candidates = choose_gap_sequence(m, d, r, level.gaps[0][1])
+                    plan, candidates = choose_gap_sequence(
+                        m, d, r, level.gaps[0][1], expanded=combo_planning
+                    )
                     forecasts.append(
                         dict(
                             t=float(d.time),
@@ -368,13 +468,78 @@ def run(
                             )
                         )
                 elif stage == "SWEEPER" and x > hazards["sweeper"].x + 0.40:
-                    stage = "FINISH"
+                    stage = "PLAN_BOWL" if arcade else "FINISH"
+                elif (
+                    arcade
+                    and stage in ("BOWLING", "BOWL_OBSERVE")
+                    and driver.bowling.unlocked
+                ):
+                    stage = "PLAN_EXIT_BAR"
+                    events.append(
+                        dict(
+                            type="SKILL_RESULT",
+                            t=float(d.time),
+                            skill="PUSH_BALL",
+                            status="SUCCESS",
+                        )
+                    )
+                elif (
+                    arcade
+                    and stage == "BOWLING"
+                    and driver.bowling.duck_push_impulse > 0.025
+                    and d.qvel[m.jnt_dofadr[m.joint("playball/free").id]] > 0.30
+                ):
+                    stage = "BOWL_OBSERVE"
+                    bowl_watch_started = float(d.time)
+                    events.append(dict(type="SHOT_RELEASE", t=float(d.time)))
+                elif (
+                    arcade
+                    and stage == "BOWL_OBSERVE"
+                    and d.time - bowl_watch_started > 2.5
+                ):
+                    stage = "BOWLING_MISS"
+                    events.append(dict(type="SHOT_FAILED", t=float(d.time)))
+                elif (
+                    arcade
+                    and stage == "EXIT_BAR"
+                    and not exit_roll_planned
+                    and x >= named_hazards["exit_bar"].x - 0.36
+                ):
+                    exit_roll_planned = True
+                    plan, candidates = choose_roll_sequence(
+                        m,
+                        d,
+                        r,
+                        driver,
+                        named_hazards["exit_bar"].x,
+                        strict_self=combo_planning,
+                    )
+                    forecasts.append(
+                        dict(
+                            t=float(d.time),
+                            kind="exit_roll",
+                            candidates=candidates,
+                            accepted=plan is not None,
+                        )
+                    )
+                    if plan is None:
+                        stage = "ROLL_ABORT"
+                        events.append(dict(type="ROLL_ABORT", t=float(d.time)))
+                    else:
+                        stage = "EXIT_ROLL"
+                        skill = RollSequence(float(d.time), plan, r.trunk_pos())
                 elif stage == "FINISH" and x >= level.finish_x:
                     finished = True
                     stage = "CELEBRATE"
                     start("BRAKE_AND_WAIT")
                     events.append(dict(type="FINISH", t=float(d.time)))
-                elif stage in ("CELEBRATE", "FAILED", "UNSAFE_LAUNCH_STATE"):
+                elif stage in (
+                    "CELEBRATE",
+                    "FAILED",
+                    "UNSAFE_LAUNCH_STATE",
+                    "BOWLING_MISS",
+                    "ROLL_ABORT",
+                ):
                     r.active_policy = "stand"
                     r.set_command()
         driver.step(m, d, float(x))
@@ -391,9 +556,11 @@ def run(
             )
         for j in range(100):
             mujoco.mj_step(m, d)
-            audit.sample(m, d, r, intentional_rotation=stage == "ROLL")
+            audit.sample(m, d, r, intentional_rotation=stage in ("ROLL", "EXIT_ROLL"))
             gap_audit.sample(m, d, r)
             props.sample(m, d, r)
+            if arcade:
+                driver.sample(m, d)
             if capture and j % 25 == 0:
                 trajectory.append(
                     (
@@ -419,6 +586,8 @@ def run(
                 boss=d.body("boss").xpos.tolist(),
             )
         )
+        if arcade:
+            combo.sample(m, d, r, audit, gap_audit, driver, results, level)
         if i % 100 == 0:
             print(
                 seed,
@@ -446,7 +615,11 @@ def run(
         ).hexdigest(),
         predictive=predictive,
         difficulty=difficulty,
+        combination_planning=combo_planning,
+        forecast_entry_roll=forecast_entry_roll,
         forecasts=forecasts,
+        bowling=driver.bowling.report() if arcade else None,
+        encounter_combo=sorted(combo.verified) if arcade else None,
         hard_contacts=hard_contacts,
         roll_policy_sha256=hashlib.sha256(
             Path(r.bank.paths["roulade"]).read_bytes()
@@ -481,7 +654,12 @@ def run(
         audit=audit.report(),
         props=dict(contacts=props.contacts, longest_chase_s=props.longest_chase),
         events=sorted(
-            events + driver.events + audit.events + props.events + tactical.events,
+            events
+            + driver.events
+            + audit.events
+            + props.events
+            + tactical.events
+            + (driver.bowling.events + combo.events if arcade else []),
             key=lambda e: e["t"],
         ),
         warnings=d.warning.number.tolist(),
@@ -497,6 +675,7 @@ def run(
         and report["audit"]["max_penetration_m"] < 0.0015
         and report["audit"]["p99_penetration_m"] < 0.001
         and not d.warning.number.any()
+        and (not arcade or (driver.bowling.unlocked and len(combo.verified) == 6))
     )
     report["passed"] = (
         report["component_course_passed"]
@@ -569,5 +748,13 @@ if __name__ == "__main__":
     p.add_argument("--hard-contacts", action="store_true")
     p.add_argument("--roll-policy")
     p.add_argument("--predictive", action="store_true")
-    p.add_argument("--difficulty", choices=["classic", "chase"], default="classic")
+    p.add_argument("--legacy-handoffs", action="store_true")
+    p.add_argument(
+        "--forecast-entry-roll",
+        action="store_true",
+        help="Experimental brake/settle entry preview; default keeps moving phase entry",
+    )
+    p.add_argument(
+        "--difficulty", choices=["classic", "chase", "arcade"], default="classic"
+    )
     run(**vars(p.parse_args()))

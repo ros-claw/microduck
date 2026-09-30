@@ -78,9 +78,12 @@ def observe_hazards(m, d, hazards, driver, lanes, duck_x, duck_vx):
             radius = float(size[0])
             half_span = float(size[1])
             size = np.array([half_span + radius] * 2 + [radius])
-        elif h.kind == "boulder":
+        elif h.kind in ("boulder", "bowling_ball"):
             radius = float(size[0])
             size[:] = radius
+        elif h.kind == "guide":
+            radius = float(size[0])
+            size = np.abs(d.geom_xmat[gid].reshape(3, 3)[:, 2]) * size[1] + radius
         elif h.kind == "push_bar":
             size = np.array([0.23, h.half_width + 0.009, 0.23])
         held = h.kind == "crate" and h.name not in driver.released

@@ -15,6 +15,7 @@ DESCRIPTIONS = {
     "TAKE_LEFT_ROUTE": "Take the physically reachable route to higher world y, then align forward.",
     "TAKE_RIGHT_ROUTE": "Take the physically reachable route to lower world y, then align forward.",
     "JUMP_CENTER": "Execute a certified long jump across the next real gap; local feedback triggers takeoff.",
+    "PUSH_BALL": "Approach the lightweight bowling ball, push through real contact, then brake and observe the pins. A verified strike unlocks the exit.",
     "BRAKE_AND_WAIT": "Stop in a verified safe waiting region until a passage window opens.",
 }
 

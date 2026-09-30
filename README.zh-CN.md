@@ -20,6 +20,16 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 完整回放包含启动阶段。特写以 0.25× 速度重放同一段轨迹，不代表额外独立测试。渲染使用模型原生材质，外观调整前后的逐圈判定记录已核对一致。参见 [轨迹审计](artifacts/presentation/audit.json) 与 [渲染元数据](artifacts/presentation/manifest.json)。
 
+## 连锁撞瓶逃生：组合技能与物理谜题
+
+鸭子连续翻滚过杆、躲落箱、跨过真实缺口、通过旋转横臂，再推球连锁撞倒三个瓶子，解锁出口后再次翻滚逃生。巨球能撞开保龄球护栏；物体接触决定关卡状态。Jev 选择关卡动作，已有四套学习策略执行，局部物理预览比较跳跃和出口翻滚衔接。
+
+精选历史记录完成六关，用时 **27.08 仿真秒，HP 2/3**，通过输入重放、全接触及独立因果检查。初版六种子为 **2/6 逃生、1/6 严格发布通过**；最终默认版本 **2/6 严格通过**；中间版本结果和失败单独保留。护栏辅助保龄球，预测使用仿真完整状态；35 仿真秒录制耗时 77.41 秒，尚非实时视觉或硬件演示。
+
+[![Strike & Escape: physical duck–ball–target interaction](out/microduck_neon_escape_v4_strike_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4)
+
+[35 秒英文动作版](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [54 秒英文细节与慢动作版](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_technical.mp4) · [完整重放证据](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_evidence.tar.gz) · [中英方法说明](docs/STRIKE_ESCAPE.md) · [全部测试与失败](artifacts/neon-escape-v4/README.md)
+
 ## Reactive Chase：根据状态选择路线
 
 [方法与完整评估](docs/REACTIVE_CHASE.md)：Jev 选择关卡动作，局部物理模型预测起跳衔接与绕杆路线，原有电机策略负责执行。落箱位置会改变，巨球追逐更近；两条精选在线记录分别左绕／右绕，约 17.6／17.9 秒逃生，均保持满生命值。

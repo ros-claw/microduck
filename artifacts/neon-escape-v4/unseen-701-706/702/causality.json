@@ -1,0 +1,78 @@
+{
+  "capture": {
+    "scene.mjb": "b5d5093e8e4c5b199ed1af2e35814d4444e4e88a1eba51e25b2f02ee74eb8714",
+    "trajectory.npz": "793e280f0b364e11fa983909397eab0bf5f3ee1b97b1b026f12d1fd40228cd9c",
+    "inputs.npz": "acbb3cf50028aaed0deda36152450ecbc8dd02a812126b640ee27394da0422a8"
+  },
+  "passed": false,
+  "violations": [],
+  "gate_force_limit_N": 6,
+  "gate_force_limited": true,
+  "bowling": {
+    "unlocked": false,
+    "ball_hit_pins": [
+      "pin0",
+      "pin1"
+    ],
+    "chain_hit_pins": [
+      "pin0",
+      "pin1",
+      "pin2"
+    ],
+    "causal_parents": {
+      "pin0": "playball",
+      "pin1": "pin0",
+      "pin2": "pin1"
+    },
+    "qualified_toppled": [
+      "pin0",
+      "pin2"
+    ],
+    "direct_or_boss_hit_pins": [
+      "pin1"
+    ],
+    "touches_after_qualified_topple": [
+      "pin0",
+      "pin2"
+    ],
+    "duck_push_impulse_Ns": 0.07605499495201117,
+    "max_push_force_N": 34.75971011795849,
+    "ball_pin_impulses_Ns": {
+      "pin0": 0.0573796159810824,
+      "pin1": 0.011512647673802775
+    },
+    "chain_impulses_Ns": {
+      "pin0": 0.0931594601097195,
+      "pin1": 1.5526696600093883,
+      "pin2": 1.5053769401160177
+    },
+    "boss_ball_interference": true,
+    "scope": "Contact causality until unlock; whole-run collisions independently audited",
+    "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+  },
+  "events": [
+    {
+      "type": "BALL_PUSH",
+      "t": 18.87819999998268
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 20.53059999997883,
+      "pin": "pin2",
+      "chain_impulse_Ns": 0.01110086110307607,
+      "parent": "pin1"
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 20.87359999997803,
+      "pin": "pin0",
+      "chain_impulse_Ns": 0.09217426686145447,
+      "parent": "playball"
+    }
+  ],
+  "guide_boss_impulses_Ns": {
+    "gutter_right": 0.7378491029801117,
+    "gutter_left": 0.020844893794273917
+  },
+  "method": "Initialize once; replay recorded 50 Hz inputs; inspect causal contacts at every .2 ms step. Gate command and guide weld activation must follow previously measured contact state. No applied force on ball/pins."
+}

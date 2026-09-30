@@ -1,0 +1,105 @@
+{
+  "source": "artifacts/neon-escape-v4/film-402",
+  "source_audit_sha256": "a3278cc3ccc7ff4bea3fc385f9de11a9b584652904392023a7ec37c21ddd8321",
+  "video_sha256": "f7d530ab40f9cebad9517dc399fd56519b036b0fd68fbaf1b002a3e385a8b685",
+  "cut": "technical",
+  "style": "industrial",
+  "fps": 50,
+  "frames": 2722,
+  "duration_s": 54.44,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "jev",
+  "evaluation_goal": "escape",
+  "core_physical_gates": true,
+  "full_stunt_gate": false,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "0dd7cf99a7b7421bb5a0d92fd9aa683f41a6d8fa5812fbdd8b53efbedbad88b9",
+  "input_replay_sha256": "ffe1e5f1a932488dd774bad4c49728fb04a84500529df7a6020a6837ccf016f6",
+  "qualification_scope": "Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
+  "clips": [
+    {
+      "start": 0.0002,
+      "stop": 31.3395999999569,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "SIX ENCOUNTERS / CONTINUOUS RECORDED RUN",
+      "output_start": 0.0,
+      "frames": 1567
+    },
+    {
+      "start": 3.289999999999654,
+      "stop": 5.720000000003011,
+      "speed": 0.5,
+      "shot": "roll",
+      "title": "ROLL / native motor policy, measured rotation and foot support",
+      "output_start": 31.34,
+      "frames": 244
+    },
+    {
+      "start": 10.934800000000727,
+      "stop": 11.616400000000304,
+      "speed": 0.4,
+      "shot": "jump",
+      "title": "JUMP / real 15 cm void, force-bearing landing",
+      "output_start": 36.22,
+      "frames": 86
+    },
+    {
+      "start": 18.801199999982042,
+      "stop": 21.809399999976897,
+      "speed": 0.45,
+      "shot": "bowling",
+      "title": "STRIKE / duck contact \u2192 rolling ball \u2192 three falling pins",
+      "output_start": 37.94,
+      "frames": 335
+    },
+    {
+      "start": 21.359399999976898,
+      "stop": 22.359399999976898,
+      "speed": 1,
+      "shot": "bowling",
+      "title": "UNLOCK / verified strike opens a force-limited gate",
+      "output_start": 44.64,
+      "frames": 50
+    },
+    {
+      "start": 22.87999999997289,
+      "stop": 25.4699999999679,
+      "speed": 1,
+      "shot": "roll",
+      "title": "SECOND ROLL / return to walking and escape",
+      "output_start": 45.64,
+      "frames": 130
+    },
+    {
+      "start": 29.539599999956902,
+      "stop": 30.7395999999569,
+      "speed": 1,
+      "shot": "finish",
+      "title": "PURSUIT / the sphere physically strikes the closed door",
+      "output_start": 48.24,
+      "frames": 60
+    },
+    {
+      "start": 31.3395999999569,
+      "stop": 31.3395999999569,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "REPRODUCIBLE INPUT REPLAY",
+      "output_start": 49.440000000000005,
+      "frames": 250
+    }
+  ],
+  "motion_blur": "off",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained.",
+  "contact_causality_sha256": "49651eed896aef99a56d711e554e63b71d1ecb71ada7fec089f3719a0ad1927d"
+}

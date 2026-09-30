@@ -7,6 +7,7 @@ import mujoco
 
 @dataclass
 class Audit:
+    interactive_props: tuple = ()
     hp: int = 3
     score: int = 0
     combo: int = 0
@@ -17,16 +18,22 @@ class Audit:
     fall_duration: float = 0.0
     _pending: dict = field(default_factory=dict)
 
+    _geom_bodies: tuple = field(default=(), init=False, repr=False)
+
     def sample(self, m, d, r, intentional_rotation=False):
+        if not self._geom_bodies:
+            self._geom_bodies = tuple(
+                m.body(m.geom_bodyid[g]).name for g in range(m.ngeom)
+            )
         now = float(d.time)
         dt = float(m.opt.timestep)
         for i, c in enumerate(d.contact):
-            b1 = m.body(m.geom_bodyid[c.geom1]).name
-            b2 = m.body(m.geom_bodyid[c.geom2]).name
+            b1 = self._geom_bodies[c.geom1]
+            b2 = self._geom_bodies[c.geom2]
             if b1.startswith("duck/") == b2.startswith("duck/"):
                 continue
             other = c.geom2 if b1.startswith("duck/") else c.geom1
-            name = m.body(m.geom_bodyid[other]).name
+            name = self._geom_bodies[other]
             if name == "world" or name.startswith("duck/"):
                 continue
             force = np.zeros(6)
@@ -69,6 +76,17 @@ class Audit:
             self.events.append(dict(type="FALL", t=now))
 
     def _commit_hit(self, name, episode):
+        if name in self.interactive_props:
+            self.events.append(
+                dict(
+                    type="PROP_TOUCH",
+                    t=episode["first"],
+                    hazard=name,
+                    normal_impulse_Ns=episode["impulse"],
+                    hp_cost=0,
+                )
+            )
+            return
         cost = 2 if episode["impulse"] > 0.8 else 1
         self.hp = max(0, self.hp - cost)
         self.combo = 0
@@ -139,9 +157,17 @@ class PropAudit:
     chase_seconds: float = 0.0
     longest_chase: float = 0.0
 
+    _geom_bodies: tuple = field(default=(), init=False, repr=False)
+    _boss_body: int = field(default=-1, init=False, repr=False)
+
     def sample(self, m, d, r):
+        if not self._geom_bodies:
+            self._geom_bodies = tuple(
+                m.body(m.geom_bodyid[g]).name for g in range(m.ngeom)
+            )
+            self._boss_body = m.body("boss").id
         dt = float(m.opt.timestep)
-        boss = m.body("boss").id
+        boss = self._boss_body
         velocity = np.zeros(6)
         mujoco.mj_objectVelocity(m, d, mujoco.mjtObj.mjOBJ_BODY, boss, velocity, 0)
         distance = float(r.trunk_pos()[0] - d.xpos[boss, 0])
@@ -151,7 +177,7 @@ class PropAudit:
         self.chase_seconds = self.chase_seconds + dt if chasing else 0.0
         self.longest_chase = max(self.longest_chase, self.chase_seconds)
         for i, c in enumerate(d.contact):
-            names = [m.body(m.geom_bodyid[g]).name for g in (c.geom1, c.geom2)]
+            names = [self._geom_bodies[c.geom1], self._geom_bodies[c.geom2]]
             if any(n.startswith("duck/") for n in names) or names[0] == names[1]:
                 continue
             if "boss" not in names:

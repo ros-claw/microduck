@@ -76,13 +76,13 @@ class EncounterBrain:
             pos = np.asarray(predicted_position).copy()
         legal = []
         checks = {}
-        if encounter == "bar":
+        if encounter in ("bar", "exit_bar"):
             legal = ["ROLL_CENTER", "BRAKE_AND_WAIT"]
             checks["ROLL_CENTER"] = {
                 "method": "measured moving-roll envelope",
                 "trigger_distance_m": 0.37,
                 "bar_height_m": next(
-                    h.z for h in self.level.hazards if h.kind == "push_bar"
+                    h.z for h in self.level.hazards if h.name == encounter
                 ),
             }
         elif encounter == "crate":
@@ -174,6 +174,22 @@ class EncounterBrain:
                 if not hits and within_track:
                     legal.append(action)
             legal.append("BRAKE_AND_WAIT")
+        elif encounter == "bowling":
+            ball = d.body("playball").xpos
+            ready = bool(
+                d.xmat[r.trunk_body_id, 8] > 0.9
+                and ball[0] > r.trunk_pos()[0] + 0.15
+                and abs(ball[1]) < 0.12
+                and not self.driver.bowling.boss_ball_interference
+            )
+            if ready:
+                legal.append("PUSH_BALL")
+            legal.append("BRAKE_AND_WAIT")
+            checks["PUSH_BALL"] = dict(
+                ready=ready,
+                ball_position=ball.tolist(),
+                method="upright approach to a reachable lightweight ball in the physical guided alley; strike is verified only after contact",
+            )
         elif encounter == "gap":
             width = self.level.gaps[0][1] - self.level.gaps[0][0]
             if 0.12 <= width <= 0.18:
@@ -191,7 +207,13 @@ class EncounterBrain:
             simulation_time_s=float(d.time),
             prediction_horizon_s=3.0,
             mission=dict(
-                goal="escape", lives=3, style="high", speed="high", risk_budget="medium"
+                goal="strike_to_unlock_then_escape"
+                if hasattr(self.driver, "bowling")
+                else "escape",
+                lives=3,
+                style="high",
+                speed="high",
+                risk_budget="medium",
             ),
             robot=dict(
                 position=r.trunk_pos().tolist(),
@@ -222,6 +244,8 @@ class EncounterBrain:
             "bar": "ROLL_CENTER",
             "crate": "TAKE_LEFT_ROUTE",
             "gap": "JUMP_CENTER",
+            "bowling": "PUSH_BALL",
+            "exit_bar": "ROLL_CENTER",
         }[encounter]
         if encounter == "crate" and self.r.trunk_pos()[1] < -0.03:
             default = "TAKE_RIGHT_ROUTE"

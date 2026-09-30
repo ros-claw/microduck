@@ -68,6 +68,13 @@ def sound(path, duration, events):
         elif kind == "FINISH":
             for j, f in enumerate([523.25, 659.25, 783.99]):
                 tone(at + j * 0.12, 0.5, f, 0.055)
+        elif kind == "BALL_PUSH":
+            tone(at, 0.18, 240, 0.08, 0.25)
+        elif kind == "PIN_DOWN":
+            tone(at, 0.14, 420, 0.08, 0.6)
+        elif kind == "BOWLING_STRIKE":
+            for j, f in enumerate([659.25, 830.61, 987.77]):
+                tone(at + j * 0.08, 0.4, f, 0.07)
     signal = np.tanh(signal) * 0.85
     pcm = np.asarray(
         np.clip(np.stack([signal, signal], axis=1), -1, 1) * 32767, dtype="<i2"
@@ -87,6 +94,7 @@ def render(
     source = Path(source)
     output = Path(output)
     report = json.loads((source / "audit.json").read_text())
+    arcade = report.get("difficulty") == "arcade"
     for name, sha in report["capture"].items():
         if hashlib.sha256((source / name).read_bytes()).hexdigest() != sha:
             raise ValueError("Capture checksum mismatch: " + name)
@@ -115,9 +123,13 @@ def render(
             raise ValueError("Replay proof must match this exact capture")
         if not proof["passed"]:
             raise ValueError("Actuator-input replay must pass before publishing")
+    if arcade and not preview:
+        causal = json.loads((source / "causality.json").read_text())
+        if not causal.get("passed") or causal.get("capture") != report["capture"]:
+            raise ValueError("Matching independent contact-causality proof required")
     m = mujoco.MjModel.from_binary_path(str(source / "scene.mjb"))
     d = mujoco.MjData(m)
-    states = np.load(source / "trajectory.npz")
+    states = dict(np.load(source / "trajectory.npz"))
     times = states["time"]
     timeline = CinematicEventTimeline(report, float(times[-1]))
     director = ShotDirector(timeline)
@@ -254,14 +266,16 @@ def render(
         hp = max(0, 3 - sum(e["hp_cost"] for e in prior if e["type"] == "IMPACT"))
         combo = 0
         for e in prior:
-            if e["type"] in ("IMPACT", "FALL"):
+            if not arcade and e["type"] in ("IMPACT", "FALL"):
                 combo = 0
-            elif e["type"] == "STUNT_SUCCESS":
+            elif e["type"] == ("COMBO_VERIFIED" if arcade else "STUNT_SUCCESS"):
                 combo += 1
         draw.rounded_rectangle((38, 32, 554, 101), radius=14, fill=(6, 14, 25, 205))
         draw.text(
             (60, 50),
-            "MICRODUCK / REACTIVE CHASE"
+            "MICRODUCK / STRIKE & ESCAPE"
+            if arcade
+            else "MICRODUCK / REACTIVE CHASE"
             if report.get("predictive")
             else "MICRODUCK / NEON ESCAPE II",
             font=font(25, True),
@@ -287,6 +301,27 @@ def render(
                 stroke_fill=(5, 10, 18),
             )
         if cut == "hero":
+            if arcade:
+                pins = [e for e in prior if e["type"] == "PIN_DOWN"]
+                unlocked = any(e["type"] == "EXIT_UNLOCK" for e in prior)
+                if row["pos"][0] > 4.35 and t < timeline.finish:
+                    draw.rounded_rectangle(
+                        (660, 32, 1340, 110), radius=14, fill=(6, 14, 25, 220)
+                    )
+                    draw.text(
+                        (690, 49),
+                        "STRIKE TO UNLOCK"
+                        if not unlocked
+                        else "STRIKE!  EXIT UNLOCKED",
+                        font=font(27, True),
+                        fill=(255, 216, 95) if not unlocked else (64, 239, 177),
+                    )
+                    draw.text(
+                        (690, 84),
+                        f"TARGETS {len(pins)}/3  |  PUSH → WATCH → ROLL",
+                        font=font(17),
+                        fill="white",
+                    )
             recent = [
                 e for e in prior if e["type"] == "JEV_DECISION" and t - e["t"] < 0.65
             ]
@@ -315,19 +350,28 @@ def render(
                     stroke_fill=(5, 10, 18),
                 )
             success = [
-                e for e in prior if e["type"] == "STUNT_SUCCESS" and t - e["t"] < 0.7
+                e
+                for e in prior
+                if e["type"] == ("COMBO_VERIFIED" if arcade else "STUNT_SUCCESS")
+                and t - e["t"] < 0.7
             ]
             if success:
                 e = success[-1]
-                label = {
-                    "ROLL_CENTER": "PERFECT ROLL",
-                    "JUMP_CENTER": "LONG JUMP",
-                    "TAKE_LEFT_ROUTE": "DODGE",
-                    "TAKE_RIGHT_ROUTE": "ALIGNED",
-                }[e["skill"]]
+                label = (
+                    e["challenge"]
+                    if arcade
+                    else {
+                        "ROLL_CENTER": "PERFECT ROLL",
+                        "JUMP_CENTER": "LONG JUMP",
+                        "TAKE_LEFT_ROUTE": "DODGE",
+                        "TAKE_RIGHT_ROUTE": "ALIGNED",
+                    }[e["skill"]]
+                )
                 draw.text(
                     (62, 930),
-                    f"{label}  +{e['bonus']}",
+                    f"{label}  /  COMBO x{e['combo']}"
+                    if arcade
+                    else f"{label}  +{e['bonus']}",
                     font=font(35, True),
                     fill=(56, 238, 199),
                     stroke_width=2,
@@ -456,6 +500,32 @@ def render(
                     ),
                     ("Foley is synthesized in post-production.", 25),
                 ]
+                if arcade:
+                    plan_ms = sum(
+                        c["wall_ms"]
+                        for f in report["forecasts"]
+                        for c in f["candidates"]
+                    )
+                    lines = [
+                        ("ACTUATOR-INPUT REPLAY", 42),
+                        (
+                            f"{replay_stats.get('frames', 0):,} states reproduced; position error {replay_stats.get('max_qpos_error', 0):.1e}",
+                            28,
+                        ),
+                        (
+                            "Six verified encounters. Real contact chain unlocks the motorized gate.",
+                            26,
+                        ),
+                        (
+                            f"Privileged-state previews: {plan_ms / 1000:.1f}s wall clock; simulation-time replay.",
+                            26,
+                        ),
+                        (
+                            "Selected frozen-cohort run; failures and latency are reported in the README.",
+                            25,
+                        ),
+                        ("Synthesized Foley. This is a simulator demonstration.", 25),
+                    ]
                 yy = 252
                 for text, size in lines:
                     draw.text(
@@ -489,6 +559,17 @@ def render(
                 else (timeline.route + 1.2, "dodge"),
                 (timeline.door + 0.2, "finish"),
             ]
+            if arcade:
+                push = next(e["t"] for e in events if e["type"] == "BALL_PUSH")
+                strike = next(e["t"] for e in events if e["type"] == "BOWLING_STRIKE")
+                picks = [
+                    (sum(timeline.instances["ROLL_CENTER"][0]) / 2, "roll"),
+                    (timeline.flight["start"] + 0.08, "jump"),
+                    (push + 0.12, "bowling"),
+                    (strike + 0.08, "bowling"),
+                    (sum(timeline.instances["ROLL_CENTER"][-1]) / 2, "roll"),
+                    (timeline.door + 0.2, "finish"),
+                ]
             sheet = Image.new("RGB", (1920, 1080))
             for j, (t, shot) in enumerate(picks):
                 im = Image.fromarray(
@@ -606,6 +687,11 @@ def render(
             input_replay_sha256=hashlib.sha256(
                 (source / "replay.json").read_bytes()
             ).hexdigest(),
+            contact_causality_sha256=hashlib.sha256(
+                (source / "causality.json").read_bytes()
+            ).hexdigest()
+            if arcade
+            else None,
             qualification_scope="Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
             clips=rendered,
             motion_blur="4 nearest actual 200 Hz states at -6/-2/+2/+6 ms; no joint interpolation"

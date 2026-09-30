@@ -255,6 +255,9 @@ def build_world(
             "crate": (0.0012, 0.35),
             "boulder": (0.001, 0.4),
             "finish_gate": (0.0012, 0.4),
+            "bowling_ball": (0.0008, 0.25),
+            "pin": (0.0008, 0.35),
+            "guide": (0.0008, 0.3),
         }
         for hazard in hazards:
             kind = getattr(hazard, "kind", None)
@@ -290,7 +293,9 @@ def build_world(
                     margin=0.0002,
                     solref=[0.0008, 1.0],
                     solimp=[0.99, 0.999, 0.0005, 0.5, 2.0],
-                    friction=[0.25, 0.25, 0.003, 0.0001, 0.0001],
+                    friction=[1.2, 1.2, 0.003, 0.0001, 0.0001]
+                    if h.kind == "pin"
+                    else [0.25, 0.25, 0.003, 0.0001, 0.0001],
                 )
     if duck_floor_ref is not None:
         native = [m0.geom(g).name for g in range(m0.ngeom) if m0.geom_contype[g] & 1]

@@ -1,0 +1,98 @@
+{
+  "capture": {
+    "scene.mjb": "871f19666a4b7f87ab2c143e5a04de1db1fbb42769dc375fcbb1ca2a8551b3b4",
+    "trajectory.npz": "5c0061071a466c6f0912449ff8ed70f9ddfba045bf8433a96235b9ce712c3623",
+    "inputs.npz": "f59fc84f327842cafe39ee68d116301bb45c9a45b8e9c8bebd7e08d0dbdb4fbb"
+  },
+  "passed": true,
+  "violations": [],
+  "gate_force_limit_N": 6,
+  "gate_force_limited": true,
+  "bowling": {
+    "unlocked": true,
+    "ball_hit_pins": [
+      "pin0",
+      "pin1",
+      "pin2"
+    ],
+    "chain_hit_pins": [
+      "pin0",
+      "pin1",
+      "pin2"
+    ],
+    "causal_parents": {
+      "pin0": "playball",
+      "pin1": "pin0",
+      "pin2": "pin1"
+    },
+    "qualified_toppled": [
+      "pin0",
+      "pin1",
+      "pin2"
+    ],
+    "direct_or_boss_hit_pins": [],
+    "touches_after_qualified_topple": [],
+    "duck_push_impulse_Ns": 0.03740189847710414,
+    "max_push_force_N": 34.678807193591346,
+    "ball_pin_impulses_Ns": {
+      "pin0": 0.005815422766466372,
+      "pin1": 0.0017148138491122874,
+      "pin2": 0.00110761260717889
+    },
+    "chain_impulses_Ns": {
+      "pin0": 0.010414636608732743,
+      "pin1": 0.012771805757345359,
+      "pin2": 0.007535205052086092
+    },
+    "boss_ball_interference": false,
+    "scope": "Contact causality until unlock; whole-run collisions independently audited",
+    "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+  },
+  "events": [
+    {
+      "type": "BALL_PUSH",
+      "t": 19.151199999982044
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 21.17359999997733,
+      "pin": "pin0",
+      "chain_impulse_Ns": 0.010129556411234497,
+      "parent": "playball"
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 21.35459999997691,
+      "pin": "pin2",
+      "chain_impulse_Ns": 0.0065056560769700695,
+      "parent": "pin1"
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 21.359399999976898,
+      "pin": "pin1",
+      "chain_impulse_Ns": 0.012771805757345359,
+      "parent": "pin0"
+    },
+    {
+      "type": "BOWLING_STRIKE",
+      "t": 21.359399999976898,
+      "pins": [
+        "pin0",
+        "pin1",
+        "pin2"
+      ],
+      "duck_push_impulse_Ns": 0.03740189847710414
+    },
+    {
+      "type": "EXIT_UNLOCK",
+      "t": 21.359399999976898,
+      "cause": "duck \u2192 ball \u2192 three pins"
+    }
+  ],
+  "guide_boss_impulses_Ns": {
+    "gutter_right": 0.7462144309425776,
+    "gutter_left": 0.9698957211042987
+  },
+  "method": "Initialize once; replay recorded 50 Hz inputs; inspect causal contacts at every .2 ms step. Gate command and guide weld activation must follow previously measured contact state. No applied force on ball/pins."
+}

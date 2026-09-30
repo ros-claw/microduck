@@ -27,15 +27,18 @@ class CinematicEventTimeline:
         self.door = next(e["t"] for e in self.events if e["type"] == "BOSS_GATE_IMPACT")
         self.stop = min(end, self.door + 1.4)
         self.skills = {}
+        self.instances = {}
         for e in self.events:
             if e["type"] == "SKILL_START":
-                self.skills.setdefault(e["skill"], [e["t"], e["t"]])
+                entry = [e["t"], e["t"]]
+                self.instances.setdefault(e["skill"], []).append(entry)
+                self.skills.setdefault(e["skill"], entry)
             elif (
                 e["type"] == "SKILL_RESULT"
                 and e["skill"] in self.skills
                 and e["status"] == "SUCCESS"
             ):
-                self.skills[e["skill"]][1] = e["t"]
+                self.instances[e["skill"]][-1][1] = e["t"]
         self.flight = next(f for f in report["gap_flights"] if f["crossed"])
         self.fall = next(
             (e["t"] for e in self.events if e["type"] == "FALL"), float("inf")
@@ -49,6 +52,8 @@ class CinematicEventTimeline:
         )
 
     def hero(self):
+        if self.report.get("difficulty") == "arcade":
+            return self.arcade_hero()
         a, b = self.skills["ROLL_CENTER"]
         f = self.flight
         windows = [
@@ -82,6 +87,8 @@ class CinematicEventTimeline:
         return clips
 
     def technical(self):
+        if self.report.get("difficulty") == "arcade":
+            return self.arcade_technical()
         a, b = self.skills["ROLL_CENTER"]
         ja, jb = self.skills["JUMP_CENTER"]
         da, db = (
@@ -165,6 +172,87 @@ class CinematicEventTimeline:
             )
         return clips
 
+    def arcade_hero(self):
+        roll = self.skills["ROLL_CENTER"]
+        push = next(e["t"] for e in self.events if e["type"] == "BALL_PUSH")
+        strike = next(e["t"] for e in self.events if e["type"] == "BOWLING_STRIKE")
+        windows = [
+            (roll[0] + 0.20, min(roll[1], roll[0] + 0.75), 0.5, "roll"),
+            (self.flight["start"] - 0.08, self.flight["end"] + 0.15, 0.45, "jump"),
+            (max(push, strike - 0.5), strike + 0.16, 0.45, "bowling"),
+        ]
+        clips = []
+        cursor = 0.0002
+        for a, b, speed, shot in windows:
+            if a > cursor:
+                clips.append(Clip(cursor, a))
+            clips.append(Clip(a, b, speed, shot))
+            cursor = b
+        if cursor < self.stop:
+            clips.append(Clip(cursor, self.stop))
+        clips.append(
+            Clip(self.stop, self.stop, shot="finish", title="ESCAPED.", hold=2)
+        )
+        return clips
+
+    def arcade_technical(self):
+        push = next(e["t"] for e in self.events if e["type"] == "BALL_PUSH")
+        strike = next(e["t"] for e in self.events if e["type"] == "BOWLING_STRIKE")
+        first = self.instances["ROLL_CENTER"][0]
+        last = self.instances["ROLL_CENTER"][-1]
+        return [
+            Clip(0.0002, self.stop, title="SIX ENCOUNTERS / CONTINUOUS RECORDED RUN"),
+            Clip(
+                first[0] - 0.15,
+                first[1] + 0.1,
+                0.5,
+                "roll",
+                "ROLL / native motor policy, measured rotation and foot support",
+            ),
+            Clip(
+                self.flight["start"] - 0.2,
+                self.flight["end"] + 0.3,
+                0.4,
+                "jump",
+                "JUMP / real 15 cm void, force-bearing landing",
+            ),
+            Clip(
+                push - 0.35,
+                strike + 0.45,
+                0.45,
+                "bowling",
+                "STRIKE / duck contact → rolling ball → three falling pins",
+            ),
+            Clip(
+                strike,
+                strike + 1,
+                1,
+                "bowling",
+                "UNLOCK / verified strike opens a force-limited gate",
+            ),
+            Clip(
+                last[0] - 0.2,
+                last[1] + 0.25,
+                1,
+                "roll",
+                "SECOND ROLL / return to walking and escape",
+            ),
+            Clip(
+                self.door - 0.4,
+                self.door + 0.8,
+                1,
+                "finish",
+                "PURSUIT / the sphere physically strikes the closed door",
+            ),
+            Clip(
+                self.stop,
+                self.stop,
+                shot="finish",
+                title="REPRODUCIBLE INPUT REPLAY",
+                hold=5,
+            ),
+        ]
+
 
 class ShotDirector:
     def __init__(self, timeline):
@@ -183,6 +271,14 @@ class ShotDirector:
             return "finish"
         if tl.fall - 0.5 <= t <= tl.recover + 0.5:
             return "impact"
+        if tl.report.get("difficulty") == "arcade":
+            for a, b in tl.instances.get("ROLL_CENTER", []):
+                if a - 0.2 <= t <= b + 0.2:
+                    return "roll"
+            push = next(e["t"] for e in tl.events if e["type"] == "BALL_PUSH")
+            strike = next(e["t"] for e in tl.events if e["type"] == "BOWLING_STRIKE")
+            if push - 1.2 <= t <= strike + 0.5:
+                return "bowling"
         for name, shot in [
             ("ROLL_CENTER", "roll"),
             ("JUMP_CENTER", "jump"),
@@ -216,7 +312,13 @@ class ShotDirector:
             "impact": (duck + np.array([0.03, 0, 0.08]), 1.05, 70.0, -22.0),
             "boss": (boss + np.array([0.25, 0, 0.05]), 1.40, 110.0, -17.0),
             "spawn": (boss + np.array([0.20, 0, -0.03]), 1.50, 120.0, -17.0),
-            "finish": (np.array([5.55, 0, 0.24]), 1.60, 105.0, -18.0),
+            "finish": (
+                np.array([d.body("portal").xpos[0] + 0.05, 0, 0.24]),
+                1.60,
+                105.0,
+                -18.0,
+            ),
+            "bowling": (duck + np.array([0.28, 0, 0.08]), 1.30, 100.0, -24.0),
         }
         return params[shot], shot
 

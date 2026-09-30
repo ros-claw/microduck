@@ -15,7 +15,7 @@ def audit(source):
     verify_capture(source, report["capture"])
     m = mujoco.MjModel.from_binary_path(str(source / "scene.mjb"))
     d = mujoco.MjData(m)
-    u = np.load(source / "inputs.npz")
+    u = dict(np.load(source / "inputs.npz"))
     d.qpos[:] = u["initial_qpos"]
     d.qvel[:] = u["initial_qvel"]
     mujoco.mj_forward(m, d)
