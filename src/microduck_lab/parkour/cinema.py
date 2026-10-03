@@ -25,7 +25,11 @@ class CinematicEventTimeline:
         self.end = end
         self.finish = next(e["t"] for e in self.events if e["type"] == "FINISH")
         self.door = next(e["t"] for e in self.events if e["type"] == "BOSS_GATE_IMPACT")
-        self.stop = min(end, self.door + 1.4)
+        self.stop = (
+            end
+            if (report.get("victory") or {}).get("passed")
+            else min(end, self.door + 1.4)
+        )
         self.skills = {}
         self.instances = {}
         for e in self.events:
@@ -200,12 +204,19 @@ class CinematicEventTimeline:
         strike = next(e["t"] for e in self.events if e["type"] == "BOWLING_STRIKE")
         first = self.instances["ROLL_CENTER"][0]
         last = self.instances["ROLL_CENTER"][-1]
-        return [
-            Clip(0.0002, self.stop, title="SIX ENCOUNTERS / CONTINUOUS RECORDED RUN"),
+        victory = bool((self.report.get("victory") or {}).get("passed"))
+        clips = [
+            Clip(
+                0.0002,
+                self.stop,
+                title="SIX ENCOUNTERS / RECORDED RUN + PHYSICAL FINISH"
+                if victory
+                else "SIX ENCOUNTERS / CONTINUOUS RECORDED RUN",
+            ),
             Clip(
                 first[0] - 0.15,
                 first[1] + 0.1,
-                0.5,
+                1.0 if victory else 0.5,
                 "roll",
                 "ROLL / native motor policy, measured rotation and foot support",
             ),
@@ -252,6 +263,24 @@ class CinematicEventTimeline:
                 hold=5,
             ),
         ]
+        if victory:
+            clips[-1:-1] = [
+                Clip(
+                    last[1] + 0.25,
+                    self.finish,
+                    1,
+                    "victory",
+                    "HAPPY APPROACH / learned walking + bounded head-servo gestures",
+                ),
+                Clip(
+                    self.finish + 1.5,
+                    min(self.stop, self.finish + 6.4),
+                    0.5,
+                    "victory",
+                    "VICTORY / two learned motor-policy hops, real airborne phases and foot landings",
+                ),
+            ]
+        return clips
 
 
 class ShotDirector:
@@ -268,7 +297,11 @@ class ShotDirector:
         if t < 0.8:
             return "spawn"
         if t >= tl.finish:
-            return "finish"
+            return (
+                "victory"
+                if (tl.report.get("victory") or {}).get("passed")
+                else "finish"
+            )
         if tl.fall - 0.5 <= t <= tl.recover + 0.5:
             return "impact"
         if tl.report.get("difficulty") == "arcade":
@@ -319,6 +352,7 @@ class ShotDirector:
                 -18.0,
             ),
             "bowling": (duck + np.array([0.28, 0, 0.08]), 1.30, 100.0, -24.0),
+            "victory": (duck + np.array([0.0, 0, 0.035]), 0.72, 212.0, -12.0),
         }
         return params[shot], shot
 

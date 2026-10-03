@@ -24,6 +24,7 @@ from ..parkour.preview import (
     RollSequence,
 )
 from ..parkour.arcade import ArcadeDriver, EncounterCombo, bowling_command
+from ..parkour.victory import VictoryDance
 
 
 def run(
@@ -46,6 +47,7 @@ def run(
     difficulty="classic",
     legacy_handoffs=False,
     forecast_entry_roll=False,
+    victory_dance=False,
 ):
     output = Path(output)
     if (output / "audit.json").exists():
@@ -79,6 +81,9 @@ def run(
     r.bank.paths["jump"] = str(Path(policy).resolve())
     if roll_policy:
         r.bank.paths["roulade"] = str(Path(roll_policy).resolve())
+    if victory_dance:
+        r.bank.paths["victory_hop"] = str(repository / "policies/ropehop_centered.onnx")
+    victory = None
     arcade = difficulty == "arcade"
     combo_planning = arcade and not legacy_handoffs
     driver = ArcadeDriver(level.hazards) if arcade else HazardDriver(level.hazards)
@@ -216,6 +221,9 @@ def run(
                             )
                     elif stage == "EXIT_ROLL":
                         stage = "FINISH"
+                        if victory_dance:
+                            victory = VictoryDance(float(d.time))
+                            events.append(dict(type="VICTORY_START", t=float(d.time)))
                     elif stage == "RECOVER":
                         stage = return_stage
                         escape_y = (
@@ -528,7 +536,7 @@ def run(
                     else:
                         stage = "EXIT_ROLL"
                         skill = RollSequence(float(d.time), plan, r.trunk_pos())
-                elif stage == "FINISH" and x >= level.finish_x:
+                elif stage == "FINISH" and victory is None and x >= level.finish_x:
                     finished = True
                     stage = "CELEBRATE"
                     start("BRAKE_AND_WAIT")
@@ -542,6 +550,12 @@ def run(
                 ):
                     r.active_policy = "stand"
                     r.set_command()
+        if victory is not None:
+            victory.update(m, d, r)
+            if victory.finished_at is not None and not finished:
+                finished = True
+                stage = "CELEBRATE"
+                events.append(dict(type="FINISH", t=victory.finished_at))
         driver.step(m, d, float(x))
         r.step()
         if capture:
@@ -559,6 +573,8 @@ def run(
             audit.sample(m, d, r, intentional_rotation=stage in ("ROLL", "EXIT_ROLL"))
             gap_audit.sample(m, d, r)
             props.sample(m, d, r)
+            if victory is not None:
+                victory.sample(m, d, r)
             if arcade:
                 driver.sample(m, d)
             if capture and j % 25 == 0:
@@ -615,6 +631,7 @@ def run(
         ).hexdigest(),
         predictive=predictive,
         difficulty=difficulty,
+        victory=victory.report(m, d, r) if victory else None,
         combination_planning=combo_planning,
         forecast_entry_roll=forecast_entry_roll,
         forecasts=forecasts,
@@ -659,7 +676,8 @@ def run(
             + audit.events
             + props.events
             + tactical.events
-            + (driver.bowling.events + combo.events if arcade else []),
+            + (driver.bowling.events + combo.events if arcade else [])
+            + ([e for e in victory.events if e["type"] != "FINISH"] if victory else []),
             key=lambda e: e["t"],
         ),
         warnings=d.warning.number.tolist(),
@@ -676,6 +694,7 @@ def run(
         and report["audit"]["p99_penetration_m"] < 0.001
         and not d.warning.number.any()
         and (not arcade or (driver.bowling.unlocked and len(combo.verified) == 6))
+        and (not victory_dance or (victory is not None and report["victory"]["passed"]))
     )
     report["passed"] = (
         report["component_course_passed"]
@@ -749,6 +768,7 @@ if __name__ == "__main__":
     p.add_argument("--roll-policy")
     p.add_argument("--predictive", action="store_true")
     p.add_argument("--legacy-handoffs", action="store_true")
+    p.add_argument("--victory-dance", action="store_true")
     p.add_argument(
         "--forecast-entry-roll",
         action="store_true",

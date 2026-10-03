@@ -68,6 +68,9 @@ def sound(path, duration, events):
         elif kind == "FINISH":
             for j, f in enumerate([523.25, 659.25, 783.99]):
                 tone(at + j * 0.12, 0.5, f, 0.055)
+        elif kind == "VICTORY_HOP_LANDED":
+            tone(at, 0.12, 220, 0.035, 0.2)
+            tone(at + 0.05, 0.25, 1046.5, 0.035)
         elif kind == "BALL_PUSH":
             tone(at, 0.18, 240, 0.08, 0.25)
         elif kind == "PIN_DOWN":
@@ -521,7 +524,9 @@ def render(
                             26,
                         ),
                         (
-                            "Selected frozen-cohort run; failures and latency are reported in the README.",
+                            "Historical Jev prefix + new physical finish; see README for outcomes."
+                            if report.get("continuation")
+                            else "Selected frozen-cohort run; failures and latency are reported in the README.",
                             25,
                         ),
                         ("Synthesized Foley. This is a simulator demonstration.", 25),
@@ -692,6 +697,8 @@ def render(
             ).hexdigest()
             if arcade
             else None,
+            continuation=report.get("continuation"),
+            victory=report.get("victory"),
             qualification_scope="Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
             clips=rendered,
             motion_blur="4 nearest actual 200 Hz states at -6/-2/+2/+6 ms; no joint interpolation"

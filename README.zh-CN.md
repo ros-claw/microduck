@@ -20,6 +20,14 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 完整回放包含启动阶段。特写以 0.25× 速度重放同一段轨迹，不代表额外独立测试。渲染使用模型原生材质，外观调整前后的逐圈判定记录已核对一致。参见 [轨迹审计](artifacts/presentation/audit.json) 与 [渲染元数据](artifacts/presentation/manifest.json)。
 
+## 最终细节版：冲线与庆祝
+
+[终点动作方法与复现](docs/VICTORY_FINISH.md)：约 68 秒英文特写与慢动作版保留六关，并增加欢快冲线、两次真实腾空的小跳和点头庆祝。行走与小跳复用学习策略，头部姿态和衔接时序由电机指令编排；没有改写根部位置或速度。前 25.24 秒精确重放之前的 Jev 记录，之后继续物理仿真；这不增加未见种子的测试成绩。
+
+[![Physical victory hops and supported landings](out/microduck_neon_escape_v5_victory_technical.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4)
+
+[English technical video](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_evidence.tar.gz)
+
 ## 连锁撞瓶逃生：组合技能与物理谜题
 
 鸭子连续翻滚过杆、躲落箱、跨过真实缺口、通过旋转横臂，再推球连锁撞倒三个瓶子，解锁出口后再次翻滚逃生。巨球能撞开保龄球护栏；物体接触决定关卡状态。Jev 选择关卡动作，已有四套学习策略执行，局部物理预览比较跳跃和出口翻滚衔接。

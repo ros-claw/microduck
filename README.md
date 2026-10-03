@@ -20,6 +20,14 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
+## Final technical cut: happy approach and victory hops
+
+[Finish method and reproduction](docs/VICTORY_FINISH.md): a 68-second English close-up/slow-motion cut adds a happy approach, two genuinely airborne hops and head nods. Existing walking/centered-hop policies execute the movements; head gestures and scheduling are scripted motor commands. The first 25.24 s exactly replay the historical Jev record, followed by a new physical finish. This continuation does not add unseen evaluation trials.
+
+[![Physical victory hops and supported landings](out/microduck_neon_escape_v5_victory_technical.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4)
+
+[English technical video](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_evidence.tar.gz)
+
 ## Strike & Escape: combined skills and a physical puzzle
 
 Roll through a bar, dodge a falling crate, jump a real void, survive a rotating arm, push a ball into three targets, then roll again through the unlocked exit. Measured physical contact changes the game state; the pursuer can knock alley guides loose. Jev selects encounters, four existing learned policies execute them, and local physics previews compare jump and exit-roll transitions.
