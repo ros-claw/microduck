@@ -1,0 +1,527 @@
+{
+  "categories": {
+    "prop_floor": {
+      "samples": 3308441,
+      "max_penetration_m": 0.0007693712386332799,
+      "p99_penetration_m": 0.0
+    },
+    "duck_floor": {
+      "samples": 494935,
+      "max_penetration_m": 0.0008406060963960046,
+      "p99_penetration_m": 5.929991425507614e-05
+    },
+    "duck_self": {
+      "samples": 1618,
+      "max_penetration_m": 0.0003431545280041015,
+      "p99_penetration_m": 0.00030239037222329465
+    },
+    "prop_prop": {
+      "samples": 53731,
+      "max_penetration_m": 0.000733476999566986,
+      "p99_penetration_m": 0.00015614287214469716
+    },
+    "duck_hazard": {
+      "samples": 577,
+      "max_penetration_m": 0.00034353432639103176,
+      "p99_penetration_m": 0.00020523033768850393
+    }
+  },
+  "pairs": {
+    "floor/2 \u00d7 playball/geom": {
+      "category": "prop_floor",
+      "samples": 165507,
+      "max_penetration_m": 1.3877787807814457e-17,
+      "normal_impulse_Ns": 8.587490619540018,
+      "peak_time_s": 0.0002
+    },
+    "floor/2 \u00d7 pin0/geom": {
+      "category": "prop_floor",
+      "samples": 674011,
+      "max_penetration_m": 6.325815241407275e-05,
+      "normal_impulse_Ns": 2.779449702190091,
+      "peak_time_s": 22.549599999974124
+    },
+    "floor/2 \u00d7 pin1/geom": {
+      "category": "prop_floor",
+      "samples": 652495,
+      "max_penetration_m": 5.5857327703226575e-06,
+      "normal_impulse_Ns": 2.669926060725254,
+      "peak_time_s": 24.47699999996963
+    },
+    "floor/2 \u00d7 pin2/geom": {
+      "category": "prop_floor",
+      "samples": 667600,
+      "max_penetration_m": 0.00025841641832187543,
+      "normal_impulse_Ns": 9.806033799700016,
+      "peak_time_s": 22.18999999997496
+    },
+    "duck/left_foot_collision \u00d7 floor/0": {
+      "category": "duck_floor",
+      "samples": 86226,
+      "max_penetration_m": 0.0004799240870867873,
+      "normal_impulse_Ns": 39.78386181944462,
+      "peak_time_s": 9.153600000005344
+    },
+    "duck/right_foot_collision \u00d7 floor/0": {
+      "category": "duck_floor",
+      "samples": 89104,
+      "max_penetration_m": 0.0005199099927548855,
+      "normal_impulse_Ns": 40.96093259532921,
+      "peak_time_s": 9.729000000004003
+    },
+    "floor/2 \u00d7 gutter_left/geom": {
+      "category": "prop_floor",
+      "samples": 229837,
+      "max_penetration_m": 0.0001503330572964097,
+      "normal_impulse_Ns": 6.3127686671200465,
+      "peak_time_s": 0.10980000000000109
+    },
+    "floor/2 \u00d7 gutter_right/geom": {
+      "category": "prop_floor",
+      "samples": 230593,
+      "max_penetration_m": 9.097392868228152e-05,
+      "normal_impulse_Ns": 7.18339883438712,
+      "peak_time_s": 0.10980000000000109
+    },
+    "floor/3 \u00d7 portal/geom": {
+      "category": "prop_floor",
+      "samples": 48,
+      "max_penetration_m": 0.0007460172095706472,
+      "normal_impulse_Ns": 1.991017779323409,
+      "peak_time_s": 0.20320000000000377
+    },
+    "boss/geom \u00d7 floor/0": {
+      "category": "prop_floor",
+      "samples": 85308,
+      "max_penetration_m": 0.0005648299594035733,
+      "normal_impulse_Ns": 137.5674415624169,
+      "peak_time_s": 0.3355999999999957
+    },
+    "duck/part_48 \u00d7 floor/0": {
+      "category": "duck_floor",
+      "samples": 4571,
+      "max_penetration_m": 0.0008406060963960046,
+      "normal_impulse_Ns": 6.501694979122921,
+      "peak_time_s": 3.3561999999996632
+    },
+    "duck/part_18 \u00d7 duck/part_66": {
+      "category": "duck_self",
+      "samples": 1242,
+      "max_penetration_m": 3.656399837429349e-05,
+      "normal_impulse_Ns": 1.1875879791503896,
+      "peak_time_s": 4.0867999999997755
+    },
+    "duck/part_8 \u00d7 floor/0": {
+      "category": "duck_floor",
+      "samples": 1123,
+      "max_penetration_m": 0.00045531514785293744,
+      "normal_impulse_Ns": 2.100508267836852,
+      "peak_time_s": 4.466400000000577
+    },
+    "duck/part_25 \u00d7 floor/0": {
+      "category": "duck_floor",
+      "samples": 120,
+      "max_penetration_m": 4.7055629295280195e-05,
+      "normal_impulse_Ns": 0.26850895439735606,
+      "peak_time_s": 4.722400000001117
+    },
+    "crate/geom \u00d7 floor/0": {
+      "category": "prop_floor",
+      "samples": 521041,
+      "max_penetration_m": 0.0007693712386332799,
+      "normal_impulse_Ns": 19.107207327056685,
+      "peak_time_s": 7.842600000007701
+    },
+    "bar/geom \u00d7 boss/geom": {
+      "category": "prop_prop",
+      "samples": 243,
+      "max_penetration_m": 0.0001756472258959054,
+      "normal_impulse_Ns": 0.6856041957980423,
+      "peak_time_s": 11.334200000000262
+    },
+    "duck/part_57 \u00d7 duck/part_8": {
+      "category": "duck_self",
+      "samples": 10,
+      "max_penetration_m": 4.863123501650327e-05,
+      "normal_impulse_Ns": 0.4012620641427987,
+      "peak_time_s": 12.189599999998268
+    },
+    "duck/part_75 \u00d7 duck/part_8": {
+      "category": "duck_self",
+      "samples": 104,
+      "max_penetration_m": 0.00033804030801981284,
+      "normal_impulse_Ns": 1.0412876760497418,
+      "peak_time_s": 12.221399999998194
+    },
+    "duck/part_55 \u00d7 duck/part_8": {
+      "category": "duck_self",
+      "samples": 26,
+      "max_penetration_m": 1.6183134561706766e-05,
+      "normal_impulse_Ns": 0.6866981167642316,
+      "peak_time_s": 12.212999999998214
+    },
+    "duck/part_25 \u00d7 duck/part_8": {
+      "category": "duck_self",
+      "samples": 166,
+      "max_penetration_m": 0.00012134426633462572,
+      "normal_impulse_Ns": 1.0504027137370522,
+      "peak_time_s": 12.226799999998182
+    },
+    "duck/part_18 \u00d7 floor/1": {
+      "category": "duck_floor",
+      "samples": 27,
+      "max_penetration_m": 0.0006668434011465052,
+      "normal_impulse_Ns": 0.8021274975775108,
+      "peak_time_s": 12.525599999997485
+    },
+    "duck/part_66 \u00d7 floor/1": {
+      "category": "duck_floor",
+      "samples": 9,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.06657537770737142,
+      "peak_time_s": 0.0
+    },
+    "duck/part_48 \u00d7 floor/1": {
+      "category": "duck_floor",
+      "samples": 344,
+      "max_penetration_m": 0.0001431950629873997,
+      "normal_impulse_Ns": 1.233810598349538,
+      "peak_time_s": 12.57499999999737
+    },
+    "duck/left_foot_collision \u00d7 floor/1": {
+      "category": "duck_floor",
+      "samples": 11500,
+      "max_penetration_m": 0.000682682541811907,
+      "normal_impulse_Ns": 9.24049451310088,
+      "peak_time_s": 12.636599999997227
+    },
+    "duck/part_48 \u00d7 rail/1/-1": {
+      "category": "duck_floor",
+      "samples": 28,
+      "max_penetration_m": 0.00029094328561311237,
+      "normal_impulse_Ns": 0.18797172217141822,
+      "peak_time_s": 12.667799999997154
+    },
+    "duck/part_48 \u00d7 duck/right_foot_collision": {
+      "category": "duck_self",
+      "samples": 44,
+      "max_penetration_m": 0.0003431545280041015,
+      "normal_impulse_Ns": 0.22063256297423772,
+      "peak_time_s": 12.77219999999691
+    },
+    "duck/right_foot_collision \u00d7 floor/1": {
+      "category": "duck_floor",
+      "samples": 10244,
+      "max_penetration_m": 0.00017793628319266147,
+      "normal_impulse_Ns": 8.565733705795505,
+      "peak_time_s": 14.434999999993035
+    },
+    "duck/part_55 \u00d7 duck/part_66": {
+      "category": "duck_self",
+      "samples": 26,
+      "max_penetration_m": 0.00011352845501369041,
+      "normal_impulse_Ns": 0.18884530627510324,
+      "peak_time_s": 12.853599999996721
+    },
+    "boss/geom \u00d7 crate/geom": {
+      "category": "prop_prop",
+      "samples": 281,
+      "max_penetration_m": 0.00015538356796077069,
+      "normal_impulse_Ns": 0.3676795808117751,
+      "peak_time_s": 13.96079999999414
+    },
+    "crate/geom \u00d7 rail/0/1": {
+      "category": "prop_floor",
+      "samples": 518,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.14667212294958085,
+      "peak_time_s": 0.0
+    },
+    "duck/right_foot_collision \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 51174,
+      "max_penetration_m": 0.0008101779142529283,
+      "normal_impulse_Ns": 43.233419576312635,
+      "peak_time_s": 25.81659999996651
+    },
+    "duck/left_foot_collision \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 48515,
+      "max_penetration_m": 0.0005020774095607951,
+      "normal_impulse_Ns": 42.781429800646826,
+      "peak_time_s": 24.705999999969098
+    },
+    "boss/geom \u00d7 floor/1": {
+      "category": "prop_floor",
+      "samples": 5134,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 8.379733572389888,
+      "peak_time_s": 0.0
+    },
+    "boss/geom \u00d7 floor/2": {
+      "category": "prop_floor",
+      "samples": 75943,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 120.90184913268783,
+      "peak_time_s": 0.0
+    },
+    "boss/geom \u00d7 sweeper/geom": {
+      "category": "prop_prop",
+      "samples": 1947,
+      "max_penetration_m": 0.000507982660630223,
+      "normal_impulse_Ns": 1.5034815920204683,
+      "peak_time_s": 19.12299999998211
+    },
+    "duck/trunk_base/hazard_proxy \u00d7 playball/geom": {
+      "category": "duck_hazard",
+      "samples": 274,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.29108915780780065,
+      "peak_time_s": 0.0
+    },
+    "pin0/geom \u00d7 playball/geom": {
+      "category": "prop_prop",
+      "samples": 559,
+      "max_penetration_m": 0.00029499890580542143,
+      "normal_impulse_Ns": 0.11346563220363352,
+      "peak_time_s": 22.115199999975136
+    },
+    "pin0/geom \u00d7 pin1/geom": {
+      "category": "prop_prop",
+      "samples": 6728,
+      "max_penetration_m": 0.000733476999566986,
+      "normal_impulse_Ns": 0.14209213513903063,
+      "peak_time_s": 22.217799999974897
+    },
+    "pin1/geom \u00d7 pin2/geom": {
+      "category": "prop_prop",
+      "samples": 9876,
+      "max_penetration_m": 0.0004069505929641461,
+      "normal_impulse_Ns": 0.1450525613658614,
+      "peak_time_s": 22.193799999974953
+    },
+    "duck/ankle_right/hazard_proxy \u00d7 playball/geom": {
+      "category": "duck_hazard",
+      "samples": 12,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.017034448612708017,
+      "peak_time_s": 0.0
+    },
+    "pin1/geom \u00d7 playball/geom": {
+      "category": "prop_prop",
+      "samples": 34,
+      "max_penetration_m": 0.0003006524391391957,
+      "normal_impulse_Ns": 0.006435850401060508,
+      "peak_time_s": 22.355399999974576
+    },
+    "pin0/geom \u00d7 pin2/geom": {
+      "category": "prop_prop",
+      "samples": 1,
+      "max_penetration_m": 1.833559759499559e-05,
+      "normal_impulse_Ns": 0.0002382489590484114,
+      "peak_time_s": 22.533199999974162
+    },
+    "pin2/geom \u00d7 playball/geom": {
+      "category": "prop_prop",
+      "samples": 1161,
+      "max_penetration_m": 8.982007288353688e-05,
+      "normal_impulse_Ns": 0.3126280709961159,
+      "peak_time_s": 23.947399999970866
+    },
+    "boss/geom \u00d7 gutter_right/geom": {
+      "category": "prop_prop",
+      "samples": 444,
+      "max_penetration_m": 0.00012577963639031145,
+      "normal_impulse_Ns": 0.8314042530742803,
+      "peak_time_s": 23.076999999972895
+    },
+    "duck/jaw_soft/hazard_proxy \u00d7 playball/geom": {
+      "category": "duck_hazard",
+      "samples": 45,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.12321780660075261,
+      "peak_time_s": 0.0
+    },
+    "gutter_right/geom \u00d7 playball/geom": {
+      "category": "prop_prop",
+      "samples": 635,
+      "max_penetration_m": 0.0002142924662919994,
+      "normal_impulse_Ns": 0.04156241149374647,
+      "peak_time_s": 23.570599999971744
+    },
+    "boss/geom \u00d7 gutter_left/geom": {
+      "category": "prop_prop",
+      "samples": 87,
+      "max_penetration_m": 1.0613110263169717e-05,
+      "normal_impulse_Ns": 0.021480914538414622,
+      "peak_time_s": 23.70479999997143
+    },
+    "duck/upper_leg_right/hazard_proxy \u00d7 playball/geom": {
+      "category": "duck_hazard",
+      "samples": 5,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.007337771051124727,
+      "peak_time_s": 0.0
+    },
+    "duck/ankle_left/hazard_proxy \u00d7 pin1/geom": {
+      "category": "duck_hazard",
+      "samples": 84,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.04357635712763203,
+      "peak_time_s": 0.0
+    },
+    "duck/ankle_left/hazard_proxy \u00d7 pin2/geom": {
+      "category": "duck_hazard",
+      "samples": 136,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.022583894115760176,
+      "peak_time_s": 0.0
+    },
+    "duck/ankle_right/hazard_proxy \u00d7 pin2/geom": {
+      "category": "duck_hazard",
+      "samples": 12,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.01456550364782495,
+      "peak_time_s": 0.0
+    },
+    "gutter_right/geom \u00d7 rail/2/-1": {
+      "category": "prop_floor",
+      "samples": 81,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.004991877531435803,
+      "peak_time_s": 0.0
+    },
+    "duck/part_48 \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 3803,
+      "max_penetration_m": 0.00043102424289427556,
+      "normal_impulse_Ns": 5.5720302117989835,
+      "peak_time_s": 25.497999999967252
+    },
+    "boss/geom \u00d7 pin2/geom": {
+      "category": "prop_prop",
+      "samples": 4520,
+      "max_penetration_m": 0.00017112193638452178,
+      "normal_impulse_Ns": 7.106894901038552,
+      "peak_time_s": 25.780999999966593
+    },
+    "duck/ankle_left/hazard_proxy \u00d7 exit_bar/geom": {
+      "category": "duck_hazard",
+      "samples": 9,
+      "max_penetration_m": 0.00034353432639103176,
+      "normal_impulse_Ns": 0.15329420237634164,
+      "peak_time_s": 26.11659999996581
+    },
+    "duck/part_57 \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 14,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.03350575012902551,
+      "peak_time_s": 0.0
+    },
+    "duck/part_8 \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 1121,
+      "max_penetration_m": 0.0005388595798209667,
+      "normal_impulse_Ns": 2.198981399027956,
+      "peak_time_s": 26.360199999965243
+    },
+    "playball/geom \u00d7 rail/3/-1": {
+      "category": "prop_floor",
+      "samples": 197,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.04328435477508831,
+      "peak_time_s": 0.0
+    },
+    "duck/part_25 \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 55,
+      "max_penetration_m": 7.642468978103013e-05,
+      "normal_impulse_Ns": 0.26188913719155127,
+      "peak_time_s": 26.638399999964594
+    },
+    "duck/part_75 \u00d7 floor/2": {
+      "category": "duck_floor",
+      "samples": 27,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.0718836128199221,
+      "peak_time_s": 0.0
+    },
+    "gutter_left/geom \u00d7 rail/2/1": {
+      "category": "prop_floor",
+      "samples": 26,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.0021159688394106323,
+      "peak_time_s": 0.0
+    },
+    "playball/geom \u00d7 rail/2/-1": {
+      "category": "prop_floor",
+      "samples": 102,
+      "max_penetration_m": 0.0,
+      "normal_impulse_Ns": 0.012715249990654902,
+      "peak_time_s": 0.0
+    },
+    "duck/right_foot_collision \u00d7 floor/3": {
+      "category": "duck_floor",
+      "samples": 82466,
+      "max_penetration_m": 0.0004410871901302692,
+      "normal_impulse_Ns": 24.698166958366738,
+      "peak_time_s": 29.203199999958617
+    },
+    "duck/left_foot_collision \u00d7 floor/3": {
+      "category": "duck_floor",
+      "samples": 104464,
+      "max_penetration_m": 0.0005168321644738956,
+      "normal_impulse_Ns": 24.606889144140244,
+      "peak_time_s": 29.03419999995901
+    },
+    "boss/geom \u00d7 exit_bar/geom": {
+      "category": "prop_prop",
+      "samples": 259,
+      "max_penetration_m": 0.0006271111631811956,
+      "normal_impulse_Ns": 0.7282803417261812,
+      "peak_time_s": 28.92259999995927
+    },
+    "boss/geom \u00d7 playball/geom": {
+      "category": "prop_prop",
+      "samples": 9150,
+      "max_penetration_m": 0.00038774135011286626,
+      "normal_impulse_Ns": 0.2349264777666043,
+      "peak_time_s": 29.185999999958657
+    },
+    "boss/geom \u00d7 portal/geom": {
+      "category": "prop_prop",
+      "samples": 17806,
+      "max_penetration_m": 0.00026731766075602237,
+      "normal_impulse_Ns": 3.950077355426923,
+      "peak_time_s": 31.362799999953584
+    }
+  },
+  "warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "scope": "All force-bearing contacts at every 0.2 ms step, from replayed actuator inputs; includes native ground compliance separately from hazard contact.",
+  "capture": {
+    "scene.mjb": "6ddcdad39604d429be0d15844fa1936c22c239eceb2d8c2c84d5b5052358b2c1",
+    "trajectory.npz": "570cb5d27725fec2612ec4163d992b057cc857ff9a6a614b4989959a4791f1e5",
+    "inputs.npz": "e4bbad78da7275537551bf56cd31d8239302ec69f2889ec23e2b3d680c691b71"
+  },
+  "publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": true,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "escape_contact_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  }
+}

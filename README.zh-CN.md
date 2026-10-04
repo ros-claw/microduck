@@ -20,11 +20,49 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 完整回放包含启动阶段。特写以 0.25× 速度重放同一段轨迹，不代表额外独立测试。渲染使用模型原生材质，外观调整前后的逐圈判定记录已核对一致。参见 [轨迹审计](artifacts/presentation/audit.json) 与 [渲染元数据](artifacts/presentation/manifest.json)。
 
+## 物理闯关：特写与慢动作
+
+[方法与碰撞审计](docs/CONTACT_DETAILS.md)：63 秒英文细节版保留六段完整闯关，慢动作聚焦跨坑落地、旋转杆擦碰、鸭子推球撞瓶解锁出口。杆子接触的定格使用实际 5 kHz 物理状态，青色线框显示参与接触的保守身体碰撞盒；这里是启用接触的胶囊/盒体近似，不是逐三角面网格碰撞。
+
+简短终点动作改为单一 PPO 连续步态，并在训练、部署中使用相同的目标平滑和限速。旧版短跳与站立交替虽经过物理计算，观看反馈仍是抽搐，因此被替代。精选记录先精确重放历史 Jev 704 号轨迹至 26.32 秒，再从同一物理状态继续执行新策略；不增加未见种子测试或成功率。规划使用特权仿真状态。
+
+[![真实缺口、杆子擦碰与组合技能](out/microduck_neon_escape_v6_details_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4)
+
+[英文特写与慢动作视频](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4) · [输入重放与训练证据](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz) · [结果与失败记录](artifacts/neon-escape-v6/README.md)
+
+## 连锁撞瓶逃生：组合技能与物理谜题
+
+鸭子连续翻滚过杆、躲落箱、跨过真实缺口、通过旋转横臂，再推球连锁撞倒三个瓶子，解锁出口后再次翻滚逃生。巨球能撞开保龄球护栏；物体接触决定关卡状态。Jev 选择关卡动作，已有四套学习策略执行，局部物理预览比较跳跃和出口翻滚衔接。
+
+精选历史记录完成六关，用时 **27.08 仿真秒，HP 2/3**，通过输入重放、全接触及独立因果检查。初版六种子为 **2/6 逃生、1/6 严格发布通过**；最终默认版本 **2/6 严格通过**；中间版本结果和失败单独保留。护栏辅助保龄球，预测使用仿真完整状态；35 仿真秒录制耗时 77.41 秒，尚非实时视觉或硬件演示。
+
+[![Strike & Escape: physical duck–ball–target interaction](out/microduck_neon_escape_v4_strike_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4)
+
+[35 秒英文动作版](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [54 秒英文细节与慢动作版](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_technical.mp4) · [完整重放证据](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_evidence.tar.gz) · [中英方法说明](docs/STRIKE_ESCAPE.md) · [全部测试与失败](artifacts/neon-escape-v4/README.md)
+
+## Reactive Chase：根据状态选择路线
+
+[方法与完整评估](docs/REACTIVE_CHASE.md)：Jev 选择关卡动作，局部物理模型预测起跳衔接与绕杆路线，原有电机策略负责执行。落箱位置会改变，巨球追逐更近；两条精选在线记录分别左绕／右绕，约 17.6／17.9 秒逃生，均保持满生命值。
+
+新六种子测试：**5/6 逃生，3/6 通过严格全接触发布检查**。预测使用仿真完整状态，并非视觉识别；局部规划耗时最高约 5 秒，视频按仿真时间播放，不能作为实时真机能力证明。20 cm／1.2 秒快闪仍未达标。
+
+[![Reactive Chase — live Jev and model-based execution](out/microduck_neon_escape_v3_reactive_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4)
+
+[Action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4) · [Technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_evidence.tar.gz)
+
 ## Neon Escape：独立物理游戏原型
 
 [游戏录像与方法说明](docs/NEON_ESCAPE.md)：真实 Jev 战术决策调用现有运动策略，控制鸭子翻滚、换道并穿过程序生成的障碍场景。已有 39.98 秒无碰撞通关记录，失败种子和规则基线对照也完整公开；跨沟跳跃与通用跌倒恢复仍未验证。
 
 [![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
+
+[V2 方法与物理验收](docs/NEON_ESCAPE_V2.md)：真实 15 cm 坑、行进翻滚、有限力道具、巨球追逐和电机策略起身。精选的**规则控制物理基线**通过全接触审计及精确输入回放；在线 Jev 稳定性、20 cm／1.2 秒快闪仍未完成，属于实验分支。
+
+[![Physical baseline — rule-based tactics](out/microduck_neon_escape_v2_physical_baseline_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4)
+
+[26 s physical baseline](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4) · [60 s technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_technical.mp4) · [Replay evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_evidence.tar.gz)
+
+两支英文视频展示同一条仿真轨迹；音效为后期合成，各自最多三段慢动作。画面明确标注规则控制，不能作为在线 Jev 成功案例。
 
 ## 方法
 

@@ -20,11 +20,49 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
+## Physical gameplay: close-ups and slow motion
+
+[Method and collision audit](docs/CONTACT_DETAILS.md): a 63-second English detail cut keeps the full six-encounter run and replays three physical interactions—gap landing, a force-bearing rod brush, and duck–ball–pin contact that unlocks the exit. The rod contact freeze-frame uses an actual 5 kHz state and outlines its conservative body collision box. These are contact-enabled capsule/box approximations, not exact visual-triangle collisions.
+
+The short finish uses a separately fine-tuned PPO gait with the same target smoothing and rate limit during training and deployment. Earlier hop/stand bursts looked twitchy in user review and are superseded. The selected capture exactly replays historical Jev seed 704 through 26.32 s, then continues physics with the new motor policy. It adds no unseen trials or success-rate claims; planning uses privileged simulator state.
+
+[![Physical gap crossing, rod contact and skill composition](out/microduck_neon_escape_v6_details_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4)
+
+[English close-up and slow-motion video](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4) · [Replay and training evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz) · [Results and failed probes](artifacts/neon-escape-v6/README.md)
+
+## Strike & Escape: combined skills and a physical puzzle
+
+Roll through a bar, dodge a falling crate, jump a real void, survive a rotating arm, push a ball into three targets, then roll again through the unlocked exit. Measured physical contact changes the game state; the pursuer can knock alley guides loose. Jev selects encounters, four existing learned policies execute them, and local physics previews compare jump and exit-roll transitions.
+
+The selected historical record completes six encounters in **27.08 simulation seconds, HP 2/3**, with exact input replay, full-contact limits and independent unlock-causality proof. Initial frozen cohort: **2/6 escapes, 1/6 strict publication passes**. The final default cohort yields **2/6 strict passes**; intermediate revisions and failures are reported separately. Bowling uses physical guides; previews use privileged simulator state. A 35 s capture took 77.41 wall seconds, so this is not a real-time vision or hardware demonstration.
+
+[![Strike & Escape: physical duck–ball–target interaction](out/microduck_neon_escape_v4_strike_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4)
+
+[35 s action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [54 s details and slow motion](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_technical.mp4) · [Full replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_evidence.tar.gz) · [Bilingual methods](docs/STRIKE_ESCAPE.md) · [All cohorts and failures](artifacts/neon-escape-v4/README.md)
+
+## Reactive Chase: state-dependent routes
+
+[Methods and complete evaluation](docs/REACTIVE_CHASE.md): Jev selects encounters; a local physics model previews gap transitions and sweeper routes; existing learned motor policies execute them. Drop-zone positions vary and the sphere pursues more closely. Two selected live records choose opposite routes and escape in 17.6/17.9 simulation seconds with full HP.
+
+Frozen six-seed test: **5/6 valid escapes; 3/6 meet all publication contact limits**. Preview uses privileged simulator state, not vision. Local planning took up to about 5 seconds in the selected run; films show simulation time and do not certify real-time hardware performance. A 20 cm / 1.2 s quick dodge is still unqualified.
+
+[![Reactive Chase — live Jev and model-based execution](out/microduck_neon_escape_v3_reactive_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4)
+
+[Action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4) · [Technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_evidence.tar.gz)
+
 ## Neon Escape: independent physical arcade prototype
 
 [Gameplay and methods](docs/NEON_ESCAPE.md): real Jev tactical decisions drive existing motor policies through a seeded obstacle course, including a verified forward roll. One recorded run finishes cleanly in 39.98 seconds; failures and baseline comparisons are published alongside it. Gap jumping and general fall recovery remain unvalidated.
 
 [![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
+
+[V2 methods and physical validation](docs/NEON_ESCAPE_V2.md): real 15 cm gap, moving roll, finite-force props, a pursuing sphere and motor-policy recovery. The selected **rule-controlled physical baseline** passes full contact auditing and exact input replay. Live Jev reliability and 20 cm / 1.2 s quick dodge remain unfinished; this is an experimental branch.
+
+[![Physical baseline — rule-based tactics](out/microduck_neon_escape_v2_physical_baseline_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4)
+
+[26 s physical baseline](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4) · [60 s technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_technical.mp4) · [Replay evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_evidence.tar.gz)
+
+Both English cuts show the same simulation. Synthesized Foley; at most three slow-motion segments. The baseline is explicitly labeled as rule-controlled, not live Jev.
 
 ## Method
 

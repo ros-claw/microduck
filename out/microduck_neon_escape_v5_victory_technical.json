@@ -1,0 +1,163 @@
+{
+  "source": "artifacts/neon-escape-v5/victory-2",
+  "source_audit_sha256": "15d907fc12cee1991b21c912eee6858932de298e5ce5cf9668db29f4827d59ea",
+  "video_sha256": "42112420802b85acfe34fb825d9322744d8bf738f5f8f852623d86e6abd71e2a",
+  "cut": "technical",
+  "style": "industrial",
+  "fps": 50,
+  "frames": 3376,
+  "duration_s": 67.52,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "jev",
+  "evaluation_goal": "escape",
+  "core_physical_gates": true,
+  "full_stunt_gate": false,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "ceeba6d385f591dc06674a49cdef55f562652b8bdaf353866319fe9c4010239d",
+  "input_replay_sha256": "4bcdb681864f2f2c1fec31d3c4a69a331452dbf4b5b0731c4561f748573e1f70",
+  "contact_causality_sha256": "152a0613e6e8202fd70a4af8d058c3fe93c61884b83bd77c2b8c372dbf6d53c5",
+  "continuation": {
+    "parent_audit_sha256": "a3278cc3ccc7ff4bea3fc385f9de11a9b584652904392023a7ec37c21ddd8321",
+    "parent_capture": {
+      "scene.mjb": "871f19666a4b7f87ab2c143e5a04de1db1fbb42769dc375fcbb1ca2a8551b3b4",
+      "trajectory.npz": "5c0061071a466c6f0912449ff8ed70f9ddfba045bf8433a96235b9ce712c3623",
+      "inputs.npz": "f59fc84f327842cafe39ee68d116301bb45c9a45b8e9c8bebd7e08d0dbdb4fbb"
+    },
+    "parent_source_archive_sha256": "507e3495a36f1180ef8c910045a91e28a11b7d0a4b329c75e1ac5a3defe58a09",
+    "branch_time": 25.239999999967853,
+    "prefix_control_ticks": 1262,
+    "prefix_exact": true,
+    "parent_wall_seconds": 77.40718547906727,
+    "scope": "Historical live-Jev prefix replayed exactly; new actuator-only finish suffix. Selected demonstration, not a new live API or unseen trial."
+  },
+  "victory": {
+    "passed": true,
+    "phase": "SETTLED",
+    "finished_at": 27.739999999962027,
+    "min_upright": 0.908245125343424,
+    "flights": [
+      {
+        "start": 29.756599999957327,
+        "max_height": 0.14183115212921005,
+        "min_upright": 0.9630188685745843,
+        "end": 29.829799999957157,
+        "duration": 0.0731999999998294,
+        "foot_landing": true
+      },
+      {
+        "start": 31.953199999952208,
+        "max_height": 0.1393049970966629,
+        "min_upright": 0.958238887652077,
+        "end": 32.024399999952045,
+        "duration": 0.07119999999983762,
+        "foot_landing": true
+      }
+    ],
+    "qualified_hops": 2,
+    "method": "Existing walking and centered rope-hop motor policies; bounded scripted head servo targets. No root/prop pose or velocity writes; no external robot force."
+  },
+  "qualification_scope": "Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
+  "clips": [
+    {
+      "start": 0.0002,
+      "stop": 34.75519999994568,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "SIX ENCOUNTERS / RECORDED RUN + PHYSICAL FINISH",
+      "output_start": 0.0,
+      "frames": 1738
+    },
+    {
+      "start": 3.289999999999654,
+      "stop": 5.720000000003011,
+      "speed": 1.0,
+      "shot": "roll",
+      "title": "ROLL / native motor policy, measured rotation and foot support",
+      "output_start": 34.76,
+      "frames": 122
+    },
+    {
+      "start": 10.934800000000727,
+      "stop": 11.616400000000304,
+      "speed": 0.4,
+      "shot": "jump",
+      "title": "JUMP / real 15 cm void, force-bearing landing",
+      "output_start": 37.199999999999996,
+      "frames": 86
+    },
+    {
+      "start": 18.801199999982042,
+      "stop": 21.809399999976897,
+      "speed": 0.45,
+      "shot": "bowling",
+      "title": "STRIKE / duck contact \u2192 rolling ball \u2192 three falling pins",
+      "output_start": 38.919999999999995,
+      "frames": 335
+    },
+    {
+      "start": 21.359399999976898,
+      "stop": 22.359399999976898,
+      "speed": 1,
+      "shot": "bowling",
+      "title": "UNLOCK / verified strike opens a force-limited gate",
+      "output_start": 45.62,
+      "frames": 50
+    },
+    {
+      "start": 22.87999999997289,
+      "stop": 25.4699999999679,
+      "speed": 1,
+      "shot": "roll",
+      "title": "SECOND ROLL / return to walking and escape",
+      "output_start": 46.62,
+      "frames": 130
+    },
+    {
+      "start": 29.539599999956902,
+      "stop": 30.7395999999569,
+      "speed": 1,
+      "shot": "finish",
+      "title": "PURSUIT / the sphere physically strikes the closed door",
+      "output_start": 49.22,
+      "frames": 60
+    },
+    {
+      "start": 25.4699999999679,
+      "stop": 27.739999999962027,
+      "speed": 1,
+      "shot": "victory",
+      "title": "HAPPY APPROACH / learned walking + bounded head-servo gestures",
+      "output_start": 50.42,
+      "frames": 114
+    },
+    {
+      "start": 29.239999999962027,
+      "stop": 34.13999999996203,
+      "speed": 0.5,
+      "shot": "victory",
+      "title": "VICTORY / two learned motor-policy hops, real airborne phases and foot landings",
+      "output_start": 52.7,
+      "frames": 491
+    },
+    {
+      "start": 34.75519999994568,
+      "stop": 34.75519999994568,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "REPRODUCIBLE INPUT REPLAY",
+      "output_start": 62.52,
+      "frames": 250
+    }
+  ],
+  "motion_blur": "off",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained."
+}

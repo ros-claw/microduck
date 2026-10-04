@@ -1,0 +1,153 @@
+{
+  "policy_sha256": "e1d76b5034ade35153759183ba5b29ade7bbebecdc66ced97b09560c437d0c68",
+  "probes": [
+    {
+      "mode": "continuous_joy_smooth_pd_v1",
+      "passed": false,
+      "phase": "CONTINUOUS JOY",
+      "finished_at": 0.3999999999998123,
+      "dance_started": 1.9999999999998124,
+      "duration_s": 5.000000000006111,
+      "min_upright": -0.994160008255655,
+      "max_drift_m": 0.26743023408022376,
+      "feet_peak_m": [
+        0.28906291726959144,
+        0.28292661023036314
+      ],
+      "target_rate_rms_rad_s": 2.478762297027115,
+      "head_target_rate_rms_rad_s": 2.21050297546072,
+      "max_target_step_rad": 0.08000000000000007,
+      "pose_power_above_8hz_ratio": 0.0033134712586089126,
+      "target_conditioner": {
+        "version": "v1",
+        "alpha": 0.25,
+        "max_step_rad": 0.08,
+        "hz": 50,
+        "initialization": "previous actuator target"
+      },
+      "method": "Single PPO policy at 50 Hz; continuous pose commands and measured feedback; the same alpha=.25 / max-step=.08 rad target conditioner as training, initialized from the previous actuator target. Previous-action observations remain raw. No servo overrides, state edits or external robot forces.",
+      "initialization_seed": 0,
+      "warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "continuous_joy_smooth_pd_v1",
+      "passed": false,
+      "phase": "CONTINUOUS JOY",
+      "finished_at": 0.3999999999998123,
+      "dance_started": 1.9999999999998124,
+      "duration_s": 5.000000000006111,
+      "min_upright": 0.12078133309803057,
+      "max_drift_m": 0.2663258547432591,
+      "feet_peak_m": [
+        0.12883458053382046,
+        0.1541279006106644
+      ],
+      "target_rate_rms_rad_s": 2.9585996145590303,
+      "head_target_rate_rms_rad_s": 2.504593930572148,
+      "max_target_step_rad": 0.08000000000000007,
+      "pose_power_above_8hz_ratio": 3.939120423018724e-05,
+      "target_conditioner": {
+        "version": "v1",
+        "alpha": 0.25,
+        "max_step_rad": 0.08,
+        "hz": 50,
+        "initialization": "previous actuator target"
+      },
+      "method": "Single PPO policy at 50 Hz; continuous pose commands and measured feedback; the same alpha=.25 / max-step=.08 rad target conditioner as training, initialized from the previous actuator target. Previous-action observations remain raw. No servo overrides, state edits or external robot forces.",
+      "initialization_seed": 1,
+      "warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "continuous_joy_smooth_pd_v1",
+      "passed": false,
+      "phase": "CONTINUOUS JOY",
+      "finished_at": 0.3999999999998123,
+      "dance_started": 1.9999999999998124,
+      "duration_s": 5.000000000006111,
+      "min_upright": -0.265589662678382,
+      "max_drift_m": 0.2526775847926765,
+      "feet_peak_m": [
+        0.13399332428896496,
+        0.17307388786956973
+      ],
+      "target_rate_rms_rad_s": 2.739481258788035,
+      "head_target_rate_rms_rad_s": 2.5969169349157006,
+      "max_target_step_rad": 0.08000000000000007,
+      "pose_power_above_8hz_ratio": 2.73089550999056e-05,
+      "target_conditioner": {
+        "version": "v1",
+        "alpha": 0.25,
+        "max_step_rad": 0.08,
+        "hz": 50,
+        "initialization": "previous actuator target"
+      },
+      "method": "Single PPO policy at 50 Hz; continuous pose commands and measured feedback; the same alpha=.25 / max-step=.08 rad target conditioner as training, initialized from the previous actuator target. Previous-action observations remain raw. No servo overrides, state edits or external robot forces.",
+      "initialization_seed": 2,
+      "warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "continuous_joy_smooth_pd_v1",
+      "passed": false,
+      "phase": "CONTINUOUS JOY",
+      "finished_at": 0.3999999999998123,
+      "dance_started": 1.9999999999998124,
+      "duration_s": 5.000000000006111,
+      "min_upright": -0.2826970181147485,
+      "max_drift_m": 0.19081558853485966,
+      "feet_peak_m": [
+        0.10558991425671567,
+        0.17012044432489304
+      ],
+      "target_rate_rms_rad_s": 2.803563320976871,
+      "head_target_rate_rms_rad_s": 2.328608669034741,
+      "max_target_step_rad": 0.08000000000000007,
+      "pose_power_above_8hz_ratio": 4.35563441512593e-05,
+      "target_conditioner": {
+        "version": "v1",
+        "alpha": 0.25,
+        "max_step_rad": 0.08,
+        "hz": 50,
+        "initialization": "previous actuator target"
+      },
+      "method": "Single PPO policy at 50 Hz; continuous pose commands and measured feedback; the same alpha=.25 / max-step=.08 rad target conditioner as training, initialized from the previous actuator target. Previous-action observations remain raw. No servo overrides, state edits or external robot forces.",
+      "initialization_seed": 3,
+      "warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "passed": false,
+  "scope": "Four small joint-perturbation deployment tuning probes after a 2 s standing settle; not independent unseen-game trials.",
+  "physics_step_s": 0.0002,
+  "controller_hz": 50
+}

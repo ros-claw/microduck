@@ -1,0 +1,1087 @@
+{
+  "seeds": [
+    701,
+    702,
+    703,
+    704,
+    705,
+    706
+  ],
+  "runs": [
+    {
+      "bowling": {
+        "unlocked": true,
+        "ball_hit_pins": [
+          "pin0",
+          "pin1"
+        ],
+        "chain_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "causal_parents": {
+          "pin0": "playball",
+          "pin1": "pin0",
+          "pin2": "pin1"
+        },
+        "qualified_toppled": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "direct_or_boss_hit_pins": [],
+        "touches_after_qualified_topple": [],
+        "duck_push_impulse_Ns": 0.0458057002748973,
+        "max_push_force_N": 42.00347703795914,
+        "ball_pin_impulses_Ns": {
+          "pin0": 0.010443831137871552,
+          "pin1": 0.027392216976430836
+        },
+        "chain_impulses_Ns": {
+          "pin0": 0.03916483857234041,
+          "pin1": 0.13879114748899082,
+          "pin2": 0.08260659321322553
+        },
+        "boss_ball_interference": false,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "BOWLING STRIKE",
+        "DROP DODGE",
+        "ROLL UNDER",
+        "SWEEPER SURVIVED",
+        "VOID JUMP"
+      ],
+      "causal_passed": true,
+      "seed": 701,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "escape_publication_passed": false,
+      "component_course_passed": false,
+      "stage": "ROLL_ABORT",
+      "finished": false,
+      "hp": 1,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.35079672887818014,
+            -0.00592591638795259,
+            0.013099659236544547
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.080000000006092,
+          "duration": 1.0400000000021947
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.37317819791782725,
+            -0.09820336059378618,
+            -0.0019561401326215755
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.300000000005003,
+          "duration": 0.9999999999976694
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": [
+            0.5789254009231226,
+            -0.04278655390626366,
+            0.00012165544020242836
+          ],
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 12.719999999997032,
+          "duration": 2.8999999999932413
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 3237264,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 519562,
+          "max_penetration_m": 0.0008406060963960046,
+          "p99_penetration_m": 2.2777919487685558e-05
+        },
+        "duck_self": {
+          "samples": 6234,
+          "max_penetration_m": 0.0006075662857128127,
+          "p99_penetration_m": 0.0002245925648536603
+        },
+        "prop_prop": {
+          "samples": 25624,
+          "max_penetration_m": 0.0009020848005230275,
+          "p99_penetration_m": 0.00016727433967997693
+        },
+        "duck_hazard": {
+          "samples": 2467,
+          "max_penetration_m": 5.704066924883122e-05,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 7.787600000007585,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "bowling",
+          "action": "PUSH_BALL"
+        },
+        {
+          "status": "accepted",
+          "encounter": "exit_bar",
+          "action": "ROLL_CENTER"
+        }
+      ]
+    },
+    {
+      "bowling": {
+        "unlocked": false,
+        "ball_hit_pins": [
+          "pin0",
+          "pin1"
+        ],
+        "chain_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "causal_parents": {
+          "pin0": "playball",
+          "pin1": "pin0",
+          "pin2": "pin1"
+        },
+        "qualified_toppled": [
+          "pin0",
+          "pin2"
+        ],
+        "direct_or_boss_hit_pins": [
+          "pin1"
+        ],
+        "touches_after_qualified_topple": [
+          "pin0",
+          "pin2"
+        ],
+        "duck_push_impulse_Ns": 0.07605499495201117,
+        "max_push_force_N": 34.75971011795849,
+        "ball_pin_impulses_Ns": {
+          "pin0": 0.0573796159810824,
+          "pin1": 0.011512647673802775
+        },
+        "chain_impulses_Ns": {
+          "pin0": 0.0931594601097195,
+          "pin1": 1.5526696600093883,
+          "pin2": 1.5053769401160177
+        },
+        "boss_ball_interference": true,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "DROP DODGE",
+        "ROLL UNDER",
+        "SWEEPER SURVIVED",
+        "VOID JUMP"
+      ],
+      "causal_passed": false,
+      "seed": 702,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "escape_publication_passed": false,
+      "component_course_passed": false,
+      "stage": "BOWLING_MISS",
+      "finished": false,
+      "hp": 1,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.35079672887818014,
+            -0.00592591638795259,
+            0.013099659236544547
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.080000000006092,
+          "duration": 1.0400000000021947
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.3902008673968025,
+            -0.11884369413513014,
+            -0.0038123389346389758
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.300000000005003,
+          "duration": 1.0199999999976228
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": [
+            0.5285228635902053,
+            -0.12552494444366052,
+            0.004766051003867192
+          ],
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 11.899999999998943,
+          "duration": 2.059999999995199
+        },
+        {
+          "stage": "RECOVER",
+          "displacement_m": [
+            -0.1991031588599892,
+            0.11062004522175993,
+            0.032180083916474714
+          ],
+          "skill": "RECOVER",
+          "status": "SUCCESS",
+          "t": 27.919999999961608,
+          "duration": 1.1999999999972033
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 3250734,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 613870,
+          "max_penetration_m": 0.0010003273828593697,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 2596,
+          "max_penetration_m": 0.0002446706523249425,
+          "p99_penetration_m": 0.0002041475024812187
+        },
+        "prop_prop": {
+          "samples": 99946,
+          "max_penetration_m": 0.0031478983721320254,
+          "p99_penetration_m": 0.00010199959627356496
+        },
+        "duck_hazard": {
+          "samples": 2103,
+          "max_penetration_m": 0.0003538275161619856,
+          "p99_penetration_m": 4.788662939285983e-05
+        }
+      },
+      "publication_gate": {
+        "passed": false,
+        "failures": [
+          "prop_prop: max penetration >= 1.5 mm"
+        ],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 7.8284000000076714,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "bowling",
+          "action": "PUSH_BALL"
+        }
+      ]
+    },
+    {
+      "bowling": {
+        "unlocked": false,
+        "ball_hit_pins": [],
+        "chain_hit_pins": [],
+        "causal_parents": {},
+        "qualified_toppled": [],
+        "direct_or_boss_hit_pins": [],
+        "touches_after_qualified_topple": [],
+        "duck_push_impulse_Ns": 0.0,
+        "max_push_force_N": 0.0,
+        "ball_pin_impulses_Ns": {},
+        "chain_impulses_Ns": {},
+        "boss_ball_interference": false,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "DROP DODGE",
+        "ROLL UNDER"
+      ],
+      "causal_passed": false,
+      "seed": 703,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "escape_publication_passed": false,
+      "component_course_passed": false,
+      "stage": "VOID_FALL",
+      "finished": false,
+      "hp": 2,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.5112623581443871,
+            -0.28922270228869806,
+            0.01311304656468279
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.100000000005469,
+          "duration": 1.5999999999984906
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.5479866005000149,
+            0.13211268080920513,
+            -0.0025951385366398128
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 11.320000000000295,
+          "duration": 1.3199999999969236
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.09866625232482829,
+            0.013182064488620776,
+            -0.0030735324561455
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 13.219999999995867,
+          "duration": 1.23999999999711
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 1515938,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 279703,
+          "max_penetration_m": 0.0008406060963960046,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 1201,
+          "max_penetration_m": 3.656399837429349e-05,
+          "p99_penetration_m": 3.508474279049245e-05
+        },
+        "prop_prop": {
+          "samples": 521,
+          "max_penetration_m": 0.0001844125919961883,
+          "p99_penetration_m": 0.00014308734838103793
+        },
+        "duck_hazard": {
+          "samples": 22,
+          "max_penetration_m": 0.0,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 10.659600000001834,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_RIGHT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "bowling": {
+        "unlocked": true,
+        "ball_hit_pins": [
+          "pin0",
+          "pin1"
+        ],
+        "chain_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "causal_parents": {
+          "pin0": "playball",
+          "pin1": "pin0",
+          "pin2": "pin1"
+        },
+        "qualified_toppled": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "direct_or_boss_hit_pins": [],
+        "touches_after_qualified_topple": [],
+        "duck_push_impulse_Ns": 0.06843862408330867,
+        "max_push_force_N": 27.55752305669905,
+        "ball_pin_impulses_Ns": {
+          "pin0": 0.06368671542592079,
+          "pin1": 0.00814583044053032
+        },
+        "chain_impulses_Ns": {
+          "pin0": 0.10784973438908745,
+          "pin1": 0.11581818690700531,
+          "pin2": 0.06349064313273292
+        },
+        "boss_ball_interference": false,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "BOWLING STRIKE",
+        "DROP DODGE",
+        "EXIT ROLL",
+        "ROLL UNDER",
+        "SWEEPER SURVIVED",
+        "VOID JUMP"
+      ],
+      "causal_passed": true,
+      "seed": 704,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "escape_publication_passed": true,
+      "component_course_passed": true,
+      "stage": "CELEBRATE",
+      "finished": true,
+      "hp": 1,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.5106209626612117,
+            -0.292076347844666,
+            0.013069700793514008
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.620000000007232,
+          "duration": 1.6000000000033765
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.46212398062751037,
+            0.11821826895008902,
+            -0.0011288717587250863
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.70000000000407,
+          "duration": 1.1599999999972965
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": [
+            0.5624044081807784,
+            -0.0817930759149925,
+            0.0013587054876223331
+          ],
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 13.199999999995914,
+          "duration": 3.1199999999927286
+        },
+        {
+          "stage": "EXIT_ROLL",
+          "displacement_m": [
+            0.612504796508742,
+            0.1623732558783816,
+            -0.002893868681015613
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 26.299999999965383,
+          "duration": 3.339999999992216
+        },
+        {
+          "stage": "CELEBRATE",
+          "displacement_m": [
+            0.19095666328732896,
+            0.0030849614390439373,
+            -0.0039619498610125314
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 29.499999999957925,
+          "duration": 1.2199999999971567
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 3229047,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 510243,
+          "max_penetration_m": 0.0009153843262879265,
+          "p99_penetration_m": 4.697226587663295e-05
+        },
+        "duck_self": {
+          "samples": 1573,
+          "max_penetration_m": 0.00018846920792154508,
+          "p99_penetration_m": 0.0001496225417200788
+        },
+        "prop_prop": {
+          "samples": 112201,
+          "max_penetration_m": 0.0004505639434849041,
+          "p99_penetration_m": 3.726038741050375e-05
+        },
+        "duck_hazard": {
+          "samples": 427,
+          "max_penetration_m": 0.0003590671690211715,
+          "p99_penetration_m": 0.00023275378739568938
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 8.28460000000737,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_RIGHT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "bowling",
+          "action": "PUSH_BALL"
+        },
+        {
+          "status": "accepted",
+          "encounter": "exit_bar",
+          "action": "ROLL_CENTER"
+        }
+      ]
+    },
+    {
+      "bowling": {
+        "unlocked": true,
+        "ball_hit_pins": [
+          "pin0",
+          "pin1"
+        ],
+        "chain_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "causal_parents": {
+          "pin0": "playball",
+          "pin1": "pin0",
+          "pin2": "pin1"
+        },
+        "qualified_toppled": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "direct_or_boss_hit_pins": [],
+        "touches_after_qualified_topple": [],
+        "duck_push_impulse_Ns": 0.025431372640094655,
+        "max_push_force_N": 38.425988534921935,
+        "ball_pin_impulses_Ns": {
+          "pin0": 0.017438009581623167,
+          "pin1": 0.0015159956610801594
+        },
+        "chain_impulses_Ns": {
+          "pin0": 0.031073939544977735,
+          "pin1": 0.02472092689549805,
+          "pin2": 0.009551282553482436
+        },
+        "boss_ball_interference": false,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "BOWLING STRIKE",
+        "DROP DODGE",
+        "ROLL UNDER",
+        "SWEEPER SURVIVED",
+        "VOID JUMP"
+      ],
+      "causal_passed": true,
+      "seed": 705,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "escape_publication_passed": false,
+      "component_course_passed": false,
+      "stage": "ROLL_ABORT",
+      "finished": false,
+      "hp": 0,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.35079672887818014,
+            -0.00592591638795259,
+            0.013099659236544547
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.080000000006092,
+          "duration": 1.0400000000021947
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.37317819791782725,
+            -0.09820336059378618,
+            -0.0019561401326215755
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.300000000005003,
+          "duration": 0.9999999999976694
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": [
+            0.5789254009231226,
+            -0.04278655390626366,
+            0.00012165544020242836
+          ],
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 12.719999999997032,
+          "duration": 2.8999999999932413
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 3065383,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 605269,
+          "max_penetration_m": 0.0008406060963960046,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 1570,
+          "max_penetration_m": 0.0006075662857128127,
+          "p99_penetration_m": 0.0002911007764874132
+        },
+        "prop_prop": {
+          "samples": 33002,
+          "max_penetration_m": 0.0016265522465179704,
+          "p99_penetration_m": 0.00024042415619663867
+        },
+        "duck_hazard": {
+          "samples": 394050,
+          "max_penetration_m": 0.0002690121439541111,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": false,
+        "failures": [
+          "prop_prop: max penetration >= 1.5 mm"
+        ],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 6.83740000000558,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "bowling",
+          "action": "PUSH_BALL"
+        },
+        {
+          "status": "accepted",
+          "encounter": "exit_bar",
+          "action": "ROLL_CENTER"
+        }
+      ]
+    },
+    {
+      "bowling": {
+        "unlocked": true,
+        "ball_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "chain_hit_pins": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "causal_parents": {
+          "pin0": "playball",
+          "pin1": "pin0",
+          "pin2": "pin1"
+        },
+        "qualified_toppled": [
+          "pin0",
+          "pin1",
+          "pin2"
+        ],
+        "direct_or_boss_hit_pins": [],
+        "touches_after_qualified_topple": [],
+        "duck_push_impulse_Ns": 0.05234234111969289,
+        "max_push_force_N": 43.921266653007244,
+        "ball_pin_impulses_Ns": {
+          "pin0": 0.016951652696407082,
+          "pin1": 0.0024940628294039834,
+          "pin2": 0.002034858870367298
+        },
+        "chain_impulses_Ns": {
+          "pin0": 0.026359192021690098,
+          "pin1": 0.017889249504417358,
+          "pin2": 0.00811807901544991
+        },
+        "boss_ball_interference": false,
+        "scope": "Contact causality until unlock; whole-run collisions independently audited",
+        "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+      },
+      "encounter_combo": [
+        "BOWLING STRIKE",
+        "DROP DODGE",
+        "EXIT ROLL",
+        "ROLL UNDER",
+        "SWEEPER SURVIVED",
+        "VOID JUMP"
+      ],
+      "causal_passed": true,
+      "seed": 706,
+      "stunt_gate": true,
+      "publication_passed": true,
+      "escape_publication_passed": true,
+      "component_course_passed": true,
+      "stage": "CELEBRATE",
+      "finished": true,
+      "hp": 2,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6320660320722646,
+            0.13948858783568358,
+            0.0009971020086000232
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.360000000002462,
+          "duration": 2.240000000002773
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.4989281488686881,
+            -0.2905981945720114,
+            0.01265485439895872
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.620000000007232,
+          "duration": 1.5800000000033343
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.5035306202429926,
+            0.11808376758930861,
+            0.0018539759485832197
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 9.840000000003744,
+          "duration": 1.2799999999970169
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": [
+            0.5789255923932002,
+            0.00457792174542499,
+            -0.0068784233382145205
+          ],
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 11.959999999998804,
+          "duration": 1.7599999999958982
+        },
+        {
+          "stage": "RECOVER",
+          "displacement_m": [
+            -0.025566772416039107,
+            -0.24797847607859014,
+            0.04580656094946152
+          ],
+          "skill": "RECOVER",
+          "status": "SUCCESS",
+          "t": 16.23999999998883,
+          "duration": 0.8199999999980889
+        },
+        {
+          "stage": "EXIT_ROLL",
+          "displacement_m": [
+            0.606250089794929,
+            0.07592968775450679,
+            -0.006055238168776997
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 24.79999999996888,
+          "duration": 2.3599999999945
+        },
+        {
+          "stage": "CELEBRATE",
+          "displacement_m": [
+            0.19328787969594696,
+            -0.0020505112361429746,
+            -0.0014281496287585072
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 27.5799999999624,
+          "duration": 1.0199999999976228
+        }
+      ],
+      "contacts": {
+        "prop_floor": {
+          "samples": 3262947,
+          "max_penetration_m": 0.0007460172095706472,
+          "p99_penetration_m": 0.0
+        },
+        "duck_floor": {
+          "samples": 462695,
+          "max_penetration_m": 0.0009089678720993851,
+          "p99_penetration_m": 4.99190550402584e-05
+        },
+        "duck_self": {
+          "samples": 1661,
+          "max_penetration_m": 0.0002170873782921563,
+          "p99_penetration_m": 0.00014156516767256357
+        },
+        "prop_prop": {
+          "samples": 34763,
+          "max_penetration_m": 0.0008247728953123586,
+          "p99_penetration_m": 0.00012058871219412357
+        },
+        "duck_hazard": {
+          "samples": 272,
+          "max_penetration_m": 0.00020304995546071777,
+          "p99_penetration_m": 0.00016052333393559923
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "requires_hazard_contact": true,
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 7.661200000007319,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_RIGHT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "bowling",
+          "action": "PUSH_BALL"
+        },
+        {
+          "status": "accepted",
+          "encounter": "exit_bar",
+          "action": "ROLL_CENTER"
+        }
+      ]
+    }
+  ],
+  "total": 6,
+  "escape_passed": 2,
+  "publication_passed": 1,
+  "escape_publication_passed": 2,
+  "scope": "Fixed source/policies and explicit new seeds; no retries. Every run includes matching input replay and all-contact audit. Not a hardware safety guarantee."
+}

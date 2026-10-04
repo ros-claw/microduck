@@ -1,0 +1,770 @@
+{
+  "seeds": [
+    201,
+    202,
+    203,
+    204,
+    205,
+    206
+  ],
+  "runs": [
+    {
+      "seed": 201,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": false,
+      "stage": "VOID_FALL",
+      "finished": false,
+      "hp": 3,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.4428406890751333,
+            0.0726375305027594,
+            0.011206977668809251
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.780000000007569,
+          "duration": 1.2200000000025746
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.4659768385719594,
+            -0.18369946523499167,
+            -0.0023818757708126137
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.080000000003185,
+          "duration": 1.2799999999970169
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.14639794012215868,
+            0.0003921621843036029,
+            -0.01093018467864651
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 11.599999999999643,
+          "duration": 0.9999999999976694
+        },
+        {
+          "stage": "RECOVER",
+          "displacement_m": [
+            -0.15670754603802406,
+            -0.12171779355428897,
+            -0.07556034337099543
+          ],
+          "skill": "RECOVER",
+          "status": "FAILED",
+          "t": 15.499999999990553,
+          "duration": 2.0199999999952922
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 203056,
+          "max_penetration_m": 0.0015435340464019884,
+          "p99_penetration_m": 4.283820695484859e-05
+        },
+        "prop_floor": {
+          "samples": 210864,
+          "max_penetration_m": 0.0005648299594041284,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 2362,
+          "max_penetration_m": 0.0123130644556179,
+          "p99_penetration_m": 0.010818099336783234
+        },
+        "prop_prop": {
+          "samples": 736,
+          "max_penetration_m": 0.00017547237687301487,
+          "p99_penetration_m": 0.0001543915607550932
+        }
+      },
+      "publication_gate": {
+        "passed": false,
+        "failures": [
+          "duck_hazard: missing force-bearing contact evidence",
+          "duck_floor: max penetration >= 1.5 mm",
+          "duck_self: max penetration >= 1.5 mm",
+          "duck_self: P99 penetration >= 1 mm"
+        ],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 14.505199999992872,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "seed": 202,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": false,
+      "stage": "VOID_FALL",
+      "finished": false,
+      "hp": 3,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.4437249059356829,
+            0.07172187187338,
+            0.011137481065351174
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.760000000007527,
+          "duration": 1.2200000000025746
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.6030770908018641,
+            -0.1737660832783144,
+            -0.004212909731139497
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.440000000002346,
+          "duration": 1.6799999999960846
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.15388888369127196,
+            -0.030141261819918188,
+            0.0022166539694325887
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 11.859999999999037,
+          "duration": 1.17999999999725
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 176378,
+          "max_penetration_m": 0.0008662440599249017,
+          "p99_penetration_m": 5.504762504136752e-05
+        },
+        "prop_floor": {
+          "samples": 142939,
+          "max_penetration_m": 0.0009379059654726893,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 2058,
+          "max_penetration_m": 0.011812354820184934,
+          "p99_penetration_m": 0.010263733574798263
+        },
+        "prop_prop": {
+          "samples": 843,
+          "max_penetration_m": 0.00016416716594219727,
+          "p99_penetration_m": 0.00013534685636925456
+        }
+      },
+      "publication_gate": {
+        "passed": false,
+        "failures": [
+          "duck_hazard: missing force-bearing contact evidence",
+          "duck_self: max penetration >= 1.5 mm",
+          "duck_self: P99 penetration >= 1 mm"
+        ],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 13.382599999995488,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "seed": 203,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": true,
+      "stage": "CELEBRATE",
+      "finished": true,
+      "hp": 1,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.5147665668490884,
+            0.06891816022967914,
+            0.01270106507527552
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.840000000007696,
+          "duration": 1.3400000000028278
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.47940873434056597,
+            -0.19068748144075634,
+            0.0005573754099987838
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.020000000003325,
+          "duration": 1.2999999999969702
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.19375957883222572,
+            0.0051221180447253364,
+            -0.00036258505961869747
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 11.420000000000062,
+          "duration": 0.979999999997716
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": null,
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 13.259999999995774,
+          "duration": 1.6599999999961312
+        },
+        {
+          "stage": "CELEBRATE",
+          "displacement_m": [
+            0.18325666388570827,
+            0.011356320604463432,
+            -0.008258224383368484
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 20.699999999978434,
+          "duration": 0.8599999999979957
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 367646,
+          "max_penetration_m": 0.0008662440599249017,
+          "p99_penetration_m": 3.090259471985364e-05
+        },
+        "prop_floor": {
+          "samples": 485128,
+          "max_penetration_m": 0.0008925870726488637,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 1888,
+          "max_penetration_m": 0.00012180300835124069,
+          "p99_penetration_m": 0.00011243502342294206
+        },
+        "prop_prop": {
+          "samples": 19994,
+          "max_penetration_m": 0.0007724001167016981,
+          "p99_penetration_m": 1.287599115608772e-05
+        },
+        "duck_hazard": {
+          "samples": 490,
+          "max_penetration_m": 0.0,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 17.11459999998679,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "seed": 204,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": false,
+      "stage": "CELEBRATE",
+      "finished": true,
+      "hp": 0,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.4435925913960146,
+            0.07172729338304631,
+            0.011078884588223675
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.740000000007485,
+          "duration": 1.2200000000025746
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.5496542831350419,
+            -0.1600055185152141,
+            -0.001998770699475988
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.360000000002533,
+          "duration": 1.5799999999963177
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.15328866286494414,
+            -0.032374818602937804,
+            0.0008584217878928185
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 12.199999999998244,
+          "duration": 1.539999999996411
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": null,
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 15.379999999990833,
+          "duration": 1.8199999999957583
+        },
+        {
+          "stage": "CELEBRATE",
+          "displacement_m": [
+            0.20159852414342705,
+            -0.007055060473220812,
+            -0.01116750646018326
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 23.61999999997163,
+          "duration": 0.9599999999977626
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 399406,
+          "max_penetration_m": 0.0008662440599249017,
+          "p99_penetration_m": 2.0217789897650303e-05
+        },
+        "prop_floor": {
+          "samples": 554118,
+          "max_penetration_m": 0.0007297246287535017,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 1827,
+          "max_penetration_m": 0.0007715576280203946,
+          "p99_penetration_m": 0.00045205428632096923
+        },
+        "prop_prop": {
+          "samples": 23455,
+          "max_penetration_m": 0.0004215795919800692,
+          "p99_penetration_m": 1.4821362926256128e-05
+        },
+        "duck_hazard": {
+          "samples": 564,
+          "max_penetration_m": 0.0,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 16.74639999998765,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "seed": 205,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": true,
+      "stage": "CELEBRATE",
+      "finished": true,
+      "hp": 1,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.44318173425158625,
+            0.07159264037181368,
+            0.010951395871824338
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.820000000007654,
+          "duration": 1.2200000000025746
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.5664221152415561,
+            -0.16072985007765778,
+            -0.0007000623590327493
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.600000000001973,
+          "duration": 1.799999999995805
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.12931407242509607,
+            -0.022180318458242736,
+            -0.010836535591898983
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 11.69999999999941,
+          "duration": 0.7599999999982288
+        },
+        {
+          "stage": "JUMP",
+          "displacement_m": null,
+          "skill": "JUMP_CENTER",
+          "status": "SUCCESS",
+          "t": 15.979999999989435,
+          "duration": 1.6599999999961312
+        },
+        {
+          "stage": "CELEBRATE",
+          "displacement_m": [
+            0.18600181401350468,
+            0.004724266966644767,
+            -0.0011541913833905265
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 22.279999999974752,
+          "duration": 1.2599999999970635
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 518624,
+          "max_penetration_m": 0.0008662440599249017,
+          "p99_penetration_m": 0.0
+        },
+        "prop_floor": {
+          "samples": 515356,
+          "max_penetration_m": 0.0008400436522115738,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 2185,
+          "max_penetration_m": 0.0007645242260240299,
+          "p99_penetration_m": 0.0005725436933232926
+        },
+        "prop_prop": {
+          "samples": 38388,
+          "max_penetration_m": 0.00024522457363804206,
+          "p99_penetration_m": 5.3328560062256505e-06
+        },
+        "duck_hazard": {
+          "samples": 21,
+          "max_penetration_m": 0.0,
+          "p99_penetration_m": 0.0
+        }
+      },
+      "publication_gate": {
+        "passed": true,
+        "failures": [],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 16.116999999989115,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    },
+    {
+      "seed": 206,
+      "stunt_gate": false,
+      "publication_passed": false,
+      "component_course_passed": false,
+      "stage": "VOID_FALL",
+      "finished": false,
+      "hp": 3,
+      "skills": [
+        {
+          "stage": "ROLL",
+          "displacement_m": [
+            0.6293199253571445,
+            0.13587308482930352,
+            0.0018184481526489354
+          ],
+          "skill": "ROLL_CENTER",
+          "status": "SUCCESS",
+          "t": 5.320000000002378,
+          "duration": 2.2000000000026887
+        },
+        {
+          "stage": "DODGE",
+          "displacement_m": [
+            0.4437249059356829,
+            0.07172187187338,
+            0.011137481065351174
+          ],
+          "skill": "TAKE_LEFT_ROUTE",
+          "status": "SUCCESS",
+          "t": 7.760000000007527,
+          "duration": 1.2200000000025746
+        },
+        {
+          "stage": "RETURN",
+          "displacement_m": [
+            0.6033197598141586,
+            -0.1738074646007737,
+            -0.004064969347698316
+          ],
+          "skill": "TAKE_RIGHT_ROUTE",
+          "status": "SUCCESS",
+          "t": 10.440000000002346,
+          "duration": 1.6799999999960846
+        },
+        {
+          "stage": "BRAKE",
+          "displacement_m": [
+            0.14864061395235817,
+            -0.028292147787450782,
+            0.002318662482549333
+          ],
+          "skill": "BRAKE_AND_WAIT",
+          "status": "SUCCESS",
+          "t": 12.199999999998244,
+          "duration": 1.5199999999964575
+        }
+      ],
+      "contacts": {
+        "duck_floor": {
+          "samples": 178463,
+          "max_penetration_m": 0.0008662440599249017,
+          "p99_penetration_m": 6.1930508188825e-05
+        },
+        "prop_floor": {
+          "samples": 156431,
+          "max_penetration_m": 0.0009127232559004051,
+          "p99_penetration_m": 0.0
+        },
+        "duck_self": {
+          "samples": 2273,
+          "max_penetration_m": 0.006112102244558109,
+          "p99_penetration_m": 0.005454812076616273
+        },
+        "prop_prop": {
+          "samples": 1020,
+          "max_penetration_m": 0.0001411575466510051,
+          "p99_penetration_m": 0.0001045933728311656
+        }
+      },
+      "publication_gate": {
+        "passed": false,
+        "failures": [
+          "duck_hazard: missing force-bearing contact evidence",
+          "duck_self: max penetration >= 1.5 mm",
+          "duck_self: P99 penetration >= 1 mm"
+        ],
+        "scope": "Every force-bearing contact category, including native ground and self-contact"
+      },
+      "longest_chase_s": 13.902599999994276,
+      "decisions": [
+        {
+          "status": "accepted",
+          "encounter": "bar",
+          "action": "ROLL_CENTER"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "BRAKE_AND_WAIT"
+        },
+        {
+          "status": "accepted",
+          "encounter": "crate",
+          "action": "TAKE_LEFT_ROUTE"
+        },
+        {
+          "status": "accepted",
+          "encounter": "gap",
+          "action": "JUMP_CENTER"
+        }
+      ]
+    }
+  ],
+  "total": 6,
+  "escape_passed": 2,
+  "publication_passed": 0,
+  "scope": "Fixed source/policies and explicit new seeds; no retries. Every run includes matching input replay and all-contact audit. Not a hardware safety guarantee."
+}

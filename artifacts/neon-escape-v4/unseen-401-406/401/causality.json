@@ -1,0 +1,30 @@
+{
+  "capture": {
+    "scene.mjb": "cc5b7589d11a22c06d932a3a250761d951dea406ec8f60fec39104b3713d4264",
+    "trajectory.npz": "47e1978d89002ef55aead3bd33923608aee67871de609516335f8531a107d6ac",
+    "inputs.npz": "a54bede34f58cb3823e76408375fb746c80e91c8a6ba996f2e08769df47ce9a5"
+  },
+  "passed": false,
+  "violations": [],
+  "gate_force_limit_N": 6,
+  "gate_force_limited": true,
+  "bowling": {
+    "unlocked": false,
+    "ball_hit_pins": [],
+    "chain_hit_pins": [],
+    "causal_parents": {},
+    "qualified_toppled": [],
+    "direct_or_boss_hit_pins": [],
+    "touches_after_qualified_topple": [],
+    "duck_push_impulse_Ns": 0.0,
+    "max_push_force_N": 0.0,
+    "ball_pin_impulses_Ns": {},
+    "chain_impulses_Ns": {},
+    "boss_ball_interference": false,
+    "scope": "Contact causality until unlock; whole-run collisions independently audited",
+    "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+  },
+  "events": [],
+  "guide_boss_impulses_Ns": {},
+  "method": "Initialize once; replay recorded 50 Hz inputs; inspect causal contacts at every .2 ms step. Gate command and guide weld activation must follow previously measured contact state. No applied force on ball/pins."
+}

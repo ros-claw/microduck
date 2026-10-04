@@ -1,0 +1,68 @@
+{
+  "status": "development-qualified component; integrated certification separate",
+  "sha256": "464503067c080c7323f4714a64d9eda3bd84f717fe51da469025e53bdcb5c63c",
+  "task": "Mjlab-ParkourGap-Flat-MicroDuck",
+  "checkpoint": "microduck_rl/logs/rsl_rl/microduck_parkour/2026-09-27_17-18-46_real_gap_landing_v2/model_500.pt",
+  "observation_dim": 61,
+  "control_hz": 50,
+  "joint_velocity_delay": 1,
+  "export": "upstream scripts/export.py with baked observation normalization",
+  "tests": {
+    "gap_widths_m": [
+      0.12,
+      0.15,
+      0.18,
+      0.2
+    ],
+    "handoff_trials": 40,
+    "handoff_passed": 40,
+    "launch_distance_m": [
+      0.06,
+      0.14
+    ],
+    "launch_window_trials": 20,
+    "launch_window_passed": 20
+  },
+  "limitations": [
+    "Development seeds; not an unseen whole-course success rate.",
+    "Requires a settled upright launch; running launch is not certified.",
+    "Lateral landing drift is allowed within the physical three-lane corridor.",
+    "The 40/40 battery used native compliant ground and the earlier 0.524 m track. Hard-contact transfer and current 0.60 m track require separate qualification."
+  ],
+  "hard_contact_development_tests": {
+    "profile": {
+      "floor_solref_s": 0.002,
+      "floor_margin_m": 0.0002,
+      "self_solref_s": 0.0012,
+      "self_margin_m": 0,
+      "track_width_m": 0.6
+    },
+    "settled_launch_distance_m": 0.06,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "gap_widths_m": [
+      0.12,
+      0.15,
+      0.18,
+      0.2
+    ],
+    "passed_per_10": [
+      9,
+      10,
+      9,
+      3
+    ],
+    "evidence": "artifacts/neon-escape-v2/gap500-hard-self12-edge06.json",
+    "scope": "Isolated settled starts, not whole-course approach qualification."
+  }
+}
