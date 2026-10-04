@@ -8,5 +8,15 @@
 | [MuJoCo](https://mujoco.org) | physics engine | Apache-2.0 | simulation |
 | Marope (arXiv, 2026) | cooperative long-rope skipping MARL | paper | prior art for rope-skipping metrics |
 
-Nothing from upstream is vendored into this repository; run
-`scripts/bootstrap.py` to fetch pinned assets locally.
+Robot source meshes are fetched locally through `scripts/bootstrap.py` rather
+than stored as source assets here. Release MJB captures contain compiled robot
+geometry, and evidence bundles include the upstream motor policies used by the
+record. Their original attribution and asset/model license terms remain relevant.
+
+`policies/continuous_joy.onnx` is a PPO fine-tune initialized from upstream
+`alpha_walking.onnx`, trained with the project's continuous-pose task and matching
+position-servo target conditioner. The source patch, seed/selected checkpoints,
+source snapshot and SHA-256 provenance are in the V6 evidence bundle; see
+[CONTACT_DETAILS](docs/CONTACT_DETAILS.md) and
+[training/run.json](artifacts/neon-escape-v6/training/run.json). It is a simulation
+policy, not an upstream release or a hardware-qualified behavior.

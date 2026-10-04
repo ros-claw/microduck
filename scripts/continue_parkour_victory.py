@@ -17,12 +17,13 @@ from microduck_lab.parkour.arcade import ArcadeDriver
 from microduck_lab.parkour.hazards import Hazard
 from microduck_lab.parkour.audit import Audit, PropAudit
 from microduck_lab.parkour.victory import VictoryDance
+from microduck_lab.parkour.joy import JoyDance
 from microduck_lab.parkour.evidence import verify_capture
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(source, output, branch_time=25.24):
+def run(source, output, branch_time=25.24, joy_policy=None):
     source, output = Path(source), Path(output)
     if output.exists():
         raise FileExistsError("Evidence must use a fresh directory")
@@ -62,6 +63,8 @@ def run(source, output, branch_time=25.24):
             ("victory_hop", ROOT / "policies/ropehop_centered.onnx"),
         ]
     }
+    if joy_policy:
+        paths["joy"] = str(Path(joy_policy).resolve())
     r = DuckRuntime(m, d, ParkourPolicyBank(paths), prefix="duck/")
     driver = ArcadeDriver([Hazard(**h) for h in parent["level"]["hazards"]])
     audit = Audit(interactive_props=("playball", "pin0", "pin1", "pin2"))
@@ -83,11 +86,14 @@ def run(source, output, branch_time=25.24):
             prefix += 1
         else:
             if victory is None:
-                victory = VictoryDance(t)
+                victory = JoyDance(t) if joy_policy else VictoryDance(t)
                 r.last_action = (d.ctrl[r.act_ids] - DEFAULT_POSE).astype(np.float32)
             victory.update(m, d, r)
             driver.step(m, d, float(r.trunk_pos()[0]))
             r.step()
+            if joy_policy:
+                victory.condition_targets(d, r)
+                victory.control_sample(d, r)
             stage = "CELEBRATE" if victory.finished_at else "FINISH"
         ur.append(
             (
@@ -127,7 +133,11 @@ def run(source, output, branch_time=25.24):
                 victory_phase=victory.phase if victory else None,
             )
         )
-        if victory and victory.finished_at and d.time - victory.finished_at >= 7.0:
+        if (
+            victory
+            and victory.finished_at
+            and d.time - victory.finished_at >= (6.0 if joy_policy else 7.0)
+        ):
             break
     for k, name in enumerate(
         ["time", "qpos", "qvel", "ctrl", "eq_active", "geom_rgba"]
@@ -201,11 +211,16 @@ def run(source, output, branch_time=25.24):
         key=lambda e: e["t"],
     )
     report["skills"] = [s for s in parent["skills"] if s["t"] < victory.started]
-    report["policy_hashes"] = parent["policy_hashes"] | {
-        "victory_hop": hashlib.sha256(
+    report["detail_focus"] = bool(joy_policy)
+    report["policy_hashes"] = parent["policy_hashes"].copy()
+    if joy_policy:
+        report["policy_hashes"]["joy"] = hashlib.sha256(
+            Path(joy_policy).read_bytes()
+        ).hexdigest()
+    else:
+        report["policy_hashes"]["victory_hop"] = hashlib.sha256(
             Path(paths["victory_hop"]).read_bytes()
         ).hexdigest()
-    }
     report["capture"] = {
         n: hashlib.sha256((output / n).read_bytes()).hexdigest()
         for n in ["scene.mjb", "trajectory.npz", "inputs.npz"]
@@ -232,4 +247,5 @@ if __name__ == "__main__":
     p.add_argument("--source", required=True)
     p.add_argument("--output", required=True)
     p.add_argument("--branch-time", type=float, default=25.24)
+    p.add_argument("--joy-policy")
     run(**vars(p.parse_args()))

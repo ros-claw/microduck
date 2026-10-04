@@ -1,0 +1,55 @@
+{
+  "task": "Mjlab-JoySmoothPD-Flat-MicroDuck",
+  "run": "2026-10-03_23-35-37_continuous-smooth-pd-v1",
+  "num_envs": 2048,
+  "seed_checkpoint": "pd200-seed.pt",
+  "selected_checkpoint": "selected-checkpoint.pt",
+  "selected_checkpoint_index": 300,
+  "resume_index": 200,
+  "matched_fine_tune_updates_through_selected": 101,
+  "training_runs": {
+    "joy-train2": {
+      "last_logged_index": 177,
+      "planned_last_boundary": 600
+    },
+    "joy-pd-train": {
+      "last_logged_index": 234,
+      "planned_last_boundary": 400
+    },
+    "joy-smooth-train": {
+      "last_logged_index": 349,
+      "planned_last_boundary": 400
+    }
+  },
+  "selected_training_source_archive_sha256": "046a4833825b23fbd51dcbd0d737ad3625bf84b7a205c8451a17103a93e3f240",
+  "training_patch_sha256": "f202da9a57d9a24407020c455df0dca64a3156d19e04df51f627ae5278bbdcf3",
+  "policy_sha256": "dc09fc26384686c98ab09a594fc02ddf9a77b3da215f65f9d9dceaeb7873de41",
+  "stop_reason": "Selected checkpoint passed four CPU deployment tuning probes and the full physical continuation; later updates were not used. Original unfiltered branches failed smoothness/transfer.",
+  "training_physics_step_s": 0.001,
+  "training_contact_margin_m": 0,
+  "deployment_physics_step_s": 0.0002,
+  "control_hz": 50,
+  "actor_observations": 61,
+  "target_conditioner": {
+    "alpha": 0.25,
+    "max_step_rad": 0.08,
+    "initialization": "previous actuator target; training resets initialize actuator targets to measured initial joint positions"
+  },
+  "flags": [
+    "--env.scene.num-envs",
+    "2048",
+    "--agent.max-iterations",
+    "200",
+    "--agent.run-name",
+    "continuous-smooth-pd-v1",
+    "--agent.logger",
+    "tensorboard",
+    "--agent.resume",
+    "True",
+    "--agent.load-run",
+    "pd200-seed",
+    "--agent.load-checkpoint",
+    "model_seed.pt"
+  ],
+  "scope": "Development tuning, not an unseen-game cohort or hardware validation."
+}

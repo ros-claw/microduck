@@ -1,0 +1,296 @@
+--- a/src/mjlab_microduck/tasks/mdp.py
++++ b/src/mjlab_microduck/tasks/mdp.py
+@@ -8245,3 +8245,90 @@
+     delta=(height-env._parkour_apex_frontier).clamp(0.,max_paid_rate*env.step_dt)
+     env._parkour_apex_frontier=torch.maximum(env._parkour_apex_frontier,height)
+     return delta/(env.step_dt*target_height)
++
++# Continuous commanded joy gait: phase is represented by actual head/body pose
++# commands, in the existing 61-D contract, not a hidden observation channel.
++def joy_phase(env, frequency=1.15):
++    return 2 * math.pi * frequency * env.episode_length_buf * env.step_dt
++
++
++def joy_head_command(env):
++    p = joy_phase(env)
++    e = torch.clamp(env.episode_length_buf * env.step_dt / .8, 0., 1.)
++    return torch.stack((.07*torch.sin(2*p), .03*torch.sin(2*p), .24*torch.sin(p), .12*torch.sin(p)),dim=-1)*e[:,None]
++
++
++def joy_body_command(env):
++    p=joy_phase(env);e=torch.clamp(env.episode_length_buf*env.step_dt/.8,0.,1.);z=torch.zeros_like(p)
++    return torch.stack((z,z,.006*(1-torch.cos(2*p)),.07*torch.sin(p),z,z),dim=-1)*e[:,None]
++
++
++def joy_twist_command(env):
++    asset=env.scene['robot'];pos=asset.data.root_link_pos_w-env.scene.terrain.env_origins
++    quat=asset.data.root_link_quat_w;w,x,y,z=quat.unbind(-1)
++    yaw=torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z))
++    dx=torch.clamp(-2*pos[:,0],-.15,.15);dy=torch.clamp(-2*pos[:,1],-.15,.15)
++    return torch.stack((torch.cos(yaw)*dx+torch.sin(yaw)*dy,-torch.sin(yaw)*dx+torch.cos(yaw)*dy,torch.clamp(-2*yaw,-.8,.8)),dim=-1)
++
++
++def joy_foot_rhythm(env, asset_cfg=SceneEntityCfg('robot',site_names=['left_foot','right_foot'])):
++    asset=env.scene[asset_cfg.name];p=joy_phase(env);e=torch.clamp(env.episode_length_buf*env.step_dt/.8,0.,1.)
++    target=.0005+.024*torch.stack((torch.relu(torch.sin(p))**2,torch.relu(-torch.sin(p))**2),dim=-1)*e[:,None]
++    actual=asset.data.site_pos_w[:,asset_cfg.site_ids,2]-env.scene.terrain.env_origins[:,None,2]
++    return torch.exp(-((actual-target)/.009)**2).prod(-1)
++
++
++def joy_head_tracking(env):
++    a=env.scene['robot'];delta=_servo_joint_pos(env,a)-_servo_default_joint_pos(env,a)
++    return torch.exp(-((delta[:,5:9]-joy_head_command(env))/.20)**2).mean(-1)
++
++
++def joy_balance(env):
++    a=env.scene['robot'];pos=a.data.root_link_pos_w-env.scene.terrain.env_origins;q=a.data.root_link_quat_w;w,x,y,z=q.unbind(-1)
++    roll=torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y));pitch=torch.asin(torch.clamp(2*(w*y-z*x),-1.,1.));yaw=torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z));cmd=joy_body_command(env)
++    error=((pos[:,2]-(.117+cmd[:,2]))/.025)**2+((roll-cmd[:,3])/.18)**2+(pitch/.18)**2+(yaw/.35)**2
++    return torch.exp(-error)
++
++
++def joy_drift_cost(env):
++    a=env.scene['robot'];pos=a.data.root_link_pos_w-env.scene.terrain.env_origins
++    return -(pos[:,:2].square().sum(-1)+.05*a.data.root_link_lin_vel_w[:,:2].square().sum(-1))
++
++
++# Matched training/deployment target conditioner, only for JoySmoothPD.
++# Raw previous actions remain in the standard 61-D observation contract.
++from dataclasses import dataclass as _joy_dataclass
++from mjlab.envs.mdp.actions.actions import JointPositionActionCfg as _JoyPositionCfg,JointPositionAction as _JoyPositionAction
++
++
++class JoySmoothPositionAction(_JoyPositionAction):
++    def __init__(self,cfg,env):
++        super().__init__(cfg,env)
++        self._joy_target=torch.zeros_like(self._processed_actions)
++        self._joy_pending=torch.ones(env.num_envs,dtype=torch.bool,device=env.device)
++
++    def process_actions(self,actions):
++        super().process_actions(actions)
++        initial=self._entity.data.data.ctrl[:,self._entity.indexing.ctrl_ids]+self._entity.data.encoder_bias[:,self._target_ids]
++        previous=torch.where(self._joy_pending[:,None],initial,self._joy_target)
++        delta=torch.clamp(self.cfg.joy_alpha*(self._processed_actions-previous),-self.cfg.joy_max_step,self.cfg.joy_max_step)
++        self._joy_target.copy_(previous+delta)
++        self._processed_actions=self._joy_target
++        self._joy_pending.fill_(False)
++
++    def reset(self,env_ids=None):
++        super().reset(env_ids)
++        self._joy_pending[env_ids]=True
++
++
++@_joy_dataclass(kw_only=True)
++class JoySmoothPositionActionCfg(_JoyPositionCfg):
++    joy_alpha:float=.25
++    joy_max_step:float=.08
++    def build(self,env):
++        return JoySmoothPositionAction(self,env)
++
++
++def initialize_joy_servo_targets(env,env_ids):
++    a=env.scene['robot'];ids,_=a.find_joints_by_actuator_names((r"^(?!passive_).*",))
++    a.data.write_ctrl(a.data.joint_pos[env_ids][:,ids],env_ids=env_ids)
+--- a/src/mjlab_microduck/tasks/__init__.py
++++ b/src/mjlab_microduck/tasks/__init__.py
+@@ -402,3 +402,12 @@
+     rl_cfg=MicroduckParkourRollRlCfg,
+     runner_cls=MicroduckOnPolicyRunner,
+ )
++
++from .microduck_joy_env_cfg import make_microduck_joy_env_cfg,MicroduckJoyRlCfg
++register_mjlab_task(task_id='Mjlab-Joy-Flat-MicroDuck',env_cfg=make_microduck_joy_env_cfg(),play_env_cfg=make_microduck_joy_env_cfg(play=True),rl_cfg=MicroduckJoyRlCfg,runner_cls=MicroduckOnPolicyRunner)
++
++from .microduck_joy_env_cfg import make_microduck_joy_pd_env_cfg,MicroduckJoyPdRlCfg
++register_mjlab_task(task_id='Mjlab-JoyPD-Flat-MicroDuck',env_cfg=make_microduck_joy_pd_env_cfg(),play_env_cfg=make_microduck_joy_pd_env_cfg(play=True),rl_cfg=MicroduckJoyPdRlCfg,runner_cls=MicroduckOnPolicyRunner)
++
++from .microduck_joy_env_cfg import make_microduck_joy_smooth_pd_env_cfg,MicroduckJoySmoothPdRlCfg
++register_mjlab_task(task_id='Mjlab-JoySmoothPD-Flat-MicroDuck',env_cfg=make_microduck_joy_smooth_pd_env_cfg(),play_env_cfg=make_microduck_joy_smooth_pd_env_cfg(play=True),rl_cfg=MicroduckJoySmoothPdRlCfg,runner_cls=MicroduckOnPolicyRunner)
+--- a/scripts/export.py
++++ b/scripts/export.py
+@@ -242,6 +242,13 @@
+         metadata["hop_centering"] = "v1"
+     if task_id == "Mjlab-SweepRopeHop-Flat-MicroDuck":
+         metadata["hop_height_command"] = "sweep-v1"
++    if task_id in ("Mjlab-Joy-Flat-MicroDuck", "Mjlab-JoyPD-Flat-MicroDuck", "Mjlab-JoySmoothPD-Flat-MicroDuck"):
++        metadata["joy_commands"] = "v1"
++        metadata["joy_frequency_hz"] = "1.15"
++    if task_id == "Mjlab-JoySmoothPD-Flat-MicroDuck":
++        metadata["joy_target_conditioner"] = "v1"
++        metadata["joy_target_alpha"] = "0.25"
++        metadata["joy_target_max_step_rad"] = "0.08"
+     attach_metadata_to_onnx(onnx_path, metadata)
+ 
+     print(f"Written {onnx_path}")
+--- /dev/null
++++ b/src/mjlab_microduck/tasks/microduck_joy_env_cfg.py
+@@ -0,0 +1,102 @@
++"""Continuous 1.15 Hz commanded stepping/sway; existing 61-D BAM template."""
++from copy import deepcopy
++from mjlab.managers import ObservationTermCfg,RewardTermCfg,CurriculumTermCfg
++from mjlab.managers.scene_entity_config import SceneEntityCfg
++from mjlab_microduck.robot.microduck_constants import MICRODUCK_STANDUP_ROBOT_CFG,MICRODUCK_STANDUP_PD_ROBOT_CFG
++from .microduck_velocity_env_cfg import make_microduck_velocity_env_cfg,MicroduckRlCfg
++from . import mdp
++
++
++def make_microduck_joy_env_cfg(play=False,pd_actuators=False):
++    cfg=make_microduck_velocity_env_cfg(play=play)
++    cfg.scene.entities['robot']=deepcopy(MICRODUCK_STANDUP_PD_ROBOT_CFG if pd_actuators else MICRODUCK_STANDUP_ROBOT_CFG)
++    if pd_actuators:
++        cfg.scene.entities['robot'].spec_fn=joy_pd_spec
++        cfg.scene.entities['robot'].collisions=()
++        cfg.scene.spec_fn=joy_pd_terrain_spec
++        cfg.events.pop('randomize_joint_friction',None)
++        cfg.sim.mujoco.timestep=.001
++        cfg.decimation=20
++    cfg.episode_length_s=8.
++    cfg.sim.mujoco.timestep=.002
++    cfg.decimation=10
++    cfg.sim.mujoco.iterations=30
++    cfg.sim.nconmax=200
++    cfg.events.pop('push_robot',None)
++    cfg.events['reset_base'].params['pose_range']={'x':(-.01,.01),'y':(-.01,.01),'z':(.12,.125),'roll':(-.02,.02),'pitch':(-.02,.02),'yaw':(-.02,.02)}
++    cfg.events['reset_base'].params['velocity_range']={'x':(-.03,.03),'y':(-.03,.03),'z':(-.02,.02)}
++    cfg.commands['twist'].ranges.lin_vel_x=(0.,0.)
++    cfg.commands['twist'].ranges.lin_vel_y=(0.,0.)
++    cfg.commands['twist'].ranges.ang_vel_z=(0.,0.)
++    for group in ('actor','critic'):
++        cfg.observations[group].terms['command']=ObservationTermCfg(func=mdp.joy_twist_command)
++        cfg.observations[group].terms['head_command']=ObservationTermCfg(func=mdp.joy_head_command)
++        cfg.observations[group].terms['body_command']=ObservationTermCfg(func=mdp.joy_body_command)
++    # Preserve DR/encoder/IMU terms and BAM startup expansion from the template.
++    for name in ['track_linear_velocity','track_angular_velocity','air_time','foot_clearance','foot_swing_height','head_pose_tracking','head_pose_bias','body_pose_tracking']:
++        cfg.rewards.pop(name,None)
++    cfg.rewards['pose'].weight=.15
++    cfg.rewards['joy_feet']=RewardTermCfg(func=mdp.joy_foot_rhythm,weight=12.,params={"asset_cfg":SceneEntityCfg("robot",site_names=["left_foot","right_foot"])})
++    cfg.rewards['joy_head']=RewardTermCfg(func=mdp.joy_head_tracking,weight=3.)
++    cfg.rewards['joy_balance']=RewardTermCfg(func=mdp.joy_balance,weight=5.)
++    cfg.rewards['joy_drift']=RewardTermCfg(func=mdp.joy_drift_cost,weight=100.)
++    cfg.rewards['action_rate_l2'].weight=-.05
++    cfg.curriculum={k:v for k,v in cfg.curriculum.items() if k in ('com_range','head_com_range')}
++    cfg.curriculum['action_rate_weight']=CurriculumTermCfg(func=mdp.reward_weight,params={'reward_name':'action_rate_l2','weight_stages':[{'step':0,'weight':-.05},{'step':150*24,'weight':-.15},{'step':300*24,'weight':-.3}]})
++    if pd_actuators:
++        cfg.sim.mujoco.timestep=.001
++        cfg.decimation=20
++        cfg.rewards["action_rate_l2"].weight=-.1
++        cfg.curriculum["action_rate_weight"].params["weight_stages"]=[{"step":0,"weight":-.1},{"step":100*24,"weight":-.5},{"step":200*24,"weight":-1.}]
++    return cfg
++
++MicroduckJoyRlCfg=deepcopy(MicroduckRlCfg)
++MicroduckJoyRlCfg.experiment_name='microduck_joy'
++MicroduckJoyRlCfg.run_name='continuous_joy_v1'
++MicroduckJoyRlCfg.max_iterations=600
++MicroduckJoyRlCfg.save_interval=100
++MicroduckJoyRlCfg.logger='tensorboard'
++MicroduckJoyRlCfg.algorithm.learning_rate=.0003
++MicroduckJoyRlCfg.actor.distribution_cfg['init_std']=.4
++
++
++def joy_pd_spec():
++    # Explicit supported PD family: deployment uses position servos, so use
++    # the same actuator family/current limit rather than transferring BAM targets.
++    from mjlab_microduck.robot.microduck_constants import get_standup_spec
++    spec=get_standup_spec()
++    for a in spec.actuators:
++        a.forcelimited=True;a.forcerange=[-.6405,.6405]
++    for g in spec.geoms:
++        if g.contype & 1:
++            g.solref=[.0012,1.];g.solimp=[.99,.999,.0005,.5,2.];g.margin=0.  # Warp MULTICCD requires zero margin; CPU rehearsal retains .2 mm margin.
++    return spec
++
++def make_microduck_joy_pd_env_cfg(play=False):
++    return make_microduck_joy_env_cfg(play,pd_actuators=True)
++
++MicroduckJoyPdRlCfg=deepcopy(MicroduckJoyRlCfg)
++MicroduckJoyPdRlCfg.experiment_name='microduck_joy_pd'
++MicroduckJoyPdRlCfg.run_name='continuous_pd_v1'
++MicroduckJoyPdRlCfg.max_iterations=400
++
++
++def joy_pd_terrain_spec(spec):
++    for g in spec.body('terrain').geoms:
++        g.solref=[.002,1.];g.solimp=[.9,.95,.001,.5,2.];g.priority=1
++
++
++def make_microduck_joy_smooth_pd_env_cfg(play=False):
++    cfg=make_microduck_joy_pd_env_cfg(play)
++    old=cfg.actions['joint_pos']
++    from dataclasses import fields
++    cfg.actions['joint_pos']=mdp.JoySmoothPositionActionCfg(**{f.name:getattr(old,f.name) for f in fields(old)})
++    from mjlab.managers import EventTermCfg
++    cfg.events['initialize_joy_servo_targets']=EventTermCfg(func=mdp.initialize_joy_servo_targets,mode='reset')
++    return cfg
++
++MicroduckJoySmoothPdRlCfg=deepcopy(MicroduckJoyPdRlCfg)
++MicroduckJoySmoothPdRlCfg.experiment_name='microduck_joy_smooth_pd'
++MicroduckJoySmoothPdRlCfg.run_name='continuous_smooth_pd_v1'
++MicroduckJoySmoothPdRlCfg.max_iterations=200
++MicroduckJoySmoothPdRlCfg.algorithm.learning_rate=.0002
+--- /dev/null
++++ b/tests/test_joy_cfg.py
+@@ -0,0 +1,64 @@
++import torch
++from types import SimpleNamespace
++from mjlab_microduck.tasks.microduck_joy_env_cfg import make_microduck_joy_env_cfg
++from mjlab_microduck.tasks import mdp
++
++
++def test_deployment_contract_and_bam_startup():
++ c=make_microduck_joy_env_cfg()
++ assert c.decimation*c.sim.mujoco.timestep==.02
++ assert list(c.observations['actor'].terms)==['base_ang_vel','projected_gravity','joint_pos','joint_vel','actions','command','head_command','body_command']
++ assert 'expand_bam_friction_fields' in c.events
++ assert c.rewards['joy_drift'].weight>0
++ assert c.rewards['action_rate_l2'].weight<0
++ assert c.rewards['joy_feet'].params['asset_cfg'].site_names==['left_foot','right_foot']
++ assert 'push_robot' not in c.events
++
++
++def test_pose_commands_are_continuous_bounded_and_keep_slots():
++ e=SimpleNamespace(episode_length_buf=torch.arange(500),step_dt=.02)
++ h,b=mdp.joy_head_command(e),mdp.joy_body_command(e)
++ assert h.shape==(500,4) and b.shape==(500,6)
++ assert (h[0]==0).all() and (b[0]==0).all()
++ assert (h[1:]-h[:-1]).abs().max()<.04
++ assert (b[1:]-b[:-1]).abs().max()<.02
++ assert h.abs().max()<=.24 and b.abs().max()<=.07
++ assert (b[:,0:2]==0).all() and (b[:,4:]==0).all()
++
++
++def test_pd_transfer_uses_matching_servo_limits_and_50_hz():
++ from mjlab_microduck.tasks.microduck_joy_env_cfg import make_microduck_joy_pd_env_cfg,joy_pd_spec
++ c=make_microduck_joy_pd_env_cfg()
++ assert c.decimation*c.sim.mujoco.timestep==.02
++ assert c.sim.mujoco.timestep==.001
++ assert c.scene.entities['robot'].collisions==()
++ assert 'randomize_joint_friction' not in c.events
++ s=joy_pd_spec();m=s.compile()
++ assert m.nu==14
++ assert (abs(m.actuator_forcerange[:,0]+.6405)<1e-8).all()
++ assert (abs(m.actuator_forcerange[:,1]-.6405)<1e-8).all()
++ assert (m.geom_margin==0).all()
++ assert c.rewards['action_rate_l2'].weight==-.1
++
++
++def test_smooth_pd_keeps_raw_observation_actions_and_bounds_targets():
++ from mjlab_microduck.tasks.microduck_joy_env_cfg import make_microduck_joy_smooth_pd_env_cfg
++ c=make_microduck_joy_smooth_pd_env_cfg()
++ assert c.actions['joint_pos'].joy_alpha==.25
++ assert c.actions['joint_pos'].joy_max_step==.08
++ assert c.events['initialize_joy_servo_targets'].mode=='reset'
++ action=object.__new__(mdp.JoySmoothPositionAction)
++ action.cfg=SimpleNamespace(clip=None,joy_alpha=.25,joy_max_step=.08)
++ action._raw_actions=torch.zeros(2,14);action._processed_actions=action._raw_actions.clone()
++ action._scale=1.;action._offset=torch.zeros(2,14);action._target_ids=torch.arange(14)
++ initial=torch.linspace(-.2,.2,14).repeat(2,1)
++ action._entity=SimpleNamespace(data=SimpleNamespace(data=SimpleNamespace(ctrl=initial.clone()),encoder_bias=torch.zeros(2,14)),indexing=SimpleNamespace(ctrl_ids=torch.arange(14)))
++ action._joy_target=torch.zeros(2,14);action._joy_pending=torch.ones(2,dtype=torch.bool)
++ previous=initial.clone()
++ for raw in [torch.ones(2,14),-torch.ones(2,14),torch.full((2,14),.3)]:
++  expected=previous+torch.clamp(.25*(raw-previous),-.08,.08)
++  action.process_actions(raw)
++  torch.testing.assert_close(action._processed_actions,expected)
++  torch.testing.assert_close(action._raw_actions,raw)
++  assert (action._processed_actions-previous).abs().max()<=.080001
++  previous=expected

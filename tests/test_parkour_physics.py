@@ -218,3 +218,35 @@ def test_deferred_tactic_expires_and_cannot_cross_encounters():
     assert loop.poll("gap", ["TAKE_LEFT_ROUTE"], completed=True) is None
     assert loop.ready is None
     loop.close()
+
+
+def test_each_hazard_box_encloses_visual_mesh_through_articulation():
+    from microduck_lab.parkour.world import geom_vertices
+
+    m, d, r, _ = build_world(hazards=[Hazard("sweep", "sweeper", 1.0, z=0.08)])
+    rng = np.random.default_rng(37)
+    joints = [
+        j
+        for j in range(m.njnt)
+        if m.joint(j).name.startswith("duck/")
+        and m.jnt_type[j] == mujoco.mjtJoint.mjJNT_HINGE
+    ]
+    for _ in range(4):
+        for j in joints:
+            d.qpos[m.jnt_qposadr[j]] = rng.uniform(*m.jnt_range[j])
+        mujoco.mj_forward(m, d)
+        for proxy in range(m.ngeom):
+            if not m.geom(proxy).name.endswith("/hazard_proxy"):
+                continue
+            bid = m.geom_bodyid[proxy]
+            parts = [
+                g
+                for g in range(m.ngeom)
+                if m.geom_bodyid[g] == bid
+                and (m.geom_group[g] == 2 or m.geom_contype[g] & 1)
+            ]
+            points = np.concatenate([geom_vertices(m, d, g) for g in parts])
+            local = (points - d.geom_xpos[proxy]) @ d.geom_xmat[proxy].reshape(3, 3)
+            assert (np.abs(local) <= m.geom_size[proxy] + 1e-9).all(), m.geom(
+                proxy
+            ).name

@@ -20,13 +20,15 @@ MicroDuck 是一个研究接触条件下双足运动与多机器人协调的仿�
 
 完整回放包含启动阶段。特写以 0.25× 速度重放同一段轨迹，不代表额外独立测试。渲染使用模型原生材质，外观调整前后的逐圈判定记录已核对一致。参见 [轨迹审计](artifacts/presentation/audit.json) 与 [渲染元数据](artifacts/presentation/manifest.json)。
 
-## 最终细节版：冲线与庆祝
+## 物理闯关：特写与慢动作
 
-[终点动作方法与复现](docs/VICTORY_FINISH.md)：约 68 秒英文特写与慢动作版保留六关，并增加欢快冲线、两次真实腾空的小跳和点头庆祝。行走与小跳复用学习策略，头部姿态和衔接时序由电机指令编排；没有改写根部位置或速度。前 25.24 秒精确重放之前的 Jev 记录，之后继续物理仿真；这不增加未见种子的测试成绩。
+[方法与碰撞审计](docs/CONTACT_DETAILS.md)：63 秒英文细节版保留六段完整闯关，慢动作聚焦跨坑落地、旋转杆擦碰、鸭子推球撞瓶解锁出口。杆子接触的定格使用实际 5 kHz 物理状态，青色线框显示参与接触的保守身体碰撞盒；这里是启用接触的胶囊/盒体近似，不是逐三角面网格碰撞。
 
-[![Physical victory hops and supported landings](out/microduck_neon_escape_v5_victory_technical.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4)
+简短终点动作改为单一 PPO 连续步态，并在训练、部署中使用相同的目标平滑和限速。旧版短跳与站立交替虽经过物理计算，观看反馈仍是抽搐，因此被替代。精选记录先精确重放历史 Jev 704 号轨迹至 26.32 秒，再从同一物理状态继续执行新策略；不增加未见种子测试或成功率。规划使用特权仿真状态。
 
-[English technical video](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_evidence.tar.gz)
+[![真实缺口、杆子擦碰与组合技能](out/microduck_neon_escape_v6_details_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4)
+
+[英文特写与慢动作视频](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4) · [输入重放与训练证据](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz) · [结果与失败记录](artifacts/neon-escape-v6/README.md)
 
 ## 连锁撞瓶逃生：组合技能与物理谜题
 

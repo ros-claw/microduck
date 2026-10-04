@@ -134,6 +134,28 @@ def render(
     d = mujoco.MjData(m)
     states = dict(np.load(source / "trajectory.npz"))
     times = states["time"]
+    sweeper_detail = None
+    highrate = None
+    if report.get("detail_focus"):
+        sweeper_detail = json.loads((source / "sweeper-clearance.json").read_text())
+        if sweeper_detail.get("capture") != report["capture"] or not sweeper_detail.get(
+            "passed"
+        ):
+            raise ValueError("Matching full-rate sweeper proof required")
+        highrate_path = source / "sweeper-highrate.npz"
+        if hashlib.sha256(highrate_path.read_bytes()).hexdigest() != sweeper_detail.get(
+            "highrate_sha256"
+        ):
+            raise ValueError("Full-rate contact-state checksum mismatch")
+        highrate = dict(np.load(highrate_path))
+        if (
+            sweeper_detail.get("force_samples", 0) <= 0
+            or sweeper_detail.get("peak_force_N", 0) <= 0
+        ):
+            raise ValueError("Contact detail requires a measured rod/duck force")
+        if np.min(np.abs(highrate["time"] - sweeper_detail["peak_state_time"])) > 1e-8:
+            raise ValueError("Force-bearing state absent from dense capture")
+        report = report | {"sweeper_detail": sweeper_detail}
     timeline = CinematicEventTimeline(report, float(times[-1]))
     director = ShotDirector(timeline)
     clips = timeline.hero() if cut == "hero" else timeline.technical()
@@ -162,7 +184,7 @@ def render(
         else {}
     )
 
-    def state(t):
+    def state(t, dense=False):
         i = int(np.clip(np.searchsorted(times, t), 0, len(times) - 1))
         if i and abs(times[i - 1] - t) < abs(times[i] - t):
             i -= 1
@@ -172,6 +194,11 @@ def render(
         d.eq_active[:] = states["eq_active"][i]
         m.geom_rgba[:] = states["geom_rgba"][i]
         d.time = float(times[i])
+        if dense:
+            k = int(np.argmin(np.abs(highrate["time"] - t)))
+            for name in ("qpos", "qvel", "ctrl", "eq_active"):
+                getattr(d, name)[:] = highrate[name][k]
+            d.time = float(highrate["time"][k])
         for g in range(m.ngeom):
             if m.geom(g).name.startswith("floor/"):
                 m.geom_rgba[g, :3] = [0.12, 0.18, 0.26]
@@ -190,13 +217,16 @@ def render(
 
     def frame(t, clip, reset=False):
         nonlocal camera_position
-        state(t)
+        dense = clip.title.startswith("CONTACT FRAME")
+        state(t, dense=dense)
         cam, kind = director.camera(t, d, 1 / fps, clip.shot, reset)
         renderer.update_scene(d, camera=cam, scene_option=option)
         camera_position = np.asarray(renderer.scene.camera[0].pos).copy()
         pictures = []
-        for offset in [-0.006, -0.002, 0.002, 0.006] if blur == 4 else [0.0]:
-            state(t + offset)
+        for offset in (
+            [-0.006, -0.002, 0.002, 0.006] if blur == 4 and not dense else [0.0]
+        ):
+            state(t + offset, dense=dense)
             # Camera occlusion management applies to decorative, non-colliding
             # posts only. Robot, floor, rails, gap and all hazards remain visible.
             subjects = [d.body("duck/trunk_base").xpos + np.array([0, 0, 0.08])]
@@ -259,6 +289,41 @@ def render(
                     renderer.scene.ngeom += 1
             if style == "industrial":
                 industrial(renderer.scene, m, d, report, camera_position)
+            if dense:
+                # Draw only the contacted enclosure, as non-colliding render lines.
+                gi = m.geom(sweeper_detail["peak_force_geom"]).id
+                Rg = d.geom_xmat[gi].reshape(3, 3)
+                corners = [
+                    d.geom_xpos[gi]
+                    + Rg
+                    @ (
+                        m.geom_size[gi]
+                        * np.array([1 if k & bit else -1 for bit in (1, 2, 4)])
+                    )
+                    for k in range(8)
+                ]
+                for k in range(8):
+                    for bit in (1, 2, 4):
+                        if k & bit:
+                            continue
+                        g = renderer.scene.geoms[renderer.scene.ngeom]
+                        mujoco.mjv_initGeom(
+                            g,
+                            mujoco.mjtGeom.mjGEOM_LINE,
+                            np.zeros(3),
+                            np.zeros(3),
+                            np.eye(3).ravel(),
+                            np.array([0.1, 1.0, 0.8, 1.0]),
+                        )
+                        mujoco.mjv_connector(
+                            g,
+                            mujoco.mjtGeom.mjGEOM_LINE,
+                            2.0,
+                            corners[k],
+                            corners[k | bit],
+                        )
+                        g.category = int(mujoco.mjtCatBit.mjCAT_DECOR)
+                        renderer.scene.ngeom += 1
             pictures.append(renderer.render().astype(np.float32))
         im = Image.fromarray(np.uint8(np.clip(np.mean(pictures, axis=0), 0, 255)))
         draw = ImageDraw.Draw(im, "RGBA")
@@ -470,6 +535,27 @@ def render(
                         font=font(22),
                         fill=(207, 222, 235),
                     )
+            if report.get("detail_focus"):
+                if dense:
+                    detail = f"Enclosing collision box (cyan) | peak normal force {sweeper_detail['peak_force_N']:.1f} N | impulse {sweeper_detail['normal_impulse_Ns']:.3f} N s"
+                elif clip.shot == "sweeper_top":
+                    detail = "Capsule rod / enclosing body colliders | contact enabled | full-rate force audit verifies a brief brush"
+                elif clip.shot == "landing":
+                    detail = f"Airborne phase {timeline.flight['end'] - timeline.flight['start']:.3f} s | real gap geometry | feet re-establish support"
+                elif clip.shot == "bowling":
+                    detail = "Force transfers from duck to ball to pins | measured pin falls trigger the gate motor"
+                else:
+                    detail = "Jev selects skills; learned policies drive position servos | simulator-state planning, not camera perception"
+                draw.rectangle((50, 975, 1870, 1035), fill=(5, 14, 26, 255))
+                draw.text((62, 984), detail, font=font(22), fill=(207, 222, 235))
+                if dense:
+                    draw.rectangle((50, 924, 1870, 973), fill=(5, 14, 26, 255))
+                    draw.text(
+                        (62, 935),
+                        "Exact 5 kHz contact state | 0.2 mm soft-contact margin | no geometric rod/body penetration in this encounter",
+                        font=font(22),
+                        fill=(189, 212, 234),
+                    )
             if clip.title == "REPRODUCIBLE INPUT REPLAY":
                 draw.rounded_rectangle(
                     (280, 220, 1640, 690), radius=24, fill=(5, 14, 26, 235)
@@ -575,10 +661,31 @@ def render(
                     (sum(timeline.instances["ROLL_CENTER"][-1]) / 2, "roll"),
                     (timeline.door + 0.2, "finish"),
                 ]
+            if report.get("detail_focus"):
+                hit = sweeper_detail["peak_state_time"]
+                picks = [
+                    (timeline.flight["start"] + 0.06, "landing"),
+                    (hit - 0.10, "sweeper_top"),
+                    (hit, "sweeper_side"),
+                    (strike + 0.06, "bowling"),
+                    (sum(timeline.instances["ROLL_CENTER"][-1]) / 2, "roll"),
+                    (timeline.stop - 0.5, "victory"),
+                ]
             sheet = Image.new("RGB", (1920, 1080))
             for j, (t, shot) in enumerate(picks):
                 im = Image.fromarray(
-                    frame(t, clips[0].__class__(t, t, shot=shot), True)
+                    frame(
+                        t,
+                        clips[0].__class__(
+                            t,
+                            t,
+                            shot=shot,
+                            title="CONTACT FRAME / exact 0.2 ms physics state"
+                            if report.get("detail_focus") and shot == "sweeper_side"
+                            else "",
+                        ),
+                        True,
+                    )
                 )
                 im.resize((640, 540)).save(output.parent / f"parkour-preview-{j}.jpg")
                 sheet.paste(im.resize((640, 360)), ((j % 3) * 640, (j // 3) * 360))
@@ -696,6 +803,17 @@ def render(
                 (source / "causality.json").read_bytes()
             ).hexdigest()
             if arcade
+            else None,
+            sweeper_detail_sha256=hashlib.sha256(
+                (source / "sweeper-clearance.json").read_bytes()
+            ).hexdigest()
+            if sweeper_detail
+            else None,
+            sweeper_highrate_sha256=sweeper_detail.get("highrate_sha256")
+            if sweeper_detail
+            else None,
+            contact_frame="Nearest actual 5 kHz state, collision enclosure outlined in render-only cyan lines"
+            if sweeper_detail
             else None,
             continuation=report.get("continuation"),
             victory=report.get("victory"),

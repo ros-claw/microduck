@@ -25,6 +25,7 @@ from ..parkour.preview import (
 )
 from ..parkour.arcade import ArcadeDriver, EncounterCombo, bowling_command
 from ..parkour.victory import VictoryDance
+from ..parkour.joy import JoyDance
 
 
 def run(
@@ -48,7 +49,11 @@ def run(
     legacy_handoffs=False,
     forecast_entry_roll=False,
     victory_dance=False,
+    joy_policy=None,
 ):
+    victory_dance = bool(victory_dance or joy_policy)
+    if joy_policy and difficulty != "arcade":
+        raise ValueError("Continuous finish requires the arcade course")
     output = Path(output)
     if (output / "audit.json").exists():
         raise FileExistsError(
@@ -81,7 +86,9 @@ def run(
     r.bank.paths["jump"] = str(Path(policy).resolve())
     if roll_policy:
         r.bank.paths["roulade"] = str(Path(roll_policy).resolve())
-    if victory_dance:
+    if joy_policy:
+        r.bank.paths["joy"] = str(Path(joy_policy).resolve())
+    elif victory_dance:
         r.bank.paths["victory_hop"] = str(repository / "policies/ropehop_centered.onnx")
     victory = None
     arcade = difficulty == "arcade"
@@ -222,7 +229,11 @@ def run(
                     elif stage == "EXIT_ROLL":
                         stage = "FINISH"
                         if victory_dance:
-                            victory = VictoryDance(float(d.time))
+                            victory = (
+                                JoyDance(float(d.time))
+                                if joy_policy
+                                else VictoryDance(float(d.time))
+                            )
                             events.append(dict(type="VICTORY_START", t=float(d.time)))
                     elif stage == "RECOVER":
                         stage = return_stage
@@ -558,6 +569,9 @@ def run(
                 events.append(dict(type="FINISH", t=victory.finished_at))
         driver.step(m, d, float(x))
         r.step()
+        if joy_policy and victory is not None:
+            victory.condition_targets(d, r)
+            victory.control_sample(d, r)
         if capture:
             inputs.append(
                 (
@@ -632,6 +646,7 @@ def run(
         predictive=predictive,
         difficulty=difficulty,
         victory=victory.report(m, d, r) if victory else None,
+        detail_focus=bool(joy_policy),
         combination_planning=combo_planning,
         forecast_entry_roll=forecast_entry_roll,
         forecasts=forecasts,
@@ -769,6 +784,10 @@ if __name__ == "__main__":
     p.add_argument("--predictive", action="store_true")
     p.add_argument("--legacy-handoffs", action="store_true")
     p.add_argument("--victory-dance", action="store_true")
+    p.add_argument(
+        "--joy-policy",
+        help="Continuous learned finish; expects matching conditioner metadata",
+    )
     p.add_argument(
         "--forecast-entry-roll",
         action="store_true",

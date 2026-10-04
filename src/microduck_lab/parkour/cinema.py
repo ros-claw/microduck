@@ -200,6 +200,8 @@ class CinematicEventTimeline:
         return clips
 
     def arcade_technical(self):
+        if self.report.get("detail_focus"):
+            return self.arcade_details()
         push = next(e["t"] for e in self.events if e["type"] == "BALL_PUSH")
         strike = next(e["t"] for e in self.events if e["type"] == "BOWLING_STRIKE")
         first = self.instances["ROLL_CENTER"][0]
@@ -282,6 +284,82 @@ class CinematicEventTimeline:
             ]
         return clips
 
+    def arcade_details(self):
+        push = next(e["t"] for e in self.events if e["type"] == "BALL_PUSH")
+        strike = next(e["t"] for e in self.events if e["type"] == "BOWLING_STRIKE")
+        hit = self.report.get("sweeper_detail", {}).get(
+            "peak_state_time",
+            self.report.get("sweeper_detail", {}).get("peak_force_time"),
+        )
+        if hit is None:
+            hit = (
+                next(
+                    e["t"]
+                    for e in self.events
+                    if e["type"] == "COMBO_VERIFIED"
+                    and e["challenge"] == "SWEEPER SURVIVED"
+                )
+                - 0.8
+            )
+        last = self.instances["ROLL_CENTER"][-1]
+        return [
+            Clip(
+                0.0002,
+                self.stop,
+                title="PHYSICAL SKILL COMPOSITION / CONTINUOUS RECORDED RUN",
+            ),
+            Clip(
+                self.flight["start"] - 0.25,
+                self.flight["end"] + 0.45,
+                0.25,
+                "landing",
+                "GAP / both feet clear the void; force-bearing landing",
+            ),
+            Clip(
+                hit - 0.8,
+                hit + 0.65,
+                0.25,
+                "sweeper_top",
+                "SWEEPER / approach, side route and physical rod contact",
+            ),
+            Clip(
+                hit,
+                hit,
+                1.0,
+                "sweeper_side",
+                "CONTACT FRAME / exact 0.2 ms physics state",
+                hold=2.5,
+            ),
+            Clip(
+                push - 0.25,
+                strike + 0.4,
+                0.3,
+                "bowling",
+                "CAUSAL CHAIN / duck pushes ball; three targets topple",
+            ),
+            Clip(
+                strike,
+                strike + 0.8,
+                1.0,
+                "bowling",
+                "UNLOCK / qualified contact chain opens the force-limited gate",
+            ),
+            Clip(
+                last[0] - 0.15,
+                last[1] + 0.2,
+                1.0,
+                "roll",
+                "SKILL TRANSITION / second roll, supported stance, walking",
+            ),
+            Clip(
+                self.stop,
+                self.stop,
+                shot="finish",
+                title="REPRODUCIBLE INPUT REPLAY",
+                hold=2.5,
+            ),
+        ]
+
 
 class ShotDirector:
     def __init__(self, timeline):
@@ -352,7 +430,10 @@ class ShotDirector:
                 -18.0,
             ),
             "bowling": (duck + np.array([0.28, 0, 0.08]), 1.30, 100.0, -24.0),
-            "victory": (duck + np.array([0.0, 0, 0.035]), 0.72, 212.0, -12.0),
+            "victory": (duck + np.array([0.0, 0, 0.035]), 0.90, 155.0, -16.0),
+            "landing": (duck + np.array([0.04, 0.0, -0.025]), 0.84, 90.0, -9.0),
+            "sweeper_top": (duck + np.array([0.0, -0.08, 0.02]), 1.10, 100.0, -65.0),
+            "sweeper_side": (duck + np.array([0.04, 0.0, 0.02]), 0.78, 90.0, -8.0),
         }
         return params[shot], shot
 

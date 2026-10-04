@@ -20,13 +20,15 @@ This repository provides the deployment runtime, exported policies, evaluation e
 
 The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
 
-## Final technical cut: happy approach and victory hops
+## Physical gameplay: close-ups and slow motion
 
-[Finish method and reproduction](docs/VICTORY_FINISH.md): a 68-second English close-up/slow-motion cut adds a happy approach, two genuinely airborne hops and head nods. Existing walking/centered-hop policies execute the movements; head gestures and scheduling are scripted motor commands. The first 25.24 s exactly replay the historical Jev record, followed by a new physical finish. This continuation does not add unseen evaluation trials.
+[Method and collision audit](docs/CONTACT_DETAILS.md): a 63-second English detail cut keeps the full six-encounter run and replays three physical interactions—gap landing, a force-bearing rod brush, and duck–ball–pin contact that unlocks the exit. The rod contact freeze-frame uses an actual 5 kHz state and outlines its conservative body collision box. These are contact-enabled capsule/box approximations, not exact visual-triangle collisions.
 
-[![Physical victory hops and supported landings](out/microduck_neon_escape_v5_victory_technical.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4)
+The short finish uses a separately fine-tuned PPO gait with the same target smoothing and rate limit during training and deployment. Earlier hop/stand bursts looked twitchy in user review and are superseded. The selected capture exactly replays historical Jev seed 704 through 26.32 s, then continues physics with the new motor policy. It adds no unseen trials or success-rate claims; planning uses privileged simulator state.
 
-[English technical video](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_technical.mp4) · [Input-replay evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-victory-2026-10-03/microduck_neon_escape_v5_victory_evidence.tar.gz)
+[![Physical gap crossing, rod contact and skill composition](out/microduck_neon_escape_v6_details_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4)
+
+[English close-up and slow-motion video](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4) · [Replay and training evidence](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz) · [Results and failed probes](artifacts/neon-escape-v6/README.md)
 
 ## Strike & Escape: combined skills and a physical puzzle
 

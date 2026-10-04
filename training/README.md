@@ -68,3 +68,44 @@ training checkpoints are still not included.
 
 V2 物理基线实验预发布的证据包单独附带所选长跳 `model_500.pt`；这不改变旧跳绳
 训练检查点未随仓库交付的限制。
+
+## Continuous gait / 连续步态
+
+`continuous_joy.patch` applies after `microduck_rl.patch` and `parkour_v2.patch`.
+It preserves the 61-D actor, 50 Hz controls, observation normalization and base
+randomization/noise/NaN guards. `Mjlab-JoySmoothPD-Flat-MicroDuck` uses the
+existing supported XML position-servo family with ±0.6405 N m limits; these
+simulation weights must not be described as BAM/hardware-qualified policies.
+Zero-margin, 1 ms Warp training is checked in the existing 0.2 ms CPU course.
+The matched target conditioner uses alpha .25 and max step .08 rad per 20 ms;
+raw previous actions remain in observations. Its metadata must accompany ONNX.
+
+连续步态补丁叠加于已交付训练源码与跑酷补丁之上。训练和运行时采用相同目标递推，
+不能只在部署端临时加滤波；ONNX 元数据记录这个接口。位置伺服分支、电流限制、
+训练/部署碰撞差异与失败候选详见 [CONTACT_DETAILS](../docs/CONTACT_DETAILS.md)。
+
+```bash
+git apply --check "$DELIVERY_ROOT/training/continuous_joy.patch"
+git apply "$DELIVERY_ROOT/training/continuous_joy.patch"
+uv run --with pytest pytest tests/test_joy_cfg.py
+uv run train Mjlab-JoySmoothPD-Flat-MicroDuck --env.scene.num-envs 64 \
+  --agent.max-iterations 5 --agent.logger tensorboard
+# Long run, after successful smoke. To reproduce the selected fine-tune,
+# use the archived seed checkpoint and the flags in the evidence run manifest.
+uv run train Mjlab-JoySmoothPD-Flat-MicroDuck --env.scene.num-envs 2048 \
+  --agent.max-iterations 200 --agent.logger tensorboard
+uv run scripts/export.py Mjlab-JoySmoothPD-Flat-MicroDuck \
+  --checkpoint-file /path/to/checkpoint.pt --device cpu --num-envs 1 \
+  --onnx-file continuous_joy.onnx
+```
+
+The selected policy is initialized from the separately trained PD candidate,
+which was itself seeded from upstream `alpha_walking.onnx` with numerical parity
+verification. Training from scratch follows the same task but does not reproduce
+these weights. The release includes the selected actor checkpoint, its seed,
+exact selected-run source snapshot, logs, standard-export parity and deployment
+probes. The incremental patch omits pre-existing uncommitted `uv.lock` changes;
+the full run snapshot retains the actual lockfile. Failed unfiltered candidates
+and the initially unstable filtered handoff are reported rather than relabeled
+as successes. Four small deployment perturbations are tuning checks, not
+unseen-game trials or hardware tests.

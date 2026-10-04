@@ -1,0 +1,148 @@
+{
+  "source": "artifacts/neon-escape-v6/joysmooth300-704",
+  "source_audit_sha256": "12247a8b2c753acebd92ed552ad9038b362b8e62da103f3f59f97b80ef26f467",
+  "video_sha256": "8533e131744b35d567386d5c8e02fbaec56a38418f67445d7ed6cdfb4b10f49b",
+  "cut": "technical",
+  "style": "industrial",
+  "fps": 50,
+  "frames": 3133,
+  "duration_s": 62.66,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "jev",
+  "evaluation_goal": "escape",
+  "core_physical_gates": true,
+  "full_stunt_gate": false,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "e8ae57853e94be6f1be09135a57eaac0c7d86243fe54f44425813afa41f05029",
+  "input_replay_sha256": "543bd78cede23f30b9f9c5258d036c4778333ee284b358cc6c795f28b6c939ea",
+  "contact_causality_sha256": "f39bc07785df6740873ca0f76285fdef8d07cf864c108b6d27a72c3ab0f089c4",
+  "sweeper_detail_sha256": "1f105459bb612fadd0764896b436fc700dcefde18d963e8fe468cb41feb9d2e2",
+  "sweeper_highrate_sha256": "2d56852ff47989067610d122e67490c6241a121f1bb3550d2dba1f4ab4906f16",
+  "contact_frame": "Nearest actual 5 kHz state, collision enclosure outlined in render-only cyan lines",
+  "continuation": {
+    "parent_audit_sha256": "3748e6d6c0f2ecf54b295c4ba2fa946b1e3d9816a0b37254f38772df7528296a",
+    "parent_capture": {
+      "scene.mjb": "f6ff6e8e32bd556b758269c62846cdf0c7af469554b806c67e597d6de112bf68",
+      "trajectory.npz": "95b106c638df4b015e98ea2226bdec8f323f18382519c9eda48822ad900bfca4",
+      "inputs.npz": "740b1e25a4c88e5de877a28ba77378eec3bd9df0e7bdd3f83bb182efcd0bfb50"
+    },
+    "parent_source_archive_sha256": "7badadd4bef89abf5606584196db99e9604cec1ae24c4c7d3850dd1237649f18",
+    "branch_time": 26.319999999965336,
+    "prefix_control_ticks": 1316,
+    "prefix_exact": true,
+    "parent_wall_seconds": 109.19583940599114,
+    "scope": "Historical live-Jev prefix replayed exactly; new actuator-only finish suffix. Selected demonstration, not a new live API or unseen trial."
+  },
+  "victory": {
+    "mode": "continuous_joy_smooth_pd_v1",
+    "passed": true,
+    "phase": "CONTINUOUS JOY",
+    "finished_at": 29.11999999995881,
+    "dance_started": 30.739999999955035,
+    "duration_s": 4.399999999989749,
+    "min_upright": 0.9941391629807925,
+    "max_drift_m": 0.03317793376518835,
+    "feet_peak_m": [
+      0.018461397002017398,
+      0.02002818994203742
+    ],
+    "target_rate_rms_rad_s": 2.515485967290254,
+    "head_target_rate_rms_rad_s": 1.9131153823741072,
+    "max_target_step_rad": 0.08000000000000002,
+    "pose_power_above_8hz_ratio": 0.0002955527866171167,
+    "target_conditioner": {
+      "version": "v1",
+      "alpha": 0.25,
+      "max_step_rad": 0.08,
+      "hz": 50,
+      "initialization": "previous actuator target"
+    },
+    "method": "Single PPO policy at 50 Hz; continuous pose commands and measured feedback; the same alpha=.25 / max-step=.08 rad target conditioner as training, initialized from the previous actuator target. Previous-action observations remain raw. No servo overrides, state edits or external robot forces."
+  },
+  "qualification_scope": "Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
+  "clips": [
+    {
+      "start": 0.0002,
+      "stop": 35.135199999944795,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "PHYSICAL SKILL COMPOSITION / CONTINUOUS RECORDED RUN",
+      "output_start": 0.0,
+      "frames": 1757
+    },
+    {
+      "start": 11.550199999999176,
+      "stop": 12.43259999999875,
+      "speed": 0.25,
+      "shot": "landing",
+      "title": "GAP / both feet clear the void; force-bearing landing",
+      "output_start": 35.14,
+      "frames": 177
+    },
+    {
+      "start": 14.968799999989926,
+      "stop": 16.418799999989925,
+      "speed": 0.25,
+      "shot": "sweeper_top",
+      "title": "SWEEPER / approach, side route and physical rod contact",
+      "output_start": 38.68,
+      "frames": 290
+    },
+    {
+      "start": 15.768799999989927,
+      "stop": 15.768799999989927,
+      "speed": 1.0,
+      "shot": "sweeper_side",
+      "title": "CONTACT FRAME / exact 0.2 ms physics state",
+      "output_start": 44.48,
+      "frames": 125
+    },
+    {
+      "start": 19.23759999998126,
+      "stop": 22.166799999975947,
+      "speed": 0.3,
+      "shot": "bowling",
+      "title": "CAUSAL CHAIN / duck pushes ball; three targets topple",
+      "output_start": 46.98,
+      "frames": 489
+    },
+    {
+      "start": 21.766799999975948,
+      "stop": 22.56679999997595,
+      "speed": 1.0,
+      "shot": "bowling",
+      "title": "UNLOCK / qualified contact chain opens the force-limited gate",
+      "output_start": 56.76,
+      "frames": 41
+    },
+    {
+      "start": 23.92999999997056,
+      "stop": 26.499999999965382,
+      "speed": 1.0,
+      "shot": "roll",
+      "title": "SKILL TRANSITION / second roll, supported stance, walking",
+      "output_start": 57.58,
+      "frames": 129
+    },
+    {
+      "start": 35.135199999944795,
+      "stop": 35.135199999944795,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "REPRODUCIBLE INPUT REPLAY",
+      "output_start": 60.16,
+      "frames": 125
+    }
+  ],
+  "motion_blur": "off",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained."
+}

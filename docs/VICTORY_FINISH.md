@@ -1,5 +1,9 @@
 # Victory finish / 终点庆祝
 
+> Historical V5: physically simulated, but user review found the hop/stand switches
+> twitchy. Superseded by the [continuous-motion and contact-detail revision](CONTACT_DETAILS.md).
+> 旧版 V5 的动作经过物理计算，但观看反馈是抽搐；新版改用连续动作训练，详见上面的新方法文档。
+
 The final English technical cut adds a happy finish approach, two short airborne
 hops, head nods and a closer front-side camera. It uses native robot materials;
 all movement remains in the contact-enabled MuJoCo simulation. Walking and
