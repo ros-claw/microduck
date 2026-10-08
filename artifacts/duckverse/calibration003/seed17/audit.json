@@ -1,0 +1,95 @@
+{
+  "schema": "microduck.arena.greybox.v1",
+  "seed": 17,
+  "dt": 0.0005,
+  "duration": 12.0,
+  "mujoco_version": "3.12.0",
+  "experiment": "scripted neighbour walk and occupied support release",
+  "events": [
+    {
+      "time": 4.0,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.0,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 8.0,
+      "tile": 4,
+      "state": "WARNING"
+    },
+    {
+      "time": 10.0,
+      "tile": 4,
+      "state": "RELEASED"
+    }
+  ],
+  "root_initial": [
+    -0.4920000682800353,
+    -8.835765432239854e-09,
+    0.11999755913301231,
+    0.9999999999995024,
+    -1.903070855316686e-07,
+    6.938050708706615e-07,
+    6.911451589764178e-07
+  ],
+  "root_final": [
+    0.09194732280603839,
+    0.4009419072729147,
+    -0.693497261873235,
+    -0.39541924356784114,
+    0.008313400846802346,
+    -0.0035005171116221753,
+    0.9184564527306387
+  ],
+  "centre_error_at_7s_m": 0.04840283290771557,
+  "centre_supported_before_warning": true,
+  "locked_tile_max_drift_m": 6.047181850838551e-05,
+  "receiver_foot_contact": true,
+  "penetration_p99_m": 3.3094496202406544e-06,
+  "penetration_max_m": 0.0017150629305886064,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "finite": true,
+  "wall_s": 2.8620832399465144,
+  "recording_real_time_factor": 4.192750173200501,
+  "external_forces_zero": true,
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+  "contact_columns": [
+    "geom1",
+    "geom2",
+    "distance",
+    "force_normal",
+    "force_t1",
+    "force_t2",
+    "torque_n",
+    "torque_t1",
+    "torque_t2",
+    "px",
+    "py",
+    "pz",
+    "nx",
+    "ny",
+    "nz"
+  ],
+  "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+  "hashes": {
+    "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+    "trajectory.npz": "3d45ba43f4cb803d99c282eecf9aaf760dc7b85c210778f14a00b81f176d0c77",
+    "contacts.jsonl.gz": "8067a656d7f607175aa5bac54163b3d518397b740961c24edc2e8ae79ba1a12c"
+  }
+}

@@ -1,0 +1,1096 @@
+{
+  "passed": 10,
+  "total": 10,
+  "runs": [
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 11,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000985983663,
+        9.29852802846891e-09,
+        0.11999755314401143,
+        0.999999999999038,
+        -4.3407760996196776e-08,
+        1.1148658244762902e-06,
+        8.24122319305925e-07
+      ],
+      "root_final": [
+        0.08421967860339125,
+        0.6129690777383787,
+        -0.7242505697169433,
+        0.17489303031300446,
+        0.19591088372889093,
+        0.4137027942830055,
+        -0.8717117365201261
+      ],
+      "centre_error_at_7s_m": 0.046723483678825145,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.959981123189115e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 3.975874020846021e-06,
+      "penetration_max_m": 0.0017146313779098647,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 3.031002620002255,
+      "recording_real_time_factor": 3.9590859871942548,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "01999c8a6a943d44c7b9ee988866c847c5051261754b32a1743afcbc98cdf474",
+        "contacts.jsonl.gz": "cae7de9df9ea7bfed3b8804db4595eb4a58a76d987556288f3ac2b0e6ed71c1d"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0012282857795745856,
+        "receiver": 0.0017146313779098647,
+        "other": 0.00010424431740315512
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 12,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000726634692,
+        -6.115040031589562e-10,
+        0.11999756295444775,
+        0.9999999999994033,
+        -1.0732756956871467e-07,
+        8.404915825859271e-07,
+        6.895809136399226e-07
+      ],
+      "root_final": [
+        0.49823624185266707,
+        0.11691550853307085,
+        -0.7478912997163709,
+        -0.23230633184167793,
+        0.12622610229247494,
+        0.783953830314238,
+        -0.5617091161997899
+      ],
+      "centre_error_at_7s_m": 0.04755449395405881,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0200814274099373e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 5.378529713123443e-06,
+      "penetration_max_m": 0.002905725684387456,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 2.993380645988509,
+      "recording_real_time_factor": 4.008845322121477,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "63e0b8bf162393ba028236c097986fd92ba6afe031a9d4b5986a407c950d1c64",
+        "contacts.jsonl.gz": "08e7632c938b5826d7387d5ee8799fb67e3602b246bc54d5ce17829e6d1f8f38"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0011697050082261223,
+        "receiver": 0.002905725684387456,
+        "other": 0.00018899447929399734
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 13,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200007934504564,
+        8.423498739152934e-09,
+        0.11999756085826552,
+        0.999999999999303,
+        -4.288620849112725e-08,
+        8.920720418510549e-07,
+        7.722559736815248e-07
+      ],
+      "root_final": [
+        0.1493090502237211,
+        0.48717472492862435,
+        -0.7287141914671187,
+        0.6976249987409902,
+        -0.6217603644084576,
+        0.3257015865284673,
+        -0.143707643899463
+      ],
+      "centre_error_at_7s_m": 0.04571644757227453,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.880827069656286e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 4.024176381183081e-06,
+      "penetration_max_m": 0.002408451691103985,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 2.9369318999815732,
+      "recording_real_time_factor": 4.085896578015748,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "170040afabb02cb0de92a8dd3a69344bac3f72b176243fc753180c4d72a78a44",
+        "contacts.jsonl.gz": "7b1476686a3270996b7408e06f8c0104a3b81bc6bdc73986d2588fffdea36ca3"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0014687512549429456,
+        "receiver": 0.002408451691103985,
+        "other": 7.262636878012461e-05
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 14,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008637795106,
+        2.3988858419829122e-08,
+        0.11999755131784971,
+        0.9999999999991332,
+        6.37041525025314e-08,
+        1.064743557562277e-06,
+        7.718734363028185e-07
+      ],
+      "root_final": [
+        0.10343401698389633,
+        0.2922685784280164,
+        -0.6741538858043259,
+        0.3892315181092541,
+        -0.1347142556678601,
+        0.2000301572067537,
+        0.8890100285362709
+      ],
+      "centre_error_at_7s_m": 0.04676675276560712,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.760256779734421e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 5.104937648031726e-06,
+      "penetration_max_m": 0.002467879629998432,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 2.9977716160356067,
+      "recording_real_time_factor": 4.002973387235336,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "aee5df1321ca300187acfb186527c779d17b800f3a1e30624741650346199510",
+        "contacts.jsonl.gz": "8ec2b3a75b972d5eba9fc8684321b6314f8271abf3bc626dd4387f3a389cbb7d"
+      },
+      "category_max_m": {
+        "duck_tile": 0.00021069892679646834,
+        "receiver": 0.002467879629998432,
+        "other": 0.0009636723589973737
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 15,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200007173240023,
+        2.0374910338935572e-08,
+        0.11999755683939461,
+        0.9999999999993242,
+        4.224097998867951e-08,
+        8.627672307163305e-07,
+        7.780741710177256e-07
+      ],
+      "root_final": [
+        0.24148153728596655,
+        0.3903866348360872,
+        -0.7234734744071615,
+        -0.024433567647035845,
+        -0.1564456465299518,
+        -0.6190799714136234,
+        0.7691994211180667
+      ],
+      "centre_error_at_7s_m": 0.05459709208265795,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.76045169229239e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 5.473556726539971e-06,
+      "penetration_max_m": 0.0025112970333046724,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 2.856013434997294,
+      "recording_real_time_factor": 4.201660907106821,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "b0f7ecae0e4c23e365c00af09b319c5e7ae844dabb89cb3d8053357b48a18004",
+        "contacts.jsonl.gz": "da0f193d42632966441a8992edba9b4c1c35da8340f6e527cf9a584eb572d5fa"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0004688073386129122,
+        "receiver": 0.0025112970333046724,
+        "other": 0.0001341876734639538
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 16,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000620835721,
+        -6.655906686645076e-09,
+        0.11999755979050665,
+        0.9999999999994997,
+        -1.722721005951648e-07,
+        7.195850304852936e-07,
+        6.731229223693343e-07
+      ],
+      "root_final": [
+        0.09387612664760503,
+        0.09960463552833464,
+        -0.6428453245875342,
+        0.5081651476466138,
+        0.011368542912280784,
+        0.01941189552038857,
+        0.860965804931678
+      ],
+      "centre_error_at_7s_m": 0.049799261774112216,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.988393913607809e-05,
+      "receiver_foot_contact": false,
+      "penetration_p99_m": 5.153842315474616e-06,
+      "penetration_max_m": 0.0018377836612987791,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 3.0008334160083905,
+      "recording_real_time_factor": 3.9988890872729628,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "2a8cb5b915ebd80a6da5e9ab68a62411c057818ef8b0c36f76012e63dd7d6d32",
+        "contacts.jsonl.gz": "d34c5425aef4d06654b32d45dd6d4588faa71db9d6a9fe61bd75880844558fc2"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0011347311589482018,
+        "receiver": 0.0018377836612987791,
+        "other": 0.00030636338784287894
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 17,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000682800353,
+        -8.835765432239854e-09,
+        0.11999755913301231,
+        0.9999999999995024,
+        -1.903070855316686e-07,
+        6.938050708706615e-07,
+        6.911451589764178e-07
+      ],
+      "root_final": [
+        0.09194732280603839,
+        0.4009419072729147,
+        -0.693497261873235,
+        -0.39541924356784114,
+        0.008313400846802346,
+        -0.0035005171116221753,
+        0.9184564527306387
+      ],
+      "centre_error_at_7s_m": 0.04840283290771557,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.047181850838551e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 3.3094496202406544e-06,
+      "penetration_max_m": 0.0017150629305886064,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 2.943903685954865,
+      "recording_real_time_factor": 4.076220311571695,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "3d45ba43f4cb803d99c282eecf9aaf760dc7b85c210778f14a00b81f176d0c77",
+        "contacts.jsonl.gz": "529139a181799c16021cd68f790e5231edf735c9b29a8d4a8c12cc8e58fb53d9"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0015314573955719731,
+        "receiver": 0.0017150629305886064,
+        "other": 4.558623668582734e-05
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 18,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008187543265,
+        1.394637377340013e-08,
+        0.11999755550101988,
+        0.9999999999990493,
+        -1.8891675500867344e-08,
+        1.0636188824444237e-06,
+        8.773728946717655e-07
+      ],
+      "root_final": [
+        0.1469053267963852,
+        0.3395873864808843,
+        -0.6939157328917063,
+        -0.25236139813369574,
+        0.0004787421941221327,
+        -0.009423833919718799,
+        0.9675870435739472
+      ],
+      "centre_error_at_7s_m": 0.047280515120159496,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.896883678910281e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 2.9714207919258394e-06,
+      "penetration_max_m": 0.001888707032056589,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 3.0912075719679706,
+      "recording_real_time_factor": 3.8819780686420815,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "1ad902a9bfc2d1e2f5c228f461242587385d184674a9321591b1d82abe06a9c4",
+        "contacts.jsonl.gz": "2cb7464d55aeb535c760649a99f73ab6ded962da14eae835ba0005a76d7d44d3"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0014326396844712467,
+        "receiver": 0.001888707032056589,
+        "other": 0.0008558953760160412
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 19,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008290933434,
+        2.8263352556950136e-08,
+        0.11999755402337785,
+        0.9999999999991409,
+        9.979205292167341e-08,
+        9.804966319993129e-07,
+        8.641425441924878e-07
+      ],
+      "root_final": [
+        0.38074441797285763,
+        0.4445952254858459,
+        -0.6991003659447076,
+        -0.24523524764354968,
+        0.22894839025001765,
+        -0.013182680755927824,
+        -0.9419493218019848
+      ],
+      "centre_error_at_7s_m": 0.05150842602609865,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.099356643255241e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 6.224359171735941e-06,
+      "penetration_max_m": 0.0016254570154829492,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 3.107622184965294,
+      "recording_real_time_factor": 3.861473269838308,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "dfcd8e3d8d7822f1adac2e56c5e784dfb84550ad6be5f7e27399fbfd06c8b46b",
+        "contacts.jsonl.gz": "90dbb46862c14ddfa36aa43e4a0965c621221635fb2b8cbae7ea766eae7acedb"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0012460409176132483,
+        "receiver": 0.0016254570154829492,
+        "other": 0.0002608040130013697
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 20,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.492000083101138,
+        1.5184632460195897e-08,
+        0.11999755346211807,
+        0.9999999999992749,
+        -3.443610719283342e-09,
+        9.083528180180491e-07,
+        7.905584354379634e-07
+      ],
+      "root_final": [
+        0.14288206156218441,
+        0.28792147654763944,
+        -0.6970869142497937,
+        0.09480395944108924,
+        -0.3739382268260298,
+        0.2848256482705974,
+        0.8775287812258522
+      ],
+      "centre_error_at_7s_m": 0.04703522196360292,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.842622843478876e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 4.105294529881857e-06,
+      "penetration_max_m": 0.002428641565353776,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "time_reset": false,
+      "motor_force_max_Nm": 0.6405,
+      "source_sha256": {
+        "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+        "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+      },
+      "finite": true,
+      "wall_s": 3.2735531009966508,
+      "recording_real_time_factor": 3.665741666553854,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "0a246fca636f8852e6ee7dd5174d981e252ff9fe0a0fa72a49f589b3b033c1c4",
+        "trajectory.npz": "3ce4d02a0c0ef9b30b3562fcd455bc821cd62d98ed9a0a256555a0a9aed15b4d",
+        "contacts.jsonl.gz": "4dedf64714af27abc300d55a25eec394e21ff16269adade6c752011aa9cd3a65"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0004624948691214034,
+        "receiver": 0.002428641565353776,
+        "other": 0.0009536337287200366
+      },
+      "gate_pass": true
+    }
+  ]
+}
