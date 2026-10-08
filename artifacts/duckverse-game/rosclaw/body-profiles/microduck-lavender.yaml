@@ -1,0 +1,170 @@
+profile_id: microduck
+profile_version: 1.0.0
+vendor: Pollen Robotics
+model: microduck
+display_name: Pollen Microduck (simulation)
+description: 14-axis biped, native MJCF in the external microduck-lab executor.
+schema_version: eurdf.profile.v1
+assets:
+  urdf: robot.urdf
+  mjcf: robot.mjcf.xml
+identity:
+  robot_class: biped
+  evidence_domain: simulation
+frames:
+  root: base_link
+  world: world
+joints:
+- name: left_hip_yaw
+  type: revolute
+  limits:
+  - -0.4363323129985824
+  - 0.5235987755982988
+- name: left_hip_roll
+  type: revolute
+  limits:
+  - -0.3839724354387525
+  - 0.3839724354387525
+- name: left_hip_pitch
+  type: revolute
+  limits:
+  - -1.570796326795005
+  - 1.5707963267947882
+- name: left_knee
+  type: revolute
+  limits:
+  - -1.570796326795012
+  - 1.570796326794781
+- name: left_ankle
+  type: revolute
+  limits:
+  - -1.5707963267949019
+  - 1.5707963267948912
+- name: neck_pitch
+  type: revolute
+  limits:
+  - -1.5707963267948966
+  - 1.0471975511965976
+- name: head_pitch
+  type: revolute
+  limits:
+  - -1.5707963267948974
+  - 1.5707963267948957
+- name: head_yaw
+  type: revolute
+  limits:
+  - -2.967059728390373
+  - 2.967059728390348
+- name: head_roll
+  type: revolute
+  limits:
+  - -0.43633231299859127
+  - 0.4363323129985735
+- name: right_hip_yaw
+  type: revolute
+  limits:
+  - -0.5235987755982988
+  - 0.4363323129985824
+- name: right_hip_roll
+  type: revolute
+  limits:
+  - -0.3839724354387525
+  - 0.3839724354387525
+- name: right_hip_pitch
+  type: revolute
+  limits:
+  - -1.5707963267949268
+  - 1.5707963267948664
+- name: right_knee
+  type: revolute
+  limits:
+  - -1.570796326794932
+  - 1.570796326794861
+- name: right_ankle
+  type: revolute
+  limits:
+  - -1.5707963267949054
+  - 1.5707963267948877
+sensors:
+- name: imu
+  type: imu
+actuators:
+- name: left_hip_yaw
+  type: position
+  torque_limit_Nm: 0.6405
+- name: left_hip_roll
+  type: position
+  torque_limit_Nm: 0.6405
+- name: left_hip_pitch
+  type: position
+  torque_limit_Nm: 0.6405
+- name: left_knee
+  type: position
+  torque_limit_Nm: 0.6405
+- name: left_ankle
+  type: position
+  torque_limit_Nm: 0.6405
+- name: neck_pitch
+  type: position
+  torque_limit_Nm: 0.6405
+- name: head_pitch
+  type: position
+  torque_limit_Nm: 0.6405
+- name: head_yaw
+  type: position
+  torque_limit_Nm: 0.6405
+- name: head_roll
+  type: position
+  torque_limit_Nm: 0.6405
+- name: right_hip_yaw
+  type: position
+  torque_limit_Nm: 0.6405
+- name: right_hip_roll
+  type: position
+  torque_limit_Nm: 0.6405
+- name: right_hip_pitch
+  type: position
+  torque_limit_Nm: 0.6405
+- name: right_knee
+  type: position
+  torque_limit_Nm: 0.6405
+- name: right_ankle
+  type: position
+  torque_limit_Nm: 0.6405
+capability_hints:
+  all:
+  - microduck.start_game
+forbidden_capabilities:
+- id: real_execution
+  reason: simulation only
+safety:
+  safety_level: SIMULATION_ONLY
+  joint_soft_limits: {}
+  safety_limits:
+    motor_torque_Nm: 0.6405
+  workspace_boundaries: {}
+  pfl: {}
+  collision_detection: {}
+  emergency_stop: {}
+  interaction: {}
+  environment:
+    real_robot_execution_allowed: false
+provider_interfaces:
+  state:
+    required:
+    - joint_states
+    optional: []
+  command:
+    required:
+    - joint_trajectory
+    optional: []
+sandbox:
+  compatible_engines:
+  - mujoco
+  preferred_engine: mujoco
+metadata:
+  evidence_domain: simulation
+  hardware_verified: false
+  motor_hz: 50
+  mjcf_sha256: 7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044
+  mjcf_uri: https://github.com/pollen-robotics/microduck_rl/blob/5946fd9cdbc58956424420153e51975af3b30d77/src/mjlab_microduck/robot/microduck/robot_allcollisions.xml

@@ -3,6 +3,7 @@
 | 阅读目的 | 当前文档 |
 | --- | --- |
 | 看演示、安装与运行 | [中文首页](../README.zh-CN.md) · [English](../README.md) |
+| Duckverse 四鸭同场淘汰赛 | [中文方法](duckverse/GAME.zh-CN.md) · [English method](duckverse/GAME.md) · [实际 ROSClaw 接通](duckverse/ROSCLAW_INTEGRATION.md) · [发布素材](duckverse/PUBLICATION.md) |
 | Duckverse 调度、避险与物理裁判 | [DG-02 方法、对照与重放](duckverse/DG02_SCHEDULE_REFEREE.md) |
 | Duckverse 第一期：单鸭真实塌陷地板 | [实测、视频与复现](duckverse/LAST_DUCK_STANDING.md) · [阶段进度](duckverse/03-implementation-board.md) |
 | 跳绳完整方法与评测 | [中文](COOPERATIVE_ROPE_SKIPPING.zh-CN.md) · [English](COOPERATIVE_ROPE_SKIPPING.md) |

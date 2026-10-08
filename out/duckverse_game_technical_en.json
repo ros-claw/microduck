@@ -1,0 +1,81 @@
+{
+  "schema": "microduck.duckverse.technical-film.v1",
+  "video": "duckverse_game_technical_en.mp4",
+  "video_sha256": "e4ea9f872819f7452cbf6852cd689f7fe82b089dd683093237071a149f25f716",
+  "fps": 50,
+  "duration_s": 144.32,
+  "runs": [
+    {
+      "seed": 101,
+      "audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+      "hashes": {
+        "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+        "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+        "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+        "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+      },
+      "outcome": {
+        "status": "WINNER",
+        "winner": "lavender",
+        "alive": [
+          "lavender"
+        ]
+      }
+    },
+    {
+      "seed": 20008,
+      "audit_sha256": "e0cf7bd0aa9f034dd0108d969e76c88b9f46f036fe9ac616860ad6ec7bf9d62e",
+      "hashes": {
+        "scene.mjb": "12b82e9d3e22b28cd79d19d771451bd77987340ffd97356765c014bd4ff34750",
+        "contacts.jsonl.gz": "d9fb232fe77dbe3145b09a2f784e764e7eff4395017a57a545964b4c858388fc",
+        "trajectory.npz": "8194fddbf54157f69d41645affff35db475caad98385d558e6bfeed9746a4759",
+        "decisions.jsonl.gz": "7485df9ee6d50e6ac846fb317d7349c0841f781b161e47186c28114e4de2e5e9"
+      },
+      "outcome": {
+        "status": "WINNER",
+        "winner": "graphite",
+        "alive": [
+          "graphite"
+        ]
+      }
+    },
+    {
+      "seed": 20017,
+      "audit_sha256": "7ec921d6bf6ed4e70d88315856baa10f4d5fda5f6f29332828ccc4bf362311a1",
+      "hashes": {
+        "scene.mjb": "7effd2a028e471e06b30e440e5f607e982da24d986c9c3393475e47ce5e970e7",
+        "contacts.jsonl.gz": "04db3ecb217a7436ad30e2de6de8929abe41615d5d1da2beb9e6961db886ee5c",
+        "trajectory.npz": "97bf82a012bb29fbc24910605cfabd302fa53da3f92582e8652971f89f13cebf",
+        "decisions.jsonl.gz": "102344f952e163b5f6d6e363a4a947066fa16b0beabd5e2c1ff03ea84163e5ea"
+      },
+      "outcome": {
+        "status": "WINNER",
+        "winner": "cream",
+        "alive": [
+          "cream"
+        ]
+      }
+    }
+  ],
+  "frame_map": "duckverse_game_technical_en.frames.jsonl.gz",
+  "frame_map_sha256": "73d3e2f5ead797b07a4ce88e9f3d471714a14b64d7b562cbcb7fb72213fcabfe",
+  "physics_edited": false,
+  "audio": "none",
+  "evidence_domain": "simulation",
+  "editing": "Three labelled continuous matches followed by explicitly labelled detail replays; no pose interpolation; explicit end/method cards carry no physical-state claim",
+  "subtitles": {
+    "en": {
+      "file": "duckverse_game_technical_en.en.srt",
+      "sha256": "a06ff68b6a6fea06a0ba3e82bbffc8f19113220c7dc99139a439a05464c4515e"
+    },
+    "zh-CN": {
+      "file": "duckverse_game_technical_en.zh-CN.srt",
+      "sha256": "633a258f2b311ef9d07e87a899fe684de30626667c3978b9cae8f792562b5b85"
+    }
+  },
+  "presentation_source_sha256": {
+    "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+    "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+    "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+  }
+}

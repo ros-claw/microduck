@@ -1,0 +1,913 @@
+{
+  "schema": "microduck.arena.multiplayer.v1",
+  "seed": 20028,
+  "config": {
+    "players": 4,
+    "grid": 5,
+    "tile_size": 0.48,
+    "gap": 0.012,
+    "dt": 0.00025,
+    "layout": "terraces",
+    "cadence": "rapid",
+    "duration": 45.0,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd"
+  },
+  "steps": 96688,
+  "duration": 24.172,
+  "mujoco_version": "3.12.0",
+  "capture": false,
+  "final_state_sha256": "ed1a9e97cabbe306ab1576b3c62b523ca5173633284eb01bf286504f4deb415e",
+  "spawns": {
+    "lavender": {
+      "tile": 2,
+      "yaw": -0.0
+    },
+    "cream": {
+      "tile": 14,
+      "yaw": -1.5707963267948966
+    },
+    "sky": {
+      "tile": 22,
+      "yaw": -3.141592653589793
+    },
+    "graphite": {
+      "tile": 10,
+      "yaw": 1.5707963267948966
+    }
+  },
+  "outcome": {
+    "status": "WINNER",
+    "winner": "cream",
+    "alive": [
+      "cream"
+    ]
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "tile": 10,
+      "state": "WARNING"
+    },
+    {
+      "time": 2.85,
+      "tile": 3,
+      "state": "WARNING"
+    },
+    {
+      "time": 3.7,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 4.55,
+      "tile": 19,
+      "state": "WARNING"
+    },
+    {
+      "time": 5.4,
+      "tile": 15,
+      "state": "WARNING"
+    },
+    {
+      "time": 5.5,
+      "tile": 10,
+      "state": "RELEASED"
+    },
+    {
+      "time": 5.5200000000000005,
+      "tile": 10,
+      "state": "FALLING",
+      "z": -0.027013149700378443,
+      "vz": -0.19620000000033133
+    },
+    {
+      "time": 5.6595,
+      "tile": 10,
+      "state": "LOST",
+      "z": -0.1500066378254243,
+      "vz": -1.5646950000003201
+    },
+    {
+      "time": 6.25,
+      "tile": 14,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.3500000000000005,
+      "tile": 3,
+      "state": "RELEASED"
+    },
+    {
+      "time": 6.37025,
+      "tile": 3,
+      "state": "FALLING",
+      "z": -0.027044509926347046,
+      "vz": -0.19865250000046752
+    },
+    {
+      "time": 6.50975,
+      "tile": 3,
+      "state": "LOST",
+      "z": -0.1503801218014119,
+      "vz": -1.5671475000004562
+    },
+    {
+      "time": 7.1000000000000005,
+      "tile": 5,
+      "state": "WARNING"
+    },
+    {
+      "time": 7.2,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 7.220000000000001,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.02700813866701109,
+      "vz": -0.19619999999984117
+    },
+    {
+      "time": 7.359500000000001,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.15000162679198845,
+      "vz": -1.5646949999998299
+    },
+    {
+      "time": 7.95,
+      "tile": 22,
+      "state": "WARNING"
+    },
+    {
+      "time": 8.05,
+      "tile": 19,
+      "state": "RELEASED"
+    },
+    {
+      "time": 8.07025,
+      "tile": 19,
+      "state": "FALLING",
+      "z": -0.027037863993507074,
+      "vz": -0.19865250000032705
+    },
+    {
+      "time": 8.20975,
+      "tile": 19,
+      "state": "LOST",
+      "z": -0.1503734758685523,
+      "vz": -1.5671475000003159
+    },
+    {
+      "time": 8.8,
+      "tile": 9,
+      "state": "WARNING"
+    },
+    {
+      "time": 8.9,
+      "tile": 15,
+      "state": "RELEASED"
+    },
+    {
+      "time": 8.92,
+      "tile": 15,
+      "state": "FALLING",
+      "z": -0.02701478459985074,
+      "vz": -0.19620000000000393
+    },
+    {
+      "time": 9.0595,
+      "tile": 15,
+      "state": "LOST",
+      "z": -0.15000827272485093,
+      "vz": -1.5646949999999926
+    },
+    {
+      "time": 9.65,
+      "tile": 23,
+      "state": "WARNING"
+    },
+    {
+      "time": 9.75,
+      "tile": 14,
+      "state": "RELEASED"
+    },
+    {
+      "time": 9.770249999999999,
+      "tile": 14,
+      "state": "FALLING",
+      "z": -0.02703622909402431,
+      "vz": -0.19865250000006984
+    },
+    {
+      "time": 9.909749999999999,
+      "tile": 14,
+      "state": "LOST",
+      "z": -0.1503718409690335,
+      "vz": -1.5671475000000585
+    },
+    {
+      "time": 10.5,
+      "tile": 2,
+      "state": "WARNING"
+    },
+    {
+      "time": 10.6,
+      "tile": 5,
+      "state": "RELEASED"
+    },
+    {
+      "time": 10.62,
+      "tile": 5,
+      "state": "FALLING",
+      "z": -0.02701478459984987,
+      "vz": -0.1961999999999534
+    },
+    {
+      "time": 10.7595,
+      "tile": 5,
+      "state": "LOST",
+      "z": -0.15000827272484285,
+      "vz": -1.5646949999999422
+    },
+    {
+      "time": 11.35,
+      "tile": 21,
+      "state": "WARNING"
+    },
+    {
+      "time": 11.450000000000001,
+      "tile": 22,
+      "state": "RELEASED"
+    },
+    {
+      "time": 11.47025,
+      "tile": 22,
+      "state": "FALLING",
+      "z": -0.027049520959699244,
+      "vz": -0.19865250000003348
+    },
+    {
+      "time": 11.60975,
+      "tile": 22,
+      "state": "LOST",
+      "z": -0.1503851328347035,
+      "vz": -1.5671475000000223
+    },
+    {
+      "time": 12.200000000000001,
+      "tile": 13,
+      "state": "WARNING"
+    },
+    {
+      "time": 12.3,
+      "tile": 9,
+      "state": "RELEASED"
+    },
+    {
+      "time": 12.32025,
+      "tile": 9,
+      "state": "FALLING",
+      "z": -0.027037863993515536,
+      "vz": -0.19865250000092194
+    },
+    {
+      "time": 12.45975,
+      "tile": 9,
+      "state": "LOST",
+      "z": -0.15037347586864372,
+      "vz": -1.5671475000009107
+    },
+    {
+      "time": 13.05,
+      "tile": 11,
+      "state": "WARNING"
+    },
+    {
+      "time": 13.15,
+      "tile": 23,
+      "state": "RELEASED"
+    },
+    {
+      "time": 13.17025,
+      "tile": 23,
+      "state": "FALLING",
+      "z": -0.0270445099263436,
+      "vz": -0.1986525000002049
+    },
+    {
+      "time": 13.30975,
+      "tile": 23,
+      "state": "LOST",
+      "z": -0.1503801218013716,
+      "vz": -1.5671475000001938
+    },
+    {
+      "time": 13.9,
+      "tile": 7,
+      "state": "WARNING"
+    },
+    {
+      "time": 14.0,
+      "tile": 2,
+      "state": "RELEASED"
+    },
+    {
+      "time": 14.020249999999999,
+      "tile": 2,
+      "state": "FALLING",
+      "z": -0.027049520959698745,
+      "vz": -0.1986525000000066
+    },
+    {
+      "time": 14.159749999999999,
+      "tile": 2,
+      "state": "LOST",
+      "z": -0.15038513283469923,
+      "vz": -1.5671474999999953
+    },
+    {
+      "time": 14.75,
+      "tile": 6,
+      "state": "WARNING"
+    },
+    {
+      "time": 14.85,
+      "tile": 21,
+      "state": "RELEASED"
+    },
+    {
+      "time": 14.87,
+      "tile": 21,
+      "state": "FALLING",
+      "z": -0.027008138667016606,
+      "vz": -0.19620000000016005
+    },
+    {
+      "time": 15.0095,
+      "tile": 21,
+      "state": "LOST",
+      "z": -0.15000162679203852,
+      "vz": -1.564695000000149
+    },
+    {
+      "time": 15.6,
+      "tile": 8,
+      "state": "WARNING"
+    },
+    {
+      "time": 15.700000000000001,
+      "tile": 13,
+      "state": "RELEASED"
+    },
+    {
+      "time": 15.72025,
+      "tile": 13,
+      "state": "FALLING",
+      "z": -0.027037970328422745,
+      "vz": -0.19865249999977605
+    },
+    {
+      "time": 15.85975,
+      "tile": 13,
+      "state": "LOST",
+      "z": -0.15037358220339114,
+      "vz": -1.5671474999997648
+    },
+    {
+      "time": 16.45,
+      "tile": 17,
+      "state": "WARNING"
+    },
+    {
+      "time": 16.55,
+      "tile": 11,
+      "state": "RELEASED"
+    },
+    {
+      "time": 16.57,
+      "tile": 11,
+      "state": "FALLING",
+      "z": -0.027001599069103908,
+      "vz": -0.19620000000011267
+    },
+    {
+      "time": 16.709750000000003,
+      "tile": 11,
+      "state": "LOST",
+      "z": -0.1503868740691193,
+      "vz": -1.5671475000001014
+    },
+    {
+      "time": 17.3,
+      "tile": 18,
+      "state": "WARNING"
+    },
+    {
+      "time": 17.400000000000002,
+      "tile": 7,
+      "state": "RELEASED"
+    },
+    {
+      "time": 17.420250000000003,
+      "tile": 7,
+      "state": "FALLING",
+      "z": -0.027044616261264805,
+      "vz": -0.19865250000001713
+    },
+    {
+      "time": 17.55975,
+      "tile": 7,
+      "state": "LOST",
+      "z": -0.15038022813626667,
+      "vz": -1.567147500000006
+    },
+    {
+      "time": 18.150000000000002,
+      "tile": 16,
+      "state": "WARNING"
+    },
+    {
+      "time": 18.25,
+      "tile": 6,
+      "state": "RELEASED"
+    },
+    {
+      "time": 18.2695,
+      "tile": 6,
+      "state": "FALLING",
+      "z": -0.02701707453415017,
+      "vz": -0.2016082355456318
+    },
+    {
+      "time": 18.408,
+      "tile": 6,
+      "state": "LOST",
+      "z": -0.15000804594870545,
+      "vz": -1.566535963996052
+    },
+    {
+      "time": 18.771250000000002,
+      "body_id": "graphite",
+      "state": "ELIMINATED",
+      "z": -0.6370248205987554,
+      "vz": -0.16641392503401387,
+      "supporting_tile_ids": [],
+      "contact_step": 75084
+    },
+    {
+      "time": 19.0,
+      "tile": 12,
+      "state": "WARNING"
+    },
+    {
+      "time": 19.1,
+      "tile": 8,
+      "state": "RELEASED"
+    },
+    {
+      "time": 19.119500000000002,
+      "tile": 8,
+      "state": "FALLING",
+      "z": -0.027044505519252544,
+      "vz": -0.20886214124362634
+    },
+    {
+      "time": 19.2575,
+      "tile": 8,
+      "state": "LOST",
+      "z": -0.1501172302441138,
+      "vz": -1.5676775302153545
+    },
+    {
+      "time": 19.621750000000002,
+      "body_id": "lavender",
+      "state": "ELIMINATED",
+      "z": -0.6373497903716173,
+      "vz": -0.10905564329172604,
+      "supporting_tile_ids": [],
+      "contact_step": 78486
+    },
+    {
+      "time": 19.95,
+      "tile": 17,
+      "state": "RELEASED"
+    },
+    {
+      "time": 19.97025,
+      "tile": 17,
+      "state": "FALLING",
+      "z": -0.027044616261275158,
+      "vz": -0.19865250000062948
+    },
+    {
+      "time": 20.109750000000002,
+      "tile": 17,
+      "state": "LOST",
+      "z": -0.1503802281363625,
+      "vz": -1.5671475000006183
+    },
+    {
+      "time": 20.8,
+      "tile": 18,
+      "state": "RELEASED"
+    },
+    {
+      "time": 20.82025,
+      "tile": 18,
+      "state": "FALLING",
+      "z": -0.02703960522789888,
+      "vz": -0.1986524999996576
+    },
+    {
+      "time": 20.959750000000003,
+      "tile": 18,
+      "state": "LOST",
+      "z": -0.15037521710285062,
+      "vz": -1.5671474999996464
+    },
+    {
+      "time": 21.650000000000002,
+      "tile": 16,
+      "state": "RELEASED"
+    },
+    {
+      "time": 21.669,
+      "tile": 16,
+      "state": "FALLING",
+      "z": -0.027003990638499065,
+      "vz": -0.20449599191888287
+    },
+    {
+      "time": 21.807250000000003,
+      "tile": 16,
+      "state": "LOST",
+      "z": -0.15020570980615439,
+      "vz": -1.5685358097557072
+    },
+    {
+      "time": 22.172,
+      "body_id": "sky",
+      "state": "ELIMINATED",
+      "z": -0.6348652483789285,
+      "vz": -0.06250622132201283,
+      "supporting_tile_ids": [],
+      "contact_step": 88687
+    },
+    {
+      "time": 22.172,
+      "state": "TERMINAL",
+      "status": "WINNER",
+      "winner": "cream",
+      "alive": [
+        "cream"
+      ]
+    }
+  ],
+  "oracle_schedule": [
+    {
+      "tile": 10,
+      "warning_at": 2.0,
+      "release_at": 5.5
+    },
+    {
+      "tile": 3,
+      "warning_at": 2.85,
+      "release_at": 6.35
+    },
+    {
+      "tile": 1,
+      "warning_at": 3.7,
+      "release_at": 7.2
+    },
+    {
+      "tile": 19,
+      "warning_at": 4.55,
+      "release_at": 8.05
+    },
+    {
+      "tile": 15,
+      "warning_at": 5.4,
+      "release_at": 8.9
+    },
+    {
+      "tile": 14,
+      "warning_at": 6.25,
+      "release_at": 9.75
+    },
+    {
+      "tile": 5,
+      "warning_at": 7.1,
+      "release_at": 10.6
+    },
+    {
+      "tile": 22,
+      "warning_at": 7.95,
+      "release_at": 11.45
+    },
+    {
+      "tile": 9,
+      "warning_at": 8.8,
+      "release_at": 12.3
+    },
+    {
+      "tile": 23,
+      "warning_at": 9.649999999999999,
+      "release_at": 13.149999999999999
+    },
+    {
+      "tile": 2,
+      "warning_at": 10.5,
+      "release_at": 14.0
+    },
+    {
+      "tile": 21,
+      "warning_at": 11.35,
+      "release_at": 14.85
+    },
+    {
+      "tile": 13,
+      "warning_at": 12.2,
+      "release_at": 15.7
+    },
+    {
+      "tile": 11,
+      "warning_at": 13.049999999999999,
+      "release_at": 16.549999999999997
+    },
+    {
+      "tile": 7,
+      "warning_at": 13.9,
+      "release_at": 17.4
+    },
+    {
+      "tile": 6,
+      "warning_at": 14.75,
+      "release_at": 18.25
+    },
+    {
+      "tile": 8,
+      "warning_at": 15.6,
+      "release_at": 19.1
+    },
+    {
+      "tile": 17,
+      "warning_at": 16.45,
+      "release_at": 19.95
+    },
+    {
+      "tile": 18,
+      "warning_at": 17.299999999999997,
+      "release_at": 20.799999999999997
+    },
+    {
+      "tile": 16,
+      "warning_at": 18.15,
+      "release_at": 21.65
+    },
+    {
+      "tile": 12,
+      "warning_at": 19.0,
+      "release_at": 22.5
+    }
+  ],
+  "penetration_max_m": 0.0016450848407081984,
+  "penetration_p99_m": 1e-06,
+  "penetrating_contacts_p99_m": 1e-06,
+  "motor_force_max_Nm": 0.6405,
+  "locked_tile_max_drift_m": 0.00016158670620019036,
+  "finite": true,
+  "time_reset": false,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "external_forces_zero": true,
+  "body_contact_steps": 0,
+  "peak_body_force_N": 0.0,
+  "worst_contacts": {
+    "duck_tile_or_receiver": {
+      "time": 18.644750000000002,
+      "depth_m": 0.001079033138541863,
+      "geom_ids": [
+        5,
+        350
+      ],
+      "body_names": [
+        "tile_6",
+        "graphite/ankle_right"
+      ]
+    },
+    "tile_tile_or_receiver": {
+      "time": 11.84375,
+      "depth_m": 0.0016450848407081984,
+      "geom_ids": [
+        0,
+        20
+      ],
+      "body_names": [
+        "world",
+        "tile_22"
+      ]
+    },
+    "duck_self": {
+      "time": 22.55825,
+      "depth_m": 8.988516645226717e-06,
+      "geom_ids": [
+        216,
+        267
+      ],
+      "body_names": [
+        "sky/ankle_left",
+        "sky/ankle_right"
+      ]
+    }
+  },
+  "collision_geometry": {
+    "native_meshes": "convex hulls",
+    "native_self_contacts_preserved": true,
+    "external_envelopes": {
+      "lavender": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "cream": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "sky": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "graphite": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      }
+    },
+    "added_mass_kg": 0.0
+  },
+  "performance": {
+    "real_time_factor": 0.6312514019526223,
+    "physics_s": 22.683894315501675,
+    "inference_s": 0.9327109137084335,
+    "physics_step_mean_ms": 0.23460919985418743,
+    "motor_batch_p50_ms": 0.595416990108788,
+    "motor_batch_p95_ms": 1.5383121906779706
+  },
+  "final_roots": {
+    "lavender": [
+      -0.7327108732985348,
+      0.47036103257640055,
+      -0.7112422050292815,
+      0.7082393540959296,
+      -0.1172163125777963,
+      -0.6855608133107115,
+      -0.12109386701315229
+    ],
+    "cream": [
+      4.739115705657779e-05,
+      0.054667247978146344,
+      0.11643570178457648,
+      0.7332538630264268,
+      0.0020533050462496873,
+      0.0014637253049933504,
+      -0.6799503024511717
+    ],
+    "sky": [
+      0.636491162478738,
+      -0.6413088459748256,
+      -0.7186118792382326,
+      0.10145878260068397,
+      -0.20834500233907444,
+      0.6602760383532721,
+      -0.7143766713786409
+    ],
+    "graphite": [
+      -0.5446669397044884,
+      -0.7170773083470713,
+      -0.7094631131355777,
+      0.6554363576827769,
+      0.30465639371625053,
+      -0.6080698551874923,
+      0.3283880539964953
+    ]
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/multiplayer_verify.py": "f3f0599a67ff1ce55ca0aa1a4f50dea61c718a5f81b2c69bfc5e2d288c3357c6",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "hashes": {
+    "decisions.jsonl.gz": "4f35df94ea64dfc7f48befe88000123e4b12145bd127fc38c6cf41594bd04b27"
+  }
+}

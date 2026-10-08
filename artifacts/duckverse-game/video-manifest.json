@@ -1,0 +1,208 @@
+{
+  "schema": "microduck.duckverse.video-suite.v1",
+  "films": [
+    {
+      "schema": "microduck.duckverse.film.v1",
+      "video": "duckverse_game_reference.mp4",
+      "video_sha256": "aa828e2756e556141971b91f17e3cc7c2e11e4c1144400baa430f05ddc8a6050",
+      "fps": 50,
+      "duration_s": 34.84,
+      "mode": "reference",
+      "seed": 101,
+      "source_audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+      "source_hashes": {
+        "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+        "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+        "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+        "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+      },
+      "frame_map": "duckverse_game_reference.frames.jsonl.gz",
+      "frame_map_sha256": "9920fb0f54a806223141d5aa5bff6710aaed633fdeec370d7946840ad7eb8fb2",
+      "physics_edited": false,
+      "audio": "none",
+      "evidence_domain": "simulation",
+      "editing": "Chronological single run; recorded 4 kHz states; camera/material/HUD only; no pose interpolation; explicit end/method cards carry no physical-state claim",
+      "subtitles": {
+        "en": {
+          "file": "duckverse_game_reference.en.srt",
+          "sha256": "165ee51d64bbc640d13df6cdd8d9a48b1710c1d64ca23e6cf00dbc369df963fb"
+        },
+        "zh-CN": {
+          "file": "duckverse_game_reference.zh-CN.srt",
+          "sha256": "2f4006ba31fff953ff87c0acf2807f67d16c7fe31e22a1c1a897b96507bff778"
+        }
+      },
+      "presentation_source_sha256": {
+        "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+        "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+        "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+      }
+    },
+    {
+      "schema": "microduck.duckverse.film.v1",
+      "video": "duckverse_game_short_en.mp4",
+      "video_sha256": "5019ae7e1c0c4055c9799fdfb8137a46b347e36df75164c3c4ddea9a640057e9",
+      "fps": 50,
+      "duration_s": 17.04,
+      "mode": "vertical",
+      "seed": 101,
+      "source_audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+      "source_hashes": {
+        "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+        "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+        "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+        "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+      },
+      "frame_map": "duckverse_game_short_en.frames.jsonl.gz",
+      "frame_map_sha256": "53304fd1fb416bd124d13f16acaa87cf03d312fefd775b29aa17c03074a3348b",
+      "physics_edited": false,
+      "audio": "Original synthesized harmony/percussion sound design; not recorded physical audio",
+      "evidence_domain": "simulation",
+      "editing": "Chronological single run; recorded 4 kHz states; camera/material/HUD only; no pose interpolation; explicit end/method cards carry no physical-state claim",
+      "subtitles": {
+        "en": {
+          "file": "duckverse_game_short_en.en.srt",
+          "sha256": "cf9b7cc142ce7afe6d688fc1c77461d3c3a33966b493a20f0624da614b1493b4"
+        },
+        "zh-CN": {
+          "file": "duckverse_game_short_en.zh-CN.srt",
+          "sha256": "0c02431070d83ceb90cb300c0672816c3ee471b11d3d9d8d13c9bb1599d55ebc"
+        }
+      },
+      "presentation_source_sha256": {
+        "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+        "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+        "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+      }
+    },
+    {
+      "schema": "microduck.duckverse.technical-film.v1",
+      "video": "duckverse_game_technical_en.mp4",
+      "video_sha256": "e4ea9f872819f7452cbf6852cd689f7fe82b089dd683093237071a149f25f716",
+      "fps": 50,
+      "duration_s": 144.32,
+      "runs": [
+        {
+          "seed": 101,
+          "audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+          "hashes": {
+            "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+            "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+            "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+            "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+          },
+          "outcome": {
+            "status": "WINNER",
+            "winner": "lavender",
+            "alive": [
+              "lavender"
+            ]
+          }
+        },
+        {
+          "seed": 20008,
+          "audit_sha256": "e0cf7bd0aa9f034dd0108d969e76c88b9f46f036fe9ac616860ad6ec7bf9d62e",
+          "hashes": {
+            "scene.mjb": "12b82e9d3e22b28cd79d19d771451bd77987340ffd97356765c014bd4ff34750",
+            "contacts.jsonl.gz": "d9fb232fe77dbe3145b09a2f784e764e7eff4395017a57a545964b4c858388fc",
+            "trajectory.npz": "8194fddbf54157f69d41645affff35db475caad98385d558e6bfeed9746a4759",
+            "decisions.jsonl.gz": "7485df9ee6d50e6ac846fb317d7349c0841f781b161e47186c28114e4de2e5e9"
+          },
+          "outcome": {
+            "status": "WINNER",
+            "winner": "graphite",
+            "alive": [
+              "graphite"
+            ]
+          }
+        },
+        {
+          "seed": 20017,
+          "audit_sha256": "7ec921d6bf6ed4e70d88315856baa10f4d5fda5f6f29332828ccc4bf362311a1",
+          "hashes": {
+            "scene.mjb": "7effd2a028e471e06b30e440e5f607e982da24d986c9c3393475e47ce5e970e7",
+            "contacts.jsonl.gz": "04db3ecb217a7436ad30e2de6de8929abe41615d5d1da2beb9e6961db886ee5c",
+            "trajectory.npz": "97bf82a012bb29fbc24910605cfabd302fa53da3f92582e8652971f89f13cebf",
+            "decisions.jsonl.gz": "102344f952e163b5f6d6e363a4a947066fa16b0beabd5e2c1ff03ea84163e5ea"
+          },
+          "outcome": {
+            "status": "WINNER",
+            "winner": "cream",
+            "alive": [
+              "cream"
+            ]
+          }
+        }
+      ],
+      "frame_map": "duckverse_game_technical_en.frames.jsonl.gz",
+      "frame_map_sha256": "73d3e2f5ead797b07a4ce88e9f3d471714a14b64d7b562cbcb7fb72213fcabfe",
+      "physics_edited": false,
+      "audio": "none",
+      "evidence_domain": "simulation",
+      "editing": "Three labelled continuous matches followed by explicitly labelled detail replays; no pose interpolation; explicit end/method cards carry no physical-state claim",
+      "subtitles": {
+        "en": {
+          "file": "duckverse_game_technical_en.en.srt",
+          "sha256": "a06ff68b6a6fea06a0ba3e82bbffc8f19113220c7dc99139a439a05464c4515e"
+        },
+        "zh-CN": {
+          "file": "duckverse_game_technical_en.zh-CN.srt",
+          "sha256": "633a258f2b311ef9d07e87a899fe684de30626667c3978b9cae8f792562b5b85"
+        }
+      },
+      "presentation_source_sha256": {
+        "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+        "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+        "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+      }
+    },
+    {
+      "schema": "microduck.duckverse.film.v1",
+      "video": "duckverse_game_en.mp4",
+      "video_sha256": "ce58f2cc2701893182c9ee2134a60d9812aa07aaa808907e4025acb356f9d0ce",
+      "fps": 50,
+      "duration_s": 45.58,
+      "mode": "hero",
+      "seed": 101,
+      "source_audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+      "source_hashes": {
+        "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+        "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+        "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+        "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+      },
+      "frame_map": "duckverse_game_en.frames.jsonl.gz",
+      "frame_map_sha256": "b5aca748c78573ac9f336c97a654057ce6955dc10e615c2498e4f3cbbf0bb22e",
+      "physics_edited": false,
+      "audio": "Original synthesized harmony/percussion sound design; not recorded physical audio",
+      "evidence_domain": "simulation",
+      "editing": "Chronological single run; recorded 4 kHz states; camera/material/HUD only; no pose interpolation; explicit end/method cards carry no physical-state claim",
+      "subtitles": {
+        "en": {
+          "file": "duckverse_game_en.en.srt",
+          "sha256": "e7003e6c4e099a1fc39aea90cc1a7cceb483bf61994542d98d47c6c692608617"
+        },
+        "zh-CN": {
+          "file": "duckverse_game_en.zh-CN.srt",
+          "sha256": "c093b2eea5c8987df62c75eeb2dec1b93d932bf4a5780fc721f3382bf573cad0"
+        }
+      },
+      "presentation_source_sha256": {
+        "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+        "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+        "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+      }
+    }
+  ],
+  "source_runs": [
+    101,
+    20008,
+    20017
+  ],
+  "native_receipts": [
+    "rcpt_0f235ab91ded4dd78f05eb46",
+    "rcpt_6f98e6d996ce4085b2220f42"
+  ],
+  "physics_edited": false,
+  "evidence_domain": "simulation"
+}

@@ -2,16 +2,16 @@
 
 | Stage | Status | Evidence / boundary |
 | --- | --- | --- |
-| DG-00 audit | Implemented | [Audit](00-audit.md), [architecture](01-architecture.md), [physics contract](02-physics-contract.md) |
-| DG-01 one duck / 3×3 free tiles | G1 passed: 10/10 | [Actual experiment results](LAST_DUCK_STANDING.md) |
-| DG-02 schedule/referee | Single-body gate passed | [20 paired runs + full collapse + semantic replay](DG02_SCHEDULE_REFEREE.md); multi-body winner validation remains DG-03 |
-| DG-03 two/four ducks | Planned | No new multi-duck arena video claim |
-| DG-04 survivor baseline | Planned | Current fixed neighbour target is calibration, not autonomous survival |
-| DG-05 layouts/fairness | Planned | No seed/winner fairness evidence yet |
-| DG-06 ROSClaw live chat | Not connected | Body registration and SIMULATION adapter are prerequisites |
-| DG-07 lineage / optional Jev | Not connected | Prior Jev captures are not arena evidence |
-| DG-08 cinematic suite | Planned | First round only a 10–20 s greybox reference |
-| DG-09 frozen tournament / heldout | Planned | Current small perturbation battery is not heldout gameplay evaluation |
-| DG-10 Darwin learning | Future research | No evolution claims |
+| DG-00 audit | Implemented | Existing audit, architecture and physics contract preserved |
+| DG-01 physical tiles | G1 passed: 10/10 | [Frozen single-duck calibration](LAST_DUCK_STANDING.md) |
+| DG-02 schedule/referee | Passed | [Frozen 20 paired runs + full collapse](DG02_SCHEDULE_REFEREE.md) |
+| DG-03 shared world | G2/G3 passed | Two robots 10/10, four robots 12/12 physical quality passes |
+| DG-04 survivor baseline | Implemented | Public warnings, legal adjacent targets, motor feedback; no future schedule; no-safe-option losses retained |
+| DG-05 layouts/cadences | Implemented baseline | Four layouts × two cadences × four spawn rotations; same tactical parameters, personality learning not claimed |
+| DG-06 native agent | Live SIM execution verified | [Actual two/four robot receipts](ROSCLAW_INTEGRATION.md); candidate core PR #632 remains unmerged; network disconnect endurance not qualified |
+| DG-07 lineage | Actual recorded-SIM import verified | Existing Practice API and strict verifier; no Jev, training, Darwin or promotion |
+| DG-08 cinematic suite | Delivered | 46 s hero, 17 s vertical, 2:24 methods/POV, 35 s one-shot; subtitles, frame maps, cover |
+| DG-09 frozen release / heldout | 32/32 physics quality | 12 winners / 20 draws; all failures and limitations disclosed; [results](../../artifacts/duckverse-game/qa-summary.json) |
+| DG-10 Darwin learning | Future research | No evolution claim |
 
-The owner approved continuing after DG-00/DG-01. DG-02 is now measured; DG-03 is the next shared-world gate. See the [taskbook](implementation-taskbook.md). Series proposals in [roadmap](game-content-roadmap.md) remain ideas.
+The owner authorized continuous implementation. Physics gates were measured before cinematic output. “Passed” above denotes each specific evidence gate, not completion of every long-term series idea. The [taskbook](implementation-taskbook.md) remains the original specification; [current method](GAME.md) describes the implementation actually shipped.

@@ -2,11 +2,25 @@
 
 [English](README.md) | **简体中文**
 
-一系列可复现的 **MuJoCo 机器人仿真游戏**：真实接触跳绳、双鸭协作、动态追逐与组合技能闯关。复用 Pollen Robotics 的 Microduck 资产、ONNX 学习运动策略、显式控制器和接触审计，提供代码、权重、方法、失败实验及回放证据。尚未验证真机部署、新 Duckverse 的 ROSClaw chat 接通或自主进化。
+一系列可复现的 **MuJoCo 机器人仿真游戏**：真实接触跳绳、双鸭协作、动态追逐与组合技能闯关。复用 Pollen Robotics 的 Microduck 资产、ONNX 学习运动策略、显式控制器和接触审计，提供代码、权重、方法、失败实验及回放证据。Duckverse 已通过候选仿真 Kit 接通真实 ROSClaw chat；尚未验证真机部署或自主进化。
 
 ## 已交付 Demo
 
 点击预览观看或下载视频。同一 Demo 的不同剪辑放在一起，旧版本单独归档。
+
+### 最后一块地板 · 四鸭同场淘汰赛
+
+[![最后一块地板](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
+
+四只独立控制的 Microduck 根据当前可见预警，在不断塌陷的场地中换格避险。学习步态驱动受限力矩关节，地板解除约束后受重力真实下坠；裁判要求最后一只鸭仍直立且有真实承重支撑。**四种布局、两种节奏，不读取未来安排，不预设冠军。**
+
+[46 秒英文特写与慢动作](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4) · [17 秒竖屏](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_short_en.mp4) · [2:24 方法与鸭子视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_technical_en.mp4) · [35 秒连续原始视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_reference.mp4)
+
+物理质量：**双鸭 10/10、四鸭 12/12、新 heldout 32/32** 通过声明的接触阈值。32 局结果为 **12 局产生冠军、20 局平局**，不是“100% 游戏成功”。最大审计接触穿透 **1.798 mm**；头部、躯干采用保守碰撞包围盒，不是逐渲染三角形碰撞。四鸭仿真平均 **0.669×**，完整证据录制采用离线方式。
+
+真实 `rosclaw chat` 使用 **GPT-6 Astra / medium**，经原生动作通道取得已消费授权和终态执行回执。模型负责开赛与检查结果，具体战术、关节运动分别由确定性控制器和现有 ONNX 策略执行。需要尚未合并的 [ROSClaw 候选 PR #632](https://github.com/ros-claw/rosclaw/pull/632)。
+
+[方法、局限与复现](docs/duckverse/GAME.zh-CN.md) · [完整评测](artifacts/duckverse-game/qa-summary.json) · [原生动作与 Practice lineage](docs/duckverse/ROSCLAW_INTEGRATION.md) · [视频、字幕与证据](docs/duckverse/PUBLICATION.md)
 
 ### 三鸭协作跳绳
 
@@ -40,12 +54,6 @@
 
 [35 秒动作版](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [最终方法与复现](docs/CONTACT_DETAILS.md) · [证据包](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz)
 
-## 研发中：最后一块地板
-
-[![One duck on physically collapsing tiles](out/duckverse_dg02_en.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-dg02-schedule-2026-10-08/duckverse_dg02_en.mp4)
-
-**DG-02**：单鸭、3×3 真实自由刚体地板、种子调度、预警与接触淘汰裁判。十组开发 seed 对照：预警响应组 10/10 存活至 14 秒，不动组 10/10 被真实淘汰；20 次输入、决策、接触重放完全一致。九格全塌陷时最终真实失败，没有补造冠军；尚不是多鸭比赛。[当前方法与复现](docs/duckverse/DG02_SCHEDULE_REFEREE.md) · [首次物理标定](docs/duckverse/LAST_DUCK_STANDING.md) · [阶段进度](docs/duckverse/03-implementation-board.md) · [系列规划](docs/duckverse/game-content-roadmap.md)。
-
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。
@@ -71,13 +79,17 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-dg02-schedule-2026-10-08
+git checkout duckverse-game-2026-10-08
 python3 -m venv .venv
-.venv/bin/python -m pip install -e ".[dev]"
+.venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
 .venv/bin/python scripts/bootstrap.py
 
 # Cooperative skipping
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_duckverse.py \
+  --seed 101 --players 4 --layout square --cadence steady \
+  --out artifacts/duckverse-game/local-seed101
+
 scripts/contact_skip.sh
 
 # DG-02 warning response and contact referee; output must be new
@@ -105,15 +117,15 @@ OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_last_duck_standing.py \
 
 ## 代码与证据
 
-| Path | Purpose |
+| 路径 | 用途 |
 | --- | --- |
-| [`src/microduck_lab/sim`](src/microduck_lab/sim) | Robot runtime, composition and rope physics |
-| [`src/microduck_lab/parkour`](src/microduck_lab/parkour) | Physical skill combinations and props |
-| [`src/microduck_lab/arena`](src/microduck_lab/arena) | Independent Duckverse tile prototype |
-| [`scripts`](scripts) | Run, evaluate, replay and render |
-| [`policies`](policies) / [`training`](training) | Exported policies and training source |
-| [`artifacts`](artifacts) / [`docs`](docs/README.md) | Results, failures, manifests and methods |
+| [`src/microduck_lab/sim`](src/microduck_lab/sim) | 机器人运行时、场景组合与绳物理 |
+| [`src/microduck_lab/parkour`](src/microduck_lab/parkour) | 物理技能组合与道具 |
+| [`src/microduck_lab/arena`](src/microduck_lab/arena) | 四鸭同场仿真、战术及裁判 |
+| [`scripts`](scripts) | 运行、评测、重放和渲染 |
+| [`policies`](policies) / [`training`](training) | 导出策略与训练源码 |
+| [`artifacts`](artifacts) / [`docs`](docs/README.md) | 结果、失败、产物清单与方法 |
 
 ## 贡献与署名
 
-行为变更请附复现命令、seed/模型哈希、接触证据和局限，并保留冻结参考。项目代码采用 Apache-2.0；机器人资产与上游策略来自 **Pollen Robotics**，上游 3D 模型另有 CC BY-SA-NC 条款。见 [LICENSE](LICENSE)、[THIRD_PARTY](THIRD_PARTY.md)、[上游锁定文件](upstream.lock.yaml)。ROSClaw/Jev 仅在实际调用过的实验中标注参与；新 Duckverse 的原生 Agent 接线尚待实现。
+行为变更请附复现命令、seed/模型哈希、接触证据和局限，并保留冻结参考。项目代码采用 Apache-2.0；机器人资产与上游策略来自 **Pollen Robotics**，上游 3D 模型另有 CC BY-SA-NC 条款。见 [LICENSE](LICENSE)、[THIRD_PARTY](THIRD_PARTY.md)、[上游锁定文件](upstream.lock.yaml)。ROSClaw/Jev 仅在实际调用过的实验中标注参与；Duckverse 原生 Agent 已用候选核心扩展实测；Practice 是事后导入的仿真记录，不代表在线学习。

@@ -1,0 +1,37 @@
+{
+  "schema": "microduck.duckverse.film.v1",
+  "video": "duckverse_game_reference.mp4",
+  "video_sha256": "aa828e2756e556141971b91f17e3cc7c2e11e4c1144400baa430f05ddc8a6050",
+  "fps": 50,
+  "duration_s": 34.84,
+  "mode": "reference",
+  "seed": 101,
+  "source_audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+  "source_hashes": {
+    "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+    "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+    "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+    "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+  },
+  "frame_map": "duckverse_game_reference.frames.jsonl.gz",
+  "frame_map_sha256": "9920fb0f54a806223141d5aa5bff6710aaed633fdeec370d7946840ad7eb8fb2",
+  "physics_edited": false,
+  "audio": "none",
+  "evidence_domain": "simulation",
+  "editing": "Chronological single run; recorded 4 kHz states; camera/material/HUD only; no pose interpolation; explicit end/method cards carry no physical-state claim",
+  "subtitles": {
+    "en": {
+      "file": "duckverse_game_reference.en.srt",
+      "sha256": "165ee51d64bbc640d13df6cdd8d9a48b1710c1d64ca23e6cf00dbc369df963fb"
+    },
+    "zh-CN": {
+      "file": "duckverse_game_reference.zh-CN.srt",
+      "sha256": "2f4006ba31fff953ff87c0acf2807f67d16c7fe31e22a1c1a897b96507bff778"
+    }
+  },
+  "presentation_source_sha256": {
+    "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+    "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+    "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+  }
+}
