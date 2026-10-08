@@ -1,13 +1,13 @@
 # Videos, evidence and publication copy / 发布素材
 
-Release: [duckverse-game-2026-10-08-r1](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08-r1).
+Release: [duckverse-game-2026-10-08-r1](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08-r1). The r1 tag contains the fresh-install asset-path fix. Films and heavy evidence are unchanged assets of the [original physics freeze](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08).
 
 | Asset | Length / format | Purpose |
 | --- | --- | --- |
-| [English hero](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_en.mp4) | 45.58 s / 1280×720 / 50 fps | Chronological seed-101 match, close-ups, slow motion, original synthesized soundtrack |
-| [Vertical short](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_short_en.mp4) | 17.04 s / 720×1280 / 50 fps | Same match, final contest and real contact |
-| [Technical film](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_technical_en.mp4) | 2:24.32 / 1280×720 / 50 fps | Three labelled matches, head-follow POV, foot crossing, collision geometry, physical fall and method limitations |
-| [One-shot reference](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_reference.mp4) | 34.84 s / 1280×720 / 50 fps | Entire seed-101 match at 1×, fixed camera, no audio |
+| [English hero](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4) | 45.58 s / 1280×720 / 50 fps | Chronological seed-101 match, close-ups, slow motion, original synthesized soundtrack |
+| [Vertical short](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_short_en.mp4) | 17.04 s / 720×1280 / 50 fps | Same match, final contest and real contact |
+| [Technical film](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_technical_en.mp4) | 2:24.32 / 1280×720 / 50 fps | Three labelled matches, head-follow POV, foot crossing, collision geometry, physical fall and method limitations |
+| [One-shot reference](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_reference.mp4) | 34.84 s / 1280×720 / 50 fps | Entire seed-101 match at 1×, fixed camera, no audio |
 | [Cover](../media/duckverse-game.jpg) | 1280×720 | Actual recorded scene; native model materials |
 
 English HUD throughout. Each film has separate `.en.srt` and `.zh-CN.srt` subtitles in the release and `out/`. The hero stays below one minute; the longer technical film is an optional methods companion. Hero/vertical music is original synthesized sound design, not measured physical audio.
@@ -22,11 +22,11 @@ Selected source runs and both actual native ROSClaw runs pass strict closed-loop
 
 Each archive is below GitHub's individual release-asset limit. Extract at the repository root of this release checkout:
 
-- [Seed 101 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_seed101_evidence.tar.gz)
-- [Seed 20008 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_seed20008_evidence.tar.gz)
-- [Seed 20017 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_seed20017_evidence.tar.gz)
-- [Native ROSClaw two/four-robot captures and original Practice catalog](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_native_rosclaw_evidence.tar.gz)
-- [All qualification/development metadata, decisions, subtitles and frame maps](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_metadata.tar.gz)
+- [Seed 101 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_seed101_evidence.tar.gz)
+- [Seed 20008 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_seed20008_evidence.tar.gz)
+- [Seed 20017 full-rate evidence](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_seed20017_evidence.tar.gz)
+- [Native ROSClaw two/four-robot captures and original Practice catalog](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_native_rosclaw_evidence.tar.gz)
+- [All qualification/development metadata, decisions, subtitles and frame maps](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_metadata.tar.gz)
 
 [Bundle checksums](../../artifacts/duckverse-game/release-bundles.json). Full movie and release checksums are also available as `duckverse_game_release_provenance.json`. Original Practice absolute references are preserved; see the [integration portability note](ROSCLAW_INTEGRATION.md).
 
