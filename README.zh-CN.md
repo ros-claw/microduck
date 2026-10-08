@@ -42,9 +42,9 @@
 
 ## 研发中：最后一块地板
 
-[![One duck on physically collapsing tiles](out/duckverse_dg01_en.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-dg01-greybox-2026-10-08/duckverse_dg01_en.mp4)
+[![One duck on physically collapsing tiles](out/duckverse_dg02_en.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-dg02-schedule-2026-10-08/duckverse_dg02_en.mp4)
 
-**本轮仅 DG-00 / DG-01**：一鸭、3×3 地板。每格是由 weld 约束支撑的自由刚体，解除约束后由重力与碰撞决定运动。脚本实验让鸭子走到邻格，再有意释放脚下支撑。这是物理原型，尚不是四鸭比赛或自主生存智能体。[实测与复现](docs/duckverse/LAST_DUCK_STANDING.md) · [阶段进度](docs/duckverse/03-implementation-board.md) · [系列规划](docs/duckverse/game-content-roadmap.md)。
+**DG-02**：单鸭、3×3 真实自由刚体地板、种子调度、预警与接触淘汰裁判。十组开发 seed 对照：预警响应组 10/10 存活至 14 秒，不动组 10/10 被真实淘汰；20 次输入、决策、接触重放完全一致。九格全塌陷时最终真实失败，没有补造冠军；尚不是多鸭比赛。[当前方法与复现](docs/duckverse/DG02_SCHEDULE_REFEREE.md) · [首次物理标定](docs/duckverse/LAST_DUCK_STANDING.md) · [阶段进度](docs/duckverse/03-implementation-board.md) · [系列规划](docs/duckverse/game-content-roadmap.md)。
 
 ## 方法
 
@@ -71,7 +71,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-dg01-greybox-2026-10-08
+git checkout duckverse-dg02-schedule-2026-10-08
 python3 -m venv .venv
 .venv/bin/python -m pip install -e ".[dev]"
 export MICRODUCK_ROOT="$PWD/.assets"
@@ -80,7 +80,11 @@ export MICRODUCK_ROOT="$PWD/.assets"
 # Cooperative skipping
 scripts/contact_skip.sh
 
-# DG-01 physical tile experiment; output must be a new directory
+# DG-02 warning response and contact referee; output must be new
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_tile_survival.py \
+  --seed 11 --duration 14 --out artifacts/duckverse-dg02/local-seed11
+
+# DG-01 physical tile calibration
 OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_last_duck_standing.py \
   --seed 11 --dt .0005 --out artifacts/duckverse/local-seed11
 

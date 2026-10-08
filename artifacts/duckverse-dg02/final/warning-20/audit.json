@@ -1,0 +1,156 @@
+{
+  "schema": "microduck.arena.scheduled.v1",
+  "seed": 20,
+  "dt": 0.0005,
+  "duration": 14.0,
+  "mujoco_version": "3.12.0",
+  "brain": "warning",
+  "mode": "seeded",
+  "outcome": {
+    "status": "TIME_LIMIT",
+    "winner": null,
+    "alive": [
+      "cream"
+    ]
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.0,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 6.02,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.027019478136264694,
+      "vz": -0.1962000000000099
+    },
+    {
+      "time": 6.1594999999999995,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.15018402813626625,
+      "vz": -1.564695000000007
+    },
+    {
+      "time": 7.0,
+      "tile": 7,
+      "state": "WARNING"
+    },
+    {
+      "time": 11.0,
+      "tile": 7,
+      "state": "RELEASED"
+    },
+    {
+      "time": 11.020000000000001,
+      "tile": 7,
+      "state": "FALLING",
+      "z": -0.027019478136268302,
+      "vz": -0.19620000000022014
+    },
+    {
+      "time": 11.159500000000001,
+      "tile": 7,
+      "state": "LOST",
+      "z": -0.15018402813629947,
+      "vz": -1.5646950000002173
+    },
+    {
+      "time": 12.0,
+      "tile": 0,
+      "state": "WARNING"
+    }
+  ],
+  "decisions_file": "decisions.jsonl.gz",
+  "oracle_schedule": [
+    {
+      "tile": 1,
+      "warning_at": 2.0,
+      "release_at": 6.0
+    },
+    {
+      "tile": 7,
+      "warning_at": 7.0,
+      "release_at": 11.0
+    },
+    {
+      "tile": 0,
+      "warning_at": 12.0,
+      "release_at": 16.0
+    },
+    {
+      "tile": 5,
+      "warning_at": 17.0,
+      "release_at": 21.0
+    },
+    {
+      "tile": 8,
+      "warning_at": 22.0,
+      "release_at": 26.0
+    },
+    {
+      "tile": 2,
+      "warning_at": 27.0,
+      "release_at": 31.0
+    },
+    {
+      "tile": 6,
+      "warning_at": 32.0,
+      "release_at": 36.0
+    },
+    {
+      "tile": 4,
+      "warning_at": 37.0,
+      "release_at": 41.0
+    },
+    {
+      "tile": 3,
+      "warning_at": 42.0,
+      "release_at": 46.0
+    }
+  ],
+  "penetration_max_m": 0.00047714160685980513,
+  "penetration_p99_m": 1.5595209541686134e-06,
+  "motor_force_max_Nm": 0.6136138541235039,
+  "locked_tile_max_drift_m": 6.0504233250935346e-05,
+  "time_reset": false,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "finite": true,
+  "external_forces_zero": true,
+  "recording_real_time_factor": 2.8591634495265614,
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f"
+  },
+  "hashes": {
+    "scene.mjb": "9ee41e5b27aae520150a7db4798477bb4b67a60eb7c1579f61f57314c1dfedc8",
+    "trajectory.npz": "62c118f34b4d7de4fd69ce7360c0a195fa1223959fd26448d493213b4e3d70eb",
+    "contacts.jsonl.gz": "db5d42ae7e303872084606e500f5ac3d9b05de999668231e2a77530bde189541",
+    "decisions.jsonl.gz": "de855123b06c0e9afd51074dc4a776dd669521152a6e8a47310f0735b9d2b536"
+  }
+}

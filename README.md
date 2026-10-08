@@ -42,9 +42,9 @@ Six encounters combine rolls, a real gap, rotating-arm contact and duck鈥揵all鈥
 
 ## In development: Last Duck Standing
 
-[![One duck on physically collapsing tiles](out/duckverse_dg01_en.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-dg01-greybox-2026-10-08/duckverse_dg01_en.mp4)
+[![One duck on physically collapsing tiles](out/duckverse_dg02_en.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-dg02-schedule-2026-10-08/duckverse_dg02_en.mp4)
 
-**DG-00 / DG-01 only:** one duck and 3脳3 tiles. Each tile is a free rigid body initially welded to the world; releasing its equality constraint lets gravity and collisions determine its motion. A scripted calibration walks to the adjacent tile, then intentionally drops its occupied support. This is a physics prototype, not a four-duck match or survival agent. [Current results and reproduction](docs/duckverse/LAST_DUCK_STANDING.md) 路 [Stage board](docs/duckverse/03-implementation-board.md) 路 [Series roadmap](docs/duckverse/game-content-roadmap.md).
+**DG-02:** one duck, 3脳3 real free-body tiles, seeded warnings/releases and a contact-based elimination referee. Ten paired development seeds: warning response stays alive to 14 s in 10/10; HOLD is eliminated in 10/10. All 20 input/decision/contact replays match exactly. A full nine-tile collapse ends in real failure, with no fabricated winner. This is not yet a multiplayer tournament. [Current method and reproduction](docs/duckverse/DG02_SCHEDULE_REFEREE.md) 路 [First physical calibration](docs/duckverse/LAST_DUCK_STANDING.md) 路 [Stage board](docs/duckverse/03-implementation-board.md) 路 [Series roadmap](docs/duckverse/game-content-roadmap.md).
 
 ## How it works
 
@@ -71,7 +71,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-dg01-greybox-2026-10-08
+git checkout duckverse-dg02-schedule-2026-10-08
 python3 -m venv .venv
 .venv/bin/python -m pip install -e ".[dev]"
 export MICRODUCK_ROOT="$PWD/.assets"
@@ -80,7 +80,11 @@ export MICRODUCK_ROOT="$PWD/.assets"
 # Cooperative skipping
 scripts/contact_skip.sh
 
-# DG-01 physical tile experiment; output must be a new directory
+# DG-02 warning response and contact referee; output must be new
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_tile_survival.py \
+  --seed 11 --duration 14 --out artifacts/duckverse-dg02/local-seed11
+
+# DG-01 physical tile calibration
 OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_last_duck_standing.py \
   --seed 11 --dt .0005 --out artifacts/duckverse/local-seed11
 
