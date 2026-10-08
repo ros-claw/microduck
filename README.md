@@ -10,11 +10,11 @@ Click each preview to watch or download its video. Cuts of one demo are grouped 
 
 ### Last Duck Standing — shared-world elimination game
 
-[![Last Duck Standing](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
+[![Last Duck Standing](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_en.mp4)
 
 Four independent Microducks react to visible warnings on a shrinking arena. Learned stand/walk policies drive torque-limited joints; releasing tile welds causes real gravity-driven falls. A contact referee requires an upright, supported last survivor. **Four layouts, two cadences; no future schedule or predetermined winner.**
 
-[46 s English close-ups & slow motion](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4) · [17 s vertical](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_short_en.mp4) · [2:24 methods & POV](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_technical_en.mp4) · [35 s uninterrupted reference](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_reference.mp4)
+[46 s English close-ups & slow motion](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_en.mp4) · [17 s vertical](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_short_en.mp4) · [2:24 methods & POV](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_technical_en.mp4) · [35 s uninterrupted reference](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_reference.mp4)
 
 Physics quality: **10/10 two-robot qualification, 12/12 four-robot qualification, 32/32 new heldout matches** pass the declared contact limits. Heldout outcomes: **12 winners, 20 draws**; this is not a 100% gameplay success claim. Maximum audited penetration: **1.798 mm**. Head/torso use conservative collision boxes; contacts are not exact rendered triangles. Four-robot simulation averages **0.669×** without full-rate recording.
 
@@ -79,7 +79,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-game-2026-10-08
+git checkout duckverse-game-2026-10-08-r1
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

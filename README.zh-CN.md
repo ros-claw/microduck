@@ -10,11 +10,11 @@
 
 ### 最后一块地板 · 四鸭同场淘汰赛
 
-[![最后一块地板](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
+[![最后一块地板](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_en.mp4)
 
 四只独立控制的 Microduck 根据当前可见预警，在不断塌陷的场地中换格避险。学习步态驱动受限力矩关节，地板解除约束后受重力真实下坠；裁判要求最后一只鸭仍直立且有真实承重支撑。**四种布局、两种节奏，不读取未来安排，不预设冠军。**
 
-[46 秒英文特写与慢动作](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4) · [17 秒竖屏](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_short_en.mp4) · [2:24 方法与鸭子视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_technical_en.mp4) · [35 秒连续原始视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_reference.mp4)
+[46 秒英文特写与慢动作](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_en.mp4) · [17 秒竖屏](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_short_en.mp4) · [2:24 方法与鸭子视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_technical_en.mp4) · [35 秒连续原始视角](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08-r1/duckverse_game_reference.mp4)
 
 物理质量：**双鸭 10/10、四鸭 12/12、新 heldout 32/32** 通过声明的接触阈值。32 局结果为 **12 局产生冠军、20 局平局**，不是“100% 游戏成功”。最大审计接触穿透 **1.798 mm**；头部、躯干采用保守碰撞包围盒，不是逐渲染三角形碰撞。四鸭仿真平均 **0.669×**，完整证据录制采用离线方式。
 
@@ -79,7 +79,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-game-2026-10-08
+git checkout duckverse-game-2026-10-08-r1
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

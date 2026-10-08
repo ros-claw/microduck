@@ -1,0 +1,55 @@
+{
+  "schema": "microduck.duckverse.fresh-reproduction.v1",
+  "base_clone_sha": "b8eceddf677d94169320a616380edab5aecf797e",
+  "clone_source": "https://github.com/ros-claw/microduck.git",
+  "fresh_upstream_bootstrap": true,
+  "upstream_training_sha": "5946fd9cdbc58956424420153e51975af3b30d77",
+  "upstream_runtime_sha": "9f7eaad1008fffd90ef871a33a18aecd066b51a9",
+  "python": "3.13.12",
+  "platform": "Linux aarch64",
+  "mujoco": "3.12.0",
+  "numpy": "2.5.3",
+  "onnxruntime": "1.30.0",
+  "initial_result": "103 passed, 2 historical hop tests failed because their scorer ignored MICRODUCK_ROOT",
+  "path_only_fixes": [
+    "scripts/eval_hop_quality.py",
+    "tests/test_hop_quality.py"
+  ],
+  "after_fix_result": "105 passed in 63.88 s",
+  "strict_seed101_replay": {
+    "verified": true,
+    "steps": 139287,
+    "max_state_control_error": 0.0,
+    "decisions_regenerated": true,
+    "contacts_regenerated": true,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "lavender",
+      "alive": [
+        "lavender"
+      ]
+    },
+    "evidence_domain": "simulation",
+    "independent_physical_validation": false
+  },
+  "actor_source_sha256": {
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/multiplayer_verify.py": "f3f0599a67ff1ce55ca0aa1a4f50dea61c718a5f81b2c69bfc5e2d288c3357c6",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "actor_physics_changed": false,
+  "validated_fix_file_sha256": {
+    "scripts/eval_hop_quality.py": "08273567e9f0456617bc4f0dc194c949a4eaefb15529cc830b5e3579ddaa7b96",
+    "tests/test_hop_quality.py": "ad43329dc28057f49d7c8cbafae17fc9c45e2a3b9f356d41899ffdc5704576e4"
+  },
+  "note": "The validated path-only fix is unchanged semantically; final source additionally annotates intentional script imports for Ruff."
+}

@@ -52,7 +52,7 @@ OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_duckverse.py \
 
 Full-rate capture stores a binary scene, integration states and controls at every 0.25 ms step, all contacts with signed distance/force/position/normal, public decisions at 50 Hz, constraint/referee events and audit digests. A capture uses substantial disk space. Evaluation without `--capture` retains decisions and audit metrics while omitting heavy raw arrays/contact streams.
 
-Strict replay regenerates the entire closed loop and compares model bytes, states, controls, every decision/contact row, constraints, events and referee output exactly. Selected seeds **101, 20008, 20017** replay with zero state/control error. Live native ROSClaw captures have separate audited receipt linkage. Gzip wrapper timestamps can differ across identical runs; semantic contact rows are compared rather than wrapper-byte equality. This verifies simulator consistency, not hardware or an independent dynamics model.
+Strict replay regenerates the entire closed loop and compares model bytes, states, controls, every decision/contact row, constraints, events and referee output exactly. Selected seeds **101, 20008, 20017** replay with zero state/control error. A separate fresh GitHub clone, fresh upstream bootstrap and independently installed environment also regenerate seed 101 exactly; all 105 tests pass after the r1 legacy asset-path fix. Live native ROSClaw captures have separate audited receipt linkage. Gzip wrapper timestamps can differ across identical runs; semantic contact rows are compared rather than wrapper-byte equality. This verifies simulator consistency, not hardware or an independent dynamics model.
 
 ## Boundaries
 

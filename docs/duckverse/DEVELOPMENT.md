@@ -22,3 +22,5 @@ Final contact quality is a declared numerical threshold, not a claim of zero vis
 Native ROSClaw initially rejected an MCP input schema without `additionalProperties:false`; the adapter now declares and validates a strict schema. A stale capability snapshot was refreshed through the supported native discovery tool. Neither failure was solved by bypassing admission. Only the subsequent real completed actions are advertised as successful native runs.
 
 中文：失败实验单独保存，不计入最终通过率；旧的未冻结原型不能当成严格重放证据。最重要的改进是补足头部和躯干外部碰撞覆盖、纠正误排除世界接触、重新标定拥挤落地求解，并在冻结后使用全新的 32 个种子验证。最终仍是凸碰撞、保守包围盒和软接触近似，不宣传“零穿模”或真机效果。
+
+A final GitHub clone and fresh upstream bootstrap exposed two historical hop tests whose scorer ignored `MICRODUCK_ROOT` and assumed sibling training checkouts. The r1 release fixes asset lookup in that scorer and its stand-policy test, without changing any captured actor/physics source. Fresh-environment validation then passes **105 tests**, and seed 101 strictly regenerates with zero state/control error using NumPy 2.5.3 and ONNX Runtime 1.30.0 (the original capture used 2.5.2 / 1.29.0). Original and final fresh reports remain distinct.

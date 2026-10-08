@@ -43,7 +43,15 @@ export ROSCLAW_HOME=/absolute/path/to/an/isolated/rosclaw-home
 .venv/bin/python -m rosclaw.entrypoint body create --robot microduck --name microduck-graphite
 ```
 
-Select `microduck-lavender` as the active body in this isolated home, configure a supported native provider using ROSClaw's normal setup, then launch:
+Set these fields in this isolated home's `config.yaml` (retain any other configuration):
+
+```yaml
+agent:
+  body_id: microduck-lavender
+  engine: pi
+```
+
+Configure a supported native provider using ROSClaw's normal setup, then launch:
 
 ```bash
 .venv/bin/python -m rosclaw.entrypoint chat \
