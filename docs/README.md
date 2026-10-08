@@ -3,6 +3,9 @@
 | 阅读目的 | 当前文档 |
 | --- | --- |
 | 看演示、安装与运行 | [中文首页](../README.zh-CN.md) · [English](../README.md) |
+| Duckverse 第一期：单鸭真实塌陷地板 | [实测、视频与复现](duckverse/LAST_DUCK_STANDING.md) · [阶段进度](duckverse/03-implementation-board.md) |
+| 跳绳完整方法与评测 | [中文](COOPERATIVE_ROPE_SKIPPING.zh-CN.md) · [English](COOPERATIVE_ROPE_SKIPPING.md) |
+| 最终组合技能与接触细节 | [CONTACT_DETAILS](CONTACT_DETAILS.md) |
 | 下载发布素材、复制文案 | [PUBLICATION](PUBLICATION.md) |
 | 理解真实接触结果与失败种子 | [SWEEP_TRAINING](SWEEP_TRAINING.md) |
 | 四鸭接力与加速原型 | [实测报告](CIRCUS_RESULTS_2026-09-17.md) · [架构与命令](CIRCUS_DIRECTOR.md) |
