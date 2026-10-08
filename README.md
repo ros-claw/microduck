@@ -1,221 +1,135 @@
-# MicroDuck: Cooperative Rope Skipping in MuJoCo
+# ROSClaw × Microduck — Duckverse
 
 **English** | [简体中文](README.zh-CN.md)
 
-MicroDuck is a simulation project for studying contact-aware locomotion and coordination between three bipedal robots. Two Microduck robots drive a flexible rope through handles attached to their mouths; a third robot learns to jump over it. The system combines reinforcement-learned motor policies, explicit phase feedback, and a geometric/contact-based evaluator.
+A series of reproducible robot games in **MuJoCo simulation**: contact-aware rope skipping, cooperative double jumping, reactive pursuit, and physical skill composition. Built with Pollen Robotics’ Microduck assets, learned ONNX motor policies, explicit controllers and contact audits. This repository contains code, weights, methods, failed experiments and replay evidence. Native ROSClaw chat launches Duckverse through a simulation-only candidate kit; hardware deployment and autonomous evolution are not demonstrated.
 
-The central problem is to make **rope rotation, foot clearance, and supported landing work together under physical contact**. A correctly timed jump alone is insufficient: the rope must pass below both feet, the robot must land cleanly, and the rope must remain attached to its turners.
+Latest runnable source: [release r1](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08-r1). The checkout command below selects that version; the main page is the series gallery.
 
-This repository provides the deployment runtime, exported policies, evaluation evidence, rendering tools, and a reproducible patch containing the training implementation. It is a **MuJoCo simulation**, not a demonstrated hardware deployment or an end-to-end multi-agent RL system.
+## Delivered demos
 
-[Method](#method) · [Evaluation](#evaluation) · [Getting started](#getting-started) · [Training](#training) · [Repository structure](#repository-structure)
+Click each preview to watch or download its video. Cuts of one demo are grouped together; old versions are archived below.
 
-## Demonstration
+### Last Duck Standing — shared-world elimination game
 
-[English overview: method, close-ups, and results](out/microduck_youtube_en.mp4) · [English video description](docs/YOUTUBE_EN.md)
+[![Last Duck Standing](https://raw.githubusercontent.com/ros-claw/microduck/duckverse-game-2026-10-08-r1/docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
 
-[![Three robots skipping a physically simulated rope](docs/media/skipping.gif)](out/microduck_studio_full.mp4)
+Four independent Microducks react to visible warnings on a shrinking arena. Learned stand/walk policies drive torque-limited joints; releasing tile welds causes real gravity-driven falls. A contact referee requires an upright, supported last survivor. **Four layouts, two cadences; no future schedule or predetermined winner.**
 
-[Continuous 20-second rollout](out/microduck_studio_full.mp4) · [Mouth attachment and foot-clearance close-ups](out/microduck_closeups.mp4) · [Vertical demonstration](out/microduck_social.mp4)
+[46 s English close-ups & slow motion](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4) · [17 s vertical](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_short_en.mp4) · [2:24 methods & POV](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_technical_en.mp4) · [35 s uninterrupted reference](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_reference.mp4)
 
-The continuous rollout includes startup. Close-ups replay the same trajectory at 0.25× speed; they are not additional evaluation runs. Rendering uses the assets' original materials. Presentation changes were checked against the original per-cycle audit, with identical results. See the [trajectory audit](artifacts/presentation/audit.json) and [rendering metadata](artifacts/presentation/manifest.json).
+Physics quality: **10/10 two-robot qualification, 12/12 four-robot qualification, 32/32 new heldout matches** pass the declared contact limits. Heldout outcomes: **12 winners, 20 draws**; this is not a 100% gameplay success claim. Maximum audited penetration: **1.798 mm**. Head/torso use conservative collision boxes; contacts are not exact rendered triangles. Four-robot simulation averages **0.669×** without full-rate recording.
 
-## Neon Escape: independent physical arcade prototype
+Actual native `rosclaw chat` produced a consumed grant and terminal execution receipt using **GPT-6 Astra / medium**. The model starts and inspects the match; deterministic tactics and existing ONNX policies control movement. Integration requires [candidate ROSClaw PR #632](https://github.com/ros-claw/rosclaw/pull/632), which is not merged upstream.
 
-[Gameplay and methods](docs/NEON_ESCAPE.md): real Jev tactical decisions drive existing motor policies through a seeded obstacle course, including a verified forward roll. One recorded run finishes cleanly in 39.98 seconds; failures and baseline comparisons are published alongside it. Gap jumping and general fall recovery remain unvalidated.
+[Method, limits & reproduction](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/duckverse/GAME.md) · [All qualification results](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/artifacts/duckverse-game/qa-summary.json) · [Native action & Practice lineage](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/duckverse/ROSCLAW_INTEGRATION.md) · [Videos, subtitles & evidence](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/duckverse/PUBLICATION.md)
 
-[![Selected clean Jev-controlled physical run](out/microduck_neon_escape_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4)
+### Cooperative Rope Skipping
 
-## Method
+[![Cooperative Rope Skipping](https://raw.githubusercontent.com/ros-claw/microduck/duckverse-game-2026-10-08-r1/docs/media/skipping.gif)](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/out/microduck_youtube_en.mp4)
 
-### 1. Shared physical environment
+Two ducks rotate a mouth-held flexible rope; a third jumps. Learned motor policies use measured phase feedback. Contact-based evaluation: **442/516 clean cycles (85.7%), 5/8 runs pass**. Rope–turner and rope self-collisions are excluded.
 
-Three copies of the official Microduck model and a segmented flexible rope are simulated in one MuJoCo world. Rope endpoints are connected to mouth-held handles using equality constraints. Ball joints allow the rope segments to bend and twist. The current configuration enables rope–jumper and rope–ground collisions from initialization; rope–turner collisions are explicitly excluded, while mouth-handle constraints transmit endpoint forces, with no mocap carriers driving the rope and no rope-velocity clipping.
+[20 s continuous](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/out/microduck_studio_full.mp4) · [Slow-motion details](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/out/microduck_closeups.mp4) · [Methods, training & reproduction](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/COOPERATIVE_ROPE_SKIPPING.md)
 
-| Component | Current configuration |
-| --- | --- |
-| Robot actuation | 14 position-controlled servos per robot |
-| Policy execution | 50 Hz, ONNX Runtime |
-| Physics integration | 0.2 ms timestep, Euler integration, Newton solver |
-| Rope | 0.58 m length, 1.5 mm collision radius, ball-joint chain |
-| Coordination | Measured rope phase and jump timing; turn frequency capped at 3.1 Hz |
+### Four-Duck Circus
 
-Implementation: [world construction](src/microduck_lab/sim/classic_rope.py), [runtime](src/microduck_lab/sim/runtime.py), and [final configuration](scripts/contact_skip.sh).
+[![Four-Duck Circus](https://raw.githubusercontent.com/ros-claw/microduck/duckverse-game-2026-10-08-r1/docs/media/circus_duo.gif)](https://github.com/ros-claw/microduck/releases/download/circus-pov-2026-09-17/microduck_circus_pov_en.mp4)
 
-### 2. Motor-policy training
+Two turners and two simultaneous jumpers share one world. Matching rope length and formation yields **258/260 shared clean cycles across four static runs**. The 108 s English film includes head-follow views and a failed moving entry. Impact penetration reaches **23–37 mm**; relay entry remains unsuccessful.
 
-The turner and jumper are trained separately with PPO in the upstream mjlab-based training stack, then exported to ONNX with observation normalization included.
+[Full static rollout](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/out/circus_matched_duo.mp4) · [Methods & reproduction](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [Contact limitations](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/PHYSICAL_FIDELITY_AUDIT.md)
 
-- **Turners:** a rope-in-the-loop policy learns to move a mouth-held handle while balancing against rope reaction. Deployment runs two copies with coordinated phase commands. The turner observation contract has 73 dimensions.
-- **Jumper:** training first develops centered hopping and supported landings, then introduces a physical, torque-limited rotating obstacle. Contact penalties and landing memory prevent a hop that touched the obstacle from receiving a clean-landing reward. This obstacle is a **training apparatus**, not the final flexible-rope scene.
-- **Deployment interface:** the jumper retains the 61-dimensional observation layout. Its existing body-height command carries a phase-dependent target; the command semantics are identified by the exported `hop_height_command=sweep-v1` metadata.
+### Reactive Chase
 
-The delivered weights are [`ropehop_contact.onnx`](policies/ropehop_contact.onnx) and [`turner_rope.onnx`](policies/turner_rope.onnx). The [training source package](training/README.md) includes environment definitions, rewards, export changes, and regression tests.
+[![Reactive Chase](https://raw.githubusercontent.com/ros-claw/microduck/duckverse-game-2026-10-08-r1/out/microduck_neon_escape_v3_reactive_hero.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_hero.mp4)
 
-### 3. Closed-loop coordination
+Live Jev selects tactics; learned policies execute movement and model-based previews compare routes. Six frozen runs: **5/6 escapes, 3/6 strict passes**. Routes use simulator state; this is not onboard vision.
 
-At deployment, the jumper's height target is computed from the measured position of the rope's middle material segment relative to the feet and handle axis. The target increases around the rope's lower crossing. It is a command to the learned policy, not a direct assignment to the robot's position.
+[Technical video](https://github.com/ros-claw/microduck/releases/download/neon-escape-reactive-2026-09-28/microduck_neon_escape_v3_reactive_technical.mp4) · [Methods & reproduction](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/REACTIVE_CHASE.md)
 
-The turners adapt their frequency to observed takeoff intervals. A phase-feedback loop adjusts their shared timing using the difference between rope passage and jump apex; the 3.1 Hz cap helps retain enough time for supported landing. These measurements come from **simulation state**, not a demonstrated camera or onboard perception system.
+### Strike & Escape — final contact-detail edition
+
+[![Strike & Escape — final contact-detail edition](https://raw.githubusercontent.com/ros-claw/microduck/duckverse-game-2026-10-08-r1/out/microduck_neon_escape_v6_details_en.jpg)](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_details_en.mp4)
+
+Six encounters combine rolls, a real gap, rotating-arm contact and duck–ball–pin interactions that unlock the exit. The **63 s English final cut** replays valuable details in slow motion; a 5 kHz freeze shows the actual rod brush. Its selected 35.14 s simulation replays exactly; conservative capsule/box collisions are not visual-triangle collisions. Jev decisions come from the archived live run, with a new learned finish suffix; no new success-rate claim.
+
+[35 s action cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_hero.mp4) · [Final method & reproduction](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/CONTACT_DETAILS.md) · [Evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz)
+
+## How it works
+
+1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.
+2. **Coordination and tactics:** deterministic feedback supplies goals and phase timing. Some Neon Escape runs use live Jev for finite skill choices and physical previews for transitions; these are separate from motor-policy inference.
+3. **Physics:** robots and props share one MuJoCo world. Contacts, equality forces, gravity and actuation determine outcomes. Collision profiles and exclusions are disclosed per demo.
+4. **Evidence and filming:** full-rate contact checks, recorded inputs and trajectory replay verify selected results. Cameras, slow motion and synthesized Foley are presentation only.
 
 ```mermaid
 flowchart LR
-    World[Three robots and flexible rope] --> Measure[Rope geometry and jump timing]
-    Measure --> Height[Height command]
-    Height --> Jumper[Learned jumper policy]
-    Measure --> Sync[Frequency and phase feedback]
-    Sync --> Turners[Learned turner policies]
-    Jumper --> Servos[Position servos]
-    Turners --> Servos
-    Servos --> World
-    World --> Audit[Per-physics-step geometric and contact audit]
+    Goal[Task / tactic] --> Skill[Feedback skill controller]
+    Skill --> Policy[Learned motor policy / 50 Hz]
+    Policy --> Motor[Torque-limited joint servos]
+    Motor --> World[Shared MuJoCo world]
+    World --> Skill
+    World --> Audit[Contact audit and replay]
+    Audit --> Video[Read-only video renderer]
 ```
 
-The learned policies generate motor actions; the coordinator supplies timing feedback; the evaluator determines whether a complete skip was physically valid. Training reward and legacy timing-hit counters are not used as the final success metric.
+## Run locally
 
-## Evaluation
-
-### What counts as a successful skip?
-
-The [evaluator](src/microduck_lab/sim/skip_metrics.py) checks every physics step. A counted opportunity is a complete rope revolution after the startup window. A clean cycle requires:
-
-- An overhead passage and underfoot crossings at both feet, with at least **1 mm sole clearance**; the two foot passages must occur within 120 ms.
-- No rope–jumper contact or non-foot jumper–ground contact during the cycle.
-- A clean, upright landing with at least **50 ms of continuous foot support** after both feet have been cleared.
-- Upright robots, mouth-attachment error no greater than **10 mm**, and rope–ground numerical penetration no greater than **2 mm**.
-
-A run passes only if rotation starts within the 9-second startup window, at least 20 post-startup cycles are counted, and at least 80% are clean. Contact simulation has numerical tolerances, but the four-duck follow-up also found **substantial 23–37 mm impact penetration**, not just negligible error. Rope–turner and rope self-collisions are disabled. See the [physical fidelity audit](docs/PHYSICAL_FIDELITY_AUDIT.md).
-
-### Measured results
-
-Eight runs of 30 seconds each use seeded ±0.02 rad perturbations to the initial servo poses. The first 9 seconds of each run are excluded from cycle scoring.
-
-| Seed | Clean / complete cycles | Success rate |
-| --- | ---: | ---: |
-| 0 | 65 / 65 | 100% |
-| 1 | 65 / 65 | 100% |
-| 2 | 65 / 65 | 100% |
-| 3 | 43 / 63 | 68.3% |
-| 101 | 65 / 65 | 100% |
-| 202 | 37 / 64 | 57.8% |
-| 303 | 65 / 65 | 100% |
-| 404 | 37 / 64 | 57.8% |
-| **Total** | **442 / 516** | **85.7%** |
-
-**Five of eight runs pass individually.** The aggregate exceeds 80%, but three runs do not. Seeds 101, 202, 303, and 404 were evaluated after the frequency cap was selected; this is not an eight-seed held-out benchmark. The 20-second demonstration separately scores 33/33 after startup and does not replace the batch result.
-
-Sources: [machine-readable batch results](artifacts/takeover/contact-summary.json), [training and ablation record (Chinese)](docs/SWEEP_TRAINING.md). Earlier “93%” figures described timing hits or different tasks and are not results for this contact-enabled configuration.
-
-## Getting started
-
-Validated environment: **Linux, Python 3.13, MuJoCo 3.12**. Policy evaluation runs on CPU; NVIDIA EGL can accelerate rendering. Running the delivered policies does not require training.
+Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL accelerates video rendering.
 
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
+git checkout duckverse-game-2026-10-08-r1
 python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[dev]'
-
-# Keep this variable set for subsequent commands.
+.venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
 .venv/bin/python scripts/bootstrap.py
 
-# Default: seed 0, 30 seconds, headless physical evaluation.
+# Last Duck Standing: new output directory; add --capture for full-rate evidence
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_duckverse.py \
+  --seed 101 --players 4 --layout square --cadence steady \
+  --out artifacts/duckverse-game/local-seed101
+
+# Cooperative skipping
 scripts/contact_skip.sh
 
-# Regression tests.
+# DG-02 warning response and contact referee; output must be new
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_tile_survival.py \
+  --seed 11 --duration 14 --out artifacts/duckverse-dg02/local-seed11
+
+# DG-01 physical tile calibration
+OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_last_duck_standing.py \
+  --seed 11 --dt .0005 --out artifacts/duckverse/local-seed11
+
 .venv/bin/python -m pytest tests -q
 ```
 
-Bootstrap fetches official assets at the commits in [`upstream.lock.yaml`](upstream.lock.yaml). Existing asset checkouts are preserved rather than switched automatically; custom checkouts must remain compatible with the pinned model. Evaluation writes `artifacts/takeover/contact-latest.json`, including criteria and per-cycle failure reasons.
+For each game’s exact command, policy and asset requirements, follow its method link above. [Pinned upstream assets](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/upstream.lock.yaml) · [Training source and exports](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/training/README.md). Model/trajectory binaries and larger movies are distributed as release assets.
 
-To reproduce all eight seed evaluations without overwriting the supplied evidence:
+## Earlier editions
 
-```bash
-mkdir -p artifacts/local
-for seed in 0 1 2 3 101 202 303 404; do
-  OPENBLAS_NUM_THREADS=1 scripts/contact_skip.sh --seed "$seed" \
-    --output "artifacts/local/seed-${seed}.json"
-done
-```
+| Edition | Video / method | Status |
+| --- | --- | --- |
+| Duckverse DG-01 / DG-02 | [Physical calibration](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/duckverse/LAST_DUCK_STANDING.md) · [Paired warning-response experiment](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/duckverse/DG02_SCHEDULE_REFEREE.md) | Frozen single-body experiments |
+| Neon Escape V1 | [English film](https://github.com/ros-claw/microduck/releases/download/neon-escape-2026-09-26/microduck_neon_escape_en.mp4) · [Method](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/NEON_ESCAPE.md) | Frozen first game |
+| Neon Escape V2 | [Physical baseline](https://github.com/ros-claw/microduck/releases/download/neon-escape-v2-physical-baseline-2026-09-27/microduck_neon_escape_v2_physical_baseline_hero.mp4) · [Method](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/NEON_ESCAPE_V2.md) | Rule-controlled baseline |
+| Strike & Escape V4 | [Technical cut](https://github.com/ros-claw/microduck/releases/download/neon-escape-strike-2026-09-30/microduck_neon_escape_v4_strike_technical.mp4) · [Method](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/STRIKE_ESCAPE.md) | Earlier skill composition |
+| Victory finish V5 | [Release](https://github.com/ros-claw/microduck/releases/tag/neon-escape-victory-2026-10-03) | Superseded by V6 after motion review |
+| Circus long details | [3:20 technical film](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) | Longer companion to 1:48 final cut |
 
-### Render a trajectory
+## Code and evidence
 
-Rendering needs EGL/OpenGL drivers and Noto Sans CJK fonts (`fonts-noto-cjk` on Ubuntu).
-
-```bash
-MUJOCO_GL=egl PYOPENGL_PLATFORM=egl OPENBLAS_NUM_THREADS=1 \
-  .venv/bin/python scripts/publish_contact_video.py --capture
-
-MUJOCO_GL=egl PYOPENGL_PLATFORM=egl OPENBLAS_NUM_THREADS=1 \
-  .venv/bin/python scripts/render_closeups.py
-```
-
-The first command captures states at 200 Hz and verifies the cycle records against the supplied reference before rendering. The second reuses that trajectory for close-ups. Quarter-speed playback outputs 50 fps without joint interpolation. Both GL variables can be set to `osmesa` when EGL is unavailable; a system OSMesa library is required and rendering is slower. Large local trajectory/model caches are ignored by Git. The vertical clip's sound is post-produced foley, not recorded simulation audio.
-
-## Training
-
-The deployment repository is separate from the upstream training stack. [`training/microduck_rl.patch`](training/microduck_rl.patch) reconstructs the committed training source at `18052aaf7d98942921a8d57319f40d3692f96bcd` from the pinned upstream base. Its resulting Git tree was verified against that commit.
-
-```bash
-# Start in this repository's root; use a fresh training checkout.
-DELIVERY_ROOT="$PWD"
-git clone https://github.com/pollen-robotics/microduck_rl.git ../microduck-training
-cd ../microduck-training
-git checkout -b microduck-contact 5946fd9cdbc58956424420153e51975af3b30d77
-git apply --check "$DELIVERY_ROOT/training/microduck_rl.patch"
-git apply "$DELIVERY_ROOT/training/microduck_rl.patch"
-uv sync
-uv run --with pytest pytest tests/test_clean_ropehop_cfg.py tests/test_sweep_ropehop_cfg.py
-```
-
-The contact-training task is `Mjlab-SweepRopeHop-Flat-MicroDuck`. Follow the training repository's instructions and run a 64-environment, five-iteration smoke test before a long GPU run. [Training notes](docs/SWEEP_TRAINING.md) describe the curriculum, environment-origin fix, and ablations.
-
-**Raw `.pt` checkpoints and complete training logs are not included.** Resume commands in the experiment notes require those checkpoints. Training from scratch is possible with the source package but is not guaranteed to reproduce the delivered weights or score. Evaluation of the included ONNX policies does not need the missing checkpoints.
-
-## Repository structure
-
-| Path | Responsibility |
+| Path | Purpose |
 | --- | --- |
-| `src/microduck_lab/sim/classic_rope.py` | Shared world, rope construction, attachments and contacts |
-| `src/microduck_lab/sim/runtime.py` | ONNX inference, observation contracts and servo commands |
-| `src/microduck_lab/sim/skip_metrics.py` | Physical cycle scoring and failure classification |
-| `src/microduck_lab/demos/honest_skip.py` | Three-robot rollout and feedback coordination |
-| `scripts/contact_skip.sh` | Reference evaluation configuration |
-| `scripts/publish_contact_video.py`, `scripts/render_closeups.py` | Audited capture and rendering |
-| `policies/` | Exported deployment policies, including historical variants |
-| `training/` | Training-source patch and recovery instructions |
-| `tests/` | Deployment and evaluator regression tests |
-| `artifacts/takeover/`, `artifacts/presentation/` | Recorded evaluations and trajectory/video provenance |
-| `docs/`, `out/` | Technical records and demonstration media |
+| [`src/microduck_lab/sim`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/src/microduck_lab/sim) | Robot runtime, composition and rope physics |
+| [`src/microduck_lab/parkour`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/src/microduck_lab/parkour) | Physical skill combinations and props |
+| [`src/microduck_lab/arena`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/src/microduck_lab/arena) | Shared-world Duckverse simulation, tactics and referee |
+| [`scripts`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/scripts) | Run, evaluate, replay and render |
+| [`policies`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/policies) / [`training`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/training) | Exported policies and training source |
+| [`artifacts`](https://github.com/ros-claw/microduck/tree/duckverse-game-2026-10-08-r1/artifacts) / [`docs`](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/README.md) | Results, failures, manifests and methods |
 
-The [documentation index](docs/README.md) separates current evidence from historical experiments. The earlier ROSClaw practice/evolution prototypes remain in the repository, but they are not the reference method or acceptance evidence described here.
+## Contributing and attribution
 
-## Experimental: Circus Director
-
-An executable first-stage prototype adds Graphite, a 5 / 3 / 5 relay state machine, per-jumper contact auditing, and an evidence-gated speed curriculum. **The full relay, clean moving-rope entry, and the requested 30% speed increase have not passed.** Planning currently uses a bounded bilingual grammar; Practice searches controller parameters rather than automatically retraining PPO.
-
-[Implementation and commands](docs/CIRCUS_DIRECTOR.md) · [Measured results and failure analysis (Chinese)](docs/CIRCUS_RESULTS_2026-09-17.md) · [Machine-readable evidence](artifacts/circus/summary.json)
-
-Matching rope length to the wider formation produced **258/260 shared clean cycles across four independent 30-second static-duo runs; all four passed**, excluding the first 9 seconds of startup in each run. Moving entry still fails on rope contact. [Collision and timing analysis, including failed configurations](docs/CIRCUS_GEOMETRY_AND_TIMING.md) · [Full static-duo video](out/circus_matched_duo.mp4).
-
-**New: [1:48 film with head-follow cameras and slow motion](docs/CIRCUS_POV_VIDEO.md).** The [physical fidelity audit](docs/PHYSICAL_FIDELITY_AUDIT.md) documents substantial impact penetration and excluded rope–turner collisions.
-
-[3:20 slow-motion detail film: mouth connections, both jumpers' feet, formation and entry failure](https://github.com/ros-claw/microduck/releases/download/circus-details-2026-09-17/microduck_circus_details_en.mp4) · [Video guide and subtitles](docs/CIRCUS_DETAILS_VIDEO.md)
-
-[![Four robots performing the validated static-duo configuration](docs/media/circus_duo.gif)](out/circus_matched_duo.mp4)
-
-## Limitations and development priorities
-
-- **Startup and perturbation robustness:** three evaluated seeds remain below the target. Rope contact, insufficient clearance, and short landing support remain failure modes.
-- **Explicit coordination:** the system uses simulation-state feedback and a shared timing controller. Decentralized perception and fully learned multi-agent coordination remain future work.
-- **Training/deployment gap:** the jumper's rotating training obstacle is simpler than the deployed flexible rope. Validation must remain in the full three-robot scene.
-- **Recovery and hardware transfer:** reliable recovery from failed skips and operation on physical robots have not been demonstrated.
-
-## Contributing
-
-For bug reports, include the commit, dependency versions, seed, exact command, and evaluation JSON; add a video when the issue is visual. For changes to control or physics, run the regression suite and compare complete seed evaluations with the reference configuration. Report failed seeds and startup behavior alongside aggregate scores. Do not substitute timing-only counters or training rewards for the physical evaluator.
-
-## License and attribution
-
-This repository's code is licensed under [Apache-2.0](LICENSE). Robot models and original materials come from [Pollen Robotics Microduck](https://github.com/pollen-robotics/microduck) and its [training repository](https://github.com/pollen-robotics/microduck_rl); asset licensing and pinned sources are recorded in [`upstream.lock.yaml`](upstream.lock.yaml). Upstream models are fetched separately, not relicensed as project code. Official runtime policies, the original ROSClaw prototype, and the quackd reference implementation informed this project.
+Include reproducible commands, seed/model hashes, contact evidence and limitations with behavior changes; preserve frozen references. Project code is Apache-2.0. Robot assets and upstream policies come from **Pollen Robotics**; upstream 3D models have their separate CC BY-SA-NC terms. See [LICENSE](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/LICENSE), [THIRD_PARTY](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/THIRD_PARTY.md), and [upstream lock](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/upstream.lock.yaml). ROSClaw/Jev integrations are credited only where actually exercised; Duckverse native-agent execution is demonstrated with the linked candidate core extension; Practice imports are retrospective simulation records, not online learning.
