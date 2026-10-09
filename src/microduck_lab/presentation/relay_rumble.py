@@ -32,10 +32,6 @@ class RelayFilm(Film):
         self.m.vis.headlight.diffuse[:] = 0.65
         self.font = ImageFont.truetype(BOLD, 18)
         self.big = ImageFont.truetype(BOLD, 30)
-        self.intent_rows = []
-        with gzip.open(self.path / "decisions.jsonl.gz", "rt") as log:
-            for line in log:
-                self.intent_rows.append(json.loads(line))
         self.small = ImageFont.truetype(FONT, 20)
 
     def project(self, p):
@@ -124,8 +120,12 @@ class RelayFilm(Film):
             near = min(self.losses, key=lambda e: abs(e["time"] - t))
             p = self.d.xpos[self.bids[near["body_id"]]]
             c.lookat[:] = [p[0], p[1], float(np.clip(p[2] - 0.06, -0.45, 0.02))]
-            c.distance = 1.7
-            c.elevation = -18
+            c.distance = 1.4
+            # After the body passes below the deck, view from below its rim.
+            # A camera above the deck otherwise films an occluding floor slab.
+            c.elevation = 6 if p[2] < -0.12 else -30
+            if p[2] >= -0.12:
+                c.lookat[2] = 0.04
             c.azimuth = math.degrees(math.atan2(p[1], p[0]))
         elif shot == "follow":
             gpos = self.d.xpos[self.m.body(f"tile_{goal}").id]
@@ -215,6 +215,23 @@ class RelayFilm(Film):
         draw = ImageDraw.Draw(image)
         labels = []
         for name, bid in self.bids.items():
+            ray = self.d.xpos[bid] - self.renderer.scene.camera[0].pos
+            ray /= max(float(np.linalg.norm(ray)), 1e-9)
+            hit = np.array([-1], dtype=np.int32)
+            mujoco.mj_ray(
+                self.m,
+                self.d,
+                self.renderer.scene.camera[0].pos,
+                ray,
+                self.opt.geomgroup,
+                1,
+                -1,
+                hit,
+            )
+            if hit[0] >= 0 and not self.m.body(
+                int(self.m.geom_bodyid[int(hit[0])])
+            ).name.startswith(name + "/"):
+                continue
             p = self.project(self.d.xpos[bid] + [0, 0, 0.17])
             if p is None or (
                 name not in alive
@@ -255,7 +272,11 @@ class RelayFilm(Film):
                 caption = f"{CHARACTERS[e['body_id']]['name']}夺下{goal_names[e['tile']]}！目标转移：{goal_names[goal]}"
         if terminal:
             caption = (
-                ("本局获胜：" + CHARACTERS[terminal["winner"]]["name"])
+                (
+                    "本局获胜："
+                    + CHARACTERS[terminal["winner"]]["name"]
+                    + " · 比赛结束，继续展示自然余势"
+                )
                 if terminal.get("winner")
                 else "本局平局 · 不强行指定赢家"
             )
@@ -364,7 +385,7 @@ def render_relay(run, out, preview=None):
     terminal = next(
         (e["time"] for e in f.audit["events"] if e["state"] == "TERMINAL"), recorded_end
     )
-    end = min(recorded_end, terminal + 0.002)
+    end = recorded_end
     contacts = [
         e
         for e in f.audit["events"]
@@ -381,8 +402,8 @@ def render_relay(run, out, preview=None):
     captures = [e["time"] for e in f.audit["events"] if e["state"] == "BEACON_CAPTURE"]
     intervals = [(max(0, t - 0.12), min(end, t + 0.40), "contact") for t in chosen]
     intervals += [
-        (max(0, e["time"] - 0.8), min(end, e["time"] - 0.25), "fall")
-        for e in [e for e in f.losses if e["time"] < terminal][:2]
+        (max(0, e["time"] - 0.8), min(end, e["time"] + 0.15), "fall")
+        for e in f.losses[:2]
     ]
     times = []
     t = 0.0

@@ -95,3 +95,21 @@ MUJOCO_LOG.TXT
 /artifacts/relay-rumble/**/contacts.jsonl.gz
 /artifacts/relay-rumble/**/decisions.jsonl.gz
 /out/relay-rumble*
+
+# Unsealed tuning runs stay local; frozen final evidence and failed summary are tracked.
+/artifacts/relay-rumble/development-a/
+/artifacts/relay-rumble/capture-a/
+/artifacts/relay-rumble/trial-*/
+/artifacts/relay-rumble/development-trials.json
+/artifacts/relay-rumble/selected-four/
+/artifacts/relay-rumble/passive-four/
+/artifacts/relay-rumble/receiver-regression-52013/
+/artifacts/relay-rumble/replay-selected.json
+/artifacts/relay-rumble/heldout/*/audit.json
+/artifacts/relay-rumble/diagnose-52013/audit.json
+
+# Exact JSON audit bytes are compressed in artifacts/relay-rumble/audits/.
+/artifacts/relay-rumble/heldout-wide-receiver/*/audit.json
+/artifacts/relay-rumble/selected-four-wide-receiver/audit.json
+/artifacts/relay-rumble/passive-four-wide-receiver/audit.json
+/artifacts/relay-rumble/receiver-regression-final-52013/audit.json

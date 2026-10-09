@@ -12,12 +12,14 @@ import math
 import time
 import mujoco
 import numpy as np
-from .multiplayer import GameConfig, build_game, ContactGraph, observe, GameReferee
+from .multiplayer import GameConfig, ContactGraph, observe, GameReferee
 from .episode import STATE, sha
+from .relay_world import build_relay_world
 
 
 @dataclass(frozen=True)
 class RelayConfig(GameConfig):
+    receiver_half_extent_m: float = 3.0
     players: int = 4
     grid: int = 5
     tile_size: float = 0.40
@@ -33,7 +35,8 @@ class RelayConfig(GameConfig):
 
     def __post_init__(self):
         if (
-            self.players != 4
+            self.receiver_half_extent_m != 3.0
+            or self.players != 4
             or self.grid != 5
             or self.layout != "square"
             or not 0.36 <= self.tile_size <= 0.44
@@ -376,6 +379,7 @@ def _actor_source_hashes():
         for p in [
             Path(__file__),
             Path(__file__).with_name("multiplayer.py"),
+            Path(__file__).with_name("relay_world.py"),
             Path(__file__).with_name("tiles.py"),
             Path(__file__).with_name("referee.py"),
             Path(__file__).with_name("world.py"),
@@ -395,7 +399,7 @@ def run_relay(out, seed=31001, config=None, capture=False):
     config = config or RelayConfig()
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
-    m, d, ducks, tiles, spawns = build_game(config, seed)
+    m, d, ducks, tiles, spawns = build_relay_world(config, seed)
     source_snapshot = _LOADED_SOURCE_SNAPSHOT.copy()
     policy_snapshot = {
         n: sha(p) for n, p in next(iter(ducks.values())).bank.paths.items()

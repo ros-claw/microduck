@@ -85,3 +85,18 @@ def test_names_map_to_fixed_distinct_roles_and_larger_arena():
     assert cfg.grid * cfg.pitch > 2.0
     with pytest.raises(ValueError):
         RelayConfig(grid=3)
+
+
+def test_receiver_is_below_arena_and_wide_enough_to_remove_nearby_box_edge():
+    from microduck_lab.arena.world import ASSETS
+    from microduck_lab.arena.relay_world import build_relay_world
+
+    if not (ASSETS / "microduck/policies/alpha_stand.onnx").exists():
+        pytest.skip("Native robot assets are required for the scene integration check")
+    m, d, ducks, tiles, _ = build_relay_world(RelayConfig(), 51003)
+    g = m.geom("receiver").id
+    assert np.allclose(m.geom_size[g], [3, 3, 0.04])
+    assert m.geom_pos[g, 2] + m.geom_size[g, 2] < -0.8
+    assert m.geom_rbound[g] > 4.2
+    assert len(ducks) == 4 and len(tiles) == 25
+    assert np.isfinite(d.qpos).all()

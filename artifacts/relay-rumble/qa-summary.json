@@ -1,0 +1,97 @@
+{
+  "status": "development result; awaiting user acceptance; not a release",
+  "tests_passed": 127,
+  "ruff": "passed for changed Python files",
+  "config": {
+    "players": 4,
+    "grid": 5,
+    "tile_size": 0.4,
+    "gap": 0.008,
+    "dt": 0.00025,
+    "layout": "square",
+    "cadence": "steady",
+    "duration": 65,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd",
+    "receiver_half_extent_m": 3.0,
+    "lifetime_s": 8,
+    "filter_s": 0.12,
+    "final_at_s": 0.8,
+    "claim_s": 0.75,
+    "claim_radius_m": 0.105,
+    "points_to_win": 3,
+    "passive": false
+  },
+  "physical_gate": true,
+  "outcome_gate": true,
+  "evaluation_count": 32,
+  "physical_passes": 32,
+  "winners": 32,
+  "penetration_max_m": 0.00156842459524359,
+  "mean_stationary_fraction": 0.06205186088271967,
+  "source_frozen": true,
+  "source_sha256": {
+    "src/microduck_lab/arena/relay_rumble.py": "f6c11d9f587290804cabeda9688e9ecf20c4d510ea13f5c28e94fa280d001357",
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/relay_world.py": "43f7a1b42114f7daaef2f9c08fc339d54c06960f74d70ad954fe59da759c9343",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "evaluation": "heldout-wide-receiver/summary.json",
+  "selected_capture": "selected-four-wide-receiver/audit.json",
+  "replay": {
+    "verified": true,
+    "steps": 147552,
+    "max_state_control_error": 0.0,
+    "decisions_regenerated": true,
+    "contacts_regenerated": true,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "graphite",
+      "alive": [
+        "graphite",
+        "lavender",
+        "cream",
+        "sky"
+      ],
+      "rule": "RelayRace",
+      "points": {
+        "graphite": 3,
+        "lavender": 1,
+        "cream": 1,
+        "sky": 2
+      },
+      "required_points": 3
+    },
+    "evidence_domain": "simulation",
+    "independent_physical_validation": false
+  },
+  "agency": "agency-wide-receiver.json",
+  "media": "media-checks.json",
+  "failed_baseline": {
+    "evaluation": "heldout/summary.json",
+    "physics_passes": 31,
+    "count": 32,
+    "max_penetration_m": 0.006922345946883308,
+    "reason": "falling foot hit the narrow lower receiver corner; preserved, not counted as passed"
+  },
+  "regression": "receiver-regression-final-52013/audit.json",
+  "limitations": [
+    "one fixed 5x5 layout and small seeded initial perturbations",
+    "no hardware evaluation",
+    "no new motor training",
+    "no new Jev/native ROSClaw run",
+    "interception attempts are not verified successful blocking",
+    "no independent viewer acceptance"
+  ]
+}
