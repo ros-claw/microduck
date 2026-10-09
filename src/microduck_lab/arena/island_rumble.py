@@ -29,6 +29,7 @@ class RumbleConfig(GameConfig):
     claim_s: float = 1.5
     passive: bool = False
     claim_radius_m: float = 0.0
+    score_mode: str = "continuous"
 
     def __post_init__(self):
         if self.players not in (2, 4) or self.grid not in (3, 4):
@@ -48,6 +49,8 @@ class RumbleConfig(GameConfig):
             or not self.external_envelopes
             or self.ccd != "libccd"
             or not 0 <= self.claim_radius_m <= 0.08
+            or self.score_mode not in ("continuous", "cumulative")
+            or (self.score_mode == "cumulative" and self.claim_radius_m == 0)
         ):
             raise ValueError("Invalid rules or changed physical calibration")
 
@@ -368,12 +371,50 @@ class CrownClaim:
         return None
 
 
-def run_rumble(out, seed=31001, config=None, capture=False):
-    config = config or RumbleConfig()
-    out = Path(out)
-    out.mkdir(parents=True, exist_ok=False)
-    m, d, ducks, tiles, spawns = build_game(config, seed)
-    source_snapshot = {
+class CrownRace:
+    """Score only actual exclusive, upright, loaded centre occupancy.
+
+    Scores persist through interruptions. No grace period, synthetic support,
+    timeout ranking or identity tie-break. Simultaneous contenders get no points.
+    """
+
+    def __init__(self, config, names):
+        self.config = config
+        self.scores = dict.fromkeys(names, 0.0)
+
+    def update(self, now, observations, eliminated):
+        if now <= self.config.final_at_s:
+            return None
+        centre = self.config.centre(self.config.island)
+        occupants = [
+            n
+            for n, o in observations.items()
+            if n not in eliminated
+            and o.get("z", 0.12) >= -0.12
+            and math.hypot(o["x"] - centre[0], o["y"] - centre[1])
+            <= self.config.claim_radius_m
+        ]
+        if len(occupants) != 1:
+            return None
+        n = occupants[0]
+        o = observations[n]
+        if not o["upright"] or self.config.island not in o["supporting_tiles"]:
+            return None
+        self.scores[n] += self.config.dt
+        if self.scores[n] + 1e-9 >= self.config.claim_s:
+            return dict(
+                status="WINNER",
+                winner=n,
+                alive=[k for k in observations if k not in eliminated],
+                rule="CrownRace",
+                required_loaded_crown_s=self.config.claim_s,
+                loaded_crown_scores_s=self.scores.copy(),
+            )
+        return None
+
+
+def _actor_source_hashes():
+    return {
         str(p.relative_to(Path(__file__).resolve().parents[3])): sha(p)
         for p in [
             Path(__file__),
@@ -381,10 +422,24 @@ def run_rumble(out, seed=31001, config=None, capture=False):
             Path(__file__).with_name("tiles.py"),
             Path(__file__).with_name("referee.py"),
             Path(__file__).with_name("world.py"),
+            Path(__file__).with_name("episode.py"),
             Path(__file__).parent.parent / "sim/runtime.py",
             Path(__file__).parent.parent / "sim/composer.py",
         ]
     }
+
+
+_LOADED_SOURCE_SNAPSHOT = _actor_source_hashes()
+
+
+def run_rumble(out, seed=31001, config=None, capture=False):
+    if _actor_source_hashes() != _LOADED_SOURCE_SNAPSHOT:
+        raise RuntimeError("Actor sources changed after import; restart the worker")
+    config = config or RumbleConfig()
+    out = Path(out)
+    out.mkdir(parents=True, exist_ok=False)
+    m, d, ducks, tiles, spawns = build_game(config, seed)
+    source_snapshot = _LOADED_SOURCE_SNAPSHOT.copy()
     policy_snapshot = {
         n: sha(p) for n, p in next(iter(ducks.values())).bank.paths.items()
     }
@@ -402,7 +457,13 @@ def run_rumble(out, seed=31001, config=None, capture=False):
     }
     damage = ContactTriggeredCollapse(config, graph, next(iter(weights.values())))
     referee = GameReferee(tuple(ducks))
-    claim = CrownClaim(config) if config.claim_radius_m else IslandClaim(config)
+    claim = (
+        CrownRace(config, ducks)
+        if config.score_mode == "cumulative"
+        else CrownClaim(config)
+        if config.claim_radius_m
+        else IslandClaim(config)
+    )
     controllers = {
         n: Tactician(("rusher", "survivor", "blocker", "rusher")[j])
         for j, n in enumerate(ducks)
@@ -432,6 +493,10 @@ def run_rumble(out, seed=31001, config=None, capture=False):
         for step in range(maxsteps):
             t = step * config.dt
             if step % 80 == 0:
+                if config.score_mode == "cumulative":
+                    events.append(
+                        dict(time=t, state="SCOREBOARD", scores=claim.scores.copy())
+                    )
                 for name, duck in ducks.items():
                     obs = observe(
                         name, ducks, tiles, support, config, t, referee.eliminated
@@ -461,6 +526,8 @@ def run_rumble(out, seed=31001, config=None, capture=False):
                     else:
                         duck.active_policy = policy
                         duck.step()
+                    if config.score_mode == "cumulative":
+                        obs["crown_scores_s"] = claim.scores.copy()
                     decisions.append(
                         dict(
                             time=t,
@@ -544,6 +611,10 @@ def run_rumble(out, seed=31001, config=None, capture=False):
         for row in decisions:
             f.write(json.dumps(row) + "\n")
     mujoco.mj_getState(m, d, state, STATE)
+    if _actor_source_hashes() != _LOADED_SOURCE_SNAPSHOT:
+        raise RuntimeError(
+            "Actor sources changed during the run; evidence is not sealed"
+        )
     audit = dict(
         schema="microduck.island-rumble.prototype.v1",
         seed=seed,
@@ -556,7 +627,11 @@ def run_rumble(out, seed=31001, config=None, capture=False):
         outcome=terminal
         or dict(
             **referee.outcome(timeout=True),
-            rule="CrownClaim" if config.claim_radius_m else "IslandClaim",
+            rule="CrownRace"
+            if config.score_mode == "cumulative"
+            else "CrownClaim"
+            if config.claim_radius_m
+            else "IslandClaim",
         ),
         events=events,
         damage=damage.damage,

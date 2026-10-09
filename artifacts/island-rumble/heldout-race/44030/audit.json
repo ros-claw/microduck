@@ -1,0 +1,4873 @@
+{
+  "schema": "microduck.island-rumble.prototype.v1",
+  "seed": 44030,
+  "config": {
+    "players": 4,
+    "grid": 3,
+    "tile_size": 0.36,
+    "gap": 0.008,
+    "dt": 0.00025,
+    "layout": "square",
+    "cadence": "steady",
+    "duration": 20.0,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd",
+    "lifetime_s": 3.2,
+    "filter_s": 0.12,
+    "final_at_s": 2.0,
+    "claim_s": 1.5,
+    "passive": false,
+    "claim_radius_m": 0.08,
+    "score_mode": "cumulative"
+  },
+  "capture": false,
+  "steps": 33213,
+  "duration": 8.30325,
+  "mujoco_version": "3.12.0",
+  "spawns": {
+    "sky": {
+      "tile": 1,
+      "yaw": -0.0
+    },
+    "graphite": {
+      "tile": 5,
+      "yaw": -1.5707963267948966
+    },
+    "lavender": {
+      "tile": 7,
+      "yaw": -3.141592653589793
+    },
+    "cream": {
+      "tile": 3,
+      "yaw": 1.5707963267948966
+    }
+  },
+  "outcome": {
+    "status": "WINNER",
+    "winner": "lavender",
+    "alive": [
+      "sky",
+      "lavender",
+      "cream"
+    ],
+    "rule": "CrownRace",
+    "required_loaded_crown_s": 1.5,
+    "loaded_crown_scores_s": {
+      "sky": 0.6722499999999537,
+      "graphite": 0.0,
+      "lavender": 1.5000000000000846,
+      "cream": 0.08225000000000006
+    }
+  },
+  "events": [
+    {
+      "time": 0.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.02,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.023,
+      "tile": 1,
+      "state": "LOADED",
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.02325,
+      "tile": 3,
+      "state": "LOADED",
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.02325,
+      "tile": 5,
+      "state": "LOADED",
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.02375,
+      "tile": 7,
+      "state": "LOADED",
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.06,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.17425000000000002,
+      "tile": 1,
+      "state": "CRACKING",
+      "damage": 0.02003659727837596
+    },
+    {
+      "time": 0.17475000000000002,
+      "tile": 3,
+      "state": "CRACKING",
+      "damage": 0.020053448013437
+    },
+    {
+      "time": 0.17500000000000002,
+      "tile": 7,
+      "state": "CRACKING",
+      "damage": 0.020021478394522903
+    },
+    {
+      "time": 0.17925,
+      "tile": 5,
+      "state": "CRACKING",
+      "damage": 0.020007661290092713
+    },
+    {
+      "time": 0.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.46249999999999997,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.10001705998099375,
+      "load_N": 7.038333209646765,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.46249999999999997,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.10000022324768393,
+      "load_N": 7.039642384779443,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.46325,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.10000869104610154,
+      "load_N": 7.0384157289754725,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.46825,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.10007502180685397,
+      "load_N": 7.036651947626562,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.52,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.56,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.6,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.64,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.7000000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.78575,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.20007684811622553,
+      "load_N": 7.218390504044602,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.78575,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.20006786781887934,
+      "load_N": 7.218484531098699,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.7865,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.20006954564474086,
+      "load_N": 7.218394881609194,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.79125,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.2000488330171881,
+      "load_N": 7.218286139348969,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.8200000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.9400000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 0.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.02,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.06,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.1207500000000001,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.3000127218072588,
+      "load_N": 6.527998935217369,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 1.121,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.30003009496997474,
+      "load_N": 6.4854394226610985,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.12575,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.30002901821839495,
+      "load_N": 6.41433017987669,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.1362500000000002,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.30001522042256445,
+      "load_N": 6.192109030292582,
+      "owners": []
+    },
+    {
+      "time": 1.1400000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.3800000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.4000000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.4957500000000001,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.4000503359402393,
+      "load_N": 6.074463234945372,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.4972500000000002,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.4000460954077471,
+      "load_N": 6.147790115372891,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 1.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.5017500000000001,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.4000632124782316,
+      "load_N": 6.118859609486831,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.52,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.52025,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.4000639468012767,
+      "load_N": 6.0866309714730065,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.56,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.6,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.6400000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.6600000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.8800000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.89925,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 272.43336240886987,
+          "depth_m": 4.3013602663878115e-05
+        }
+      ]
+    },
+    {
+      "time": 1.9000000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.9122500000000002,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.5000088326297595,
+      "load_N": 5.972593836015664,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 1.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.02,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.06,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.2600000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.2800000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.3000000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.3165,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.6000386811408555,
+      "load_N": 5.978238447550425,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 2.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.3202499999999997,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 172.45534691104632,
+          "depth_m": 6.147941664338963e-05
+        }
+      ]
+    },
+    {
+      "time": 2.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.52,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.56,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.6,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.64,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.6694999999999998,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 161.82632742131977,
+          "depth_m": 5.303255956699901e-05
+        }
+      ]
+    },
+    {
+      "time": 2.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.71175,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.7000597777337416,
+      "load_N": 5.8564331856749545,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 2.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.7600000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.7800000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.8000000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 2.99625,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "cream",
+          "force_N": 132.89102736967664,
+          "depth_m": 2.3691261546795744e-05
+        }
+      ]
+    },
+    {
+      "time": 3.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.02,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.06,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.1062499999999997,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.8000354028075334,
+      "load_N": 5.774958718679321,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 3.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.0,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.009500000000000007,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.02675000000000002,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.04275000000000003,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.06175000000000005,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.07975000000000006,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.09400000000000007,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.2600000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.10650000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.2800000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.3000000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.3200000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.3475,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 157.9516537376502,
+          "depth_m": 2.6395232328319788e-05
+        }
+      ]
+    },
+    {
+      "time": 3.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.0
+      }
+    },
+    {
+      "time": 3.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.015000000000000012
+      }
+    },
+    {
+      "time": 3.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.030250000000000023
+      }
+    },
+    {
+      "time": 3.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.045750000000000034
+      }
+    },
+    {
+      "time": 3.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.06425000000000004
+      }
+    },
+    {
+      "time": 3.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.50725,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.9000471494880858,
+      "load_N": 5.525280542924726,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 3.52,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11125000000000008,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.56,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.11825000000000009,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.1342500000000001,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.6,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.1505000000000001,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.16700000000000012,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.64,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.18350000000000014,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.642,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 236.0774424358264,
+          "depth_m": 8.4018347240181e-05
+        }
+      ]
+    },
+    {
+      "time": 3.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.20075000000000015,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.21700000000000016,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.23600000000000018,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.25374999999999975,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.2732499999999976,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.7600000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.28924999999999584,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.7800000000000002,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.3022499999999944,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.8000000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.3159999999999929,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.8200000000000003,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.33274999999999105,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.3484999999999893,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.3669999999999873,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.3857499999999852,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.4014999999999835,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.906,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 1.0000582445709412,
+      "load_N": 5.91614467330427,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 3.906,
+      "tile": 5,
+      "state": "RELEASED",
+      "damage": 1.0000582445709412
+    },
+    {
+      "time": 3.91625,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 102.59370543494956,
+          "depth_m": 5.005676342476062e-05
+        }
+      ]
+    },
+    {
+      "time": 3.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.41999999999998144,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.92575,
+      "tile": 5,
+      "state": "FALLING",
+      "z": -0.027027658957639093,
+      "vz": -0.20732481304256417
+    },
+    {
+      "time": 3.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.43099999999998023,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.4459999999999786,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 3.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.46424999999997657,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.4819999999999746,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.0200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5009999999999726,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5202499999999705,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.0600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5394999999999683,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.06425,
+      "tile": 5,
+      "state": "LOST",
+      "z": -0.15000091743903368,
+      "vz": -1.566009813042553
+    },
+    {
+      "time": 4.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5582499999999663,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5732499999999646,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.5892499999999629,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6032499999999613,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6182499999999597,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6382499999999575,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.184,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 57.26322417104133,
+          "depth_m": 2.3316299365024345e-06
+        }
+      ]
+    },
+    {
+      "time": 4.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6579999999999553,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.0,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.011000000000000008,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.031000000000000024,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.048750000000000036,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.06375000000000004,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.467250000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 252.38391578280516,
+          "depth_m": 6.585596719572642e-05
+        }
+      ]
+    },
+    {
+      "time": 4.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.08250000000000006,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.48125,
+      "body_id": "graphite",
+      "state": "ELIMINATED",
+      "z": -0.6217990801872052,
+      "vz": -0.6713780873111452,
+      "supporting_tile_ids": [],
+      "contact_step": 17924
+    },
+    {
+      "time": 4.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.10075000000000008,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.5200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.11425000000000009,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.1330000000000001,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.5600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.1497500000000001,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.16875000000000012,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.6000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.18800000000000014,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.20800000000000016,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.64,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.22500000000000017,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.2450000000000002,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.2617499999999989,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.2812499999999967,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.29824999999999485,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.724,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "cream",
+          "force_N": 1.8185149132919918,
+          "depth_m": 3.0340192941557304e-07
+        }
+      ]
+    },
+    {
+      "time": 4.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.31824999999999265,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.33824999999999045,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.35724999999998835,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.37199999999998673,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.38549999999998524,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.4004999999999836,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.41549999999998194,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.43274999999998004,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.44549999999997864,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.46274999999997674,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.47999999999997484,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.49799999999997285,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 4.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.5179999999999707,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.5379999999999685,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.0200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.5539999999999667,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.03925,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 73.52027207369484,
+          "depth_m": 4.527509925276785e-05
+        }
+      ]
+    },
+    {
+      "time": 5.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.5707499999999649,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.0600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.5897499999999628,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6084999999999607,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.1000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6277499999999586,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6469999999999565,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6659999999999544,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.338,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 58.16877679298328,
+          "depth_m": 2.267806201591404e-05
+        }
+      ]
+    },
+    {
+      "time": 5.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6682499999999542,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.6842499999999524,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7037499999999502,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7182499999999487,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.5200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.5600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.6000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.6240000000000006,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 140.70013668548472,
+          "depth_m": 4.7561997463025575e-05
+        }
+      ]
+    },
+    {
+      "time": 5.64,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7224999999999482,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7349999999999468,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7544999999999447,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7689999999999431,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.7867499999999411,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.8049999999999391,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.8249999999999369,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.842249999999935,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.875,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "cream",
+          "force_N": 1.3616053427869743,
+          "depth_m": 5.005084663649989e-08
+        }
+      ]
+    },
+    {
+      "time": 5.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.8592499999999331,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.8777499999999311,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.896249999999929,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9112499999999274,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9259999999999258,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 5.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9337499999999249,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.0200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.0600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.1000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9367499999999246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.131500000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 101.002677215028,
+          "depth_m": 2.4186573725333595e-06
+        }
+      ]
+    },
+    {
+      "time": 6.140000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9484999999999233,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9617499999999218,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.97849999999992,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 0.9927499999999184,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0067499999999199,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0184999999999238,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0297499999999276,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0479999999999337,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0679999999999403,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.0874999999999468,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.1044999999999525,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.1232499999999588,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.1367499999999633,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.1529999999999687,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.1669999999999734,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.18699999999998,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2067499999999867,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2264999999999933,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2387499999999974,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.5200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2550000000000028,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.5235,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 72.0364187926024,
+          "depth_m": 1.6660336697392128e-05
+        }
+      ]
+    },
+    {
+      "time": 6.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2712500000000082,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.5600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.2880000000000138,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.3045000000000193,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.6000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.3227500000000254,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.3415000000000317,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.640000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.3565000000000367,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.3712500000000416,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.384750000000046,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.776750000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 78.63660786885457,
+          "depth_m": 1.96088983934143e-05
+        }
+      ]
+    },
+    {
+      "time": 6.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 6.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.0200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.031250000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 19.016665916641045,
+          "depth_m": 1.2853175213392576e-06
+        }
+      ]
+    },
+    {
+      "time": 7.04,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.0600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.1000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.12,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.140000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.393500000000049,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.4132500000000556,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.4275000000000604,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.444000000000066,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.4607500000000715,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.4797500000000778,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.283250000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "cream",
+          "force_N": 1.7641353114846885,
+          "depth_m": 2.4666022045011227e-07
+        }
+      ]
+    },
+    {
+      "time": 7.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.4987500000000842,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.303000000000001,
+      "state": "TERMINAL",
+      "status": "WINNER",
+      "winner": "lavender",
+      "alive": [
+        "sky",
+        "lavender",
+        "cream"
+      ],
+      "rule": "CrownRace",
+      "required_loaded_crown_s": 1.5,
+      "loaded_crown_scores_s": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.5000000000000846,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.32,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.513500000000089,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.34,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.5322500000000954,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.36,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.5510000000001016,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.38,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.570000000000108,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.4,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.5897500000001146,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.42,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.60625000000012,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.44,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.624000000000126,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.46,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.627000000000127,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.48,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.627000000000127,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.5,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.627000000000127,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.5200000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.627000000000127,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.54,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.627000000000127,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.5600000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.6370000000001304,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.56575,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 67.59184338802189,
+          "depth_m": 9.447502579599133e-06
+        }
+      ]
+    },
+    {
+      "time": 7.58,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.6550000000001364,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.6000000000000005,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.672000000000142,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.62,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.6910000000001484,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.640000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.7092500000001545,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.66,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.728750000000161,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.68,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.7482500000001675,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.7,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.7682500000001742,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.72,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.7882500000001809,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.74,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.8082500000001875,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.76,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.8282500000001942,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.78,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.848250000000201,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.8,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.8682500000002076,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.82,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.8882500000002143,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.82375,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 1.8312017131156448,
+          "depth_m": 7.048851342979258e-07
+        }
+      ]
+    },
+    {
+      "time": 7.84,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.908250000000221,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.86,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.9282500000002276,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.88,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.9482500000002343,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.9,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.968250000000241,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.92,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 1.9882500000002477,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.94,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.008250000000247,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.96,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.0282500000002357,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 7.98,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.0482500000002246,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.0,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.0682500000002135,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.02,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.0882500000002024,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.040000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.1082500000001914,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.06,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.1282500000001803,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.07375,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "lavender",
+          "force_N": 0.4469356325592305,
+          "depth_m": 3.806359055053621e-08
+        }
+      ]
+    },
+    {
+      "time": 8.08,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.148250000000169,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.1,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.168250000000158,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.120000000000001,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.188250000000147,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.14,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.208250000000136,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.16,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.228250000000125,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.18,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.2482500000001138,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.2,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.2682500000001027,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.22,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.2882500000000916,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.24,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.3082500000000805,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.26,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.3282500000000694,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.28,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.3482500000000583,
+        "cream": 0.08225000000000006
+      }
+    },
+    {
+      "time": 8.3,
+      "state": "SCOREBOARD",
+      "scores": {
+        "sky": 0.6722499999999537,
+        "graphite": 0.0,
+        "lavender": 2.3682500000000473,
+        "cream": 0.08225000000000006
+      }
+    }
+  ],
+  "damage": {
+    "0": 0.0,
+    "1": 0.4964327458182162,
+    "2": 0.0,
+    "3": 0.48107364330521796,
+    "4": 0.0,
+    "5": 1.0000582445709412,
+    "6": 0.0,
+    "7": 0.49282151400178326,
+    "8": 0.0
+  },
+  "body_weight_N": {
+    "sky": 7.232355595800001,
+    "graphite": 7.232355595800001,
+    "lavender": 7.232355595800001,
+    "cream": 7.232355595800001
+  },
+  "body_contact_steps": 3233,
+  "penetration_max_m": 0.0009152597821697854,
+  "motor_force_max_Nm": 0.6405,
+  "finite": true,
+  "time_reset": false,
+  "external_forces_zero": true,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "final_state_sha256": "0254f0534b17e6e94715329db28086503418a00e8b4258b5cba7530a9652a6f7",
+  "stationary_fraction": 0.34975961538461536,
+  "no_safe_option_fraction": 0.0,
+  "roles": {
+    "sky": "rusher",
+    "graphite": "survivor",
+    "lavender": "blocker",
+    "cream": "rusher"
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/island_rumble.py": "0e15ba7408e9872921d23e325ff9bc9bd28abc34a79c7e698dd6732224911bec",
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "performance": {
+    "real_time_factor": 1.1286535671536595
+  },
+  "hashes": {
+    "decisions.jsonl.gz": "22a542e4c4b471bcd41eea89fd33d40e45bea10baf4ffd676f8b701058a35534"
+  }
+}

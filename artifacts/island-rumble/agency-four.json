@@ -1,0 +1,88 @@
+{
+  "seed": 44016,
+  "parameters_same_except_passive": true,
+  "active": {
+    "outcome": {
+      "status": "WINNER",
+      "winner": "lavender",
+      "alive": [
+        "lavender",
+        "sky",
+        "graphite"
+      ],
+      "rule": "CrownRace",
+      "required_loaded_crown_s": 1.5,
+      "loaded_crown_scores_s": {
+        "lavender": 1.5000000000000846,
+        "cream": 0.0,
+        "sky": 1.3050000000000195,
+        "graphite": 0.26199999999999884
+      }
+    },
+    "release_events": [
+      {
+        "time": 3.88625,
+        "tile": 5,
+        "state": "RELEASED",
+        "damage": 1.0000521470528139
+      }
+    ],
+    "damage": {
+      "0": 0.0,
+      "1": 0.4852696212639439,
+      "2": 0.0,
+      "3": 0.48758877951699975,
+      "4": 0.0,
+      "5": 1.0000521470528139,
+      "6": 0.0,
+      "7": 0.49128777153390535,
+      "8": 0.0
+    }
+  },
+  "passive": {
+    "outcome": {
+      "status": "DRAW",
+      "winner": null,
+      "alive": [],
+      "rule": "LastSupportedSurvivor"
+    },
+    "release_events": [
+      {
+        "time": 3.3435,
+        "tile": 3,
+        "state": "RELEASED",
+        "damage": 1.000069953860598
+      },
+      {
+        "time": 3.34525,
+        "tile": 1,
+        "state": "RELEASED",
+        "damage": 1.0000225486317502
+      },
+      {
+        "time": 3.34775,
+        "tile": 7,
+        "state": "RELEASED",
+        "damage": 1.0000147773515424
+      },
+      {
+        "time": 3.34875,
+        "tile": 5,
+        "state": "RELEASED",
+        "damage": 1.0000571527957611
+      }
+    ],
+    "damage": {
+      "0": 0.0,
+      "1": 1.0000225486317502,
+      "2": 0.0,
+      "3": 1.000069953860598,
+      "4": 0.0,
+      "5": 1.0000571527957611,
+      "6": 0.0,
+      "7": 1.0000147773515424,
+      "8": 0.0
+    }
+  },
+  "interpretation": "Actual movement changes the damaged tiles and release times: active 1 released tile, passive 4. This establishes contact-driven world agency, not successful tactical blocking."
+}

@@ -164,3 +164,45 @@ def test_crown_microgap_filter_does_not_accept_jumps_or_contested_airborne_rival
     observations["b"] = dict(x=0.05, y=0, z=0.15, upright=True, supporting_tiles=[])
     assert rule.update(3.5, observations, {}) is None
     assert rule.candidate is None
+
+
+def test_crown_race_scores_measured_support_only_and_preserves_contested_points():
+    from microduck_lab.arena.island_rumble import CrownRace
+
+    cfg = RumbleConfig(
+        final_at_s=0, claim_s=0.5, claim_radius_m=0.08, score_mode="cumulative"
+    )
+    rule = CrownRace(cfg, ["a", "b"])
+    obs = {
+        "a": dict(x=0.01, y=0, z=0.12, upright=True, supporting_tiles=[4]),
+        "b": dict(x=0.12, y=0, z=0.12, upright=True, supporting_tiles=[4]),
+    }
+    for i in range(1000):
+        assert rule.update((i + 1) * cfg.dt, obs, {}) is None
+    assert rule.scores["a"] == pytest.approx(0.25)
+    obs["b"]["x"] = 0.03
+    for i in range(1000):
+        assert rule.update(0.25 + (i + 1) * cfg.dt, obs, {}) is None
+    assert rule.scores["a"] == pytest.approx(0.25) and rule.scores["b"] == 0
+    obs["b"]["x"] = 0.12
+    obs["a"]["supporting_tiles"] = []
+    for i in range(1000):
+        assert rule.update(0.5 + (i + 1) * cfg.dt, obs, {}) is None
+    assert rule.scores["a"] == pytest.approx(0.25)
+    obs["a"]["supporting_tiles"] = [4]
+    result = None
+    for i in range(1000):
+        result = rule.update(0.75 + (i + 1) * cfg.dt, obs, {})
+    assert result["winner"] == "a" and result["rule"] == "CrownRace"
+    assert result["loaded_crown_scores_s"]["a"] == pytest.approx(0.5)
+
+
+def test_sources_changed_after_import_are_rejected_before_start(tmp_path, monkeypatch):
+    from microduck_lab.arena import island_rumble
+
+    monkeypatch.setattr(
+        island_rumble, "_actor_source_hashes", lambda: {"tampered": True}
+    )
+    with pytest.raises(RuntimeError, match="restart the worker"):
+        island_rumble.run_rumble(tmp_path / "should-not-exist")
+    assert not (tmp_path / "should-not-exist").exists()

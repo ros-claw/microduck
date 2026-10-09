@@ -1,0 +1,1167 @@
+{
+  "schema": "microduck.island-rumble.prototype.v1",
+  "seed": 43000,
+  "config": {
+    "players": 4,
+    "grid": 3,
+    "tile_size": 0.36,
+    "gap": 0.008,
+    "dt": 0.00025,
+    "layout": "square",
+    "cadence": "steady",
+    "duration": 20.0,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd",
+    "lifetime_s": 3.2,
+    "filter_s": 0.12,
+    "final_at_s": 2.0,
+    "claim_s": 0.5,
+    "passive": false,
+    "claim_radius_m": 0.08
+  },
+  "capture": false,
+  "steps": 80000,
+  "duration": 20.0,
+  "mujoco_version": "3.12.0",
+  "spawns": {
+    "lavender": {
+      "tile": 1,
+      "yaw": -0.0
+    },
+    "cream": {
+      "tile": 5,
+      "yaw": -1.5707963267948966
+    },
+    "sky": {
+      "tile": 7,
+      "yaw": -3.141592653589793
+    },
+    "graphite": {
+      "tile": 3,
+      "yaw": 1.5707963267948966
+    }
+  },
+  "outcome": {
+    "status": "TIME_LIMIT",
+    "winner": null,
+    "alive": [
+      "lavender",
+      "sky",
+      "graphite"
+    ],
+    "rule": "CrownClaim"
+  },
+  "events": [
+    {
+      "time": 0.02275,
+      "tile": 7,
+      "state": "LOADED",
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.023,
+      "tile": 5,
+      "state": "LOADED",
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.0235,
+      "tile": 1,
+      "state": "LOADED",
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.0235,
+      "tile": 3,
+      "state": "LOADED",
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.17300000000000001,
+      "tile": 7,
+      "state": "CRACKING",
+      "damage": 0.020048617308588992
+    },
+    {
+      "time": 0.17325000000000002,
+      "tile": 3,
+      "state": "CRACKING",
+      "damage": 0.020046892140818135
+    },
+    {
+      "time": 0.17675,
+      "tile": 5,
+      "state": "CRACKING",
+      "damage": 0.020024923952014585
+    },
+    {
+      "time": 0.177,
+      "tile": 1,
+      "state": "CRACKING",
+      "damage": 0.020032104126381418
+    },
+    {
+      "time": 0.46099999999999997,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.10005802196932244,
+      "load_N": 7.040086554964062,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.46125,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.10002685334763797,
+      "load_N": 7.039552508023303,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.46525,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.10001914466636339,
+      "load_N": 7.03748944301921,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.46549999999999997,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.10004467329607775,
+      "load_N": 7.037543939426571,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.784,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.20004984695266576,
+      "load_N": 7.218539818359444,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.78425,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.20001658741014333,
+      "load_N": 7.218480751001475,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.7885,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.20002129465339924,
+      "load_N": 7.218320454590388,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.7885,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.20007502068878164,
+      "load_N": 7.21834782596164,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.11725,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.3000663225186089,
+      "load_N": 6.445940216202206,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 1.11775,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.30002190504656945,
+      "load_N": 6.51234708123623,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.1242500000000002,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.3000198556230628,
+      "load_N": 6.480280586589072,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.1300000000000001,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.30006549000119837,
+      "load_N": 6.292568682557377,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.4920000000000002,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.4000283709602684,
+      "load_N": 6.050420961818961,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.49475,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.4000250183678668,
+      "load_N": 6.119823261153979,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 1.4985000000000002,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.4000500254372852,
+      "load_N": 6.10885372810982,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.5212500000000002,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.40003246396071623,
+      "load_N": 6.019136584620762,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.8965,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 251.77914297614967,
+          "depth_m": 3.821735947170665e-05
+        }
+      ]
+    },
+    {
+      "time": 1.91575,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.5000110647908301,
+      "load_N": 5.870028917367452,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.30675,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 148.95192342298753,
+          "depth_m": 3.650555478424723e-05
+        }
+      ]
+    },
+    {
+      "time": 2.3205,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.6000419823349138,
+      "load_N": 5.880003920956641,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.62175,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 162.9627214131516,
+          "depth_m": 5.936452153140626e-05
+        }
+      ]
+    },
+    {
+      "time": 2.7145,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.7000217268987085,
+      "load_N": 5.899472770658192,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.943,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 122.97776139256241,
+          "depth_m": 5.146966735193777e-06
+        }
+      ]
+    },
+    {
+      "time": 3.118,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.8000250577589806,
+      "load_N": 5.850396053856504,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 3.339,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 40.03453185110284,
+          "depth_m": 1.211945227599225e-05
+        }
+      ]
+    },
+    {
+      "time": 3.516,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.9000012076465697,
+      "load_N": 5.542629095610745,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 3.697,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 72.92080327581883,
+          "depth_m": 4.43126157843941e-06
+        }
+      ]
+    },
+    {
+      "time": 3.903,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 1.0000488296609726,
+      "load_N": 5.9559353667077355,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 3.903,
+      "tile": 5,
+      "state": "RELEASED",
+      "damage": 1.0000488296609726
+    },
+    {
+      "time": 3.92325,
+      "tile": 5,
+      "state": "FALLING",
+      "z": -0.027045474877887044,
+      "vz": -0.19867515774550065
+    },
+    {
+      "time": 4.062,
+      "tile": 5,
+      "state": "LOST",
+      "z": -0.15036585193201726,
+      "vz": -1.569339607575942
+    },
+    {
+      "time": 4.0815,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 149.92762176005564,
+          "depth_m": 4.233955831537545e-05
+        }
+      ]
+    },
+    {
+      "time": 4.4037500000000005,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 112.2867986138866,
+          "depth_m": 8.033106317657107e-07
+        }
+      ]
+    },
+    {
+      "time": 4.45,
+      "body_id": "cream",
+      "state": "ELIMINATED",
+      "z": -0.6985272094481701,
+      "vz": -0.9257757525203295,
+      "supporting_tile_ids": [],
+      "contact_step": 17799
+    },
+    {
+      "time": 4.706250000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 132.81334168268393,
+          "depth_m": 2.2513646991433928e-05
+        }
+      ]
+    },
+    {
+      "time": 4.997750000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 39.297676701959176,
+          "depth_m": 1.133584379124474e-06
+        }
+      ]
+    },
+    {
+      "time": 5.2540000000000004,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 22.85436031372094,
+          "depth_m": 2.0938589476236155e-06
+        }
+      ]
+    },
+    {
+      "time": 5.5135000000000005,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 98.18830629352593,
+          "depth_m": 8.84760998550599e-06
+        }
+      ]
+    },
+    {
+      "time": 5.804,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 58.66396188579787,
+          "depth_m": 1.0230044898675374e-05
+        }
+      ]
+    },
+    {
+      "time": 6.0715,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 131.81390545890628,
+          "depth_m": 4.7839514236195334e-05
+        }
+      ]
+    },
+    {
+      "time": 6.34975,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 29.581532021265836,
+          "depth_m": 7.401735556353435e-06
+        }
+      ]
+    },
+    {
+      "time": 6.714,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 73.31331965199406,
+          "depth_m": 2.473530025078442e-05
+        }
+      ]
+    },
+    {
+      "time": 6.99275,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 63.20892673616092,
+          "depth_m": 1.0574059113623458e-05
+        }
+      ]
+    },
+    {
+      "time": 7.280500000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 137.2048131315338,
+          "depth_m": 3.997738776742385e-05
+        }
+      ]
+    },
+    {
+      "time": 7.53075,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 19.00310290571978,
+          "depth_m": 4.033509530233575e-06
+        }
+      ]
+    },
+    {
+      "time": 7.808750000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 61.85391914936639,
+          "depth_m": 6.179094597188626e-06
+        }
+      ]
+    },
+    {
+      "time": 8.06025,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 21.14726470869718,
+          "depth_m": 6.39224764581274e-07
+        }
+      ]
+    },
+    {
+      "time": 8.33075,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 30.65668041540341,
+          "depth_m": 8.977375215268868e-06
+        }
+      ]
+    },
+    {
+      "time": 8.5825,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 24.785808804550246,
+          "depth_m": 4.020077901122922e-06
+        }
+      ]
+    },
+    {
+      "time": 8.836,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 12.478264679392893,
+          "depth_m": 9.645314870600913e-07
+        }
+      ]
+    },
+    {
+      "time": 9.087,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 30.861388113577448,
+          "depth_m": 6.67317766367077e-07
+        }
+      ]
+    },
+    {
+      "time": 9.35825,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 16.8918361415886,
+          "depth_m": 4.7467760651823305e-06
+        }
+      ]
+    },
+    {
+      "time": 9.71375,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 84.11344668229592,
+          "depth_m": 3.3373116769674395e-05
+        }
+      ]
+    },
+    {
+      "time": 9.97175,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 58.990457823954245,
+          "depth_m": 2.0941146753156548e-05
+        }
+      ]
+    },
+    {
+      "time": 10.234,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 142.85395723567757,
+          "depth_m": 9.662982030695169e-06
+        }
+      ]
+    },
+    {
+      "time": 10.52975,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 185.02158201998014,
+          "depth_m": 1.852688226223675e-05
+        }
+      ]
+    },
+    {
+      "time": 10.8125,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 122.05229056817875,
+          "depth_m": 4.658928163477419e-05
+        }
+      ]
+    },
+    {
+      "time": 11.0625,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 1.0964219520909042,
+          "depth_m": 4.2783313077172924e-08
+        }
+      ]
+    },
+    {
+      "time": 11.3185,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 112.74655863394648,
+          "depth_m": 1.5545272811816162e-05
+        }
+      ]
+    },
+    {
+      "time": 11.57175,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 78.23332799259533,
+          "depth_m": 1.1711836004599935e-05
+        }
+      ]
+    },
+    {
+      "time": 11.854,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 42.75281797458499,
+          "depth_m": 6.3521294908679485e-06
+        }
+      ]
+    },
+    {
+      "time": 12.11075,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 100.25025946166733,
+          "depth_m": 5.100629122252642e-06
+        }
+      ]
+    },
+    {
+      "time": 12.507249999999999,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 39.21081428355218,
+          "depth_m": 1.3903526760004159e-05
+        }
+      ]
+    },
+    {
+      "time": 12.76975,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 24.56538243587221,
+          "depth_m": 1.8971600025378264e-07
+        }
+      ]
+    },
+    {
+      "time": 13.033999999999999,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 51.29442200354843,
+          "depth_m": 2.0676734576176e-06
+        }
+      ]
+    },
+    {
+      "time": 13.304,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 78.50061915146506,
+          "depth_m": 2.2139018683245068e-05
+        }
+      ]
+    },
+    {
+      "time": 13.55525,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 44.294912864625715,
+          "depth_m": 5.899499700684442e-06
+        }
+      ]
+    },
+    {
+      "time": 13.8375,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 134.83378225902874,
+          "depth_m": 1.6075454041987447e-05
+        }
+      ]
+    },
+    {
+      "time": 14.115,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 56.513136548968276,
+          "depth_m": 1.792237254262183e-05
+        }
+      ]
+    },
+    {
+      "time": 14.37175,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 13.657934802046913,
+          "depth_m": 3.5750392015660576e-06
+        }
+      ]
+    },
+    {
+      "time": 14.63525,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 15.134503399086766,
+          "depth_m": 7.912033027277915e-07
+        }
+      ]
+    },
+    {
+      "time": 14.9365,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 39.926992592954974,
+          "depth_m": 1.8836277427232307e-05
+        }
+      ]
+    },
+    {
+      "time": 15.284749999999999,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 90.17769876526457,
+          "depth_m": 4.806378512164416e-05
+        }
+      ]
+    },
+    {
+      "time": 15.6195,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 38.54728216449853,
+          "depth_m": 9.53380749507636e-06
+        }
+      ]
+    },
+    {
+      "time": 16.01125,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 56.171272448121286,
+          "depth_m": 2.720329847502239e-05
+        }
+      ]
+    },
+    {
+      "time": 16.3305,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 37.84697664399413,
+          "depth_m": 2.8856270205400824e-07
+        }
+      ]
+    },
+    {
+      "time": 16.6995,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 39.367195007460474,
+          "depth_m": 4.633630370398551e-06
+        }
+      ]
+    },
+    {
+      "time": 17.0305,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 52.029957351893664,
+          "depth_m": 1.5169761669332846e-05
+        }
+      ]
+    },
+    {
+      "time": 17.308500000000002,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 27.7495508191674,
+          "depth_m": 4.512420272444607e-06
+        }
+      ]
+    },
+    {
+      "time": 17.575750000000003,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 26.104099812881945,
+          "depth_m": 1.6627263235206644e-05
+        }
+      ]
+    },
+    {
+      "time": 17.829250000000002,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 32.32072646181301,
+          "depth_m": 9.513960554961914e-06
+        }
+      ]
+    },
+    {
+      "time": 18.081750000000003,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 92.03098273042862,
+          "depth_m": 3.266044805003444e-05
+        }
+      ]
+    },
+    {
+      "time": 18.337500000000002,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 22.47109790898637,
+          "depth_m": 7.0418362648247055e-09
+        }
+      ]
+    },
+    {
+      "time": 18.592750000000002,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 13.634158911175996,
+          "depth_m": 8.500323987517788e-07
+        }
+      ]
+    },
+    {
+      "time": 18.9145,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 175.91468652621273,
+          "depth_m": 9.932399685774383e-06
+        }
+      ]
+    },
+    {
+      "time": 19.202,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "graphite",
+          "force_N": 186.97150267630374,
+          "depth_m": 6.64579002323321e-05
+        }
+      ]
+    },
+    {
+      "time": 19.453000000000003,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 1.9970683290633495,
+          "depth_m": 3.275859933576236e-07
+        }
+      ]
+    },
+    {
+      "time": 19.703000000000003,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "sky",
+          "force_N": 3.2350209672778076,
+          "depth_m": 4.2892490325160516e-07
+        }
+      ]
+    }
+  ],
+  "damage": {
+    "0": 0.0,
+    "1": 0.4813141633543154,
+    "2": 0.0,
+    "3": 0.48686548343620434,
+    "4": 0.0,
+    "5": 1.0000488296609726,
+    "6": 0.0,
+    "7": 0.4982097033911383,
+    "8": 0.0
+  },
+  "body_weight_N": {
+    "lavender": 7.232355595800001,
+    "cream": 7.232355595800001,
+    "sky": 7.232355595800001,
+    "graphite": 7.232355595800001
+  },
+  "body_contact_steps": 3282,
+  "penetration_max_m": 0.0009353125883456758,
+  "motor_force_max_Nm": 0.6405,
+  "finite": true,
+  "time_reset": false,
+  "external_forces_zero": true,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "final_state_sha256": "9956d1d1c253635550c21462c2da79bce2317c8183a063ac2ec349d6c1d1581a",
+  "stationary_fraction": 0.35925,
+  "no_safe_option_fraction": 0.0,
+  "roles": {
+    "lavender": "rusher",
+    "cream": "survivor",
+    "sky": "blocker",
+    "graphite": "rusher"
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/island_rumble.py": "4c0210b3a9f2bfbd925caebb3622e4378e1a549a110a634b0109a300246ac564",
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "performance": {
+    "real_time_factor": 1.0843247405429217
+  },
+  "hashes": {
+    "decisions.jsonl.gz": "e36a3d0b3db350da72521ceecee8ab222fca127ad85996699871bad17050fa06"
+  }
+}

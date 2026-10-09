@@ -8,6 +8,18 @@
 
 点击预览观看或下载视频。同一 Demo 的不同剪辑放在一起，旧版本单独归档。
 
+### 四鸭抢岛 · 踩踏改变场地的玩法原型
+
+[![四鸭抢岛](docs/media/island-rumble.jpg)](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4)
+
+真实脚底承重累积损伤，地板解除约束后受重力下坠；四只带固定颜色标记和名字的鸭子争夺公开白圈，只有独占、直立且脚底承重时才计分，先积满 1.5 秒获胜。**CrownRace 是公开的抢点积分新规则，不冒充原来的最后幸存者判定。** 保留模型原有材质。
+
+[24 秒英文特写与慢动作](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4) · [24 秒英文竖屏](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-vertical-en.mp4) · [16 秒两鸭九板灰盒](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-two-en.mp4) · [12 秒完整连续参考](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-reference-raw.mp4)
+
+冻结的 3×3 场地上，**32/32 新种子产生冠军并通过物理质量检查，最大接触穿透 1.678mm**；首次身体碰撞约 1.86–1.98 秒，首次淘汰约 4.41–4.63 秒。选中双鸭/四鸭比赛可精确重放。复用已有 ONNX 技能与确定性战术，不宣称新训练、真机验证、独立观众盲测或新模式的 ROSClaw 原生回执。
+
+[方法、失败规则与复现](docs/island-rumble/README.zh-CN.md) · [English methods](docs/island-rumble/README.md) · [完整检查](artifacts/island-rumble/qa-summary.json)
+
 ### 最后一块地板 · 四鸭同场淘汰赛
 
 [![最后一块地板](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
@@ -79,7 +91,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-game-2026-10-08-r1
+git checkout island-rumble-prototype-2026-10-09
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

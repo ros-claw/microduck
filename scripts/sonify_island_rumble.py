@@ -23,6 +23,7 @@ audit = json.loads((run / "audit.json").read_text())
 with gzip.open(video.with_suffix(".frames.jsonl.gz"), "rt") as f:
     frames = [json.loads(line) for line in f]
 times = np.array([r["sim_time_s"] for r in frames])
+bounds = [0, *list(np.flatnonzero(np.diff(times) < 0) + 1), len(times)]
 rate = 48000
 samples = np.zeros(round(len(frames) / 50 * rate) + rate, dtype=np.float64)
 rng = np.random.default_rng(20261009)
@@ -43,10 +44,17 @@ for e in audit["events"]:
     if e["time"] - last.get(key, -100) < 0.25:
         continue
     last[key] = e["time"]
-    index = int(np.searchsorted(times, e["time"]))
-    if index >= len(times):
+    occurrences = []
+    for lo, hi in zip(bounds[:-1], bounds[1:]):
+        segment_times = times[lo:hi]
+        if (
+            not len(segment_times)
+            or not segment_times[0] <= e["time"] <= segment_times[-1]
+        ):
+            continue
+        occurrences.append(lo + int(np.searchsorted(segment_times, e["time"])))
+    if not occurrences:
         continue
-    when = index / 50
     duration = {
         "LOADED": 0.05,
         "CRACKING": 0.16,
@@ -80,11 +88,13 @@ for e in audit["events"]:
             * np.exp(-t * (70 if kind == "LOADED" else 35))
             * (0.05 if kind == "LOADED" else 0.10)
         )
-    start = round(when * rate)
-    samples[start : start + len(signal)] += signal
-    cues.append(
-        dict(kind=kind, sim_time_s=e["time"], video_time_s=when, synthesized=True)
-    )
+    for index in occurrences:
+        when = index / 50
+        start = round(when * rate)
+        samples[start : start + len(signal)] += signal
+        cues.append(
+            dict(kind=kind, sim_time_s=e["time"], video_time_s=when, synthesized=True)
+        )
 samples = np.clip(samples[: round(len(frames) / 50 * rate)], -0.85, 0.85)
 wav = out.with_suffix(".wav")
 with wave.open(str(wav), "wb") as f:

@@ -30,3 +30,7 @@
 - [Physical fidelity audit / 穿模与碰撞范围复核](PHYSICAL_FIDELITY_AUDIT.md)
 
 - [Neon Escape / Jev 物理游戏原型与复现实验](NEON_ESCAPE.md)
+
+## Island Rumble / 四鸭抢岛（玩法原型）
+
+[English method](island-rumble/README.md) · [中文方法](island-rumble/README.zh-CN.md) · [Qualification](../artifacts/island-rumble/qa-summary.json)

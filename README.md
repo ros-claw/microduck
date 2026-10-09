@@ -8,6 +8,18 @@ A series of reproducible robot games in **MuJoCo simulation**: contact-aware rop
 
 Click each preview to watch or download its video. Cuts of one demo are grouped together; old versions are archived below.
 
+### Island Rumble — contact-driven gameplay prototype
+
+[![Island Rumble](docs/media/island-rumble.jpg)](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4)
+
+Actual loaded feet damage tiles; gravity drops them after their welds release. Four named, colour-marked ducks contest a public crown circle: only exclusive, upright, loaded control earns points; first to accumulate 1.5 seconds wins. **CrownRace is an explicit capture-point ruleset, not the archived last-survivor rule.** Original robot materials are retained.
+
+[24 s English close-ups & slow motion](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4) · [24 s vertical](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-vertical-en.mp4) · [16 s two-duck greybox](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-two-en.mp4) · [12 s uninterrupted reference](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-reference-raw.mp4)
+
+Frozen 3x3 arena: **32/32 new seeds produce champions and pass physical quality; maximum contact penetration 1.678mm**. First body contacts occur at 1.86–1.98s, first eliminations at 4.41–4.63s. The selected two/four matches regenerate exactly. This prototype uses existing ONNX motor skills and deterministic tactics; no new training, hardware validation, independent viewer panel or new-mode native ROSClaw receipt is claimed.
+
+[Method, failed rules & reproduction](docs/island-rumble/README.md) · [完整中文说明](docs/island-rumble/README.zh-CN.md) · [Qualification](artifacts/island-rumble/qa-summary.json)
+
 ### Last Duck Standing — shared-world elimination game
 
 [![Last Duck Standing](docs/media/duckverse-game.jpg)](https://github.com/ros-claw/microduck/releases/download/duckverse-game-2026-10-08/duckverse_game_en.mp4)
@@ -79,7 +91,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-game-2026-10-08-r1
+git checkout island-rumble-prototype-2026-10-09
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
