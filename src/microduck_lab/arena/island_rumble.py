@@ -178,7 +178,13 @@ class Tactician:
             destination = goal
         else:
             # Before Final Island: explore a loaded neighbour rather than waiting.
-            candidates = [i for i in safe if i != goal and i != anchor and route(i)]
+            candidates = [
+                i
+                for i in safe
+                if (i != goal or (obs.get("crown_mode") and self.role != "survivor"))
+                and i != anchor
+                and route(i)
+            ]
             if not candidates:
                 destination = goal
             else:
@@ -199,6 +205,13 @@ class Tactician:
                     radial = np.linalg.norm(c)
                     return (
                         len(route(i))
+                        - (
+                            3.0
+                            if obs.get("crown_mode")
+                            and i == goal
+                            and self.role == "rusher"
+                            else 0
+                        )
                         + ts[i]["damage"] * 2
                         + (3 * crowd if self.role == "survivor" else -crowd)
                         + (radial if self.role == "rusher" else 0)
@@ -216,7 +229,10 @@ class Tactician:
             return "stand", (0, 0, 0), "NO_SAFE_OPTION"
         delta = np.array(ts[self.target]["centre_xy"]) - pos
         dist = float(np.linalg.norm(delta))
-        if dist < 0.035 and current == self.target:
+        if (
+            dist < (obs["claim_radius_m"] - 0.005 if obs.get("crown_mode") else 0.035)
+            and current == self.target
+        ):
             arrived = self.target
             if arrived == goal and obs["final_active"]:
                 return "stand", (0, 0, 0), "CLAIM_ISLAND"
@@ -276,6 +292,82 @@ class IslandClaim:
         return None
 
 
+class CrownClaim:
+    """Public centre zone; stable loaded occupancy tolerates <=10 ms micro-gaps.
+
+    At least 90% of the continuous upright 1.5s hold must have actual loaded feet.
+    Walking micro-contact interruptions are not equivalent to a visible jump.
+    A rival inside the zone contests it even when momentarily airborne.
+    """
+
+    max_gap_s = 0.01
+    min_support_fraction = 0.90
+
+    def __init__(self, config):
+        self.config = config
+        self.reset()
+
+    def reset(self):
+        self.candidate = None
+        self.since = self.last_time = self.last_loaded = None
+        self.loaded_s = self.max_gap = 0.0
+
+    def update(self, now, observations, eliminated):
+        centre = self.config.centre(self.config.island)
+        occupants = [
+            n
+            for n, o in observations.items()
+            if n not in eliminated
+            and o.get("z", 0.12) >= -0.12
+            and math.hypot(o["x"] - centre[0], o["y"] - centre[1])
+            <= self.config.claim_radius_m
+        ]
+        if (
+            now < self.config.final_at_s
+            or len(occupants) != 1
+            or not observations[occupants[0]]["upright"]
+        ):
+            self.reset()
+            return None
+        n = occupants[0]
+        loaded = self.config.island in observations[n]["supporting_tiles"]
+        if n != self.candidate:
+            self.reset()
+            if not loaded:
+                return None
+            self.candidate = n
+            self.since = self.last_time = self.last_loaded = now
+        elapsed = now - self.last_time
+        self.last_time = now
+        if loaded:
+            self.loaded_s += elapsed
+            self.last_loaded = now
+        gap = now - self.last_loaded
+        self.max_gap = max(self.max_gap, gap)
+        if gap > self.max_gap_s + 1e-9:
+            self.reset()
+            return None
+        duration = now - self.since
+        fraction = self.loaded_s / duration if duration else 1.0
+        if (
+            loaded
+            and duration + 1e-9 >= self.config.claim_s
+            and fraction >= self.min_support_fraction
+        ):
+            return dict(
+                status="WINNER",
+                winner=n,
+                alive=[k for k in observations if k not in eliminated],
+                rule="CrownClaim",
+                exclusive_zone_hold_s=duration,
+                measured_loaded_fraction=fraction,
+                max_unsupported_gap_s=self.max_gap,
+                required_loaded_fraction=self.min_support_fraction,
+                allowed_unsupported_gap_s=self.max_gap_s,
+            )
+        return None
+
+
 def run_rumble(out, seed=31001, config=None, capture=False):
     config = config or RumbleConfig()
     out = Path(out)
@@ -309,7 +401,8 @@ def run_rumble(out, seed=31001, config=None, capture=False):
         for n in ducks
     }
     damage = ContactTriggeredCollapse(config, graph, next(iter(weights.values())))
-    referee, claim = GameReferee(tuple(ducks)), IslandClaim(config)
+    referee = GameReferee(tuple(ducks))
+    claim = CrownClaim(config) if config.claim_radius_m else IslandClaim(config)
     controllers = {
         n: Tactician(("rusher", "survivor", "blocker", "rusher")[j])
         for j, n in enumerate(ducks)
@@ -354,6 +447,8 @@ def run_rumble(out, seed=31001, config=None, capture=False):
                         island=config.island,
                         final_active=t >= config.final_at_s,
                         passive=config.passive,
+                        crown_mode=config.claim_radius_m > 0,
+                        claim_radius_m=config.claim_radius_m,
                     )
                     policy, command, intent = controllers[name].choose(obs)
                     if name in referee.eliminated:
@@ -458,7 +553,11 @@ def run_rumble(out, seed=31001, config=None, capture=False):
         duration=steps * config.dt,
         mujoco_version=mujoco.__version__,
         spawns=spawns,
-        outcome=terminal or dict(**referee.outcome(timeout=True), rule="IslandClaim"),
+        outcome=terminal
+        or dict(
+            **referee.outcome(timeout=True),
+            rule="CrownClaim" if config.claim_radius_m else "IslandClaim",
+        ),
         events=events,
         damage=damage.damage,
         body_weight_N=weights,

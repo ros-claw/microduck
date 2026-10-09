@@ -115,3 +115,52 @@ def test_crown_claim_is_a_distinct_public_rule_with_real_support():
     observations["b"]["supporting_tiles"] = []
     observations["a"]["supporting_tiles"] = []
     assert rule.update(3.1, observations, {}) is None  # airborne/receiver cannot claim
+
+
+def test_crown_controller_holds_inside_target_instead_of_shuffling_forever():
+    from microduck_lab.arena.island_rumble import Tactician
+
+    cfg = RumbleConfig(claim_radius_m=0.08)
+    obs = dict(
+        sim_time_s=4,
+        robot=dict(x=0.07, y=0, yaw=3.14, current_tile_id=4),
+        visible_tiles=[
+            dict(id=i, centre_xy=cfg.centre(i).tolist(), state="LOCKED", damage=0)
+            for i in cfg.ids
+        ],
+        grid=3,
+        island=4,
+        passive=False,
+        final_active=True,
+        crown_mode=True,
+        claim_radius_m=0.08,
+        nearby_ducks=[],
+    )
+    actor = Tactician()
+    policy, command, intent = actor.choose(obs)
+    assert policy == "stand" and command == (0, 0, 0) and intent == "CLAIM_ISLAND"
+    obs["robot"]["x"] = 0.1
+    assert actor.choose(obs)[0] == "walk"
+
+
+def test_crown_microgap_filter_does_not_accept_jumps_or_contested_airborne_rivals():
+    from microduck_lab.arena.island_rumble import CrownClaim
+
+    cfg = RumbleConfig(final_at_s=0, claim_radius_m=0.08)
+    rule = CrownClaim(cfg)
+    observations = {"a": dict(x=0.01, y=0, z=0.12, upright=True, supporting_tiles=[4])}
+    result = None
+    for i in range(1501):
+        # 1ms gaps every 100ms; actual loaded duty cycle ~99%.
+        observations["a"]["supporting_tiles"] = [] if i % 100 == 99 else [4]
+        result = rule.update(i * 0.001, observations, {})
+    assert result["winner"] == "a" and result["measured_loaded_fraction"] > 0.98
+    for i in range(1502, 1515):
+        observations["a"]["supporting_tiles"] = []
+        assert rule.update(i * 0.001, observations, {}) is None
+    assert rule.candidate is None  # >10ms unsupported resets the whole hold
+    observations["a"]["supporting_tiles"] = [4]
+    rule.update(2, observations, {})
+    observations["b"] = dict(x=0.05, y=0, z=0.15, upright=True, supporting_tiles=[])
+    assert rule.update(3.5, observations, {}) is None
+    assert rule.candidate is None

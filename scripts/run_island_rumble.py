@@ -17,6 +17,7 @@ p.add_argument("--duration", type=float, default=20.0)
 p.add_argument("--passive", action="store_true")
 p.add_argument("--capture", action="store_true")
 p.add_argument("--claim-radius", type=float, default=0.0)
+p.add_argument("--claim-time", type=float, default=1.5)
 a = p.parse_args()
 r = run_rumble(
     a.out,
@@ -30,6 +31,7 @@ r = run_rumble(
         duration=a.duration,
         passive=a.passive,
         claim_radius_m=a.claim_radius,
+        claim_s=a.claim_time,
     ),
     a.capture,
 )

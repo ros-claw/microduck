@@ -9,13 +9,17 @@ from microduck_lab.arena.island_rumble import RumbleConfig, run_rumble
 
 
 def evaluate(args):
-    root, seed, players, size, final, radius = args
+    root, seed, players, size, final, radius, hold = args
     run = Path(root) / str(seed)
     r = run_rumble(
         run,
         seed,
         RumbleConfig(
-            players=players, tile_size=size, final_at_s=final, claim_radius_m=radius
+            players=players,
+            tile_size=size,
+            final_at_s=final,
+            claim_radius_m=radius,
+            claim_s=hold,
         ),
     )
     quality = (
@@ -59,13 +63,22 @@ if __name__ == "__main__":
     p.add_argument("--tile-size", type=float, default=0.36)
     p.add_argument("--final-at", type=float, default=6.0)
     p.add_argument("--claim-radius", type=float, default=0.0)
+    p.add_argument("--claim-time", type=float, default=1.5)
     a = p.parse_args()
     with ProcessPoolExecutor(max_workers=a.workers) as pool:
         rows = list(
             pool.map(
                 evaluate,
                 [
-                    (a.out, s, a.players, a.tile_size, a.final_at, a.claim_radius)
+                    (
+                        a.out,
+                        s,
+                        a.players,
+                        a.tile_size,
+                        a.final_at,
+                        a.claim_radius,
+                        a.claim_time,
+                    )
                     for s in range(a.start, a.start + a.count)
                 ],
             )
