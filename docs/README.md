@@ -30,3 +30,7 @@
 - [Physical fidelity audit / 穿模与碰撞范围复核](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/PHYSICAL_FIDELITY_AUDIT.md)
 
 - [Neon Escape / Jev 物理游戏原型与复现实验](https://github.com/ros-claw/microduck/blob/duckverse-game-2026-10-08-r1/docs/NEON_ESCAPE.md)
+
+## Island Rumble / 四鸭抢岛（玩法原型）
+
+[English method](https://github.com/ros-claw/microduck/blob/island-rumble-prototype-2026-10-09/docs/island-rumble/README.md) · [中文方法](https://github.com/ros-claw/microduck/blob/island-rumble-prototype-2026-10-09/docs/island-rumble/README.zh-CN.md)

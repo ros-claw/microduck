@@ -4,11 +4,23 @@
 
 一系列可复现的 **MuJoCo 机器人仿真游戏**：真实接触跳绳、双鸭协作、动态追逐与组合技能闯关。复用 Pollen Robotics 的 Microduck 资产、ONNX 学习运动策略、显式控制器和接触审计，提供代码、权重、方法、失败实验及回放证据。Duckverse 已通过候选仿真 Kit 接通真实 ROSClaw chat；尚未验证真机部署或自主进化。
 
-最新可运行源码见 [r1 发行版](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08-r1)。下方安装命令检出该版本；本仓库首页集中展示系列 Demo。
+最新玩法原型见 [四鸭抢岛](https://github.com/ros-claw/microduck/releases/tag/island-rumble-prototype-2026-10-09)，上一版冻结游戏见 [r1 发行版](https://github.com/ros-claw/microduck/releases/tag/duckverse-game-2026-10-08-r1)。下方安装命令检出新原型源码；main 是系列展示页，不表示游戏代码 PR 已合并。
 
 ## 已交付 Demo
 
 点击预览观看或下载视频。同一 Demo 的不同剪辑放在一起，旧版本单独归档。
+
+### 四鸭抢岛 · 踩踏改变场地的玩法原型
+
+[![四鸭抢岛](docs/media/island-rumble.jpg)](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4)
+
+真实脚底承重累积损伤，地板解除约束后受重力下坠；四只带固定颜色标记和名字的鸭子争夺公开白圈，只有独占、直立且脚底承重时才计分，先积满 1.5 秒获胜。**CrownRace 是公开的抢点积分新规则，不冒充原来的最后幸存者判定。** 保留模型原有材质。
+
+[24 秒英文特写与慢动作](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-en.mp4) · [24 秒英文竖屏](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-vertical-en.mp4) · [16 秒两鸭九板灰盒](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-two-en.mp4) · [12 秒完整连续参考](https://github.com/ros-claw/microduck/releases/download/island-rumble-prototype-2026-10-09/island-rumble-four-reference-raw.mp4)
+
+冻结的 3×3 场地上，**32/32 新种子产生冠军并通过物理质量检查，最大接触穿透 1.678mm**；首次身体碰撞约 1.86–1.98 秒，首次淘汰约 4.41–4.63 秒。选中双鸭/四鸭比赛可精确重放。复用已有 ONNX 技能与确定性战术，不宣称新训练、真机验证、独立观众盲测或新模式的 ROSClaw 原生回执。
+
+[方法、失败规则与复现](https://github.com/ros-claw/microduck/blob/island-rumble-prototype-2026-10-09/docs/island-rumble/README.zh-CN.md) · [English methods](https://github.com/ros-claw/microduck/blob/island-rumble-prototype-2026-10-09/docs/island-rumble/README.md) · [完整检查](https://github.com/ros-claw/microduck/blob/island-rumble-prototype-2026-10-09/artifacts/island-rumble/qa-summary.json)
 
 ### 最后一块地板 · 四鸭同场淘汰赛
 
@@ -81,7 +93,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout duckverse-game-2026-10-08-r1
+git checkout island-rumble-prototype-2026-10-09
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
