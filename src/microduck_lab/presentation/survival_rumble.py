@@ -33,6 +33,7 @@ class SurvivalFilm(Film):
         self.font = ImageFont.truetype(BOLD, 18)
         self.big = ImageFont.truetype(BOLD, 30)
         self.small = ImageFont.truetype(FONT, 20)
+        self.speaker_angles = {}
 
     def project(self, p):
         cam = self.renderer.scene.camera[0]
@@ -144,6 +145,22 @@ class SurvivalFilm(Film):
             if p[2] >= -0.12:
                 c.lookat[2] = 0.04
             c.azimuth = math.degrees(math.atan2(p[1], p[0]))
+        elif shot.startswith("character_"):
+            name = shot.removeprefix("character_")
+            c.lookat[:] = self.d.xpos[self.bids[name]] + [0, 0, 0.02]
+            c.distance = 1.2
+            if name not in self.speaker_angles:
+                others = [self.d.xpos[self.bids[n]][:2] for n in alive if n != name]
+                away = self.d.xpos[self.bids[name]][:2] - (
+                    np.mean(others, axis=0) if others else np.zeros(2)
+                )
+                self.speaker_angles[name] = (
+                    math.degrees(math.atan2(-away[1], -away[0]))
+                    if np.linalg.norm(away) > 0.025
+                    else 128
+                )
+            c.azimuth = self.speaker_angles[name]
+            c.elevation = -32
         elif shot == "follow":
             gpos = self.d.xpos[self.m.body(f"tile_{goal}").id]
             leader = (
@@ -537,13 +554,18 @@ def render_survival(run, out, preview=None, speech=None, plan_only=False):
         f.close()
         return dict(preview=str(out))
     cues = json.loads(Path(speech).read_text())["cues"] if speech else []
+    with gzip.open(run / "decisions.jsonl.gz", "rt") as stream:
+        decisions = [json.loads(line) for line in stream]
     subtitle_font = ImageFont.truetype(BOLD, 28)
     with imageio.get_writer(
         str(out), fps=50, codec="libx264", quality=8, macro_block_size=2
     ) as w:
         for j, row in enumerate(times):
-            pixels = f.frame(row["t"], row["speed"], row["shot"])
             cue = next((c for c in cues if c["start_s"] <= j / 50 < c["end_s"]), None)
+            shot = row["shot"]
+            if cue and cue["evidence"]["kind"] == "decision":
+                shot = "character_" + decisions[cue["evidence"]["index"]]["body_id"]
+            pixels = f.frame(row["t"], row["speed"], shot)
             if cue:
                 im = Image.fromarray(pixels)
                 draw = ImageDraw.Draw(im)

@@ -156,6 +156,33 @@ with wave.open(str(wav), "wb") as f:
     f.setsampwidth(2)
     f.setframerate(rate)
     f.writeframes((samples * 32767).astype("<i2").tobytes())
+# Two-pass loudness mastering makes speech comfortable to hear without clipping.
+measurement = subprocess.run(
+    [
+        imageio_ffmpeg.get_ffmpeg_exe(),
+        "-v",
+        "info",
+        "-i",
+        str(wav),
+        "-af",
+        "loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json",
+        "-f",
+        "null",
+        "-",
+    ],
+    capture_output=True,
+    text=True,
+    check=True,
+)
+start = measurement.stderr.rfind("{")
+end = measurement.stderr.find("}", start) + 1
+loudness = json.loads(measurement.stderr[start:end])
+master_filter = (
+    "loudnorm=I=-16:TP=-1.5:LRA=11:linear=false"
+    + f":measured_I={loudness['input_i']}:measured_TP={loudness['input_tp']}"
+    + f":measured_LRA={loudness['input_lra']}:measured_thresh={loudness['input_thresh']}"
+    + f":offset={loudness['target_offset']}"
+)
 subprocess.run(
     [
         imageio_ffmpeg.get_ffmpeg_exe(),
@@ -168,6 +195,10 @@ subprocess.run(
         str(wav),
         "-c:v",
         "copy",
+        "-af",
+        master_filter,
+        "-ar",
+        "48000",
         "-c:a",
         "aac",
         "-b:a",
@@ -187,6 +218,8 @@ manifest.update(
     commentary_source_sha256=sha(speech_path),
     commentary=speech,
     spoken_language="zh-CN",
+    audio_mastering="two-pass loudnorm, target -16 LUFS / -1.5 dBTP / 11 LU LRA",
+    audio_pre_master_measurement=loudness,
     audio_cues=cues,
     audio_source_sha256=sha(Path(__file__)),
 )

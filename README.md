@@ -4,6 +4,8 @@
 
 A series of reproducible robot games in **MuJoCo simulation**: contact-aware rope skipping, cooperative double jumping, reactive pursuit, and physical skill composition. Built with Pollen Robotics’ Microduck assets, learned ONNX motor policies, explicit controllers and contact audits. This repository contains code, weights, methods, failed experiments and replay evidence. Native ROSClaw chat launches Duckverse through a simulation-only candidate kit; hardware deployment and autonomous evolution are not demonstrated.
 
+Development branch: [Last Duck Alive](docs/survival-rumble/README.md) adds physical last-survivor rules and Mandarin sports commentary. It remains unaccepted and has no Release or Tag. [Score-based relay](docs/relay-rumble/README.md) is preserved.
+
 ## Confirmed demos
 
 Click each preview to watch or download its video. Confirmed demos are three-duck skipping, four-duck skipping, and parkour. Island Rumble remains in development; no release or tag is published until the user confirms completion.

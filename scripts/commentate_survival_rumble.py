@@ -137,7 +137,6 @@ def prepare(run, plan, out, tts):
         "INTERCEPT_APPROACH": "老六尝试截路！",
         "SAFE_DETOUR": "二呆绕行，先保命！",
         "CHASE_BEACON": "卷王紧追目标！",
-        "ESCAPE_CROWD": None,
     }
     actors = {
         "RUSH_BEACON": "lavender",
