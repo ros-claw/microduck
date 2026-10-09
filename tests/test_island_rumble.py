@@ -99,3 +99,19 @@ def test_only_loaded_upward_foot_contacts_damage_tiles():
 def test_invalid_configuration_is_rejected(kwargs):
     with pytest.raises(ValueError):
         RumbleConfig(**kwargs)
+
+
+def test_crown_claim_is_a_distinct_public_rule_with_real_support():
+    cfg = RumbleConfig(final_at_s=0, claim_radius_m=0.08)
+    rule = IslandClaim(cfg)
+    observations = {
+        "a": dict(x=0.02, y=0.01, upright=True, supporting_tiles=[4]),
+        "b": dict(x=0.12, y=0.01, upright=True, supporting_tiles=[4]),
+    }
+    assert rule.update(0, observations, {}) is None
+    assert rule.update(1.5, observations, {})["rule"] == "CrownClaim"
+    observations["b"]["x"] = 0.06
+    assert rule.update(1.51, observations, {}) is None
+    observations["b"]["supporting_tiles"] = []
+    observations["a"]["supporting_tiles"] = []
+    assert rule.update(3.1, observations, {}) is None  # airborne/receiver cannot claim

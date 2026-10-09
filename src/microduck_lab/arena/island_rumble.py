@@ -28,6 +28,7 @@ class RumbleConfig(GameConfig):
     final_at_s: float = 6.0
     claim_s: float = 1.5
     passive: bool = False
+    claim_radius_m: float = 0.0
 
     def __post_init__(self):
         if self.players not in (2, 4) or self.grid not in (3, 4):
@@ -46,6 +47,7 @@ class RumbleConfig(GameConfig):
             or self.solver_iterations != 80
             or not self.external_envelopes
             or self.ccd != "libccd"
+            or not 0 <= self.claim_radius_m <= 0.08
         ):
             raise ValueError("Invalid rules or changed physical calibration")
 
@@ -241,7 +243,16 @@ class IslandClaim:
         occupants = [
             n
             for n, o in observations.items()
-            if n not in eliminated and self.config.island in o["supporting_tiles"]
+            if n not in eliminated
+            and self.config.island in o["supporting_tiles"]
+            and (
+                self.config.claim_radius_m == 0
+                or math.hypot(
+                    o["x"] - self.config.centre(self.config.island)[0],
+                    o["y"] - self.config.centre(self.config.island)[1],
+                )
+                <= self.config.claim_radius_m
+            )
         ]
         if (
             now < self.config.final_at_s
@@ -259,7 +270,7 @@ class IslandClaim:
                 status="WINNER",
                 winner=n,
                 alive=[k for k in observations if k not in eliminated],
-                rule="IslandClaim",
+                rule="CrownClaim" if self.config.claim_radius_m else "IslandClaim",
                 exclusive_supported_s=now - self.since,
             )
         return None
@@ -337,7 +348,9 @@ def run_rumble(out, seed=31001, config=None, capture=False):
                         # No fixed countdown exists in this mode.
                         tile["warning_remaining_s"] = None
                     obs.update(
-                        objective="IslandClaim",
+                        objective="CrownClaim"
+                        if config.claim_radius_m
+                        else "IslandClaim",
                         island=config.island,
                         final_active=t >= config.final_at_s,
                         passive=config.passive,
@@ -394,6 +407,8 @@ def run_rumble(out, seed=31001, config=None, capture=False):
             )
             observations = {
                 n: dict(
+                    x=float(o.trunk_pos()[0]),
+                    y=float(o.trunk_pos()[1]),
                     z=float(o.trunk_pos()[2]),
                     vz=float(o.trunk_linvel()[2]),
                     supporting_tiles=support[n],

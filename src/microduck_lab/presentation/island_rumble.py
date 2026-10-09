@@ -123,6 +123,18 @@ class RumbleFilm(Film):
             ]
             if all(p is not None for p in pts):
                 draw.line(pts, fill=(65, 25, 18), width=2)
+        radius = self.audit["config"].get("claim_radius_m", 0)
+        if radius:
+            bid = self.m.body(f"tile_{self.island}").id
+            pts = [
+                self.project(
+                    self.d.xpos[bid]
+                    + np.array([radius * math.cos(a), radius * math.sin(a), 0.027])
+                )
+                for a in np.linspace(0, 2 * math.pi, 65)
+            ]
+            if all(p is not None for p in pts):
+                draw.line(pts, fill=(255, 255, 240), width=3)
         labels = []
         for name, bid in self.bids.items():
             p = self.project(self.d.xpos[bid] + [0, 0, 0.17])
@@ -148,9 +160,12 @@ class RumbleFilm(Film):
         draw.rectangle((0, 0, self.w, 96), fill=(12, 19, 29))
         draw.text((22, 10), "ISLAND RUMBLE", font=self.big, fill="white")
         if caption is None:
+            phase = self.audit["config"]["final_at_s"]
             caption = (
                 "STEP ON IT. CRACK IT. CLAIM THE GOLD ISLAND."
-                if t < 6
+                if t < phase
+                else "HOLD THE WHITE CIRCLE FOR 1.5s — rivals can contest it"
+                if radius
                 else "FINAL ISLAND: hold it alone, upright, for 1.5 seconds"
             )
         if terminal:
