@@ -1,0 +1,172 @@
+{
+  "physical_gates_pass": true,
+  "progressive_rules_pass": true,
+  "real_jev_provenance_pass": true,
+  "strict_sole_winner": true,
+  "outcome": {
+    "status": "WINNER",
+    "winner": "sky",
+    "alive": [
+      "sky"
+    ],
+    "rule": "LastDuckAlive",
+    "support_rule": "any remaining grounded tile",
+    "supporting_tiles_at_win": [
+      12
+    ],
+    "stable_supported_s": 0.75,
+    "loaded_fraction": 0.9219999999999354,
+    "max_unsupported_gap_s": 0.004500000000007276,
+    "eliminated": [
+      "cream",
+      "graphite",
+      "lavender"
+    ]
+  },
+  "first_release_s": 10.0,
+  "released_tiles": 23,
+  "minimum_release_gap_s": 3.9999999999999964,
+  "applied_jev_decisions": 13433,
+  "goals_different_from_beacon": 11765,
+  "requests": 50,
+  "latency_median_ms": 720.5058530016686,
+  "latency_max_ms": 801.6061779999291,
+  "input_tokens": 263958,
+  "output_tokens": 10799,
+  "recoveries": [
+    {
+      "time": 10.5,
+      "state": "RECOVERY_STARTED",
+      "body_id": "lavender",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 12.5,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "lavender",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 15.4,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "lavender",
+      "duration_s": 4.9
+    },
+    {
+      "time": 24.8,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 26.8,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "graphite",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 29.6,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "graphite",
+      "duration_s": 4.800000000000001
+    },
+    {
+      "time": 49.160000000000004,
+      "state": "RECOVERY_STARTED",
+      "body_id": "lavender",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 50.46,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 51.160000000000004,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "lavender",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 52.46,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "graphite",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 54.480000000000004,
+      "state": "RECOVERY_STARTED",
+      "body_id": "sky",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 56.480000000000004,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "sky",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 61.2,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "graphite",
+      "duration_s": 10.740000000000002
+    },
+    {
+      "time": 64.1,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 66.1,
+      "state": "RECOVERY_SKILL_STARTED",
+      "body_id": "graphite",
+      "policy": "sitstand",
+      "maximum_duration_s": 0.8
+    },
+    {
+      "time": 67.82000000000001,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "graphite",
+      "duration_s": 3.720000000000013
+    },
+    {
+      "time": 68.94,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "sky",
+      "duration_s": 14.459999999999994
+    },
+    {
+      "time": 74.4,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 98.32000000000001,
+      "state": "RECOVERY_STARTED",
+      "body_id": "cream",
+      "trigger": "early_posture_reflex"
+    }
+  ],
+  "intent_counts": {
+    "SETTLE": 160,
+    "JEV_INTERCEPT": 6894,
+    "JEV_CAPTURE": 872,
+    "JEV_EVADE": 5048,
+    "LOCAL_RECOVERY": 3852,
+    "LOCAL_RECOVERY_SKILL": 240,
+    "JEV_HOLD": 619,
+    "LOCAL_EVACUATE": 451,
+    "JEV_PLAN_INVALID_BRAKE": 84,
+    "ELIMINATED": 1790,
+    "MATCH_COMPLETE": 50
+  },
+  "source_audit_sha256": "12b9cf522dbe2ef6b0f5156a7211b0b9c9c7cf0780e278cceb03f67572550540"
+}

@@ -4,7 +4,7 @@
 
 一系列可复现的 **MuJoCo 机器人仿真游戏**：真实接触跳绳、双鸭协作、动态追逐与组合技能闯关。复用 Pollen Robotics 的 Microduck 资产、ONNX 学习运动策略、显式控制器和接触审计，提供代码、权重、方法、失败实验及回放证据。Duckverse 已通过候选仿真 Kit 接通真实 ROSClaw chat；尚未验证真机部署或自主进化。
 
-当前开发分支的新版玩法见 [最后一鸭](docs/survival-rumble/README.zh-CN.md)，历史计分版见 [四鸭抢岛](docs/relay-rumble/README.zh-CN.md)。均待用户验收，未发布 Release 或 Tag；主首页只展示已确认作品。
+当前开发分支新增 [在线 Jev 生存战](docs/jev-rumble/README.zh-CN.md)：真实战术请求、倒地恢复技能组合与逐块预警撤离。此前的本地规则版见 [最后一鸭](docs/survival-rumble/README.zh-CN.md)，历史计分版见 [四鸭抢岛](docs/relay-rumble/README.zh-CN.md)。均待用户验收，未发布 Release 或 Tag；主首页只展示已确认作品。
 
 ## 已确认 Demo
 

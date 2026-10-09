@@ -1,0 +1,63 @@
+{
+  "physical_gates_pass": true,
+  "progressive_rules_pass": true,
+  "real_jev_provenance_pass": true,
+  "strict_sole_winner": true,
+  "outcome": {
+    "status": "WINNER",
+    "winner": "lavender",
+    "alive": [
+      "lavender"
+    ],
+    "rule": "LastDuckAlive",
+    "support_rule": "any remaining grounded tile",
+    "supporting_tiles_at_win": [
+      12
+    ],
+    "stable_supported_s": 2.289999999999992,
+    "loaded_fraction": 0.9000000000000982,
+    "max_unsupported_gap_s": 0.006499999999988404,
+    "eliminated": [
+      "cream",
+      "graphite",
+      "sky"
+    ]
+  },
+  "first_release_s": 10.0,
+  "released_tiles": 18,
+  "minimum_release_gap_s": 3.9999999999999964,
+  "applied_jev_decisions": 13855,
+  "goals_different_from_beacon": 12883,
+  "requests": 41,
+  "latency_median_ms": 717.6746100012679,
+  "latency_max_ms": 763.9232830042602,
+  "input_tokens": 210731,
+  "output_tokens": 8652,
+  "recoveries": [
+    {
+      "time": 78.48,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite",
+      "trigger": "early_posture_reflex"
+    },
+    {
+      "time": 78.86,
+      "state": "RECOVERY_STARTED",
+      "body_id": "sky",
+      "trigger": "early_posture_reflex"
+    }
+  ],
+  "intent_counts": {
+    "SETTLE": 160,
+    "JEV_CAPTURE": 98,
+    "JEV_EVADE": 2977,
+    "JEV_INTERCEPT": 10583,
+    "LOCAL_EVACUATE": 198,
+    "JEV_HOLD": 197,
+    "JEV_PLAN_INVALID_BRAKE": 74,
+    "ELIMINATED": 2097,
+    "LOCAL_RECOVERY": 18,
+    "MATCH_COMPLETE": 50
+  },
+  "source_audit_sha256": "6f5a9ebda5cb238589286e67d0bd2e0976bfbbc60b5cf7a3faabca730fbc3481"
+}

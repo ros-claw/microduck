@@ -1,0 +1,79 @@
+{
+  "physical_gates_pass": true,
+  "progressive_rules_pass": true,
+  "real_jev_provenance_pass": true,
+  "strict_sole_winner": true,
+  "outcome": {
+    "status": "WINNER",
+    "winner": "graphite",
+    "alive": [
+      "graphite"
+    ],
+    "rule": "LastDuckAlive",
+    "stable_supported_s": 0.75,
+    "loaded_fraction": 0.9609999999999311,
+    "max_unsupported_gap_s": 0.0037499999999965894,
+    "eliminated": [
+      "cream",
+      "lavender",
+      "sky"
+    ]
+  },
+  "first_release_s": 9.2,
+  "released_tiles": 16,
+  "minimum_release_gap_s": 3.1999999999999957,
+  "applied_jev_decisions": 6641,
+  "goals_different_from_beacon": 6384,
+  "requests": 30,
+  "latency_median_ms": 720.152126497851,
+  "latency_max_ms": 1846.6403679994983,
+  "input_tokens": 149264,
+  "output_tokens": 6103,
+  "recoveries": [
+    {
+      "time": 41.54,
+      "state": "RECOVERY_STARTED",
+      "body_id": "cream"
+    },
+    {
+      "time": 43.28,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite"
+    },
+    {
+      "time": 44.76,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "graphite",
+      "duration_s": 1.4799999999999969
+    },
+    {
+      "time": 49.02,
+      "state": "RECOVERY_STARTED",
+      "body_id": "graphite"
+    },
+    {
+      "time": 50.44,
+      "state": "RECOVERY_STARTED",
+      "body_id": "sky"
+    },
+    {
+      "time": 51.38,
+      "state": "RECOVERY_COMPLETED",
+      "body_id": "graphite",
+      "duration_s": 2.3599999999999994
+    }
+  ],
+  "intent_counts": {
+    "SETTLE": 160,
+    "JEV_CAPTURE": 76,
+    "JEV_EVADE": 2911,
+    "JEV_INTERCEPT": 3465,
+    "AWAIT_JEV": 2663,
+    "JEV_HOLD": 189,
+    "JEV_PLAN_INVALID_BRAKE": 93,
+    "LOCAL_RECOVERY": 421,
+    "ELIMINATED": 1784,
+    "MATCH_COMPLETE": 50
+  },
+  "source_audit_sha256": "891b444f0634453183e7f361511c6646e390f96db1d05d1d4bbc32f1a89456dc"
+}

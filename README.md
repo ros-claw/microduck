@@ -4,7 +4,7 @@
 
 A series of reproducible robot games in **MuJoCo simulation**: contact-aware rope skipping, cooperative double jumping, reactive pursuit, and physical skill composition. Built with Pollen Robotics’ Microduck assets, learned ONNX motor policies, explicit controllers and contact audits. This repository contains code, weights, methods, failed experiments and replay evidence. Native ROSClaw chat launches Duckverse through a simulation-only candidate kit; hardware deployment and autonomous evolution are not demonstrated.
 
-Development branch: [Last Duck Alive](docs/survival-rumble/README.md) adds physical last-survivor rules and Mandarin sports commentary. It remains unaccepted and has no Release or Tag. [Score-based relay](docs/relay-rumble/README.md) is preserved.
+Development branch: [Live Jev survival](docs/jev-rumble/README.md) adds real typed tactical choices, posture recovery and serial connected-floor collapse. It remains unaccepted, without a Release or Tag. [Last Duck Alive](docs/survival-rumble/README.md) adds physical last-survivor rules and Mandarin sports commentary. It remains unaccepted and has no Release or Tag. [Score-based relay](docs/relay-rumble/README.md) is preserved.
 
 ## Confirmed demos
 
@@ -37,7 +37,7 @@ Six encounters combine rolls, a real gap, rotating-arm contact and duck–ball�
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.
-2. **Coordination and tactics:** deterministic feedback supplies goals and phase timing. Some Neon Escape runs use live Jev for finite skill choices and physical previews for transitions; these are separate from motor-policy inference.
+2. **Coordination and tactics:** deterministic feedback supplies goals and phase timing. Live Jev survival selects reachable tactical goals; some Neon Escape runs use live Jev for finite skill choices and physical previews for transitions; these are separate from motor-policy inference.
 3. **Physics:** robots and props share one MuJoCo world. Contacts, equality forces, gravity and actuation determine outcomes. Collision profiles and exclusions are disclosed per demo.
 4. **Evidence and filming:** full-rate contact checks, recorded inputs and trajectory replay verify selected results. Cameras, slow motion and synthesized Foley are presentation only.
 
