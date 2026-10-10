@@ -1,4 +1,4 @@
-# Jev 鸭鸭生存战（开发版，待验收）
+# Jev 鸭鸭生存战
 
 [English](README.md) · [验证与限制](VALIDATION.md) · [原始检查摘要](../../artifacts/jev-rumble)
 
@@ -6,7 +6,7 @@
 
 [![Jev 鸭鸭生存战开发版](preview.jpg)](media/jev-survival-zh.mp4)
 
-[中文解说、特写与慢动作 · 110.88 秒](media/jev-survival-zh.mp4)。同一局连续记录，末尾仅老六真实存活；这是开发分支审阅视频，不是已验收发布。
+[中文解说、特写与慢动作 · 110.88 秒](media/jev-survival-zh.mp4)。同一局连续记录，末尾仅老六真实存活；用户已于 2026-10-10 确认发布。[高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10)。
 
 ## 决策与运动
 
@@ -75,6 +75,6 @@ PYTHONPATH=src .venv/bin/python scripts/check_jev_media.py --run artifacts/jev-r
 
 录制全量接触可能使仿真慢于实际时间。日志分别记录网络墙钟耗时、响应交付的仿真年龄与整局实时系数，不把仿真中的快速响应误说成网络低延迟。视频仅回放同一局的记录状态，慢动作、姓名、字幕和合成体育解说都不参与控制；成片控制在两分钟内。
 
-完整 MJB、轨迹和全量接触保留在本机采样目录，不纳入 Git。仓库包含审计与网络返回的压缩归档、校验结果、源代码快照及审阅影片；仅 clone 仓库不能重放本机的完整选局数据，需自行采样或取得相应大文件。
+完整 MJB、轨迹和全量接触保留在本机采样目录，不纳入 Git。仓库包含审计与网络返回的压缩归档、校验结果、源代码快照及审阅影片；仅 clone 仓库不能重放本机的完整选局数据，可自行采样，或从 [Release](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) 下载 scene.mjb、trajectory.npz、contacts.jsonl.gz 和 replay-metadata.tar.gz，将前三项放入同一个目录，再将元数据包解压到该目录，运行上述核验命令。
 
-开发分支交付，不创建 Release 或 Tag。小样本展示与确定性回放不构成大规模胜率或真机能力证据。
+已发布：[jev-survival-2026-10-10](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10)。此前原始审计与影片元数据保留录制时的开发状态，当前发布状态以此页为准。小样本展示与确定性回放不构成大规模胜率或真机能力证据。

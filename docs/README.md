@@ -2,6 +2,7 @@
 
 | 阅读目的 | 当前文档 |
 | --- | --- |
+| Jev 鸭鸭生存战（已确认发布） | [中文方法](jev-rumble/README.zh-CN.md) · [English](jev-rumble/README.md) · [核验与限制](jev-rumble/VALIDATION.md) |
 | 看演示、安装与运行 | [中文首页](../README.zh-CN.md) · [English](../README.md) |
 | Duckverse 四鸭同场淘汰赛 | [中文方法](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/duckverse/GAME.zh-CN.md) · [English method](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/duckverse/GAME.md) · [实际 ROSClaw 接通](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/duckverse/ROSCLAW_INTEGRATION.md) · [发布素材](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/duckverse/PUBLICATION.md) |
 | Duckverse 调度、避险与物理裁判 | [DG-02 方法、对照与重放](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/duckverse/DG02_SCHEDULE_REFEREE.md) |

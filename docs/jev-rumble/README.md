@@ -1,12 +1,12 @@
-# Jev Duck Survival (unaccepted development)
+# Jev Duck Survival
 
 [简体中文](README.zh-CN.md) · [Validation & limitations](VALIDATION.md) · [Evidence](../../artifacts/jev-rumble)
 
 Four Microduck robots contest moving beacons and progressively disappearing floors in one MuJoCo world. **Live Jev selects tactical goals**; existing ONNX policies control the joints. This is separate from the archived [deterministic survival mode](../survival-rumble/README.md) and the confirmed skipping/parkour demos.
 
-[![Jev Duck Survival development film](preview.jpg)](media/jev-survival-zh.mp4)
+[![Jev Duck Survival](preview.jpg)](media/jev-survival-zh.mp4)
 
-[Mandarin commentary, close-ups and slow motion · 110.88 s](media/jev-survival-zh.mp4). One chronological match ends with Lao Liu as its physical sole survivor. This is a development-branch review copy, not an accepted release.
+[Mandarin commentary, close-ups and slow motion · 110.88 s](media/jev-survival-zh.mp4). One chronological match ends with Lao Liu as its physical sole survivor. Accepted for publication on 2026-10-10. [HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10).
 
 ## Architecture
 
@@ -51,6 +51,6 @@ Use `render_jev_rumble.py --plan-only`, `commentate_jev_rumble.py`, `render_jev_
 
 Fresh online results are nondeterministic. Verification consumes the **recorded raw responses and delivery timeline**, regenerates public request states, revalidates choices/legality, then compares every physics state, control, contact and tactical decision. It does not make new API calls. Movies read captured states only; synthetic Mandarin commentary, sound effects, labels and event slow motion are presentation. Final cuts stay below two minutes.
 
-Full MJB/trajectory/contact captures stay in local run directories and are not Git objects. The repository contains compressed audit/API transcripts, source snapshots, check results and the review film. Cloning alone does not provide the selected match’s large replay files; generate a fresh capture or obtain those files.
+Full MJB/trajectory/contact captures stay in local run directories and are not Git objects. The repository contains compressed audit/API transcripts, source snapshots, check results and the review film. Cloning alone does not provide the selected match’s large replay files; generate a fresh capture or download scene.mjb, trajectory.npz, contacts.jsonl.gz and replay-metadata.tar.gz from the [Release](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10). Place the first three in one run directory, extract the metadata archive there, and run the verification commands above.
 
-This work stays on the development branch without a Release or Tag. Selected demonstrations and exact simulation replay do not establish population success rates or hardware capability.
+Released as [jev-survival-2026-10-10](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10). Original audit and film metadata retain their capture-time development status; this page records current publication status. Selected demonstrations and exact simulation replay do not establish population success rates or hardware capability.

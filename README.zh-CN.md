@@ -4,11 +4,11 @@
 
 一系列可复现的 **MuJoCo 机器人仿真游戏**：真实接触跳绳、双鸭协作、动态追逐与组合技能闯关。复用 Pollen Robotics 的 Microduck 资产、ONNX 学习运动策略、显式控制器和接触审计，提供代码、权重、方法、失败实验及回放证据。Duckverse 已通过候选仿真 Kit 接通真实 ROSClaw chat；尚未验证真机部署或自主进化。
 
-当前开发分支新增 [在线 Jev 生存战](docs/jev-rumble/README.zh-CN.md)：真实战术请求、倒地恢复技能组合与逐块预警撤离。此前的本地规则版见 [最后一鸭](docs/survival-rumble/README.zh-CN.md)，历史计分版见 [四鸭抢岛](docs/relay-rumble/README.zh-CN.md)。均待用户验收，未发布 Release 或 Tag；主首页只展示已确认作品。
+已确认发布：[Jev 鸭鸭生存战](docs/jev-rumble/README.zh-CN.md)，与此前的三鸭跳绳、四鸭跳绳和跑酷共同构成本项目的演示系列。历史原型与失败实验保留供研究。
 
 ## 已确认 Demo
 
-点击预览观看或下载视频。目前确认的作品为三鸭跳绳、四鸭跳绳和跑酷。抢岛游戏仍在开发，未经用户确认不发布 Release 或 Tag。
+点击预览观看或下载已确认作品的视频。
 
 ### 三鸭协作跳绳
 
@@ -33,6 +33,16 @@
 六个关卡组合翻滚、真实跨坑、旋转杆接触和鸭—球—瓶联动开门。**63 秒最终英文版**用慢动作突出关键物理交互，5 kHz 接触帧展示真实擦杆。选定的 35.14 秒仿真可精确重放；胶囊/包围盒碰撞并非逐三角形碰撞。沿用历史真实 Jev 决策，接续新学习收尾策略，不新增成功率宣称。
 
 [最终方法与复现](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/CONTACT_DETAILS.md) · [证据包](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz)
+
+### 鸭鸭生存战：Jev 指挥，谁能活到最后？
+
+[![Jev 鸭鸭生存战](docs/jev-rumble/preview.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-zh.mp4)
+
+张三、二呆、老六、卷王争夺落脚点，地板逐块预警脱落，最终只有一鸭存活。**110.88 秒中文体育解说版**包含接触特写与慢动作。在线 Jev 选择抢点、截路和撤退目标；现有学习策略以 50 Hz 控制关节，共享 MuJoCo 物理决定碰撞、跌落和胜负。一次批量请求服务所有存活角色，并非四个独立大模型智能体。
+
+选局逐步回放误差为零，最大接触穿透约 **1.64 mm**；采用保守碰撞包络，并非视觉三角网格精确碰撞。动态碰撞后的起身仍不稳定，选局最慢一次完成恢复耗时 **14.46 秒**，不宣称已彻底解决。
+
+[高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
 
 ## 方法
 
@@ -59,7 +69,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout 8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666
+git checkout jev-survival-2026-10-10
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
