@@ -4,11 +4,11 @@
 
 A series of reproducible robot games in **MuJoCo simulation**: contact-aware rope skipping, cooperative double jumping, reactive pursuit, and physical skill composition. Built with Pollen Robotics’ Microduck assets, learned ONNX motor policies, explicit controllers and contact audits. This repository contains code, weights, methods, failed experiments and replay evidence. Native ROSClaw chat launches Duckverse through a simulation-only candidate kit; hardware deployment and autonomous evolution are not demonstrated.
 
-Development branch: [Live Jev survival](docs/jev-rumble/README.md) adds real typed tactical choices, posture recovery and serial connected-floor collapse. It remains unaccepted, without a Release or Tag. [Last Duck Alive](docs/survival-rumble/README.md) adds physical last-survivor rules and Mandarin sports commentary. It remains unaccepted and has no Release or Tag. [Score-based relay](docs/relay-rumble/README.md) is preserved.
+Released: [Jev Duck Survival](docs/jev-rumble/README.md), alongside three-duck skipping, four-duck skipping and parkour. Historical prototypes and failed experiments remain available for research.
 
 ## Confirmed demos
 
-Click each preview to watch or download its video. Confirmed demos are three-duck skipping, four-duck skipping, and parkour. Island Rumble remains in development; no release or tag is published until the user confirms completion.
+Click each preview to watch or download a confirmed demo.
 
 ### Cooperative Rope Skipping
 
@@ -33,6 +33,16 @@ Two turners and two simultaneous jumpers share one world. Matching rope length a
 Six encounters combine rolls, a real gap, rotating-arm contact and duck–ball–pin interactions that unlock the exit. The **63 s English final cut** replays valuable details in slow motion; a 5 kHz freeze shows the actual rod brush. Its selected 35.14 s simulation replays exactly; conservative capsule/box collisions are not visual-triangle collisions. Jev decisions come from the archived live run, with a new learned finish suffix; no new success-rate claim.
 
 [Final method & reproduction](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/CONTACT_DETAILS.md) · [Evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz)
+
+### Jev Duck Survival — Last Duck Standing
+
+[![Jev Duck Survival](docs/jev-rumble/preview.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-zh.mp4)
+
+Four named ducks contest beacons while floors warn and fall one at a time. The **110.88 s Mandarin sports-commentary film** includes contact close-ups and slow motion. Live Jev selects capture, interception and retreat goals; existing learned policies drive joints at 50 Hz, while shared MuJoCo physics determines collisions, falls and the sole survivor. One batched request serves the live characters; these are not four independent language-model agents.
+
+The selected match replays with zero state error and approximately **1.64 mm** maximum contact penetration. Conservative collision envelopes are not visual-triangle exact. Dynamic get-up remains incomplete: the longest completed recovery in this match took **14.46 s**.
+
+[HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
 
 ## How it works
 
@@ -59,7 +69,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout 8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666
+git checkout jev-survival-2026-10-10
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

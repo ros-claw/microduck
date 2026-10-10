@@ -34,11 +34,3 @@
 ## Island Rumble / 四鸭抢岛（开发中，未验收）
 
 [English method](https://github.com/ros-claw/microduck/blob/c4bf232a43fe074dcd82f0316bb576efc83b6154/docs/island-rumble/README.md) · [中文方法](https://github.com/ros-claw/microduck/blob/c4bf232a43fe074dcd82f0316bb576efc83b6154/docs/island-rumble/README.zh-CN.md)
-
-## Relay Rumble / 中文角色移动抢岛（开发中，未验收）
-
-[中文方法](relay-rumble/README.zh-CN.md) · [English method](relay-rumble/README.md) · [本地验证结果](relay-rumble/VALIDATION.md)。未经用户确认不创建 Release 或 Tag。
-
-## Jev survival / 在线 Jev 生存战（开发中，未验收）
-
-[中文方法与影片](jev-rumble/README.zh-CN.md) · [English method](jev-rumble/README.md) · [验证及未解决的动态恢复限制](jev-rumble/VALIDATION.md)。真实 Jev 战术请求、独立恢复流程、单块预警与连通性约束；不创建 Release 或 Tag。
