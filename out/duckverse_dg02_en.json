@@ -1,0 +1,47 @@
+{
+  "schema": "microduck.duckverse.paired-film.v1",
+  "video_sha256": "00ab6daaef9254b46b02d68be170f8dddb83c4c49b67fd14a54b30c468a11cab",
+  "fps": 50,
+  "duration_s": 23.92,
+  "runs": [
+    {
+      "run": "artifacts/duckverse-dg02/final/warning-11",
+      "brain": "warning",
+      "seed": 11,
+      "source_hashes": {
+        "scene.mjb": "9ee41e5b27aae520150a7db4798477bb4b67a60eb7c1579f61f57314c1dfedc8",
+        "trajectory.npz": "ceba6ecf61ba2743fe72b8aabdf82b2da9e3d2f32ecbb5b0a2fd981847cf6f66",
+        "contacts.jsonl.gz": "99f3898f4a893ed05781a167d467265f4935dd6166133a483abd3899bdbc1b10",
+        "decisions.jsonl.gz": "fa2fa709be51cf86fd41cf8e5201f2dfe92d2756111023b6fdde342bbec3b59b"
+      },
+      "outcome": {
+        "status": "TIME_LIMIT",
+        "winner": null,
+        "alive": [
+          "cream"
+        ]
+      },
+      "video_frames": 700
+    },
+    {
+      "run": "artifacts/duckverse-dg02/final/hold-11",
+      "brain": "hold",
+      "seed": 11,
+      "source_hashes": {
+        "scene.mjb": "9ee41e5b27aae520150a7db4798477bb4b67a60eb7c1579f61f57314c1dfedc8",
+        "trajectory.npz": "db7f913521e051886da7023cc5c4e1d029d0d1e5081267a4b66d52d57c75926c",
+        "contacts.jsonl.gz": "35fb883d13039e2ff686fd4f59724bacc958ce4c9e1575987973851b881835cc",
+        "decisions.jsonl.gz": "3e765b016f5c1684c62b46bfe41728eb403ecbf144bf7382e806298ba0b09989"
+      },
+      "outcome": {
+        "status": "ELIMINATED",
+        "winner": null,
+        "alive": []
+      },
+      "video_frames": 496
+    }
+  ],
+  "editing": "Two different runs explicitly labelled A/B; hold release at 0.5x uses recorded states, no interpolation",
+  "physics_edited": false,
+  "audio": "none"
+}

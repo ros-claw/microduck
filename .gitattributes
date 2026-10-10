@@ -1,2 +1,18 @@
-# Patch context lines intentionally contain a single space.
-training/*.patch -whitespace
+# Generated physical experiment records; retain raw failures without flooding code review.
+artifacts/neon-escape-v2/** linguist-generated=true
+training/*.patch linguist-generated=true
+artifacts/neon-escape-v3/** linguist-generated=true
+src/microduck_lab/parkour/route_envelopes.json linguist-generated=true
+artifacts/neon-escape-v4/** linguist-generated=true
+artifacts/neon-escape-v5/** linguist-generated=true
+artifacts/neon-escape-v6/** linguist-generated=true
+# Patch context lines intentionally retain a single-space blank line.
+training/*.patch whitespace=-blank-at-eol
+artifacts/**/*.diff whitespace=-blank-at-eol
+
+artifacts/duckverse/**/*.json linguist-generated=true
+artifacts/duckverse-dg02/**/*.json linguist-generated=true
+artifacts/jev-rumble/**/*.json linguist-generated=true
+docs/jev-rumble/media/*.json linguist-generated=true
+# Preserve the exact capture-frozen actor bytes and their replay source hash.
+src/microduck_lab/arena/grounded_victory.py whitespace=-blank-at-eof

@@ -1,0 +1,139 @@
+{
+  "schema": "microduck.arena.scheduled.v1",
+  "seed": 17,
+  "dt": 0.0005,
+  "duration": 8.5215,
+  "mujoco_version": "3.12.0",
+  "brain": "hold",
+  "mode": "seeded",
+  "outcome": {
+    "status": "ELIMINATED",
+    "winner": null,
+    "alive": []
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.0,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 6.0195,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.027060790931924657,
+      "vz": -0.20158016301530746
+    },
+    {
+      "time": 6.1579999999999995,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.15073404996805745,
+      "vz": -1.5705121224845666
+    },
+    {
+      "time": 6.5215,
+      "body_id": "cream",
+      "state": "ELIMINATED",
+      "z": -0.6391611578472985,
+      "vz": -0.32000114404420305,
+      "supporting_tile_ids": [],
+      "contact_step": 13042
+    },
+    {
+      "time": 7.0,
+      "tile": 2,
+      "state": "WARNING"
+    }
+  ],
+  "decisions_file": "decisions.jsonl.gz",
+  "oracle_schedule": [
+    {
+      "tile": 1,
+      "warning_at": 2.0,
+      "release_at": 6.0
+    },
+    {
+      "tile": 2,
+      "warning_at": 7.0,
+      "release_at": 11.0
+    },
+    {
+      "tile": 0,
+      "warning_at": 12.0,
+      "release_at": 16.0
+    },
+    {
+      "tile": 7,
+      "warning_at": 17.0,
+      "release_at": 21.0
+    },
+    {
+      "tile": 5,
+      "warning_at": 22.0,
+      "release_at": 26.0
+    },
+    {
+      "tile": 3,
+      "warning_at": 27.0,
+      "release_at": 31.0
+    },
+    {
+      "tile": 8,
+      "warning_at": 32.0,
+      "release_at": 36.0
+    },
+    {
+      "tile": 6,
+      "warning_at": 37.0,
+      "release_at": 41.0
+    },
+    {
+      "tile": 4,
+      "warning_at": 42.0,
+      "release_at": 46.0
+    }
+  ],
+  "penetration_max_m": 0.002605103876692023,
+  "penetration_p99_m": 3.3275244723559924e-06,
+  "motor_force_max_Nm": 0.6405,
+  "locked_tile_max_drift_m": 4.340739618973258e-05,
+  "time_reset": false,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "finite": true,
+  "external_forces_zero": true,
+  "recording_real_time_factor": 3.2986133354061704,
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f"
+  },
+  "hashes": {
+    "scene.mjb": "9ee41e5b27aae520150a7db4798477bb4b67a60eb7c1579f61f57314c1dfedc8",
+    "trajectory.npz": "f30680b294caf09a49efe041942739329d17c9f1530e1a74b7c8c7f7245977b3",
+    "contacts.jsonl.gz": "f2dc49391905383681046097df9aee811b1ab8b0da88de6ddf43ee1a29fc83bf",
+    "decisions.jsonl.gz": "74bd24c4cb6d1c67ad3adb79d3fd6426d735a30deec3dd620b3faa8ea1fefa2f"
+  }
+}

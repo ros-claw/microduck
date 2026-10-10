@@ -1,0 +1,1015 @@
+{
+  "passed": 9,
+  "total": 10,
+  "runs": [
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 11,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000985983663,
+        9.29852802846891e-09,
+        0.11999755314401143,
+        0.999999999999038,
+        -4.3407760996196776e-08,
+        1.1148658244762902e-06,
+        8.24122319305925e-07
+      ],
+      "root_final": [
+        0.1251327435004251,
+        0.3702032875581066,
+        -0.7163133074258297,
+        0.8751688921950846,
+        -0.10670581238839599,
+        0.21598396975095682,
+        0.4195762201879153
+      ],
+      "centre_error_at_7s_m": 0.04917909602482577,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0936662219318594e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.2418497515633265e-05,
+      "penetration_max_m": 0.002843411881876063,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.2194893910200335,
+      "recording_real_time_factor": 3.7272991280763406,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "d390736c1ab0afec80a35e0776a4d873c13b9005ab6bc6e85109c858439e3f70",
+        "contacts.jsonl.gz": "e16e9beb6a5e0632822113af4a554554fd1921a0978ac2122e1d70e9e7a2e124"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0008024747880968676,
+        "receiver": 0.002843411881876063,
+        "other": 0.0005533395425125849
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 12,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000726634692,
+        -6.115040031589562e-10,
+        0.11999756295444775,
+        0.9999999999994033,
+        -1.0732756956871467e-07,
+        8.404915825859271e-07,
+        6.895809136399226e-07
+      ],
+      "root_final": [
+        0.11222080010351268,
+        -0.002019724343201664,
+        -0.644525696642528,
+        0.9820867646070612,
+        -0.006558114877529659,
+        0.0019983342531648064,
+        -0.18830449960927984
+      ],
+      "centre_error_at_7s_m": 0.047215572407198196,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0897426821603096e-05,
+      "receiver_foot_contact": false,
+      "penetration_p99_m": 6.948772035854173e-06,
+      "penetration_max_m": 0.0016358940694052408,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.1541754059726372,
+      "recording_real_time_factor": 3.8044808723310743,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "fa270c9b49864b7e3e9d664b528a9c0a7b61cf0c7b51978258845ea1a1148f14",
+        "contacts.jsonl.gz": "0776c82df3b39febaa8252ee0619feba7de85ab9a70fbc3b2c2255112767be80"
+      },
+      "category_max_m": {
+        "duck_tile": 0.00047616864463418296,
+        "receiver": 0.0016358940694052408
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 13,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200007934504564,
+        8.423498739152934e-09,
+        0.11999756085826552,
+        0.999999999999303,
+        -4.288620849112725e-08,
+        8.920720418510549e-07,
+        7.722559736815248e-07
+      ],
+      "root_final": [
+        0.40489797969741764,
+        -0.03702847259361908,
+        -0.693625191097387,
+        0.9996168779010419,
+        0.0003404087028749918,
+        0.011444045878030969,
+        0.025199510932345726
+      ],
+      "centre_error_at_7s_m": 0.050146250176104024,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0620232666917795e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.1561037226649262e-05,
+      "penetration_max_m": 0.0015435395206480063,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.118858703004662,
+      "recording_real_time_factor": 3.8475612852994523,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "7c841c7fbd2208733a1401465777d7dc72d0174b8585c4915a32105f39261770",
+        "contacts.jsonl.gz": "69d15ad4d32616b2c842ce22441f6f6fbd089e45d9a5f25f80128a1ee8f1d54f"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0014957633038714727,
+        "receiver": 0.0015435395206480063,
+        "other": 0.00018014167321339425
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 14,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008637795106,
+        2.3988858419829122e-08,
+        0.11999755131784971,
+        0.9999999999991332,
+        6.37041525025314e-08,
+        1.064743557562277e-06,
+        7.718734363028185e-07
+      ],
+      "root_final": [
+        0.33910195676491683,
+        0.22746902962578422,
+        -0.6774814385078223,
+        0.467558552419486,
+        0.46201698622333726,
+        0.4168264971439982,
+        -0.6278415212290144
+      ],
+      "centre_error_at_7s_m": 0.05072944755393356,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.954473960714107e-05,
+      "receiver_foot_contact": false,
+      "penetration_p99_m": 1.529725736349198e-05,
+      "penetration_max_m": 0.0031112412162971736,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.0538903059787117,
+      "recording_real_time_factor": 3.929414221757463,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "5f16fc7fafd5634461aa5b15a25adad1e876da70bc40e7acf563c61c87029b04",
+        "contacts.jsonl.gz": "036f081a94092cb701b8c688559ee6bd2d2540d7e7a24e6ef6f0ec8f236ac04b"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0009228392130492922,
+        "receiver": 0.0031112412162971736,
+        "other": 0.0002351338828197949
+      },
+      "gate_pass": false
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 15,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200007173240023,
+        2.0374910338935572e-08,
+        0.11999755683939461,
+        0.9999999999993242,
+        4.224097998867951e-08,
+        8.627672307163305e-07,
+        7.780741710177256e-07
+      ],
+      "root_final": [
+        0.2501302476289845,
+        0.37035998030587997,
+        -0.6850605533055428,
+        0.2773598565241876,
+        -0.5346388800571364,
+        0.5627911414348581,
+        0.5661262306611322
+      ],
+      "centre_error_at_7s_m": 0.04746481393523453,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.153453706432901e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.0484995408276205e-05,
+      "penetration_max_m": 0.0020802486514184433,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.254742475983221,
+      "recording_real_time_factor": 3.6869276412951644,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "44e2847ccb63e594b893fbd0f46b0ac4eeb6f6244ca303e04343b14f898a3865",
+        "contacts.jsonl.gz": "5da524aaeb44a661c40fcf6dbd188d002bece467885ecfc93b6378d9be295c2b"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0020802486514184433,
+        "receiver": 0.0014034392131701484,
+        "other": 0.0003177032439851359
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 16,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000620835721,
+        -6.655906686645076e-09,
+        0.11999755979050665,
+        0.9999999999994997,
+        -1.722721005951648e-07,
+        7.195850304852936e-07,
+        6.731229223693343e-07
+      ],
+      "root_final": [
+        0.1467181509165242,
+        0.3493498636736344,
+        -0.7038092690892639,
+        0.6018676135147586,
+        -0.25349597685275677,
+        0.3541020115215357,
+        0.6694078957989047
+      ],
+      "centre_error_at_7s_m": 0.04642601333146887,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.8507311891900504e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.2678930012403077e-05,
+      "penetration_max_m": 0.000998569781402513,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.115692983963527,
+      "recording_real_time_factor": 3.8514706236346155,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "5eaf7ad3e70ca30c03678804b0da082484812570c1337429253ae14b71180c3b",
+        "contacts.jsonl.gz": "2954c68fa178f3452386c19da2a8ec2aec3bf8e628bc7136c04627253b780b22"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0006144796981445321,
+        "receiver": 0.000998569781402513,
+        "other": 0.0006085546981785868
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 17,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.4920000682800353,
+        -8.835765432239854e-09,
+        0.11999755913301231,
+        0.9999999999995024,
+        -1.903070855316686e-07,
+        6.938050708706615e-07,
+        6.911451589764178e-07
+      ],
+      "root_final": [
+        0.07281639289393017,
+        0.44010376532895773,
+        -0.6949279473648692,
+        -0.47712626618444676,
+        -0.0021965265355751696,
+        -0.007255326572702847,
+        0.8788020605485576
+      ],
+      "centre_error_at_7s_m": 0.04874315223096323,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0184189037294084e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 5.589268918017348e-06,
+      "penetration_max_m": 0.0026057500826894646,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 3.0131532180239446,
+      "recording_real_time_factor": 3.982538932377862,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "8d787657915120affe93347fbbd18702c34630cfd59ffd3177c853841759d741",
+        "contacts.jsonl.gz": "143c92674a861314e4c8448d5ad0fde29618e115800ac9726f8c791f62641761"
+      },
+      "category_max_m": {
+        "duck_tile": 0.001991129757136555,
+        "receiver": 0.0026057500826894646,
+        "other": 0.00011843546977758005
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 18,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008187543265,
+        1.394637377340013e-08,
+        0.11999755550101988,
+        0.9999999999990493,
+        -1.8891675500867344e-08,
+        1.0636188824444237e-06,
+        8.773728946717655e-07
+      ],
+      "root_final": [
+        0.03638186681637012,
+        0.4387895356985729,
+        -0.6955384338579087,
+        -0.9575773141512508,
+        -0.03850292251037656,
+        -0.10997439067561045,
+        0.2635694325534852
+      ],
+      "centre_error_at_7s_m": 0.05125048620267318,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 6.0774118801266985e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.4629464488505762e-05,
+      "penetration_max_m": 0.00155714906815699,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 2.9254262809990905,
+      "recording_real_time_factor": 4.101966293917946,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "310403c477e16ac0af0efb995ff01aad481985841bf40d60dc35b58aac373ecb",
+        "contacts.jsonl.gz": "22fcd20b4a34f033c73abd51e632430d88f309458a86f8ea2c54c5105189ff66"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0011524144751868701,
+        "receiver": 0.00155714906815699,
+        "other": 8.937956199597653e-05
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 19,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.49200008290933434,
+        2.8263352556950136e-08,
+        0.11999755402337785,
+        0.9999999999991409,
+        9.979205292167341e-08,
+        9.804966319993129e-07,
+        8.641425441924878e-07
+      ],
+      "root_final": [
+        0.3765840765124761,
+        0.38441749132212455,
+        -0.7061424622434311,
+        -0.36377074055419073,
+        0.3691773332541738,
+        0.07885252554985306,
+        -0.8515639871098369
+      ],
+      "centre_error_at_7s_m": 0.04769525196135423,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.960123866211378e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.527239555276779e-05,
+      "penetration_max_m": 0.002313774964404965,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 2.869010833033826,
+      "recording_real_time_factor": 4.1826262424079586,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "df57c926f19a652f6e5b615e143ab7aab8b8a8d5c8f3afa7eccce7d7201e749c",
+        "contacts.jsonl.gz": "9557fb5461d7d1d65384f4d87eb9c9123e202252c01e9a8a6e55053013f0a7ca"
+      },
+      "category_max_m": {
+        "duck_tile": 0.00039890816419459435,
+        "receiver": 0.002313774964404965,
+        "other": 0.00015845728500240758
+      },
+      "gate_pass": true
+    },
+    {
+      "schema": "microduck.arena.greybox.v1",
+      "seed": 20,
+      "dt": 0.0005,
+      "duration": 12.0,
+      "mujoco_version": "3.12.0",
+      "experiment": "scripted neighbour walk and occupied support release",
+      "events": [
+        {
+          "time": 4.0,
+          "tile": 1,
+          "state": "WARNING"
+        },
+        {
+          "time": 6.0,
+          "tile": 1,
+          "state": "RELEASED"
+        },
+        {
+          "time": 8.0,
+          "tile": 4,
+          "state": "WARNING"
+        },
+        {
+          "time": 10.0,
+          "tile": 4,
+          "state": "RELEASED"
+        }
+      ],
+      "root_initial": [
+        -0.492000083101138,
+        1.5184632460195897e-08,
+        0.11999755346211807,
+        0.9999999999992749,
+        -3.443610719283342e-09,
+        9.083528180180491e-07,
+        7.905584354379634e-07
+      ],
+      "root_final": [
+        0.4572205159489547,
+        0.1187468795521041,
+        -0.7679246909960611,
+        -0.0657958823907485,
+        0.07335340704344426,
+        0.9771247278603972,
+        0.18846072731284746
+      ],
+      "centre_error_at_7s_m": 0.045804790088966894,
+      "centre_supported_before_warning": true,
+      "locked_tile_max_drift_m": 5.986326968124289e-05,
+      "receiver_foot_contact": true,
+      "penetration_p99_m": 1.7103696444053617e-05,
+      "penetration_max_m": 0.0018447719509950382,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "wall_s": 2.8911932540358976,
+      "recording_real_time_factor": 4.150535417599244,
+      "external_forces_zero": true,
+      "policy_sha256": {
+        "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+        "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+      },
+      "robot_xml_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+      "contact_columns": [
+        "geom1",
+        "geom2",
+        "distance",
+        "force_normal",
+        "force_t1",
+        "force_t2",
+        "torque_n",
+        "torque_t1",
+        "torque_t2",
+        "px",
+        "py",
+        "pz",
+        "nx",
+        "ny",
+        "nz"
+      ],
+      "sampling": "states and contact forces at pre-integration t; root/tile_z diagnostics at t+dt",
+      "hashes": {
+        "scene.mjb": "91a7e2889c6ae831d6ae2f10b07901849a1e287fab97596b1f5c8dc7ede64ed0",
+        "trajectory.npz": "d54ffcc44da3e744e89ebfe9d6b272cbf99b86149f338e31f7afc7d6a13d56e1",
+        "contacts.jsonl.gz": "5ebde9dc35bc3efa2a0033cbd5a4a801cef00e7cc034e4b942f8e4bdb8c23a40"
+      },
+      "category_max_m": {
+        "duck_tile": 0.0018447719509950382,
+        "receiver": 0.001295963811171095,
+        "other": 0.0003575287230268774
+      },
+      "gate_pass": true
+    }
+  ]
+}

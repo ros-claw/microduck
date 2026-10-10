@@ -1,0 +1,191 @@
+{
+  "schema": "microduck.rosclaw.native-evidence.v1",
+  "core_commit": "dd4499ac5cdbee4dfe4bb0dec2419a699ec39973",
+  "upstream_baseline": "21838614bb14c39599b8acef731b2b64dad3b92a",
+  "candidate_core_pr": "https://github.com/ros-claw/rosclaw/pull/632",
+  "provider": "openai-codex",
+  "model": "gpt-6-astra",
+  "thinking_level": "medium",
+  "mission_id": "mis_05f48fb5a2954f2786764004",
+  "task": {
+    "task_id": "task_a9da0dc2bfd34e84ba7ca55c",
+    "mission_id": "mis_05f48fb5a2954f2786764004",
+    "mode": "SIMULATION",
+    "body_id": "microduck-lavender",
+    "state": "SUCCEEDED",
+    "terminal_reason": "verification_passed",
+    "user_accepted_at": null
+  },
+  "actions": [
+    {
+      "txn_id": "atxn_b3a9b05bf7cf47f8bb6c19e4",
+      "mission_id": "mis_05f48fb5a2954f2786764004",
+      "pi_session_id": "01a11ac9-1a67-74c8-a156-fda3dca67413",
+      "body_hash": "7fd191268517250a71a5a5d1abfefb2a49c72c47a59d6aa1d65a067fcde9ffd9",
+      "mode": "SIMULATION",
+      "capability_id": "microduck.start_game",
+      "arguments_hash": "cf2d74ec218a66235c62dc784ed37b5566f1f21191fe43226b8cbf4374590dd0",
+      "grant_id": "grant_b0743576d7214fb6aa7d5bd4",
+      "action_id": "act_64fb1269fde34581afe2a5d2",
+      "receipt_id": "rcpt_0f235ab91ded4dd78f05eb46",
+      "state": "COMPLETED",
+      "created_at": "2026-10-08T09:12:50.126459+00:00",
+      "completed_at": "2026-10-08T09:16:33.213864+00:00"
+    }
+  ],
+  "tool_results": [
+    {
+      "toolName": "rosclaw_capabilities",
+      "toolCallId": "call_104868090d264c21abb317a27506620f|fc_0a1e052a5f25fffe016ac75e8f24e48197ad4ac283fb2c821f",
+      "content": [
+        {
+          "type": "text",
+          "text": "body: microduck-lavender  mode: SIMULATION\n\naction_capabilities\uff08\u53ef\u7ecf rosclaw_request_action \u63d0\u6848\u7684\u7cbe\u786e ID\uff09:\n  - microduck.start_game [LOW/REVERSIBLE] SIMULATION ONLY: run one shared MuJoCo world, record controls/contacts.\n\nFour independent robots; gravity releases free-\n\ncompute_capabilities\uff08\u89c4\u5212/\u9a8c\u8bc1\u7b49\u7eaf\u8ba1\u7b97\u2014\u2014\u5df2\u7269\u5316\u4e3a\u7cbe\u786e\u5de5\u5177\uff0c\u76f4\u63a5\u8c03\u7528\uff0c\u514d\u5ba1\u6279\uff09:\n  \uff08\u65e0\uff09\n\nobservation_capabilities\uff08\u53ea\u8bfb\u89c2\u6d4b\uff09:\n  - microduck.get_game_status\n  - sim_body_profile"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "action_ids": [
+          "microduck.start_game"
+        ],
+        "observation_ids": [
+          "microduck.get_game_status",
+          "sim_body_profile"
+        ],
+        "compute_ids": [],
+        "excluded": []
+      },
+      "isError": false,
+      "timestamp": 1791450767639
+    },
+    {
+      "toolName": "propose_microduck__start_game",
+      "toolCallId": "call_02cac38502c340d1b640c404be21d462|fc_0a1e052a5f25fffe016ac75e916dcc8197871c9683d195adb4",
+      "content": [
+        {
+          "type": "text",
+          "text": "\u52a8\u4f5c\u5df2\u7531 SIM \u6267\u884c\u5668\u5b8c\u6210\uff08mcp:microduck-sim\uff09\uff1acapability=microduck.start_game, final_state=COMPLETED, evidence_domain=simulation, usable_for_real_execution=false\u3002\u6ca1\u6709\u58f0\u5b66/\u7269\u7406\u89c2\u6d4b\u2014\u2014\u53ea\u80fd\u786e\u8ba4\u9a71\u52a8\u6267\u884c\uff0c\u4e0d\u80fd\u72ec\u7acb\u8bc1\u660e\u7269\u7406\u6548\u679c\uff08\u00a718.4\uff09\u3002grant \u5df2\u6d88\u8d39\u3002"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "status": "COMPLETED",
+        "decision_authority": "POLICY_AUTO",
+        "capability_id": "microduck.start_game",
+        "approval_id": "appr_44d32abf9c0c443287ff8f4a",
+        "grant_id": "grant_b0743576d7214fb6aa7d5bd4",
+        "txn_id": "atxn_b3a9b05bf7cf47f8bb6c19e4",
+        "action_id": "act_64fb1269fde34581afe2a5d2",
+        "receipt_id": "rcpt_0f235ab91ded4dd78f05eb46",
+        "terminal_receipt": true,
+        "evidence_ref": "receipt://rcpt_0f235ab91ded4dd78f05eb46",
+        "error_code": null
+      },
+      "isError": false,
+      "timestamp": 1791450993235
+    },
+    {
+      "toolName": "microduck__get_game_status",
+      "toolCallId": "call_25a379ba06da46c48d48921650ac60de|fc_0a1e052a5f25fffe016ac75f7419a48197a28de5382a1c07eb",
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"status\": \"SUCCEEDED\", \"capability_id\": \"microduck.get_game_status\", \"value\": {\"ok\": true, \"evidence_domain\": \"simulation\", \"busy\": false, \"last_game\": {\"ok\": true, \"quality_pass\": true, \"evidence_domain\": \"simulation\", \"usable_for_real_execution\": false, \"run_id\": \"duckverse_530dc5de0b51451a\", \"participant_body_ids\": [\"microduck-lavender\", \"microduck-cream\", \"microduck-sky\", \"microduck-graphite\"], \"participant_profiles\": [{\"body_id\": \"microduck-lavender\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-cream\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-sky\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-graphite\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}], \"audit_path\": \"/home/nvidia/workspace/microduck/duckverse-rosclaw-home/artifacts/duckverse/duckverse_530dc5de0b51451a/audit.json\", \"audit_sha256\": \"327148b2d634508f10a54086da057169ad8c7b7c0d5e277f8fefb362eda58385\", \"outcome\": {\"status\": \"WINNER\", \"winner\": \"lavender\", \"alive\": [\"lavender\"]}, \"steps\": 139287, \"duration\": 34.82175, \"penetration_max_m\": 0.0016450848401280574, \"finite\": true, \"solver_warnings\": [0, 0, 0, 0, 0, 0, 0], \"body_contact_steps\": 7698}, \"body_profiles\": [{\"body_id\": \"microduck-lavender\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-cream\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-sky\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}, {\"body_id\": \"microduck-graphite\", \"registered\": true, \"profile_sha256\": \"19b2bd714b3cb69fd20c32004a3e62358532656e4ba62c4791620b85ffc5d1a6\"}]}}"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "error_code": null
+      },
+      "isError": false,
+      "timestamp": 1791450996686
+    },
+    {
+      "toolName": "rosclaw_task_inspect",
+      "toolCallId": "call_d800241e2fc54884aed8044c2105cc4c|fc_0a1e052a5f25fffe016ac760438a28819783a6a88785b37cd5",
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n \"task\": {\n  \"task_id\": \"task_a9da0dc2bfd34e84ba7ca55c\",\n  \"mission_id\": \"mis_05f48fb5a2954f2786764004\",\n  \"root_goal\": \"Refresh your current capability snapshot if needed, then run exactly one SIMULATION match through the native action channel: microduck.start_game with seed=101, players=4, layout=square, cadence=steady. The executor now declares a strict input schema. Do not use shell, hardware, or change admission policies. Wait for the actual action receipt and inspect microduck.get_game_status. If a stale capability snapshot is rejected, refresh it through the supported native discovery tool and retry only that rejected, unexecuted request. Return run ID, outcome, audit digest and participant body IDs.\",\n  \"mode\": \"SIMULATION\",\n  \"body_id\": \"microduck-lavender\",\n  \"workspace_path\": \"/home/nvidia/workspace/microduck/duckverse-rosclaw-home/tasks/task_a9da0dc2bfd34e84ba7ca55c/workspace\",\n  \"state\": \"RUNNING\",\n  \"active_revision\": 1,\n  \"locale\": \"auto\",\n  \"created_at\": \"2026-10-08T09:16:36.668164+00:00\",\n  \"updated_at\": \"2026-10-08T09:16:36.668164+00:00\",\n  \"accepted_at\": null,\n  \"terminal_reason\": null,\n  \"user_accepted_at\": null\n },\n \"outcome\": null\n}"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "task_id": "task_a9da0dc2bfd34e84ba7ca55c"
+      },
+      "isError": false,
+      "timestamp": 1791451203843
+    },
+    {
+      "toolName": "rosclaw_deliver",
+      "toolCallId": "call_56ab1f9d8b824cf48009908d88dca7e3|fc_0a1e052a5f25fffe016ac76045943c8197b4585c46a9541def",
+      "content": [
+        {
+          "type": "text",
+          "text": "\u4ea4\u4ed8\u7269\u5df2\u767b\u8bb0\uff1aaudit.json\uff0822494B\uff09artifact_id=art_9772517db2b3410987f07c1b"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "error_code": null
+      },
+      "isError": false,
+      "timestamp": 1791451207938
+    },
+    {
+      "toolName": "rosclaw_verify",
+      "toolCallId": "call_e63f1b3a04374523b64b568174021325|fc_0a1e052a5f25fffe016ac76049811481979b7517205eaf2cba",
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"receipts\": [{\"action_id\": \"act_64fb1269fde34581afe2a5d2\", \"evidence_domain\": \"simulation\", \"final_state\": \"COMPLETED\", \"receipt_id\": \"rcpt_0f235ab91ded4dd78f05eb46\", \"trust_level\": \"SIMULATED\", \"usable_for_real_execution\": false, \"verified\": true}]}"
+        }
+      ],
+      "details": {
+        "ok": true,
+        "error_code": null
+      },
+      "isError": false,
+      "timestamp": 1791451214557
+    }
+  ],
+  "game_run_id": "duckverse_530dc5de0b51451a",
+  "game_audit_sha256": "327148b2d634508f10a54086da057169ad8c7b7c0d5e277f8fefb362eda58385",
+  "outcome": {
+    "status": "WINNER",
+    "winner": "lavender",
+    "alive": [
+      "lavender"
+    ]
+  },
+  "evidence_domain": "simulation",
+  "usable_for_real_execution": false,
+  "qualification": "External MuJoCo 3.12.0 worker; not core Harness 3.13 qualification",
+  "model_scope": "Mission-level native action selection; deterministic public-state tactics and existing ONNX motor policies control the match",
+  "new_training": false,
+  "jev_used": false,
+  "selected101_equivalence": {
+    "scene_binary_sha_match": true,
+    "trajectory_binary_sha_match": true,
+    "final_state_sha_match": true,
+    "events_match": true,
+    "gzip_wrapper_bytes_match": false,
+    "note": "Gzip wrapper timestamps differ; each capture separately passes complete semantic regeneration."
+  },
+  "strict_replay": {
+    "verified": true,
+    "steps": 139287,
+    "max_state_control_error": 0.0,
+    "decisions_regenerated": true,
+    "contacts_regenerated": true,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "lavender",
+      "alive": [
+        "lavender"
+      ]
+    },
+    "evidence_domain": "simulation",
+    "independent_physical_validation": false
+  }
+}

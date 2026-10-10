@@ -1,0 +1,104 @@
+{
+  "source": "artifacts/neon-escape-v3/final-dev-12",
+  "source_audit_sha256": "6ab16c38d14cdd6bbe8ac7fb3e8b578ae3e5c7fd130e2e2bdad33c8a6d8a5860",
+  "video_sha256": "47702f5312e56d9a833ef83cfd1f91442355812c4bf9ee07999109cc7753fc46",
+  "cut": "hero",
+  "style": "industrial",
+  "fps": 50,
+  "frames": 1252,
+  "duration_s": 25.04,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "brain": "jev",
+  "evaluation_goal": "escape",
+  "core_physical_gates": true,
+  "full_stunt_gate": false,
+  "contact_publication_gate": {
+    "passed": true,
+    "failures": [],
+    "requires_hazard_contact": false,
+    "scope": "Every force-bearing contact category, including native ground and self-contact"
+  },
+  "full_contact_audit_sha256": "a44664d7a5c66525021aab2450a8f01d6e1ab49d8394a6d64a3637796cc813a5",
+  "input_replay_sha256": "99526bb3a8601a7efeadfed85e47c5cc5e56201402f5c17f15f00b4da4f187d7",
+  "qualification_scope": "Selected simulation for the declared evaluation_goal; not a 20 cm / 1.2 s dodge certificate or unseen success-rate claim. Physics preview uses privileged simulator state, not vision.",
+  "clips": [
+    {
+      "start": 0.0002,
+      "stop": 3.3199999999996894,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "",
+      "output_start": 0.0,
+      "frames": 166
+    },
+    {
+      "start": 3.3199999999996894,
+      "stop": 3.8699999999996892,
+      "speed": 0.5,
+      "shot": "roll",
+      "title": "",
+      "output_start": 3.32,
+      "frames": 55
+    },
+    {
+      "start": 3.8699999999996892,
+      "stop": 10.898200000001,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "",
+      "output_start": 4.42,
+      "frames": 352
+    },
+    {
+      "start": 10.898200000001,
+      "stop": 11.352600000000592,
+      "speed": 0.4,
+      "shot": "jump",
+      "title": "",
+      "output_start": 11.46,
+      "frames": 57
+    },
+    {
+      "start": 11.352600000000592,
+      "stop": 18.749399999982746,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "",
+      "output_start": 12.600000000000001,
+      "frames": 370
+    },
+    {
+      "start": 18.749399999982746,
+      "stop": 19.149399999982748,
+      "speed": 0.4,
+      "shot": "finish",
+      "title": "",
+      "output_start": 20.0,
+      "frames": 51
+    },
+    {
+      "start": 19.149399999982748,
+      "stop": 20.249399999982746,
+      "speed": 1.0,
+      "shot": "auto",
+      "title": "",
+      "output_start": 21.02,
+      "frames": 55
+    },
+    {
+      "start": 20.249399999982746,
+      "stop": 20.249399999982746,
+      "speed": 1.0,
+      "shot": "finish",
+      "title": "ESCAPED.",
+      "output_start": 22.12,
+      "frames": 146
+    }
+  ],
+  "motion_blur": "4 nearest actual 200 Hz states at -6/-2/+2/+6 ms; no joint interpolation",
+  "audio": "Procedural post-produced Foley, not a simulated microphone",
+  "decor": "Non-colliding posts styled at +/-0.75 m with 16 mm half-width; foreground occlusion management; studio fill lighting. Collidable geometry and native robot materials retained."
+}

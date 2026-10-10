@@ -1,0 +1,947 @@
+{
+  "schema": "microduck.island-rumble.prototype.v1",
+  "seed": 42000,
+  "config": {
+    "players": 4,
+    "grid": 3,
+    "tile_size": 0.36,
+    "gap": 0.008,
+    "dt": 0.00025,
+    "layout": "square",
+    "cadence": "steady",
+    "duration": 20.0,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd",
+    "lifetime_s": 3.2,
+    "filter_s": 0.12,
+    "final_at_s": 3.0,
+    "claim_s": 1.5,
+    "passive": false
+  },
+  "capture": false,
+  "steps": 31938,
+  "duration": 7.984500000000001,
+  "mujoco_version": "3.12.0",
+  "spawns": {
+    "lavender": {
+      "tile": 1,
+      "yaw": -0.0
+    },
+    "cream": {
+      "tile": 5,
+      "yaw": -1.5707963267948966
+    },
+    "sky": {
+      "tile": 7,
+      "yaw": -3.141592653589793
+    },
+    "graphite": {
+      "tile": 3,
+      "yaw": 1.5707963267948966
+    }
+  },
+  "outcome": {
+    "status": "DRAW",
+    "winner": null,
+    "alive": [],
+    "rule": "LastSupportedSurvivor"
+  },
+  "events": [
+    {
+      "time": 0.023,
+      "tile": 3,
+      "state": "LOADED",
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.02325,
+      "tile": 1,
+      "state": "LOADED",
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.02375,
+      "tile": 5,
+      "state": "LOADED",
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.02375,
+      "tile": 7,
+      "state": "LOADED",
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.1715,
+      "tile": 1,
+      "state": "CRACKING",
+      "damage": 0.020042130331732647
+    },
+    {
+      "time": 0.17325000000000002,
+      "tile": 3,
+      "state": "CRACKING",
+      "damage": 0.020005800976444596
+    },
+    {
+      "time": 0.17550000000000002,
+      "tile": 7,
+      "state": "CRACKING",
+      "damage": 0.020035956568934834
+    },
+    {
+      "time": 0.17725,
+      "tile": 5,
+      "state": "CRACKING",
+      "damage": 0.020039555807585353
+    },
+    {
+      "time": 0.45949999999999996,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.10002121502626243,
+      "load_N": 7.039489734334057,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.46149999999999997,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.1000294979962381,
+      "load_N": 7.039098805947962,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.46349999999999997,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.10003604480194667,
+      "load_N": 7.039848038549587,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.46599999999999997,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.10005100564946408,
+      "load_N": 7.03679450201787,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 0.7825,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.2000109400478932,
+      "load_N": 7.218543052239969,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 0.7845,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.20001257430345817,
+      "load_N": 7.218216457490307,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 0.7865,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.2000269383808002,
+      "load_N": 7.2184914845829855,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 0.789,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.2000268250137429,
+      "load_N": 7.218269822284473,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.1087500000000001,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.30002227765594036,
+      "load_N": 7.148639894963396,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.11975,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.30002759513003663,
+      "load_N": 6.40048206374579,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.1267500000000001,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.30000637036776656,
+      "load_N": 6.3075961997247205,
+      "owners": []
+    },
+    {
+      "time": 1.1305,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.30000028824609326,
+      "load_N": 6.295301666422983,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.46425,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.4000399857083966,
+      "load_N": 5.969633197872685,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.4952500000000002,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.4000085976772816,
+      "load_N": 6.181728989782127,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.5057500000000001,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.4000506831817884,
+      "load_N": 6.0725908851857,
+      "owners": []
+    },
+    {
+      "time": 1.52075,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.4000481976305706,
+      "load_N": 6.0498363129846355,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 1.8507500000000001,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.5000464052615355,
+      "load_N": 6.15945331574024,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 1.8765,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.5000348067114541,
+      "load_N": 6.234280555140678,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 1.89175,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.5000018907263786,
+      "load_N": 6.116166969565321,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 1.915,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.5000084012182151,
+      "load_N": 6.077773086838283,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.2275,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.6000105744364425,
+      "load_N": 6.075188874227992,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 2.254,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.600038293588769,
+      "load_N": 5.926351503863786,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 2.27325,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.6000595655578247,
+      "load_N": 5.938162776873988,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 2.3162499999999997,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.6000218036570883,
+      "load_N": 5.912799112644285,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.6105,
+      "tile": 3,
+      "state": "DAMAGE",
+      "damage": 0.7000505882836677,
+      "load_N": 6.010853595601543,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 2.61475,
+      "tile": 2,
+      "state": "LOADED",
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 2.62775,
+      "tile": 8,
+      "state": "LOADED",
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 2.62825,
+      "tile": 0,
+      "state": "LOADED",
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 2.64025,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.700004513527994,
+      "load_N": 5.357148408625737,
+      "owners": []
+    },
+    {
+      "time": 2.6675,
+      "tile": 7,
+      "state": "DAMAGE",
+      "damage": 0.7000203289278981,
+      "load_N": 4.234980684591421,
+      "owners": []
+    },
+    {
+      "time": 2.781,
+      "tile": 2,
+      "state": "CRACKING",
+      "damage": 0.020037918288696024
+    },
+    {
+      "time": 2.7849999999999997,
+      "tile": 0,
+      "state": "CRACKING",
+      "damage": 0.02004442163671162
+    },
+    {
+      "time": 2.7929999999999997,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.7000068794077652,
+      "load_N": 1.3242547878811937,
+      "owners": []
+    },
+    {
+      "time": 2.7935,
+      "tile": 8,
+      "state": "CRACKING",
+      "damage": 0.020038614500589684
+    },
+    {
+      "time": 2.8115,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 331.6537546160208,
+          "depth_m": 0.00017081364541176837
+        }
+      ]
+    },
+    {
+      "time": 2.99525,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.10010194402819259,
+      "load_N": 10.665526019196813,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 3.1294999999999997,
+      "tile": 2,
+      "state": "DAMAGE",
+      "damage": 0.10004814339694842,
+      "load_N": 5.733739889068545,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 3.13775,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.10004823349545836,
+      "load_N": 5.99044282804492,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 3.16525,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 118.79792572878252,
+          "depth_m": 2.8091162739270897e-05
+        }
+      ]
+    },
+    {
+      "time": 3.19925,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.20006600012865672,
+      "load_N": 11.412479613396505,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 3.3985,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.3000501537341283,
+      "load_N": 11.759261364122512,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 3.5324999999999998,
+      "tile": 2,
+      "state": "DAMAGE",
+      "damage": 0.20000116958200892,
+      "load_N": 5.840222144970476,
+      "owners": []
+    },
+    {
+      "time": 3.5345,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.20003239933124334,
+      "load_N": 5.982506389787956,
+      "owners": []
+    },
+    {
+      "time": 3.5942499999999997,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.40005440417250265,
+      "load_N": 11.866734202828116,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 3.7895,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.500068678060036,
+      "load_N": 11.750673837108236,
+      "owners": [
+        "graphite"
+      ]
+    },
+    {
+      "time": 3.93275,
+      "tile": 2,
+      "state": "DAMAGE",
+      "damage": 0.3000456279522873,
+      "load_N": 5.6994835963961235,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 3.93675,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.30002629831745836,
+      "load_N": 5.862528069038513,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 3.984,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 101.5576604644871,
+          "depth_m": 5.95380121474807e-05
+        }
+      ]
+    },
+    {
+      "time": 3.9892499999999997,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.6001138455519668,
+      "load_N": 11.154473403161505,
+      "owners": [
+        "lavender"
+      ]
+    },
+    {
+      "time": 4.1885,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.7001043016259396,
+      "load_N": 11.78746989815619,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 4.32725,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.4000035300092535,
+      "load_N": 6.018120188854277,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 4.33175,
+      "tile": 2,
+      "state": "DAMAGE",
+      "damage": 0.4000488017245779,
+      "load_N": 6.010063570137929,
+      "owners": []
+    },
+    {
+      "time": 4.385750000000001,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.8000682489593721,
+      "load_N": 11.362887582655977,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 4.583,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 0.9000621558317315,
+      "load_N": 11.618560685597714,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 4.7075000000000005,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.50005703256067,
+      "load_N": 5.996608125283124,
+      "owners": []
+    },
+    {
+      "time": 4.722250000000001,
+      "tile": 2,
+      "state": "DAMAGE",
+      "damage": 0.5000170103711882,
+      "load_N": 5.996114170709695,
+      "owners": []
+    },
+    {
+      "time": 4.7285,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 93.12829352237999,
+          "depth_m": 5.1693814945766124e-05
+        }
+      ]
+    },
+    {
+      "time": 4.7802500000000006,
+      "tile": 0,
+      "state": "DAMAGE",
+      "damage": 1.0000924272053713,
+      "load_N": 11.506111335578106,
+      "owners": [
+        "graphite",
+        "lavender"
+      ]
+    },
+    {
+      "time": 4.7802500000000006,
+      "tile": 0,
+      "state": "RELEASED",
+      "damage": 1.0000924272053713
+    },
+    {
+      "time": 4.799250000000001,
+      "tile": 0,
+      "state": "FALLING",
+      "z": -0.027028393271769386,
+      "vz": -0.20299375869305802
+    },
+    {
+      "time": 4.9375,
+      "tile": 0,
+      "state": "LOST",
+      "z": -0.15034994577012725,
+      "vz": -1.5690146662546045
+    },
+    {
+      "time": 5.028250000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "graphite",
+          "force_N": 507.13676705807995,
+          "depth_m": 0.00010765393366561713
+        }
+      ]
+    },
+    {
+      "time": 5.09525,
+      "tile": 8,
+      "state": "DAMAGE",
+      "damage": 0.6000500360450132,
+      "load_N": 5.834535159671353,
+      "owners": []
+    },
+    {
+      "time": 5.24275,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.800023945734642,
+      "load_N": 5.437128189289499,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 5.3125,
+      "body_id": "graphite",
+      "state": "ELIMINATED",
+      "z": -0.6401314085196458,
+      "vz": 0.31196444013766894,
+      "supporting_tile_ids": [],
+      "contact_step": 21249
+    },
+    {
+      "time": 5.32075,
+      "body_id": "lavender",
+      "state": "ELIMINATED",
+      "z": -0.6821639683548579,
+      "vz": 0.21634760552317167,
+      "supporting_tile_ids": [],
+      "contact_step": 21282
+    },
+    {
+      "time": 5.6385000000000005,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 0.900029519613205,
+      "load_N": 5.855617385018687,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 5.649500000000001,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.8000436168406696,
+      "load_N": 5.4172740486121675,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 6.02725,
+      "tile": 1,
+      "state": "DAMAGE",
+      "damage": 1.0000139481177521,
+      "load_N": 6.089303845445632,
+      "owners": [
+        "cream"
+      ]
+    },
+    {
+      "time": 6.02725,
+      "tile": 1,
+      "state": "RELEASED",
+      "damage": 1.0000139481177521
+    },
+    {
+      "time": 6.04675,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.027034141876757036,
+      "vz": -0.19815123461136125
+    },
+    {
+      "time": 6.05775,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 0.9000224253299637,
+      "load_N": 5.760620977228739,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 6.18625,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.1502998272300416,
+      "vz": -1.56664623461135
+    },
+    {
+      "time": 6.456,
+      "tile": 5,
+      "state": "DAMAGE",
+      "damage": 1.000030248614709,
+      "load_N": 6.096871944141605,
+      "owners": [
+        "sky"
+      ]
+    },
+    {
+      "time": 6.456,
+      "tile": 5,
+      "state": "RELEASED",
+      "damage": 1.000030248614709
+    },
+    {
+      "time": 6.475250000000001,
+      "tile": 5,
+      "state": "FALLING",
+      "z": -0.027021964461186876,
+      "vz": -0.2049822648660281
+    },
+    {
+      "time": 6.6135,
+      "tile": 5,
+      "state": "LOST",
+      "z": -0.15037409181049852,
+      "vz": -1.582057214515226
+    },
+    {
+      "time": 6.704750000000001,
+      "body_id": "cream",
+      "state": "ELIMINATED",
+      "z": -0.6544419157015403,
+      "vz": -0.34905586980057224,
+      "supporting_tile_ids": [],
+      "contact_step": 26818
+    },
+    {
+      "time": 6.984500000000001,
+      "body_id": "sky",
+      "state": "ELIMINATED",
+      "z": -0.7241443378748361,
+      "vz": -2.0143811581298734,
+      "supporting_tile_ids": [],
+      "contact_step": 27937
+    },
+    {
+      "time": 6.984500000000001,
+      "state": "TERMINAL",
+      "status": "DRAW",
+      "winner": null,
+      "alive": [],
+      "rule": "LastSupportedSurvivor"
+    },
+    {
+      "time": 7.28425,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 813.2337337138102,
+          "depth_m": 8.981314112376686e-05
+        }
+      ]
+    },
+    {
+      "time": 7.5365,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "sky",
+          "b": "cream",
+          "force_N": 7.720601059235903,
+          "depth_m": 9.8913708634936e-07
+        }
+      ]
+    },
+    {
+      "time": 7.788500000000001,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "cream",
+          "b": "sky",
+          "force_N": 2.6056610409293133,
+          "depth_m": 1.0896002762679847e-07
+        }
+      ]
+    }
+  ],
+  "damage": {
+    "0": 1.0000924272053713,
+    "1": 1.0000139481177521,
+    "2": 0.5918939786459682,
+    "3": 0.7652511514679424,
+    "4": 0.0,
+    "5": 1.000030248614709,
+    "6": 0.0,
+    "7": 0.7219559765987305,
+    "8": 0.6456875527934979
+  },
+  "body_weight_N": {
+    "lavender": 7.232355595800001,
+    "cream": 7.232355595800001,
+    "sky": 7.232355595800001,
+    "graphite": 7.232355595800001
+  },
+  "body_contact_steps": 2067,
+  "penetration_max_m": 0.0010043018059981376,
+  "motor_force_max_Nm": 0.6405,
+  "finite": true,
+  "time_reset": false,
+  "external_forces_zero": true,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "final_state_sha256": "6a1ee19d91513a4441ad645533a14d6e23556ba9ad6a4de312d110b0acf60064",
+  "stationary_fraction": 0.168125,
+  "no_safe_option_fraction": 0.004375,
+  "roles": {
+    "lavender": "rusher",
+    "cream": "survivor",
+    "sky": "blocker",
+    "graphite": "rusher"
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/island_rumble.py": "e3835f359af4cc5a10758e1fa62164ebf6e122e15ddbccb81dfcf1bb42496256",
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "performance": {
+    "real_time_factor": 1.199879741528831
+  },
+  "hashes": {
+    "decisions.jsonl.gz": "e69f5c68eaab1a7235022e3b161cf3e0ee5e01dbcc16d882e2381338abf05295"
+  }
+}

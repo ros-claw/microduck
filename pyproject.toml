@@ -1,12 +1,12 @@
 [project]
 name = "microduck-lab"
 version = "0.1.0"
-description = "Microduck Circus — three ROSClaw ducks learn to skip a long rope (Pollen Microduck × MuJoCo × ROSClaw loop)"
+description = "Microduck Duckverse — reproducible physical robot skills and games in MuJoCo"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
 dependencies = [
-    "mujoco>=3.12",
+    "mujoco>=3.12,<3.13",
     "onnxruntime>=1.17",
     "numpy>=1.26",
     "imageio>=2.34",
@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+rosclaw = ["mcp>=1.0,<2.0"]
 
 [build-system]
 requires = ["hatchling"]

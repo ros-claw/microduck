@@ -1,0 +1,37 @@
+{
+  "schema": "microduck.duckverse.film.v1",
+  "video": "duckverse_game_en.mp4",
+  "video_sha256": "ce58f2cc2701893182c9ee2134a60d9812aa07aaa808907e4025acb356f9d0ce",
+  "fps": 50,
+  "duration_s": 45.58,
+  "mode": "hero",
+  "seed": 101,
+  "source_audit_sha256": "0e23402740baed916929750a2c878709289355edab2fe6a963402929b6c58907",
+  "source_hashes": {
+    "scene.mjb": "75a97b7f939f7cfb9dddced6a4784f80a066d2bd64635ced0a3c418064320f7b",
+    "contacts.jsonl.gz": "9e6b9026e3e41d13a4f48eb52b294c8d15bcc53c7723a76e236551e8602b3a7e",
+    "trajectory.npz": "c071d5c39f8ec509be4ff7226eda62317fb5bb8d5b1fd37a156b85326a434d3f",
+    "decisions.jsonl.gz": "02ca78f81fa21ae580404b066c105b6829ceafb48d394c0b09485d76cfa8e54e"
+  },
+  "frame_map": "duckverse_game_en.frames.jsonl.gz",
+  "frame_map_sha256": "b5aca748c78573ac9f336c97a654057ce6955dc10e615c2498e4f3cbbf0bb22e",
+  "physics_edited": false,
+  "audio": "Original synthesized harmony/percussion sound design; not recorded physical audio",
+  "evidence_domain": "simulation",
+  "editing": "Chronological single run; recorded 4 kHz states; camera/material/HUD only; no pose interpolation; explicit end/method cards carry no physical-state claim",
+  "subtitles": {
+    "en": {
+      "file": "duckverse_game_en.en.srt",
+      "sha256": "e7003e6c4e099a1fc39aea90cc1a7cceb483bf61994542d98d47c6c692608617"
+    },
+    "zh-CN": {
+      "file": "duckverse_game_en.zh-CN.srt",
+      "sha256": "c093b2eea5c8987df62c75eeb2dec1b93d932bf4a5780fc721f3382bf573cad0"
+    }
+  },
+  "presentation_source_sha256": {
+    "src/microduck_lab/presentation/duckverse.py": "174da144086b45b4b2e32784f6cae16da122d989b97be4d52fbed277dcb0abca",
+    "scripts/render_duckverse_technical.py": "55b8145b770240f56d79c22267bf7e08c621e85a74258ce4b57961f1dd17091a",
+    "scripts/finalize_duckverse_media.py": "cf816b998282b58bd325ebeb62440b40a435df809a83d7aa3d71632c4fb60f85"
+  }
+}

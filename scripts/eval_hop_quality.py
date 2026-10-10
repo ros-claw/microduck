@@ -4,6 +4,7 @@ This evaluates a single duck without a rope, NOT rope-skip success.
 """
 from __future__ import annotations
 import argparse
+import os
 import json
 import pathlib
 import sys
@@ -14,17 +15,18 @@ import numpy as np
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from microduck_lab.sim.composer import compose_world, DuckSpec
-from microduck_lab.sim.runtime import PolicyBank, DuckRuntime
+from microduck_lab.sim.composer import compose_world, DuckSpec  # noqa: E402 - local source/script import after path setup
+from microduck_lab.sim.runtime import PolicyBank, DuckRuntime  # noqa: E402 - local source/script import after path setup
 
 
 def evaluate(policy, seed=0, seconds=10., video=None):
-    robot = ROOT.parent / 'microduck_rl/src/mjlab_microduck/robot/microduck/robot_allcollisions.xml'
+    assets = pathlib.Path(os.environ.get('MICRODUCK_ROOT', ROOT.parent)).expanduser()
+    robot = assets / 'microduck_rl/src/mjlab_microduck/robot/microduck/robot_allcollisions.xml'
     world = compose_world(robot, [DuckSpec('sky', (0, 0))], playground=False)
     m, d = world.model, world.data
     m.opt.timestep = .001
     m.opt.iterations = 100
-    bank = PolicyBank({'stand': str(ROOT.parent/'microduck/policies/alpha_stand.onnx'), 'hop': str(policy)})
+    bank = PolicyBank({'stand': str(assets/'microduck/policies/alpha_stand.onnx'), 'hop': str(policy)})
     duck = DuckRuntime(m, d, bank, prefix='sky/')
     d.qpos[duck.joint_qpos_idx] = duck.default_pose + np.random.default_rng(seed).uniform(-.02,.02,14)
     mujoco.mj_forward(m, d)

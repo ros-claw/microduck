@@ -1,0 +1,144 @@
+{
+  "status": "unaccepted development preview; physical gate passed, outcome gate failed",
+  "actor_checkpoint": "14d6e63",
+  "source_sha256": {
+    "src/microduck_lab/arena/survival_rumble.py": "c1c1f89e674c920c4fcc8b1b1cfcc4520f4d4d4b54a52a09246c68306359b893",
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/relay_world.py": "43f7a1b42114f7daaef2f9c08fc339d54c06960f74d70ad954fe59da759c9343",
+    "src/microduck_lab/arena/relay_rumble.py": "f6c11d9f587290804cabeda9688e9ecf20c4d510ea13f5c28e94fa280d001357",
+    "src/microduck_lab/arena/survival_world.py": "2b13d1dcc217842ef89c2098c3ef6ae649b6d2b62e1b89a50a0d79162b610645",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "tests_passed": 136,
+  "ruff": "passed",
+  "heldout": {
+    "count": 32,
+    "physical_passes": 32,
+    "declared_winners": 13,
+    "strict_final_survivors": 10,
+    "draws": 18,
+    "timeouts": 1,
+    "post_match_instability": 3,
+    "outcome_gate": false,
+    "maximum_penetration_m": 0.0016444241900169098
+  },
+  "selected": {
+    "seed": 61204,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "cream",
+      "alive": [
+        "cream"
+      ],
+      "rule": "LastDuckAlive",
+      "stable_supported_s": 0.75,
+      "loaded_fraction": 0.998999999999927,
+      "max_unsupported_gap_s": 0.0002500000000011937,
+      "eliminated": [
+        "graphite",
+        "lavender",
+        "sky"
+      ]
+    },
+    "final_alive": [
+      "cream"
+    ],
+    "duration_s": 44.592,
+    "captures": 5,
+    "body_contact_episodes": 38,
+    "maximum_penetration_m": 0.0016444241836231484,
+    "stationary_fraction": 0.06631142687981054
+  },
+  "passive": {
+    "outcome": {
+      "status": "DRAW",
+      "winner": null,
+      "alive": [],
+      "rule": "LastDuckAlive"
+    },
+    "captures": 0,
+    "body_contact_episodes": 0,
+    "finale_started_s": 36.0
+  },
+  "replay": {
+    "verified": true,
+    "steps": 178368,
+    "max_state_control_error": 0.0,
+    "decisions_regenerated": true,
+    "contacts_regenerated": true,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "cream",
+      "alive": [
+        "cream"
+      ],
+      "rule": "LastDuckAlive",
+      "stable_supported_s": 0.75,
+      "loaded_fraction": 0.998999999999927,
+      "max_unsupported_gap_s": 0.0002500000000011937,
+      "eliminated": [
+        "graphite",
+        "lavender",
+        "sky"
+      ]
+    },
+    "evidence_domain": "simulation",
+    "independent_physical_validation": false
+  },
+  "release_created": false,
+  "tag_created": false,
+  "media": {
+    "decoded": true,
+    "frames": 3667,
+    "duration_s": 73.34,
+    "chronological": true,
+    "speech_cues": 16,
+    "speech_and_frames_provenance_checked": true,
+    "audio_peak": 0.8818951845169067,
+    "audio_rms": 0.11274586348933177,
+    "audio_near_full_scale_fraction": 0.0,
+    "outcome": {
+      "status": "WINNER",
+      "winner": "cream",
+      "alive": [
+        "cream"
+      ],
+      "rule": "LastDuckAlive",
+      "stable_supported_s": 0.75,
+      "loaded_fraction": 0.998999999999927,
+      "max_unsupported_gap_s": 0.0002500000000011937,
+      "eliminated": [
+        "graphite",
+        "lavender",
+        "sky"
+      ]
+    },
+    "final_alive": [
+      "cream"
+    ],
+    "video_sha256": "5c111ad05689a4058959dcb47369ec0399714436fe931b93c11a52148359834d",
+    "measured_final_audio": {
+      "input_i": "-17.00",
+      "input_tp": "-1.09",
+      "input_lra": "9.80",
+      "input_thresh": "-29.09",
+      "output_i": "-16.80",
+      "output_tp": "-1.50",
+      "output_lra": "8.70",
+      "output_thresh": "-28.82",
+      "normalization_type": "dynamic",
+      "target_offset": "0.80"
+    }
+  },
+  "video_file": "out/survival-rumble-commentary-zh.mp4",
+  "publication_status": "development branch only; no Release or Tag"
+}

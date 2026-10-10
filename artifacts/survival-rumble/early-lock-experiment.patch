@@ -1,0 +1,58 @@
+diff --git a/src/microduck_lab/arena/survival_rumble.py b/src/microduck_lab/arena/survival_rumble.py
+index 70cc930..f269d4e 100644
+--- a/src/microduck_lab/arena/survival_rumble.py
++++ b/src/microduck_lab/arena/survival_rumble.py
+@@ -326,6 +326,10 @@ def run_survival(out, seed=31001, config=None, capture=False):
+     claim = RoamingBeacons(config, ducks)
+     finale = SurvivalFinale(config)
+     victory = LastDuckVictory(config)
++    arena_locks = np.array(
++        [m.equality("arena_lock_" + axis).id for axis in ("roll", "pitch")]
++    )
++    platform_unlocked = False
+     arena_act = np.array([m.actuator("arena_" + a).id for a in ("roll", "pitch")])
+     arena_qpos = np.array(
+         [m.jnt_qposadr[m.joint("arena_" + a + "_joint").id] for a in ("roll", "pitch")]
+@@ -465,6 +469,10 @@ def run_survival(out, seed=31001, config=None, capture=False):
+                     terminal is None,
+                 )
+             )
++            if finale.inner_done and not platform_unlocked:
++                d.eq_active[arena_locks] = False
++                platform_unlocked = True
++                events.append(dict(time=t + config.dt, state="PLATFORM_UNLOCKED"))
+             events.extend(
+                 e for tile in tiles.values() for e in tile.update(d, t + config.dt)
+             )
+diff --git a/src/microduck_lab/arena/survival_world.py b/src/microduck_lab/arena/survival_world.py
+index 1184926..8d7dcd2 100644
+--- a/src/microduck_lab/arena/survival_world.py
++++ b/src/microduck_lab/arena/survival_world.py
+@@ -87,6 +87,13 @@ def build_survival_world(config, seed):
+                     forcerange=[-4.0, 4.0],
+                 )
+                 a.set_to_position(kp=35, kv=2.0)
++                lock = s.add_equality(name="arena_lock_" + axis)
++                lock.type = mujoco.mjtEq.mjEQ_JOINT
++                lock.objtype = mujoco.mjtObj.mjOBJ_JOINT
++                lock.name1 = "arena_" + axis + "_joint"
++                lock.data[0] = 0.0
++                lock.solref = [0.002, 1]
++                lock.solimp = [0.999, 0.999, 0.001, 0.5, 2]
+         else:
+             b = s.worldbody.add_body(name=f"tile_{i}", pos=[*config.centre(i), -0.025])
+             b.add_freejoint(name=f"tile_{i}_free")
+diff --git a/tests/test_survival_rumble.py b/tests/test_survival_rumble.py
+index 01ff075..4383acb 100644
+--- a/tests/test_survival_rumble.py
++++ b/tests/test_survival_rumble.py
+@@ -118,6 +118,9 @@ def test_gimbal_is_actuated_geometry_with_grounded_base():
+     assert d.eq_active[m.equality("tile_12_support").id]
+     assert m.body("tile_12").parentid == m.body("arena_roll_body").id
+     for axis in ("roll", "pitch"):
++        lock = m.equality("arena_lock_" + axis).id
++        assert d.eq_active[lock]
++        assert m.eq_obj1id[lock] == m.joint("arena_" + axis + "_joint").id
+         a = m.actuator("arena_" + axis).id
+         assert np.allclose(m.actuator_forcerange[a], [-4, 4])
+         assert m.actuator_trnid[a, 0] == m.joint("arena_" + axis + "_joint").id

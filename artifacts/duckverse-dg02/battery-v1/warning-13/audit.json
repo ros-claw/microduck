@@ -1,0 +1,156 @@
+{
+  "schema": "microduck.arena.scheduled.v1",
+  "seed": 13,
+  "dt": 0.0005,
+  "duration": 14.0,
+  "mujoco_version": "3.12.0",
+  "brain": "warning",
+  "mode": "seeded",
+  "outcome": {
+    "status": "TIME_LIMIT",
+    "winner": null,
+    "alive": [
+      "cream"
+    ]
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.0,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 6.02,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.027019478136265984,
+      "vz": -0.1962000000000882
+    },
+    {
+      "time": 6.1594999999999995,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.15018402813627815,
+      "vz": -1.5646950000000854
+    },
+    {
+      "time": 7.0,
+      "tile": 0,
+      "state": "WARNING"
+    },
+    {
+      "time": 11.0,
+      "tile": 0,
+      "state": "RELEASED"
+    },
+    {
+      "time": 11.020000000000001,
+      "tile": 0,
+      "state": "FALLING",
+      "z": -0.027027758968579844,
+      "vz": -0.19619999999999324
+    },
+    {
+      "time": 11.159500000000001,
+      "tile": 0,
+      "state": "LOST",
+      "z": -0.15019230896857935,
+      "vz": -1.5646949999999904
+    },
+    {
+      "time": 12.0,
+      "tile": 8,
+      "state": "WARNING"
+    }
+  ],
+  "decisions_file": "decisions.jsonl.gz",
+  "oracle_schedule": [
+    {
+      "tile": 1,
+      "warning_at": 2.0,
+      "release_at": 6.0
+    },
+    {
+      "tile": 0,
+      "warning_at": 7.0,
+      "release_at": 11.0
+    },
+    {
+      "tile": 8,
+      "warning_at": 12.0,
+      "release_at": 16.0
+    },
+    {
+      "tile": 4,
+      "warning_at": 17.0,
+      "release_at": 21.0
+    },
+    {
+      "tile": 3,
+      "warning_at": 22.0,
+      "release_at": 26.0
+    },
+    {
+      "tile": 6,
+      "warning_at": 27.0,
+      "release_at": 31.0
+    },
+    {
+      "tile": 7,
+      "warning_at": 32.0,
+      "release_at": 36.0
+    },
+    {
+      "tile": 2,
+      "warning_at": 37.0,
+      "release_at": 41.0
+    },
+    {
+      "tile": 5,
+      "warning_at": 42.0,
+      "release_at": 46.0
+    }
+  ],
+  "penetration_max_m": 0.00048621995060585063,
+  "penetration_p99_m": 1.5293641874775397e-06,
+  "motor_force_max_Nm": 0.5812249836574461,
+  "locked_tile_max_drift_m": 6.086693107298924e-05,
+  "time_reset": false,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "finite": true,
+  "external_forces_zero": true,
+  "recording_real_time_factor": 2.826170712173521,
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "310f571647baa2fadeccd0f4115f3a62aed1ed627d4cbb22107e71e77e9b90cc",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f"
+  },
+  "hashes": {
+    "scene.mjb": "9ee41e5b27aae520150a7db4798477bb4b67a60eb7c1579f61f57314c1dfedc8",
+    "trajectory.npz": "49c9c867c518c1de69ea43ad7ca6d22b94da13b8297f8290d0c6150c1fbb37d8",
+    "contacts.jsonl.gz": "5a88d611eff04d9acc765262bb2c2d03bd7fc18e7a1e8c7fbc9807c967e04eb8",
+    "decisions.jsonl.gz": "4e231cdecfee4a19441e7cf24eafa6cd5054de8045af8a54b9cd9f6acbc11b27"
+  }
+}

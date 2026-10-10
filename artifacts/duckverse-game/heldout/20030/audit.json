@@ -1,0 +1,961 @@
+{
+  "schema": "microduck.arena.multiplayer.v1",
+  "seed": 20030,
+  "config": {
+    "players": 4,
+    "grid": 5,
+    "tile_size": 0.48,
+    "gap": 0.012,
+    "dt": 0.00025,
+    "layout": "terraces",
+    "cadence": "rapid",
+    "duration": 45.0,
+    "contact_ref_s": 0.0005,
+    "solver_iterations": 80,
+    "external_envelopes": true,
+    "ccd": "libccd"
+  },
+  "steps": 100084,
+  "duration": 25.021,
+  "mujoco_version": "3.12.0",
+  "capture": false,
+  "final_state_sha256": "08cca8d298fbf09acaf54141b73e47775b863f03fdbaccf8f6cb0ee7a444d887",
+  "spawns": {
+    "sky": {
+      "tile": 2,
+      "yaw": -0.0
+    },
+    "graphite": {
+      "tile": 14,
+      "yaw": -1.5707963267948966
+    },
+    "lavender": {
+      "tile": 22,
+      "yaw": -3.141592653589793
+    },
+    "cream": {
+      "tile": 10,
+      "yaw": 1.5707963267948966
+    }
+  },
+  "outcome": {
+    "status": "DRAW",
+    "winner": null,
+    "alive": []
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "tile": 5,
+      "state": "WARNING"
+    },
+    {
+      "time": 2.85,
+      "tile": 1,
+      "state": "WARNING"
+    },
+    {
+      "time": 3.7,
+      "tile": 14,
+      "state": "WARNING"
+    },
+    {
+      "time": 4.55,
+      "tile": 23,
+      "state": "WARNING"
+    },
+    {
+      "time": 5.4,
+      "tile": 10,
+      "state": "WARNING"
+    },
+    {
+      "time": 5.5,
+      "tile": 5,
+      "state": "RELEASED"
+    },
+    {
+      "time": 5.5200000000000005,
+      "tile": 5,
+      "state": "FALLING",
+      "z": -0.02701478459984929,
+      "vz": -0.1961999999999204
+    },
+    {
+      "time": 5.6595,
+      "tile": 5,
+      "state": "LOST",
+      "z": -0.15000827272483783,
+      "vz": -1.5646949999999091
+    },
+    {
+      "time": 6.25,
+      "tile": 2,
+      "state": "WARNING"
+    },
+    {
+      "time": 6.3500000000000005,
+      "tile": 1,
+      "state": "RELEASED"
+    },
+    {
+      "time": 6.37,
+      "tile": 1,
+      "state": "FALLING",
+      "z": -0.027008138667014483,
+      "vz": -0.19620000000003848
+    },
+    {
+      "time": 6.5095,
+      "tile": 1,
+      "state": "LOST",
+      "z": -0.15000162679201928,
+      "vz": -1.5646950000000273
+    },
+    {
+      "time": 7.1000000000000005,
+      "tile": 19,
+      "state": "WARNING"
+    },
+    {
+      "time": 7.2,
+      "tile": 14,
+      "state": "RELEASED"
+    },
+    {
+      "time": 7.22025,
+      "tile": 14,
+      "state": "FALLING",
+      "z": -0.027036229094021907,
+      "vz": -0.19865249999993767
+    },
+    {
+      "time": 7.359750000000001,
+      "tile": 14,
+      "state": "LOST",
+      "z": -0.1503718409690128,
+      "vz": -1.5671474999999264
+    },
+    {
+      "time": 7.95,
+      "tile": 15,
+      "state": "WARNING"
+    },
+    {
+      "time": 8.05,
+      "tile": 23,
+      "state": "RELEASED"
+    },
+    {
+      "time": 8.07025,
+      "tile": 23,
+      "state": "FALLING",
+      "z": -0.027044509926339697,
+      "vz": -0.1986525000000334
+    },
+    {
+      "time": 8.20975,
+      "tile": 23,
+      "state": "LOST",
+      "z": -0.15038012180134394,
+      "vz": -1.5671475000000221
+    },
+    {
+      "time": 8.8,
+      "tile": 22,
+      "state": "WARNING"
+    },
+    {
+      "time": 8.9,
+      "tile": 10,
+      "state": "RELEASED"
+    },
+    {
+      "time": 8.92,
+      "tile": 10,
+      "state": "FALLING",
+      "z": -0.027013149700378856,
+      "vz": -0.19620000000040716
+    },
+    {
+      "time": 9.0595,
+      "tile": 10,
+      "state": "LOST",
+      "z": -0.15000663782543516,
+      "vz": -1.5646950000003959
+    },
+    {
+      "time": 9.65,
+      "tile": 21,
+      "state": "WARNING"
+    },
+    {
+      "time": 9.75,
+      "tile": 2,
+      "state": "RELEASED"
+    },
+    {
+      "time": 9.770249999999999,
+      "tile": 2,
+      "state": "FALLING",
+      "z": -0.027049520959698373,
+      "vz": -0.19865249999998857
+    },
+    {
+      "time": 9.909749999999999,
+      "tile": 2,
+      "state": "LOST",
+      "z": -0.15038513283469623,
+      "vz": -1.5671474999999773
+    },
+    {
+      "time": 10.5,
+      "tile": 9,
+      "state": "WARNING"
+    },
+    {
+      "time": 10.6,
+      "tile": 19,
+      "state": "RELEASED"
+    },
+    {
+      "time": 10.62025,
+      "tile": 19,
+      "state": "FALLING",
+      "z": -0.027037863993510734,
+      "vz": -0.19865250000060208
+    },
+    {
+      "time": 10.75975,
+      "tile": 19,
+      "state": "LOST",
+      "z": -0.15037347586859426,
+      "vz": -1.5671475000005908
+    },
+    {
+      "time": 11.35,
+      "tile": 3,
+      "state": "WARNING"
+    },
+    {
+      "time": 11.450000000000001,
+      "tile": 15,
+      "state": "RELEASED"
+    },
+    {
+      "time": 11.469999999999999,
+      "tile": 15,
+      "state": "FALLING",
+      "z": -0.02701478459985501,
+      "vz": -0.1962000000002532
+    },
+    {
+      "time": 11.609499999999999,
+      "tile": 15,
+      "state": "LOST",
+      "z": -0.15000827272488998,
+      "vz": -1.564695000000242
+    },
+    {
+      "time": 12.200000000000001,
+      "tile": 6,
+      "state": "WARNING"
+    },
+    {
+      "time": 12.3,
+      "tile": 22,
+      "state": "RELEASED"
+    },
+    {
+      "time": 12.32025,
+      "tile": 22,
+      "state": "FALLING",
+      "z": -0.027049520959701014,
+      "vz": -0.19865250000013643
+    },
+    {
+      "time": 12.45975,
+      "tile": 22,
+      "state": "LOST",
+      "z": -0.1503851328347197,
+      "vz": -1.5671475000001251
+    },
+    {
+      "time": 13.05,
+      "tile": 8,
+      "state": "WARNING"
+    },
+    {
+      "time": 13.15,
+      "tile": 21,
+      "state": "RELEASED"
+    },
+    {
+      "time": 13.17,
+      "tile": 21,
+      "state": "FALLING",
+      "z": -0.02700813866700745,
+      "vz": -0.19619999999957052
+    },
+    {
+      "time": 13.3095,
+      "tile": 21,
+      "state": "LOST",
+      "z": -0.150001626791947,
+      "vz": -1.5646949999995594
+    },
+    {
+      "time": 13.9,
+      "tile": 11,
+      "state": "WARNING"
+    },
+    {
+      "time": 14.0,
+      "tile": 9,
+      "state": "RELEASED"
+    },
+    {
+      "time": 14.020249999999999,
+      "tile": 9,
+      "state": "FALLING",
+      "z": -0.02703786399346945,
+      "vz": -0.19865249999849757
+    },
+    {
+      "time": 14.159749999999999,
+      "tile": 9,
+      "state": "LOST",
+      "z": -0.15037347586825953,
+      "vz": -1.5671474999984862
+    },
+    {
+      "time": 14.75,
+      "tile": 17,
+      "state": "WARNING"
+    },
+    {
+      "time": 14.85,
+      "tile": 3,
+      "state": "RELEASED"
+    },
+    {
+      "time": 14.87025,
+      "tile": 3,
+      "state": "FALLING",
+      "z": -0.027044509926317517,
+      "vz": -0.19865249999907572
+    },
+    {
+      "time": 15.00975,
+      "tile": 3,
+      "state": "LOST",
+      "z": -0.15038012180118812,
+      "vz": -1.5671474999990644
+    },
+    {
+      "time": 15.6,
+      "tile": 18,
+      "state": "WARNING"
+    },
+    {
+      "time": 15.700000000000001,
+      "tile": 6,
+      "state": "RELEASED"
+    },
+    {
+      "time": 15.719999999999999,
+      "tile": 6,
+      "state": "FALLING",
+      "z": -0.027003233968579853,
+      "vz": -0.19619999999999385
+    },
+    {
+      "time": 15.85975,
+      "tile": 6,
+      "state": "LOST",
+      "z": -0.15038850896857858,
+      "vz": -1.5671474999999826
+    },
+    {
+      "time": 16.434250000000002,
+      "state": "BODY_CONTACT",
+      "contacts": [
+        {
+          "a": "lavender",
+          "b": "cream",
+          "force_N": 180.4488480334048,
+          "depth_m": 5.3762922257628507e-05
+        }
+      ]
+    },
+    {
+      "time": 16.45,
+      "tile": 16,
+      "state": "WARNING"
+    },
+    {
+      "time": 16.55,
+      "tile": 8,
+      "state": "RELEASED"
+    },
+    {
+      "time": 16.57025,
+      "tile": 8,
+      "state": "FALLING",
+      "z": -0.027039605227891898,
+      "vz": -0.19865249999917087
+    },
+    {
+      "time": 16.709750000000003,
+      "tile": 8,
+      "state": "LOST",
+      "z": -0.15037521710277588,
+      "vz": -1.5671474999991597
+    },
+    {
+      "time": 17.3,
+      "tile": 13,
+      "state": "WARNING"
+    },
+    {
+      "time": 17.400000000000002,
+      "tile": 11,
+      "state": "RELEASED"
+    },
+    {
+      "time": 17.42,
+      "tile": 11,
+      "state": "FALLING",
+      "z": -0.027001599069111235,
+      "vz": -0.19620000000056817
+    },
+    {
+      "time": 17.55975,
+      "tile": 11,
+      "state": "LOST",
+      "z": -0.1503868740691901,
+      "vz": -1.567147500000557
+    },
+    {
+      "time": 18.150000000000002,
+      "tile": 7,
+      "state": "WARNING"
+    },
+    {
+      "time": 18.25,
+      "tile": 17,
+      "state": "RELEASED"
+    },
+    {
+      "time": 18.27025,
+      "tile": 17,
+      "state": "FALLING",
+      "z": -0.027044616261265603,
+      "vz": -0.19865250000006096
+    },
+    {
+      "time": 18.409750000000003,
+      "tile": 17,
+      "state": "LOST",
+      "z": -0.1503802281362737,
+      "vz": -1.5671475000000497
+    },
+    {
+      "time": 19.0,
+      "tile": 12,
+      "state": "WARNING"
+    },
+    {
+      "time": 19.1,
+      "tile": 18,
+      "state": "RELEASED"
+    },
+    {
+      "time": 19.120250000000002,
+      "tile": 18,
+      "state": "FALLING",
+      "z": -0.027039605227964395,
+      "vz": -0.19865250000279414
+    },
+    {
+      "time": 19.25975,
+      "tile": 18,
+      "state": "LOST",
+      "z": -0.1503752171033537,
+      "vz": -1.5671475000027828
+    },
+    {
+      "time": 19.95,
+      "tile": 16,
+      "state": "RELEASED"
+    },
+    {
+      "time": 19.970000000000002,
+      "tile": 16,
+      "state": "FALLING",
+      "z": -0.027003233968577997,
+      "vz": -0.19619999999988907
+    },
+    {
+      "time": 20.109750000000002,
+      "tile": 16,
+      "state": "LOST",
+      "z": -0.15038850896856215,
+      "vz": -1.5671474999998778
+    },
+    {
+      "time": 20.8,
+      "tile": 13,
+      "state": "RELEASED"
+    },
+    {
+      "time": 20.82025,
+      "tile": 13,
+      "state": "FALLING",
+      "z": -0.027037970328420546,
+      "vz": -0.1986524999996445
+    },
+    {
+      "time": 20.959750000000003,
+      "tile": 13,
+      "state": "LOST",
+      "z": -0.15037358220337058,
+      "vz": -1.5671474999996333
+    },
+    {
+      "time": 21.650000000000002,
+      "tile": 7,
+      "state": "RELEASED"
+    },
+    {
+      "time": 21.670250000000003,
+      "tile": 7,
+      "state": "FALLING",
+      "z": -0.02704461626127043,
+      "vz": -0.19865250000034076
+    },
+    {
+      "time": 21.80975,
+      "tile": 7,
+      "state": "LOST",
+      "z": -0.1503802281363175,
+      "vz": -1.5671475000003294
+    },
+    {
+      "time": 22.5,
+      "tile": 12,
+      "state": "RELEASED"
+    },
+    {
+      "time": 22.51875,
+      "tile": 12,
+      "state": "FALLING",
+      "z": -0.02702809845168986,
+      "vz": -0.21773195185864666
+    },
+    {
+      "time": 22.6565,
+      "tile": 12,
+      "state": "LOST",
+      "z": -0.150262272320218,
+      "vz": -1.5690594518586354
+    },
+    {
+      "time": 23.020000000000003,
+      "body_id": "cream",
+      "state": "ELIMINATED",
+      "z": -0.6324077289399217,
+      "vz": -0.18938688101446724,
+      "supporting_tile_ids": [],
+      "contact_step": 92079
+    },
+    {
+      "time": 23.02025,
+      "body_id": "sky",
+      "state": "ELIMINATED",
+      "z": -0.6380165750395712,
+      "vz": -0.11590940014166061,
+      "supporting_tile_ids": [],
+      "contact_step": 92080
+    },
+    {
+      "time": 23.02025,
+      "body_id": "graphite",
+      "state": "ELIMINATED",
+      "z": -0.6362622079699911,
+      "vz": -0.08181713716787158,
+      "supporting_tile_ids": [],
+      "contact_step": 92080
+    },
+    {
+      "time": 23.021,
+      "body_id": "lavender",
+      "state": "ELIMINATED",
+      "z": -0.6463373867606855,
+      "vz": -0.4837675307111643,
+      "supporting_tile_ids": [],
+      "contact_step": 92083
+    },
+    {
+      "time": 23.021,
+      "state": "TERMINAL",
+      "status": "DRAW",
+      "winner": null,
+      "alive": []
+    }
+  ],
+  "oracle_schedule": [
+    {
+      "tile": 5,
+      "warning_at": 2.0,
+      "release_at": 5.5
+    },
+    {
+      "tile": 1,
+      "warning_at": 2.85,
+      "release_at": 6.35
+    },
+    {
+      "tile": 14,
+      "warning_at": 3.7,
+      "release_at": 7.2
+    },
+    {
+      "tile": 23,
+      "warning_at": 4.55,
+      "release_at": 8.05
+    },
+    {
+      "tile": 10,
+      "warning_at": 5.4,
+      "release_at": 8.9
+    },
+    {
+      "tile": 2,
+      "warning_at": 6.25,
+      "release_at": 9.75
+    },
+    {
+      "tile": 19,
+      "warning_at": 7.1,
+      "release_at": 10.6
+    },
+    {
+      "tile": 15,
+      "warning_at": 7.95,
+      "release_at": 11.45
+    },
+    {
+      "tile": 22,
+      "warning_at": 8.8,
+      "release_at": 12.3
+    },
+    {
+      "tile": 21,
+      "warning_at": 9.649999999999999,
+      "release_at": 13.149999999999999
+    },
+    {
+      "tile": 9,
+      "warning_at": 10.5,
+      "release_at": 14.0
+    },
+    {
+      "tile": 3,
+      "warning_at": 11.35,
+      "release_at": 14.85
+    },
+    {
+      "tile": 6,
+      "warning_at": 12.2,
+      "release_at": 15.7
+    },
+    {
+      "tile": 8,
+      "warning_at": 13.049999999999999,
+      "release_at": 16.549999999999997
+    },
+    {
+      "tile": 11,
+      "warning_at": 13.9,
+      "release_at": 17.4
+    },
+    {
+      "tile": 17,
+      "warning_at": 14.75,
+      "release_at": 18.25
+    },
+    {
+      "tile": 18,
+      "warning_at": 15.6,
+      "release_at": 19.1
+    },
+    {
+      "tile": 16,
+      "warning_at": 16.45,
+      "release_at": 19.95
+    },
+    {
+      "tile": 13,
+      "warning_at": 17.299999999999997,
+      "release_at": 20.799999999999997
+    },
+    {
+      "tile": 7,
+      "warning_at": 18.15,
+      "release_at": 21.65
+    },
+    {
+      "tile": 12,
+      "warning_at": 19.0,
+      "release_at": 22.5
+    }
+  ],
+  "penetration_max_m": 0.0016450848415765595,
+  "penetration_p99_m": 1e-06,
+  "penetrating_contacts_p99_m": 1e-06,
+  "motor_force_max_Nm": 0.6405,
+  "locked_tile_max_drift_m": 0.00015993144739192416,
+  "finite": true,
+  "time_reset": false,
+  "solver_warnings": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "external_forces_zero": true,
+  "body_contact_steps": 7653,
+  "peak_body_force_N": 614.4319371396833,
+  "worst_contacts": {
+    "duck_tile_or_receiver": {
+      "time": 18.65525,
+      "depth_m": 0.0011352375285695279,
+      "geom_ids": [
+        12,
+        184
+      ],
+      "body_names": [
+        "tile_13",
+        "graphite/ankle_right"
+      ]
+    },
+    "tile_tile_or_receiver": {
+      "time": 12.69375,
+      "depth_m": 0.0016450848415765595,
+      "geom_ids": [
+        0,
+        20
+      ],
+      "body_names": [
+        "world",
+        "tile_22"
+      ]
+    },
+    "duck_duck": {
+      "time": 22.89575,
+      "depth_m": 0.00026904671456592287,
+      "geom_ids": [
+        83,
+        332
+      ],
+      "body_names": [
+        "sky/jaw_soft_external_contact",
+        "cream/jaw_soft_external_contact"
+      ]
+    },
+    "duck_self": {
+      "time": 23.1615,
+      "depth_m": 2.3160658260153385e-05,
+      "geom_ids": [
+        50,
+        101
+      ],
+      "body_names": [
+        "sky/ankle_left",
+        "sky/ankle_right"
+      ]
+    }
+  },
+  "collision_geometry": {
+    "native_meshes": "convex hulls",
+    "native_self_contacts_preserved": true,
+    "external_envelopes": {
+      "sky": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "graphite": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "lavender": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      },
+      "cream": {
+        "jaw_soft": {
+          "centre": [
+            0.012193562046894715,
+            3.635506696728075e-08,
+            -0.02284501193733495
+          ],
+          "half_size": [
+            0.030141221953163176,
+            0.046381513416777875,
+            0.061845010986252995
+          ]
+        },
+        "trunk_base": {
+          "centre": [
+            -0.006166467191342954,
+            -0.0002500001400778905,
+            -0.0010206309794548556
+          ],
+          "half_size": [
+            0.04116646903507795,
+            0.03251448862168706,
+            0.04354700049934032
+          ]
+        }
+      }
+    },
+    "added_mass_kg": 0.0
+  },
+  "performance": {
+    "real_time_factor": 0.643184852695173,
+    "physics_s": 23.1556123343762,
+    "inference_s": 0.9669043250032701,
+    "physics_step_mean_ms": 0.23136177944902483,
+    "motor_batch_p50_ms": 0.6096879951655865,
+    "motor_batch_p95_ms": 1.4982624154072255
+  },
+  "final_roots": {
+    "sky": [
+      -0.11564517713438774,
+      0.20299361196689747,
+      -0.718287153618857,
+      0.7187391184432873,
+      -0.6840016275793664,
+      0.014607886643584766,
+      -0.12386469527655095
+    ],
+    "graphite": [
+      0.2217926743970558,
+      0.22424528455443662,
+      -0.7101384637303975,
+      0.2565483511727256,
+      -0.6420165172397871,
+      -0.2419402280321873,
+      -0.6807809200922
+    ],
+    "lavender": [
+      0.35894486416200544,
+      0.1660552078200042,
+      -0.6893296527674664,
+      0.08159235943316748,
+      -0.45375489230528543,
+      -0.26102856218184783,
+      -0.8481233838990786
+    ],
+    "cream": [
+      -0.2668295878433554,
+      0.0010594885250466862,
+      -0.7181490062588382,
+      0.024169184668510493,
+      -0.08940175374583499,
+      -0.6862835002348625,
+      -0.7214139825682712
+    ]
+  },
+  "policy_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
+  },
+  "source_sha256": {
+    "src/microduck_lab/arena/multiplayer.py": "0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6",
+    "src/microduck_lab/arena/multiplayer_verify.py": "f3f0599a67ff1ce55ca0aa1a4f50dea61c718a5f81b2c69bfc5e2d288c3357c6",
+    "src/microduck_lab/arena/episode.py": "948bc1460ba8a59bd6e9b786f6015131e264e200cdc9f3514e3b69a1fb4ca6ca",
+    "src/microduck_lab/arena/tiles.py": "8628f5e1dde8a6470f80ee3be3d6dc0e3a64a2397e037d7369575fe1c6151d1a",
+    "src/microduck_lab/arena/controller.py": "05aef46b7e6151f6656d90c8ad01bdca33e5164717d70a412a3dfcc5387c7b45",
+    "src/microduck_lab/arena/verify.py": "388b0aa57fc95d6932b27377eb305bf9c3c6e507bbea9c33bbba3f44dc3b7905",
+    "src/microduck_lab/arena/__init__.py": "8c653b8089169c354debfc8ceb02ba56a920e5473c399d3f6c8fc5af7e65b18b",
+    "src/microduck_lab/arena/referee.py": "39b4bed654174576846c09c24e331c05d23108c2e9d510cd8b0bff30343be4dd",
+    "src/microduck_lab/arena/survival.py": "7f75b6ebdf0716f5cf2698f9ae69a983729caa26c00058c576ef281f01d9a0e7",
+    "src/microduck_lab/arena/world.py": "5a86f7ecd4eae89aec31564abfb1da15ae924e40c222acac082dc0c870bf223f",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624"
+  },
+  "hashes": {
+    "decisions.jsonl.gz": "62b3d3b3ade14338af01a644a5bd5db0c3631f48fec8edd9fdb8b50650e9803a"
+  }
+}

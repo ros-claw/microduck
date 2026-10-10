@@ -1,0 +1,68 @@
+{
+  "capture": {
+    "scene.mjb": "3b554743f574ca669dd3407c81eacd963b3cd7122e1f7586273692e28eb4fdfd",
+    "trajectory.npz": "de6bd3442dc82ddb93abb838598f4d85d0837235d6e4dc5b40e8b212786f5704",
+    "inputs.npz": "228e69e65825da4ff2fe8ca290ab4c1d840f044854d25a68f8ff35137f73880b"
+  },
+  "passed": false,
+  "violations": [],
+  "gate_force_limit_N": 6,
+  "gate_force_limited": true,
+  "bowling": {
+    "unlocked": false,
+    "ball_hit_pins": [
+      "pin0"
+    ],
+    "chain_hit_pins": [
+      "pin0",
+      "pin1",
+      "pin2"
+    ],
+    "causal_parents": {
+      "pin0": "playball",
+      "pin1": "pin0",
+      "pin2": "pin1"
+    },
+    "qualified_toppled": [
+      "pin2"
+    ],
+    "direct_or_boss_hit_pins": [
+      "pin0",
+      "pin1"
+    ],
+    "touches_after_qualified_topple": [
+      "pin2"
+    ],
+    "duck_push_impulse_Ns": 0.2825888647911596,
+    "max_push_force_N": 47.057056950973504,
+    "ball_pin_impulses_Ns": {
+      "pin0": 0.2742068528657359
+    },
+    "chain_impulses_Ns": {
+      "pin0": 2.9273895603674185,
+      "pin1": 3.1294457804922264,
+      "pin2": 2.76045148301377
+    },
+    "boss_ball_interference": true,
+    "scope": "Contact causality until unlock; whole-run collisions independently audited",
+    "rule": "Duck-ball impulse > .001 Ns; ball or previously struck pin \u2192 pin impulse > .0005 Ns; pin up < .35; no duck/boss pin hit before toppling or boss-ball interference"
+  },
+  "events": [
+    {
+      "type": "BALL_PUSH",
+      "t": 20.451199999979014
+    },
+    {
+      "type": "PIN_DOWN",
+      "t": 22.193399999974954,
+      "pin": "pin2",
+      "chain_impulse_Ns": 0.02680078812586945,
+      "parent": "pin1"
+    }
+  ],
+  "guide_boss_impulses_Ns": {
+    "gutter_right": 0.7926381203830172,
+    "gutter_left": 1.466177879996518
+  },
+  "method": "Initialize once; replay recorded 50 Hz inputs; inspect causal contacts at every .2 ms step. Gate command and guide weld activation must follow previously measured contact state. No applied force on ball/pins."
+}

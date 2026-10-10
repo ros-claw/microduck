@@ -1,0 +1,133 @@
+{
+  "schema": "microduck.duckverse.qa.v1",
+  "physics_frozen": true,
+  "qualification": {
+    "two": {
+      "seed_count": 10,
+      "quality_pass_count": 10,
+      "outcomes": {
+        "WINNER": 4,
+        "DRAW": 6
+      },
+      "wins": {
+        "lavender": 3,
+        "cream": 1
+      }
+    },
+    "four": {
+      "seed_count": 12,
+      "quality_pass_count": 12,
+      "outcomes": {
+        "DRAW": 8,
+        "WINNER": 4
+      },
+      "wins": {
+        "graphite": 2,
+        "cream": 1,
+        "sky": 1
+      }
+    },
+    "heldout": {
+      "seed_count": 32,
+      "quality_pass_count": 32,
+      "outcomes": {
+        "WINNER": 12,
+        "DRAW": 20
+      },
+      "wins": {
+        "sky": 2,
+        "graphite": 7,
+        "lavender": 1,
+        "cream": 2
+      }
+    }
+  },
+  "heldout_seeds": [
+    20000,
+    20031
+  ],
+  "heldout_started_after_freeze": true,
+  "layout_cadences": {
+    "square/steady": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "WINNER": 1,
+        "DRAW": 3
+      }
+    },
+    "square/rapid": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "DRAW": 3,
+        "WINNER": 1
+      }
+    },
+    "ring/steady": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "WINNER": 3,
+        "DRAW": 1
+      }
+    },
+    "ring/rapid": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "WINNER": 4
+      }
+    },
+    "cross/steady": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "DRAW": 3,
+        "WINNER": 1
+      }
+    },
+    "cross/rapid": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "DRAW": 3,
+        "WINNER": 1
+      }
+    },
+    "terraces/steady": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "DRAW": 4
+      }
+    },
+    "terraces/rapid": {
+      "matches": 4,
+      "quality_passes": 4,
+      "outcomes": {
+        "WINNER": 1,
+        "DRAW": 3
+      }
+    }
+  },
+  "overall_max_penetration_m": 0.0017977363899535498,
+  "heldout_max_penetrating_p99_m": 1e-06,
+  "heldout_matches_with_body_contact": 22,
+  "heldout_mean_real_time_factor": 0.6689970402554579,
+  "heldout_motor_batch_p95_ms_max": 1.7974923946894694,
+  "heldout_physics_step_mean_ms_mean": 0.22628662612536557,
+  "actor_inputs": "Ideal current simulation state; public warning countdown and current opponent poses; never seed/permutation/future releases",
+  "spawn_design": "Each 8-seed layout contains four cyclic body-to-cardinal-spawn rotations at each cadence; no unbiased win-rate claim from 32 seeds",
+  "new_training": false,
+  "jev_used": false,
+  "darwin_used": false,
+  "hardware_verified": false,
+  "known_limits": [
+    "20/32 heldout games draw; controller cannot escape when all adjacent options expire",
+    "Conservative head/torso AABBs and native convex collision meshes; not exact rendered triangles",
+    "Soft contacts permit finite sub-threshold penetration",
+    "Offline game recording; four-robot physics below 1x",
+    "Uniform deterministic tactical parameters; character names are identities, not learned personalities"
+  ]
+}

@@ -4,9 +4,11 @@
 
 A series of reproducible robot games in **MuJoCo simulation**: contact-aware rope skipping, cooperative double jumping, reactive pursuit, and physical skill composition. Built with Pollen Robotics’ Microduck assets, learned ONNX motor policies, explicit controllers and contact audits. This repository contains code, weights, methods, failed experiments and replay evidence. Native ROSClaw chat launches Duckverse through a simulation-only candidate kit; hardware deployment and autonomous evolution are not demonstrated.
 
+Released: [Jev Duck Survival](docs/jev-rumble/README.md), alongside three-duck skipping, four-duck skipping and parkour. Historical prototypes and failed experiments remain available for research.
+
 ## Confirmed demos
 
-Click each preview to watch or download its video. Confirmed demos are three-duck skipping, four-duck skipping, and parkour. Island Rumble remains in development; no release or tag is published until the user confirms completion.
+Click each preview to watch or download a confirmed demo.
 
 ### Cooperative Rope Skipping
 
@@ -32,10 +34,20 @@ Six encounters combine rolls, a real gap, rotating-arm contact and duck–ball�
 
 [Final method & reproduction](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/CONTACT_DETAILS.md) · [Evidence bundle](https://github.com/ros-claw/microduck/releases/download/neon-escape-contact-details-v6/microduck_neon_escape_v6_evidence.tar.gz)
 
+### Jev Duck Survival — Last Duck Standing
+
+[![Jev Duck Survival](docs/jev-rumble/preview.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-zh.mp4)
+
+Four named ducks contest beacons while floors warn and fall one at a time. The **110.88 s Mandarin sports-commentary film** includes contact close-ups and slow motion. Live Jev selects capture, interception and retreat goals; existing learned policies drive joints at 50 Hz, while shared MuJoCo physics determines collisions, falls and the sole survivor. One batched request serves the live characters; these are not four independent language-model agents.
+
+The selected match replays with zero state error and approximately **1.64 mm** maximum contact penetration. Conservative collision envelopes are not visual-triangle exact. Dynamic get-up remains incomplete: the longest completed recovery in this match took **14.46 s**.
+
+[HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.
-2. **Coordination and tactics:** deterministic feedback supplies goals and phase timing. Some Neon Escape runs use live Jev for finite skill choices and physical previews for transitions; these are separate from motor-policy inference.
+2. **Coordination and tactics:** deterministic feedback supplies goals and phase timing. Live Jev survival selects reachable tactical goals; some Neon Escape runs use live Jev for finite skill choices and physical previews for transitions; these are separate from motor-policy inference.
 3. **Physics:** robots and props share one MuJoCo world. Contacts, equality forces, gravity and actuation determine outcomes. Collision profiles and exclusions are disclosed per demo.
 4. **Evidence and filming:** full-rate contact checks, recorded inputs and trajectory replay verify selected results. Cameras, slow motion and synthesized Foley are presentation only.
 
@@ -57,7 +69,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout 8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666
+git checkout jev-survival-2026-10-10
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"
