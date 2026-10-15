@@ -4,6 +4,7 @@
 import argparse
 import gzip
 import json
+import re
 from pathlib import Path
 import subprocess
 
@@ -37,6 +38,19 @@ def check(run, video):
     assert max(r["state_index"] for r in frames) < audit["steps"]
     speech = manifest["commentary"]
     cues = speech["cues"]
+    if manifest["language"] == "en":
+        assert manifest["spoken_language"] == speech["language"] == "en"
+        assert manifest["rendered_text"]
+        assert {x["name"] for x in manifest["characters"].values()} == {
+            "Dash",
+            "Waddles",
+            "Sly",
+            "Ace",
+        }
+        assert not any(
+            re.search(r"[\u3400-\u9fff]", text)
+            for text in manifest["rendered_text"] + [c["text"] for c in cues]
+        )
     assert speech["source_audit_sha256"] == sha(run / "audit.json")
     assert not speech["unvoiced_terminal_events"]
     with gzip.open(run / "decisions.jsonl.gz", "rt") as f:

@@ -9,10 +9,11 @@ p.add_argument("--out", required=True)
 p.add_argument("--preview", type=float)
 p.add_argument("--speech")
 p.add_argument("--plan-only", action="store_true")
+p.add_argument("--language", choices=("zh-CN", "en"), default="zh-CN")
 a = p.parse_args()
 print(
     json.dumps(
-        render_jev(a.run, a.out, a.preview, a.speech, a.plan_only),
+        render_jev(a.run, a.out, a.preview, a.speech, a.plan_only, a.language),
         ensure_ascii=False,
     )
 )

@@ -5,6 +5,7 @@ import gzip
 from pathlib import Path
 import math
 import os
+import sys
 
 os.environ["MUJOCO_GL"] = "egl"
 os.environ["PYOPENGL_PLATFORM"] = "egl"
@@ -16,13 +17,16 @@ from .duckverse import Film, COLORS
 from ..arena.relay_rumble import CHARACTERS
 
 from ..arena.episode import STATE, sha
+from .jev_english import CHARACTERS_EN, EnglishDraw
 
 FONT = BOLD = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 COLORS = {**COLORS, "graphite": (255, 155, 141)}
 
 
 class JevFilm(Film):
-    def __init__(self, path, width=1280, height=720):
+    def __init__(self, path, width=1280, height=720, language="zh-CN"):
+        self.language = language
+        self.display_text = set()
         super().__init__(path, width, height)
         self.island = (
             self.audit["config"]["grid"] * (self.audit["config"]["grid"] // 2)
@@ -30,14 +34,24 @@ class JevFilm(Film):
         )
         self.m.vis.headlight.ambient[:] = 0.45
         self.m.vis.headlight.diffuse[:] = 0.65
-        self.font = ImageFont.truetype(BOLD, 18)
-        self.big = ImageFont.truetype(BOLD, 30)
-        self.small = ImageFont.truetype(FONT, 20)
+        font = (
+            "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
+            if language == "en"
+            else BOLD
+        )
+        self.font = ImageFont.truetype(font, 18)
+        self.big = ImageFont.truetype(font, 30)
+        self.small = ImageFont.truetype(font if language == "en" else FONT, 20)
         self.speaker_angles = {}
         with gzip.open(Path(path) / "decisions.jsonl.gz", "rt") as stream:
             rows = [json.loads(line) for line in stream]
-        self.actor_decisions = {n: [r for r in rows if r["body_id"] == n] for n in self.names}
-        self.actor_times = {n: np.array([r["time"] for r in rs]) for n, rs in self.actor_decisions.items()}
+        self.actor_decisions = {
+            n: [r for r in rows if r["body_id"] == n] for n in self.names
+        }
+        self.actor_times = {
+            n: np.array([r["time"] for r in rs])
+            for n, rs in self.actor_decisions.items()
+        }
 
     def project(self, p):
         cam = self.renderer.scene.camera[0]
@@ -280,7 +294,11 @@ class JevFilm(Film):
         ).astype(np.uint8)
         pixels[empty] = background[empty]
         image = Image.fromarray(pixels)
-        draw = ImageDraw.Draw(image)
+        draw = (
+            EnglishDraw(image, self.display_text)
+            if self.language == "en"
+            else ImageDraw.Draw(image)
+        )
         labels = []
         for name, bid in self.bids.items():
             ray = self.d.xpos[bid] - self.renderer.scene.camera[0].pos
@@ -362,7 +380,7 @@ class JevFilm(Film):
             caption = f"剩余{len(alive)}鸭 · 第{captures + 1}轮争夺{goal_names[goal]} · 抢点不判胜，最后一鸭存活才赢"
             if warnings:
                 tile, deadline = next(iter(warnings.items()))
-                caption = f"剩余{len(alive)}鸭 · {tile}号地板 {max(0., deadline-t):.1f}秒后脱落 · 一次仅一块，留路撤离"
+                caption = f"剩余{len(alive)}鸭 · {tile}号地板 {max(0.0, deadline - t):.1f}秒后脱落 · 一次仅一块，留路撤离"
             if finale:
                 deadline = finale["inner_release_s"]
                 caption = (
@@ -423,13 +441,16 @@ class JevFilm(Film):
                     (x + 9, y + 3),
                     f"{CHARACTERS[name]['name']} · 淘汰"
                     if name not in alive
-                    else f"{CHARACTERS[name]['name']} · 存活" + (f" | 抢岛{int(score)}次" if score else ""),
+                    else f"{CHARACTERS[name]['name']} · 存活"
+                    + (f" | 抢岛{int(score)}次" if score else ""),
                     font=self.font,
                     fill=COLORS[name],
                 )
                 draw.text(
                     (x + 9, y + 32),
-                    self.intent_label(name, t) if name in alive else "已跌落 · 本局出局",
+                    self.intent_label(name, t)
+                    if name in alive
+                    else "已跌落 · 本局出局",
                     font=self.font,
                     fill=(177, 190, 202) if name in alive else (113, 124, 138),
                 )
@@ -475,13 +496,17 @@ class JevFilm(Film):
             fill=(215, 222, 230),
         )
         for tile, deadline in warnings.items():
-            p = self.project(self.d.geom_xpos[self.tiles[tile]] + np.array([0, 0, .025]))
-            if p is not None and 100 < p[1] < self.h-170:
-                label = f"{tile} · {max(0., deadline-t):.1f}s"
+            p = self.project(
+                self.d.geom_xpos[self.tiles[tile]] + np.array([0, 0, 0.025])
+            )
+            if p is not None and 100 < p[1] < self.h - 170:
+                label = f"{tile} · {max(0.0, deadline - t):.1f}s"
                 width = draw.textlength(label, font=self.font)
-                x = float(np.clip(p[0]-width/2, 10, self.w-width-10))
-                draw.rounded_rectangle((x-6, p[1]-14, x+width+6, p[1]+14), 5, fill=(105, 29, 22))
-                draw.text((x, p[1]-12), label, font=self.font, fill=(255, 231, 169))
+                x = float(np.clip(p[0] - width / 2, 10, self.w - width - 10))
+                draw.rounded_rectangle(
+                    (x - 6, p[1] - 14, x + width + 6, p[1] + 14), 5, fill=(105, 29, 22)
+                )
+                draw.text((x, p[1] - 12), label, font=self.font, fill=(255, 231, 169))
         self.records.append(
             dict(
                 frame=len(self.records),
@@ -494,15 +519,25 @@ class JevFilm(Film):
         return np.asarray(image)
 
     def intent_label(self, name, t):
-        index = max(0, int(np.searchsorted(self.actor_times[name], t, side="right"))-1)
+        if self.language == "en" and t < 4.2:
+            return CHARACTERS_EN[name]["trait"]
+        index = max(
+            0, int(np.searchsorted(self.actor_times[name], t, side="right")) - 1
+        )
         row = self.actor_decisions[name][index]
         text = {
-            "JEV_CAPTURE": "Jev · 抢点", "JEV_INTERCEPT": "Jev · 尝试截路",
-            "JEV_EVADE": "Jev · 避让", "JEV_RETREAT_CORE": "Jev · 撤回中心",
-            "JEV_HOLD": "Jev · 暂时站稳", "LOCAL_RECOVERY": "本地 · 起身恢复",
-            "LOCAL_RECOVERY_SKILL": "本地 · 坐站技能恢复", "LOCAL_EVACUATE": "本地 · 撤离危险地板",
-            "AWAIT_JEV": "等待有效 Jev 指令", "JEV_PLAN_INVALID_BRAKE": "路线失效 · 停步",
-            "SETTLE": "开场站稳", "MATCH_COMPLETE": "本局结束 · 站稳",
+            "JEV_CAPTURE": "Jev · 抢点",
+            "JEV_INTERCEPT": "Jev · 尝试截路",
+            "JEV_EVADE": "Jev · 避让",
+            "JEV_RETREAT_CORE": "Jev · 撤回中心",
+            "JEV_HOLD": "Jev · 暂时站稳",
+            "LOCAL_RECOVERY": "本地 · 起身恢复",
+            "LOCAL_RECOVERY_SKILL": "本地 · 坐站技能恢复",
+            "LOCAL_EVACUATE": "本地 · 撤离危险地板",
+            "AWAIT_JEV": "等待有效 Jev 指令",
+            "JEV_PLAN_INVALID_BRAKE": "路线失效 · 停步",
+            "SETTLE": "开场站稳",
+            "MATCH_COMPLETE": "本局结束 · 站稳",
         }.get(row["intent"], row["intent"])
         if row["intent"] in ("JEV_CAPTURE", "JEV_INTERCEPT", "JEV_EVADE"):
             text += f" · {row['target']}号岛"
@@ -515,14 +550,23 @@ def plan_jev(audit, decisions=None):
     terminal = next(
         (e["time"] for e in audit["events"] if e["state"] == "TERMINAL"), end
     )
-    elimination_times = {e["body_id"]: e["time"] for e in audit["events"] if e["state"] == "ELIMINATED"}
+    elimination_times = {
+        e["body_id"]: e["time"] for e in audit["events"] if e["state"] == "ELIMINATED"
+    }
+
     def live_contact(e):
         strongest = max(e["contacts"], key=lambda c: c["force_N"])
-        return all(e["time"]+.5 < elimination_times.get(n, math.inf) for n in (strongest["a"], strongest["b"]))
+        return all(
+            e["time"] + 0.5 < elimination_times.get(n, math.inf)
+            for n in (strongest["a"], strongest["b"])
+        )
+
     contacts = [
         e
         for e in audit["events"]
-        if e["state"] == "BODY_CONTACT" and 2 < e["time"] < terminal - 0.2 and live_contact(e)
+        if e["state"] == "BODY_CONTACT"
+        and 2 < e["time"] < terminal - 0.2
+        and live_contact(e)
     ]
     chosen = []
     for e in sorted(
@@ -537,14 +581,36 @@ def plan_jev(audit, decisions=None):
     intervals += [
         (max(0, e["time"] - 1.0), min(end, e["time"] + 0.35), "fall") for e in losses
     ]
-    recoveries = [e for e in audit["events"] if e["state"] == "RECOVERY_COMPLETED" and e["time"] > 3]
+    recoveries = [
+        e
+        for e in audit["events"]
+        if e["state"] == "RECOVERY_COMPLETED" and e["time"] > 3
+    ]
     if decisions is not None:
+
         def depth(e):
-            rows = [r for r in decisions if r["body_id"] == e["body_id"] and e["time"]-e["duration_s"] <= r["time"] <= e["time"]]
-            return min((r["input"]["robot"].get("up_cos", 1.) for r in rows), default=1.)
-        recoveries = sorted((e for e in recoveries if depth(e) < .3), key=lambda e: (depth(e), -e["duration_s"]))
+            rows = [
+                r
+                for r in decisions
+                if r["body_id"] == e["body_id"]
+                and e["time"] - e["duration_s"] <= r["time"] <= e["time"]
+            ]
+            return min(
+                (r["input"]["robot"].get("up_cos", 1.0) for r in rows), default=1.0
+            )
+
+        recoveries = sorted(
+            (e for e in recoveries if depth(e) < 0.3),
+            key=lambda e: (depth(e), -e["duration_s"]),
+        )
     for e in recoveries[:2]:
-        intervals.append((max(0., e["time"]-min(e["duration_s"], 1.5)), min(end, e["time"]+.2), "character_"+e["body_id"]))
+        intervals.append(
+            (
+                max(0.0, e["time"] - min(e["duration_s"], 1.5)),
+                min(end, e["time"] + 0.2),
+                "character_" + e["body_id"],
+            )
+        )
     captures = [e["time"] for e in audit["events"] if e["state"] == "BEACON_CAPTURE"]
     finale = next(
         (e["time"] for e in audit["events"] if e["state"] == "FINALE_WARNING"), end
@@ -581,7 +647,9 @@ def plan_jev(audit, decisions=None):
     return rows
 
 
-def render_jev(run, out, preview=None, speech=None, plan_only=False):
+def render_jev(run, out, preview=None, speech=None, plan_only=False, language="zh-CN"):
+    if language not in ("zh-CN", "en"):
+        raise ValueError("Unsupported film language")
     run = Path(run)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -597,21 +665,36 @@ def render_jev(run, out, preview=None, speech=None, plan_only=False):
             )
         )
         return dict(frames=len(times), duration_s=len(times) / 50)
-    f = JevFilm(run)
+    f = JevFilm(run, language=language)
     if preview is not None:
         Image.fromarray(
             f.frame(
-                preview, shot="duel" if audit["finale_started_s"] is not None and preview > audit["finale_started_s"] else "wide"
+                preview,
+                shot="duel"
+                if audit["finale_started_s"] is not None
+                and preview > audit["finale_started_s"]
+                else "wide",
             )
         ).save(out)
         f.close()
         return dict(preview=str(out))
     cues = json.loads(Path(speech).read_text())["cues"] if speech else []
-    subtitle_font = ImageFont.truetype(BOLD, 28)
+    subtitle_font = ImageFont.truetype(
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
+        if language == "en"
+        else BOLD,
+        28,
+    )
     with imageio.get_writer(
         str(out), fps=50, codec="libx264", quality=8, macro_block_size=2
     ) as w:
         for j, row in enumerate(times):
+            if j % 500 == 0:
+                print(
+                    f"Rendering {language}: {j}/{len(times)} frames",
+                    file=sys.stderr,
+                    flush=True,
+                )
             cue = next((c for c in cues if c["start_s"] <= j / 50 < c["end_s"]), None)
             shot = row["shot"]
             if cue and cue["evidence"]["kind"] == "decision":
@@ -628,13 +711,29 @@ def render_jev(run, out, preview=None, speech=None, plan_only=False):
                 im = Image.fromarray(pixels)
                 draw = ImageDraw.Draw(im)
                 text = cue["text"]
-                width = draw.textlength(text, font=subtitle_font)
+                lines = [""]
+                for word in text.split() if language == "en" else [text]:
+                    candidate = (lines[-1] + " " + word).strip()
+                    if (
+                        lines[-1]
+                        and draw.textlength(candidate, font=subtitle_font) > f.w - 110
+                    ):
+                        lines.append(word)
+                    else:
+                        lines[-1] = candidate
+                width = max(draw.textlength(line, font=subtitle_font) for line in lines)
                 x = (f.w - width) / 2
-                y = f.h - 156
+                y = f.h - 156 - (len(lines) - 1) * 34
                 draw.rounded_rectangle(
-                    (x - 15, y - 5, x + width + 15, y + 41), 8, fill=(10, 16, 26)
+                    (x - 15, y - 5, x + width + 15, y + len(lines) * 34 + 7),
+                    8,
+                    fill=(10, 16, 26),
                 )
-                draw.text((x, y), text, font=subtitle_font, fill=(255, 244, 215))
+                for k, line in enumerate(lines):
+                    lx = (f.w - draw.textlength(line, font=subtitle_font)) / 2
+                    draw.text(
+                        (lx, y + k * 34), line, font=subtitle_font, fill=(255, 244, 215)
+                    )
                 pixels = np.asarray(im)
             w.append_data(pixels)
     f.close()
@@ -653,13 +752,19 @@ def render_jev(run, out, preview=None, speech=None, plan_only=False):
         renderer_source_sha256=sha(Path(__file__)),
         read_only=True,
         chronological=True,
-        language="zh-CN",
+        language=language,
         audio="none",
-        status="unaccepted development preview",
+        status="English edition of the accepted match"
+        if language == "en"
+        else "accepted match",
         outcome=audit["outcome"],
         final_alive=audit["final_alive"],
         editing="one continuous match; event-aligned close-ups and slow motion; five-second labelled paused final state",
-        labels="Chinese identities and subtitles; render-only badges; native asset materials",
+        labels="English identities and subtitles; render-only badges; native asset materials"
+        if language == "en"
+        else "Chinese identities and subtitles; render-only badges; native asset materials",
+        characters=CHARACTERS_EN if language == "en" else CHARACTERS,
+        rendered_text=sorted(f.display_text) if language == "en" else [],
     )
     out.with_suffix(".json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
