@@ -6,7 +6,7 @@
 
 [![Jev 鸭鸭生存战开发版](preview.jpg)](media/jev-survival-zh.mp4)
 
-[中文解说、特写与慢动作 · 110.88 秒](media/jev-survival-zh.mp4)。同一局连续记录，末尾仅老六真实存活；用户已于 2026-10-10 确认发布。[高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10)。
+[中文解说、特写与慢动作 · 110.88 秒](media/jev-survival-zh.mp4) · [全英文解说版](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-en.mp4) · [英文角色与制作方法](ENGLISH_FILM.md)。同一局连续记录，末尾仅老六真实存活；用户已于 2026-10-10 确认发布。[高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10)。
 
 ## 决策与运动
 

@@ -11,9 +11,7 @@ p.add_argument("--speech")
 p.add_argument("--plan-only", action="store_true")
 p.add_argument("--language", choices=("zh-CN", "en"), default="zh-CN")
 a = p.parse_args()
-print(
-    json.dumps(
-        render_jev(a.run, a.out, a.preview, a.speech, a.plan_only, a.language),
-        ensure_ascii=False,
-    )
-)
+result = render_jev(a.run, a.out, a.preview, a.speech, a.plan_only, a.language)
+# The complete text audit is stored in the manifest, not echoed to the terminal.
+result.pop("rendered_text", None)
+print(json.dumps(result, ensure_ascii=False))

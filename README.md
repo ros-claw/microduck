@@ -36,13 +36,13 @@ Six encounters combine rolls, a real gap, rotating-arm contact and duck–ball�
 
 ### Jev Duck Survival — Last Duck Standing
 
-[![Jev Duck Survival](docs/jev-rumble/preview.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-zh.mp4)
+[![Jev Duck Survival](docs/jev-rumble/preview-en.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-en.mp4)
 
-Four named ducks contest beacons while floors warn and fall one at a time. The **110.88 s Mandarin sports-commentary film** includes contact close-ups and slow motion. Live Jev selects capture, interception and retreat goals; existing learned policies drive joints at 50 Hz, while shared MuJoCo physics determines collisions, falls and the sole survivor. One batched request serves the live characters; these are not four independent language-model agents.
+Four named ducks contest beacons while floors warn and fall one at a time. The **110.88 s film**, available with English or Mandarin sports commentary, includes contact close-ups and slow motion. Live Jev selects capture, interception and retreat goals; existing learned policies drive joints at 50 Hz, while shared MuJoCo physics determines collisions, falls and the sole survivor. One batched request serves the live characters; these are not four independent language-model agents.
 
 The selected match replays with zero state error and approximately **1.64 mm** maximum contact penetration. Conservative collision envelopes are not visual-triangle exact. Dynamic get-up remains incomplete: the longest completed recovery in this match took **14.46 s**.
 
-[HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
+[English edition, characters and subtitles](docs/jev-rumble/ENGLISH_FILM.md) · [HQ films and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
 
 ## How it works
 

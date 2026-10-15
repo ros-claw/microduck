@@ -4,9 +4,9 @@
 
 Four Microduck robots contest moving beacons and progressively disappearing floors in one MuJoCo world. **Live Jev selects tactical goals**; existing ONNX policies control the joints. This is separate from the archived [deterministic survival mode](../survival-rumble/README.md) and the confirmed skipping/parkour demos.
 
-[![Jev Duck Survival](preview.jpg)](media/jev-survival-zh.mp4)
+[![Jev Duck Survival](preview-en.jpg)](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-en.mp4)
 
-[Mandarin commentary, close-ups and slow motion · 110.88 s](media/jev-survival-zh.mp4). One chronological match ends with Lao Liu as its physical sole survivor. Accepted for publication on 2026-10-10. [HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10).
+[English commentary, close-ups and slow motion · 110.88 s](https://github.com/ros-claw/microduck/releases/download/jev-survival-2026-10-10/jev-rumble-commentary-en.mp4) · [Mandarin version](media/jev-survival-zh.mp4) · [English characters, subtitles and reproduction](ENGLISH_FILM.md). One chronological match ends with Lao Liu as its physical sole survivor. Accepted for publication on 2026-10-10. [HQ film and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10).
 
 ## Architecture
 
