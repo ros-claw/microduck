@@ -42,7 +42,7 @@
 
 选局逐步回放误差为零，最大接触穿透约 **1.64 mm**；采用保守碰撞包络，并非视觉三角网格精确碰撞。动态碰撞后的起身仍不稳定，选局最慢一次完成恢复耗时 **14.46 秒**，不宣称已彻底解决。
 
-[高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
+[全英文解说版与角色介绍](docs/jev-rumble/ENGLISH_FILM.md) · [高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
 
 ## 方法
 

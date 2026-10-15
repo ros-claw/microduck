@@ -214,10 +214,10 @@ wav.unlink()
 manifest = json.loads(video.with_suffix(".json").read_text())
 manifest.update(
     video_sha256=sha(out),
-    audio="synthetic Mandarin sports commentary (Yunjian Neural), original event Foley and ducked rhythmic bed; not measured robot sound",
+    audio=f"synthetic {speech.get('language', 'zh-CN')} sports commentary ({speech['voice']}), original event Foley and ducked rhythmic bed; not measured robot sound",
     commentary_source_sha256=sha(speech_path),
     commentary=speech,
-    spoken_language="zh-CN",
+    spoken_language=speech.get("language", "zh-CN"),
     audio_mastering="two-pass loudnorm, target -16 LUFS / -1.5 dBTP / 11 LU LRA",
     audio_pre_master_measurement=loudness,
     audio_cues=cues,
