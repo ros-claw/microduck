@@ -1,4 +1,5 @@
 """Live Jev survival game, separate from archived deterministic survival actors."""
+
 from pathlib import Path
 from dataclasses import asdict
 import gzip
@@ -16,7 +17,7 @@ from .survival_world import build_survival_world
 from .jev_config import JevGameConfig
 from .progressive_collapse import ConnectedBeacons
 from .jev_fairness import FairCollapse
-from .jev_recovery import RecoveryMotor
+from .jev_dynamic_recovery import DynamicRecoveryMotor
 from .grounded_victory import GroundedVictory
 from .jev_tactics import LiveTactics, RecordedTactics
 
@@ -27,6 +28,7 @@ class GentlePlatform:
     Unlike the archived finale, no floors are batch-released. The sole survivor
     holds the currently measured platform angles, without a pose reset.
     """
+
     def __init__(self, config):
         self.config = config
         self.started = None
@@ -34,18 +36,20 @@ class GentlePlatform:
 
     def targets(self, now, angles, alive, active):
         if active > 3:
-            return (0., 0.)
+            return (0.0, 0.0)
         if self.started is None:
             self.started = now
         if alive <= 1:
             if self.hold is None:
                 self.hold = tuple(float(v) for v in angles)
             return self.hold
-        elapsed = now-self.started
-        ramp = min(1., elapsed/15.)
-        ramp = ramp*ramp*(3-2*ramp)
-        return (self.config.tilt_max_rad*ramp*math.sin(.8*elapsed),
-                self.config.tilt_max_rad*ramp*.7*math.sin(.63*elapsed+.7))
+        elapsed = now - self.started
+        ramp = min(1.0, elapsed / 15.0)
+        ramp = ramp * ramp * (3 - 2 * ramp)
+        return (
+            self.config.tilt_max_rad * ramp * math.sin(0.8 * elapsed),
+            self.config.tilt_max_rad * ramp * 0.7 * math.sin(0.63 * elapsed + 0.7),
+        )
 
 
 def _actor_source_hashes():
@@ -56,6 +60,7 @@ def _actor_source_hashes():
             Path(__file__).with_name("jev_rumble.py"),
             Path(__file__).with_name("jev_fairness.py"),
             Path(__file__).with_name("jev_recovery.py"),
+            Path(__file__).with_name("jev_dynamic_recovery.py"),
             Path(__file__).with_name("jev_config.py"),
             Path(__file__).with_name("grounded_victory.py"),
             Path(__file__).with_name("jev_tactics.py"),
@@ -86,7 +91,10 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     m, d, ducks, tiles, spawns = build_survival_world(config, seed)
-    next(iter(ducks.values())).bank.paths["sitstand"] = str(ASSETS / "microduck/policies/alpha_sitstand.onnx")
+    next(iter(ducks.values())).bank.paths.update(
+        sitstand=str(ASSETS / "microduck/policies/alpha_sitstand.onnx"),
+        roulade=str(ASSETS / "microduck/policies/roulade.onnx"),
+    )
     source_snapshot = _LOADED_SOURCE_SNAPSHOT.copy()
     policy_snapshot = {
         n: sha(p) for n, p in next(iter(ducks.values())).bank.paths.items()
@@ -107,14 +115,18 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
     referee = GameReferee(tuple(ducks))
     claim = ConnectedBeacons(config, ducks)
     finale = GentlePlatform(config)
-    live = (RecordedTactics(Path(tape), out / "jev-requests.json") if tape else LiveTactics(out / "jev-requests.json"))
+    live = (
+        RecordedTactics(Path(tape), out / "jev-requests.json")
+        if tape
+        else LiveTactics(out / "jev-requests.json")
+    )
     victory = GroundedVictory(config)
     arena_act = np.array([m.actuator("arena_" + a).id for a in ("roll", "pitch")])
     arena_qpos = np.array(
         [m.jnt_qposadr[m.joint("arena_" + a + "_joint").id] for a in ("roll", "pitch")]
     )
     robot_act = np.concatenate([duck.act_ids for duck in ducks.values()])
-    controllers = {n: RecoveryMotor(CHARACTERS[n]["role"]) for n in ducks}
+    controllers = {n: DynamicRecoveryMotor(CHARACTERS[n]["role"]) for n in ducks}
     events, decisions = [], []
     support = {n: [] for n in ducks}
     maxsteps = round(config.duration / config.dt)
@@ -128,7 +140,9 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
         controls = np.lib.format.open_memmap(
             out / "ctrl.npy", mode="w+", dtype="float64", shape=(maxsteps, m.nu)
         )
-    contact_file = gzip.open(out / "contacts.jsonl.gz", "wt", compresslevel=1) if capture else None
+    contact_file = (
+        gzip.open(out / "contacts.jsonl.gz", "wt", compresslevel=1) if capture else None
+    )
     maxdepth = maxmotor = maxarena = 0.0
     finite, reset, external_zero = True, False, True
     contact_steps = 0
@@ -141,8 +155,10 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
             t = step * config.dt
             if step % 80 == 0:
                 arena_targets = finale.targets(
-                    t, d.qpos[arena_qpos], len(ducks) - len(referee.eliminated),
-                    sum(bool(d.eq_active[tile.eq_id]) for tile in tiles.values())
+                    t,
+                    d.qpos[arena_qpos],
+                    len(ducks) - len(referee.eliminated),
+                    sum(bool(d.eq_active[tile.eq_id]) for tile in tiles.values()),
                 )
                 d.ctrl[arena_act] = arena_targets
                 events.append(
@@ -167,20 +183,28 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
                 for name, duck in ducks.items():
                     if name in referee.eliminated:
                         continue
-                    obs = observe(name, ducks, tiles, support, config, t, referee.eliminated)
+                    obs = observe(
+                        name, ducks, tiles, support, config, t, referee.eliminated
+                    )
                     obs["robot"]["up_cos"] = float(d.xmat[duck.trunk_body_id, 8])
                     obs["robot"]["recovering"] = controllers[name].recovering
                     obs["robot"]["evacuating"] = controllers[name].evacuating
                     for tile in obs["visible_tiles"]:
                         tile["damage"] = damage.damage[tile["id"]]
                         tile["warning_remaining_s"] = damage.remaining(tile["id"], t)
-                    obs.update(objective="LastDuckAlive", island=claim.goal,
-                               beacon_scores=claim.scores.copy(), beacon_progress=claim.progress.copy(),
-                               last_plan=live.plans.get(name))
+                    obs.update(
+                        objective="LastDuckAlive",
+                        island=claim.goal,
+                        beacon_scores=claim.scores.copy(),
+                        beacon_progress=claim.progress.copy(),
+                        last_plan=live.plans.get(name),
+                    )
                     public[name] = obs
                 plans = live.update(t, public if terminal is None else {})
                 for name, duck in ducks.items():
-                    obs = public.get(name) or observe(name, ducks, tiles, support, config, t, referee.eliminated)
+                    obs = public.get(name) or observe(
+                        name, ducks, tiles, support, config, t, referee.eliminated
+                    )
                     plan = plans.get(name)
                     if name in referee.eliminated:
                         policy, command, intent = "joint_hold", (0, 0, 0), "ELIMINATED"
@@ -206,7 +230,11 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
                             command=command,
                             intent=intent,
                             target=controllers[name].target,
-                            jev_request_id=plan["request_id"] if plan and intent.startswith("JEV_") and intent != "JEV_PLAN_INVALID_BRAKE" else None,
+                            jev_request_id=plan["request_id"]
+                            if plan
+                            and intent.startswith("JEV_")
+                            and intent != "JEV_PLAN_INVALID_BRAKE"
+                            else None,
                             plan=plan,
                         )
                     )
@@ -247,7 +275,17 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
                 )
                 for n, o in ducks.items()
             }
-            events.extend(damage.advance(d, tiles, pairs, t+config.dt, observations, referee.eliminated, terminal is None))
+            events.extend(
+                damage.advance(
+                    d,
+                    tiles,
+                    pairs,
+                    t + config.dt,
+                    observations,
+                    referee.eliminated,
+                    terminal is None,
+                )
+            )
             events.extend(referee.update(t + config.dt, observations))
             if terminal is None:
                 claim.update(t + config.dt, observations, referee.eliminated, tiles)
@@ -297,10 +335,26 @@ def run_jev_game(out, seed=61204, config=None, capture=False, tape=None):
             "Actor sources changed during the run; evidence is not sealed"
         )
     audit = dict(
-        schema="microduck.jev-rumble.development.v4",
-        tactical_backend="recorded_jev_delivery_tape" if tape else "live_jev_shared_batch",
-        collapse_rules=dict(first_warning_s=damage.first_warning_s, warning_s=damage.warning_s, recovery_grace_s=damage.grace_s, max_pending_tiles=1, connectivity_preserved=True),
-        jev_summary=dict(requests=len(live.rows), delivered=sum("delivered_s" in r for r in live.rows), accepted_plans=sum(sum(r.get("accepted", {}).values()) for r in live.rows), applied_decisions=sum(r.get("jev_request_id") is not None for r in decisions), models=sorted({r["raw"]["model"] for r in live.rows if "raw" in r})),
+        schema="microduck.jev-rumble.development.v5",
+        tactical_backend="recorded_jev_delivery_tape"
+        if tape
+        else "live_jev_shared_batch",
+        collapse_rules=dict(
+            first_warning_s=damage.first_warning_s,
+            warning_s=damage.warning_s,
+            recovery_grace_s=damage.grace_s,
+            max_pending_tiles=1,
+            connectivity_preserved=True,
+        ),
+        jev_summary=dict(
+            requests=len(live.rows),
+            delivered=sum("delivered_s" in r for r in live.rows),
+            accepted_plans=sum(sum(r.get("accepted", {}).values()) for r in live.rows),
+            applied_decisions=sum(
+                r.get("jev_request_id") is not None for r in decisions
+            ),
+            models=sorted({r["raw"]["model"] for r in live.rows if "raw" in r}),
+        ),
         seed=seed,
         config=asdict(config),
         capture=capture,

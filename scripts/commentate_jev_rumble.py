@@ -20,7 +20,7 @@ from microduck_lab.arena.episode import sha
 from microduck_lab.arena.relay_rumble import CHARACTERS
 
 
-def prepare(run, plan, out, tts):
+def prepare(run, plan, out, tts, language="zh-CN"):
     run, plan, out = Path(run), Path(plan), Path(out)
     audit = json.loads((run / "audit.json").read_text())
     film = json.loads(plan.read_text())
@@ -64,6 +64,9 @@ def prepare(run, plan, out, tts):
         elif kind == "TERMINAL" and e.get("winner"):
             text = f"站稳了！{name(e['winner'])}，唯一幸存者！"
             priority = 99
+        elif kind == "RECOVERY_ROLL_STARTED":
+            text = f"{name(e['body_id'])}尝试翻身脱困！"
+            priority = 76
         elif kind == "RECOVERY_COMPLETED":
             text = f"{name(e['body_id'])}重新站稳！回到对抗！"
             priority = 78
@@ -83,12 +86,19 @@ def prepare(run, plan, out, tts):
             priority = 75
         elif kind == "BEACON_CAPTURE":
             islands = {i: f"{i}号岛" for i in range(25)}
-            islands.update({12: "中心岛", 2: "西岛", 14: "北岛", 22: "东岛", 10: "南岛"})
+            islands.update(
+                {12: "中心岛", 2: "西岛", 14: "北岛", 22: "东岛", 10: "南岛"}
+            )
             text = f"{name(e['body_id'])}拿下{islands[e['tile']]}！下一个点，走！"
             priority = 55
         elif kind == "BODY_CONTACT" and all(abs(e["time"] - t) > 4 for t in contacts):
             strongest = max(e["contacts"], key=lambda c: c["force_N"])
-            if any(x["state"] == "ELIMINATED" and x["body_id"] in (strongest["a"], strongest["b"]) and x["time"] <= e["time"]+.5 for x in audit["events"]):
+            if any(
+                x["state"] == "ELIMINATED"
+                and x["body_id"] in (strongest["a"], strongest["b"])
+                and x["time"] <= e["time"] + 0.5
+                for x in audit["events"]
+            ):
                 continue
             pair = f"{name(strongest['a'])}和{name(strongest['b'])}"
             variants = [
@@ -119,6 +129,9 @@ def prepare(run, plan, out, tts):
                     ),
                     text=text,
                     priority=priority,
+                    group=("roll-" + e["body_id"])
+                    if kind == "RECOVERY_ROLL_STARTED"
+                    else None,
                     evidence=dict(
                         kind="event", index=index, state=kind, sim_time_s=e["time"]
                     ),
@@ -128,7 +141,9 @@ def prepare(run, plan, out, tts):
     for index, e in enumerate(audit["events"]):
         if e["state"] == "BEACON_CAPTURE":
             islands = {i: f"{i}号岛" for i in range(25)}
-            islands.update({12: "中心岛", 2: "西岛", 14: "北岛", 22: "东岛", 10: "南岛"})
+            islands.update(
+                {12: "中心岛", 2: "西岛", 14: "北岛", 22: "东岛", 10: "南岛"}
+            )
             candidates.append(
                 dict(
                     start_s=at(e["time"]) + 3.1,
@@ -153,7 +168,12 @@ def prepare(run, plan, out, tts):
         "JEV_EVADE": "二呆选择避让，拉开距离！",
         "JEV_RETREAT_CORE": "卷王向中心撤退，争夺安全位置！",
     }
-    actors = {"JEV_CAPTURE": "lavender", "JEV_INTERCEPT": "sky", "JEV_EVADE": "cream", "JEV_RETREAT_CORE": "graphite"}
+    actors = {
+        "JEV_CAPTURE": "lavender",
+        "JEV_INTERCEPT": "sky",
+        "JEV_EVADE": "cream",
+        "JEV_RETREAT_CORE": "graphite",
+    }
     for intent, text in phrases.items():
         rows = [
             (i, d)
@@ -179,9 +199,7 @@ def prepare(run, plan, out, tts):
                 dict(
                     start_s=at(d["time"]),
                     text=text or f"{name(d['body_id'])}尝试脱离拥挤！",
-                    priority=72
-                    if intent in ("JEV_CAPTURE", "JEV_INTERCEPT")
-                    else 60,
+                    priority=72 if intent in ("JEV_CAPTURE", "JEV_INTERCEPT") else 60,
                     group=intent,
                     evidence=dict(
                         kind="decision", index=i, intent=intent, sim_time_s=d["time"]
@@ -190,6 +208,12 @@ def prepare(run, plan, out, tts):
             )
             if sum(c.get("group") == intent for c in candidates) >= 16:
                 break
+    if language == "en":
+        from microduck_lab.presentation.jev_english import commentary_text
+
+        candidates = [
+            {**c, "text": commentary_text(c, audit, decisions)} for c in candidates
+        ]
     cache = out.parent / "survival-rumble-voice-cache"
     cache.mkdir(parents=True, exist_ok=True)
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
@@ -200,13 +224,21 @@ def prepare(run, plan, out, tts):
         if c.get("group") in groups:
             continue
         start = c["start_s"]
-        estimate = len(c["text"]) / 6.3 + 0.25
+        estimate = (
+            (len(c["text"].split()) / 3.4 + 0.25)
+            if language == "en"
+            else len(c["text"]) / 6.3 + 0.25
+        )
         if start + estimate > duration:
             continue
         if any(start < b + 0.65 and start + estimate > a - 0.65 for a, b in occupied):
             continue
-        rate = "+18%" if c["priority"] >= 65 else "+10%"
-        voice = "zh-CN-YunjianNeural"
+        rate = (
+            ("+12%" if c["priority"] >= 65 else "+5%")
+            if language == "en"
+            else ("+18%" if c["priority"] >= 65 else "+10%")
+        )
+        voice = "en-GB-RyanNeural" if language == "en" else "zh-CN-YunjianNeural"
         digest = hashlib.sha256((voice + rate + c["text"]).encode()).hexdigest()
         mp3 = cache / (digest + ".mp3")
         if not mp3.exists() or mp3.stat().st_size < 1000:
@@ -293,7 +325,8 @@ def prepare(run, plan, out, tts):
         source_audit_sha256=sha(run / "audit.json"),
         plan_sha256=sha(plan),
         duration_s=duration,
-        voice="zh-CN-YunjianNeural",
+        voice="en-GB-RyanNeural" if language == "en" else "zh-CN-YunjianNeural",
+        language=language,
         synthetic=True,
         cues=selected,
         unvoiced_terminal_events=missing,
@@ -322,5 +355,8 @@ if __name__ == "__main__":
     p.add_argument("--plan", required=True)
     p.add_argument("--out", required=True)
     p.add_argument("--tts", default=".tts-venv/bin/edge-tts")
+    p.add_argument("--language", choices=("zh-CN", "en"), default="zh-CN")
     a = p.parse_args()
-    print(json.dumps(prepare(a.run, a.plan, a.out, a.tts), ensure_ascii=False))
+    print(
+        json.dumps(prepare(a.run, a.plan, a.out, a.tts, a.language), ensure_ascii=False)
+    )

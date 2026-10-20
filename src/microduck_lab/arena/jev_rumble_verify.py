@@ -22,9 +22,13 @@ from .world import ASSETS
 def verify_jev(directory):
     directory = Path(directory)
     audit = json.loads((directory / "audit.json").read_text())
-    if audit.get(
-        "schema"
-    ) not in ("microduck.jev-rumble.development.v1", "microduck.jev-rumble.development.v2", "microduck.jev-rumble.development.v3", "microduck.jev-rumble.development.v4") or not audit.get("capture"):
+    if audit.get("schema") not in (
+        "microduck.jev-rumble.development.v1",
+        "microduck.jev-rumble.development.v2",
+        "microduck.jev-rumble.development.v3",
+        "microduck.jev-rumble.development.v4",
+        "microduck.jev-rumble.development.v5",
+    ) or not audit.get("capture"):
         raise ValueError("A full-rate multiplayer capture is required")
     required = {
         "jev-requests.json",
@@ -47,20 +51,47 @@ def verify_jev(directory):
     for name, filename in (
         ("stand", "alpha_stand.onnx"),
         ("walk", "alpha_walking.onnx"),
-        *(([("sitstand", "alpha_sitstand.onnx")]) if "sitstand" in audit["policy_sha256"] else []),
+        *(
+            ([("sitstand", "alpha_sitstand.onnx")])
+            if "sitstand" in audit["policy_sha256"]
+            else []
+        ),
+        *(
+            ([("roulade", "roulade.onnx")])
+            if "roulade" in audit["policy_sha256"]
+            else []
+        ),
     ):
         if (
             sha(ASSETS / "microduck/policies" / filename)
             != audit["policy_sha256"][name]
         ):
             raise ValueError(f"Policy differs: {name}")
-    config = (JevGameConfig if audit["schema"].endswith("v4") else SurvivalConfig)(**audit["config"])
+    config = (
+        JevGameConfig if audit["schema"].endswith(("v4", "v5")) else SurvivalConfig
+    )(**audit["config"])
     if audit["steps"] < 1 or audit["duration"] != audit["steps"] * config.dt:
         raise ValueError("Invalid duration/step evidence")
     with TemporaryDirectory(prefix="duckverse-replay-") as temp:
         regenerated = Path(temp) / "run"
         actual = json.loads(
-            json.dumps(({"v1": run_jev, "v2": run_jev_fair, "v3": run_jev_game, "v4": run_jev_game}[audit["schema"][-2:]])(regenerated, audit["seed"], config, capture=True, tape=directory / "jev-requests.json"))
+            json.dumps(
+                (
+                    {
+                        "v1": run_jev,
+                        "v2": run_jev_fair,
+                        "v3": run_jev_game,
+                        "v4": run_jev_game,
+                        "v5": run_jev_game,
+                    }[audit["schema"][-2:]]
+                )(
+                    regenerated,
+                    audit["seed"],
+                    config,
+                    capture=True,
+                    tape=directory / "jev-requests.json",
+                )
+            )
         )
         ignore = {"hashes", "performance", "tactical_backend"}
         for key, value in audit.items():

@@ -211,3 +211,61 @@ def test_archived_actor_sources_unchanged():
     expected = {'survival_rumble.py': 'c1c1f89e674c920c4fcc8b1b1cfcc4520f4d4d4b54a52a09246c68306359b893', 'survival_world.py': '2b13d1dcc217842ef89c2098c3ef6ae649b6d2b62e1b89a50a0d79162b610645', 'relay_rumble.py': 'f6c11d9f587290804cabeda9688e9ecf20c4d510ea13f5c28e94fa280d001357', 'multiplayer.py': '0379bff83a24cb7b727b5a981cb75aed5545cab1fe4126f63901109d2791cad6'}
     for name, digest in expected.items():
         assert hashlib.sha256((root/"src/microduck_lab/arena"/name).read_bytes()).hexdigest() == digest
+
+
+def test_stalled_recovery_retries_with_bounded_skills_and_resets_when_supported():
+    from microduck_lab.arena.jev_dynamic_recovery import DynamicRecoveryMotor
+
+    o = observation()
+    o["robot"].update(up_cos=-0.15, speed_m_s=0.01, z=0.08)
+    motor = DynamicRecoveryMotor("survivor")
+    assert motor.choose(o, None)[0] == "stand"
+    for t, policy in [
+        (1.82, "sitstand"),
+        (2.64, "stand"),
+        (3.82, "sitstand"),
+        (4.58, "sitstand"),
+        (4.64, "stand"),
+        (6.22, "roulade"),
+        (6.68, "roulade"),
+        (6.74, "stand"),
+    ]:
+        o["sim_time_s"] = t
+        assert motor.choose(o, None)[0] == policy
+    assert [e["policy"] for e in motor.events if e["state"] == "RECOVERY_RETRY"] == [
+        "sitstand",
+        "roulade",
+    ]
+    o["robot"].update(up_cos=0.99, current_tile_id=12)
+    for t in [7.0, 7.1, 7.2]:
+        o["sim_time_s"] = t
+        assert motor.choose(o, None)[0] == "stand"
+    assert not motor.recovering and motor.retry_count == 0
+
+
+def test_recovery_watchdog_never_rolls_a_body_already_falling_below_the_deck():
+    from microduck_lab.arena.jev_dynamic_recovery import DynamicRecoveryMotor
+
+    o = observation()
+    o["robot"].update(up_cos=-0.5, speed_m_s=0.1, z=-0.2)
+    motor = DynamicRecoveryMotor("survivor")
+    motor.choose(o, None)
+    o["sim_time_s"] = 8.0
+    assert motor.choose(o, None)[0] != "roulade"
+    assert not [e for e in motor.events if e["state"] == "RECOVERY_RETRY"]
+
+
+def test_moving_fall_preserves_natural_attempt_then_stops_roll_when_upright():
+    from microduck_lab.arena.jev_dynamic_recovery import DynamicRecoveryMotor
+    o=observation()
+    o['robot'].update(up_cos=.80,speed_m_s=.05,z=.10)
+    motor=DynamicRecoveryMotor('rusher')
+    assert motor.choose(o,None)[0]=='stand'
+    o['sim_time_s']=1.82
+    o['robot']['up_cos']=-.5
+    assert motor.choose(o,None)[0]=='stand'
+    o['sim_time_s']=3.02
+    assert motor.choose(o,None)[0]=='roulade'
+    o['sim_time_s']=3.14
+    o['robot'].update(up_cos=.95,current_tile_id=12)
+    assert motor.choose(o,None)[0]=='stand'

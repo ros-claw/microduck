@@ -66,7 +66,11 @@ def check(run, video):
             row = audit["events"][e["index"]]
             assert row["state"] == e["state"] and row["time"] == e["sim_time_s"]
             middle = round((cue["start_s"] + cue["end_s"]) / 2 * manifest["fps"])
-            if row["state"] in ("RECOVERY_COMPLETED", "BEACON_CAPTURE"):
+            if row["state"] in (
+                "RECOVERY_COMPLETED",
+                "BEACON_CAPTURE",
+                "RECOVERY_ROLL_STARTED",
+            ):
                 assert frames[middle]["shot"] == "character_" + row["body_id"]
             elif row["state"] == "BODY_CONTACT":
                 touch = max(row["contacts"], key=lambda c: c["force_N"])

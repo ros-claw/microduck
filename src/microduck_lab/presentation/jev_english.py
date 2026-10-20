@@ -61,6 +61,8 @@ def english(text):
         "Jev · 暂时站稳": "Jev · Hold",
         "本地 · 起身恢复": "Local · Recovering",
         "本地 · 坐站技能恢复": "Local · Get-up skill",
+        "本地 · 翻身脱困": "Local · Rollover recovery",
+        "本地 · 恢复后站稳": "Local · Regain balance",
         "本地 · 撤离危险地板": "Local · Evacuating",
         "等待有效 Jev 指令": "Awaiting Jev",
         "路线失效 · 停步": "Route invalid · Brake",
@@ -103,3 +105,73 @@ class EnglishDraw:
         if font:
             kwargs["font"] = font
         return self.draw.text(xy, text, **kwargs)
+
+
+def commentary_text(candidate, audit, decisions):
+    """Event-grounded English lines for a fresh match, rather than a fixed dub."""
+    evidence = candidate["evidence"]
+
+    def name(body):
+        return CHARACTERS_EN[body]["name"]
+
+    if evidence["kind"] == "rules":
+        return "Four ducks. One survivor. Jev calls the plays!"
+    if evidence["kind"] == "decision":
+        row = decisions[evidence["index"]]
+        actor = name(row["body_id"])
+        return {
+            "JEV_CAPTURE": f"Jev sends {actor} after the beacon!",
+            "JEV_INTERCEPT": f"{actor} moves to cut off the chase!",
+            "JEV_EVADE": f"{actor} looks for breathing room!",
+            "JEV_RETREAT_CORE": f"{actor} heads back towards the centre!",
+        }[row["intent"]]
+    event = audit["events"][evidence["index"]]
+    kind = event["state"]
+    if kind == "ELIMINATED":
+        left = 4 - sum(
+            e["state"] == "ELIMINATED" and e["time"] <= event["time"]
+            for e in audit["events"]
+        )
+        suffix = {
+            3: "Three remain!",
+            2: "The final two!",
+            1: "Just one duck left!",
+            0: "Nobody left standing!",
+        }[left]
+        return f"{name(event['body_id'])} is out! {suffix}"
+    if kind == "TERMINAL":
+        return f"Standing firm! {name(event['winner'])} is the sole survivor!"
+    if kind == "RECOVERY_ROLL_STARTED":
+        return f"{name(event['body_id'])} tries a rollover!"
+    if kind == "RECOVERY_COMPLETED":
+        return f"{name(event['body_id'])} is back up! Back in the fight!"
+    if kind == "RECOVERY_GRACE":
+        return "Extra recovery time! Contact stays live!"
+    if kind == "FINAL_WARNING":
+        return "The first tile is counting down! Move!"
+    if kind == "FINALE_WARNING":
+        return "Final warning! Head for the centre!"
+    if kind == "FINALE_RING":
+        return (
+            "The outer ring drops!"
+            if event["radius"] == 2
+            else "Only the centre remains!"
+        )
+    if kind == "BEACON_CAPTURE":
+        tile = {12: "centre", 2: "west", 14: "north", 22: "east", 10: "south"}.get(
+            event["tile"], f"tile {event['tile']}"
+        )
+        return (
+            f"{name(event['body_id'])} has claimed the {tile} beacon!"
+            if evidence.get("retrospective")
+            else f"{name(event['body_id'])} takes the {tile} beacon!"
+        )
+    if kind == "BODY_CONTACT":
+        contact = max(event["contacts"], key=lambda c: c["force_N"])
+        pair = f"{name(contact['a'])} and {name(contact['b'])}"
+        return [
+            f"{pair} collide!",
+            f"{pair}, shoulder to shoulder!",
+            f"Look at that contact! {pair}!",
+        ][evidence["index"] % 3]
+    raise ValueError("No English commentary for " + kind)

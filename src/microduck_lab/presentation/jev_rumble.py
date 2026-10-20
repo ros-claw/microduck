@@ -533,6 +533,8 @@ class JevFilm(Film):
             "JEV_HOLD": "Jev · 暂时站稳",
             "LOCAL_RECOVERY": "本地 · 起身恢复",
             "LOCAL_RECOVERY_SKILL": "本地 · 坐站技能恢复",
+            "LOCAL_RECOVERY_ROLL": "本地 · 翻身脱困",
+            "LOCAL_RECOVERY_SETTLE": "本地 · 恢复后站稳",
             "LOCAL_EVACUATE": "本地 · 撤离危险地板",
             "AWAIT_JEV": "等待有效 Jev 指令",
             "JEV_PLAN_INVALID_BRAKE": "路线失效 · 停步",
@@ -604,12 +606,23 @@ def plan_jev(audit, decisions=None):
             key=lambda e: (depth(e), -e["duration_s"]),
         )
     for e in recoveries[:2]:
-        intervals.append(
-            (
-                max(0.0, e["time"] - min(e["duration_s"], 1.5)),
-                min(end, e["time"] + 0.2),
-                "character_" + e["body_id"],
+        begin = max(0.0, e["time"] - min(e["duration_s"], 1.5))
+        # For the new recovery controller, show a recorded roll-to-stand
+        # transition when it fits in the detail budget, not only its last pose.
+        rolls = [
+            r
+            for r in audit["events"]
+            if r.get("body_id") == e["body_id"]
+            and (
+                r["state"] == "RECOVERY_ROLL_STARTED"
+                or (r["state"] == "RECOVERY_RETRY" and r.get("policy") == "roulade")
             )
+            and 0 <= e["time"] - r["time"] <= 2.4
+        ]
+        if rolls:
+            begin = min(begin, rolls[-1]["time"] - 0.12)
+        intervals.append(
+            (max(0.0, begin), min(end, e["time"] + 0.2), "character_" + e["body_id"])
         )
     captures = [e["time"] for e in audit["events"] if e["state"] == "BEACON_CAPTURE"]
     finale = next(
@@ -701,7 +714,11 @@ def render_jev(run, out, preview=None, speech=None, plan_only=False, language="z
                 shot = "character_" + decisions[cue["evidence"]["index"]]["body_id"]
             elif cue and cue["evidence"]["kind"] == "event":
                 event = audit["events"][cue["evidence"]["index"]]
-                if event["state"] in ("RECOVERY_COMPLETED", "BEACON_CAPTURE"):
+                if event["state"] in (
+                    "RECOVERY_COMPLETED",
+                    "BEACON_CAPTURE",
+                    "RECOVERY_ROLL_STARTED",
+                ):
                     shot = "character_" + event["body_id"]
                 elif event["state"] == "BODY_CONTACT":
                     touch = max(event["contacts"], key=lambda c: c["force_N"])
@@ -754,7 +771,9 @@ def render_jev(run, out, preview=None, speech=None, plan_only=False, language="z
         chronological=True,
         language=language,
         audio="none",
-        status="English edition of the accepted match"
+        status="Unaccepted recovery-control improvement preview"
+        if audit["schema"].endswith("v5")
+        else "English edition of the accepted match"
         if language == "en"
         else "accepted match",
         outcome=audit["outcome"],
