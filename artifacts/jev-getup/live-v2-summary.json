@@ -1,0 +1,138 @@
+{
+  "source": "artifacts/jev-getup/live-v2-31261",
+  "outcome": {
+    "status": "WINNER",
+    "winner": "sky",
+    "alive": [
+      "sky"
+    ],
+    "rule": "LastDuckAlive",
+    "support_rule": "any remaining grounded tile",
+    "supporting_tiles_at_win": [
+      7
+    ],
+    "stable_supported_s": 0.75,
+    "loaded_fraction": 0.9019999999999376,
+    "max_unsupported_gap_s": 0.0020000000000095497,
+    "eliminated": [
+      "cream",
+      "graphite",
+      "lavender"
+    ]
+  },
+  "episodes": [
+    {
+      "body_id": "lavender",
+      "start_s": 11.32,
+      "end_s": 12.32,
+      "duration_s": 1.0,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "lavender",
+      "start_s": 13.26,
+      "end_s": 17.1,
+      "duration_s": 3.8400000000000016,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 14.040000000000001,
+      "end_s": 17.52,
+      "duration_s": 3.4799999999999986,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "lavender",
+      "start_s": 19.740000000000002,
+      "end_s": 22.36,
+      "duration_s": 2.6199999999999974,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "lavender",
+      "start_s": 24.88,
+      "end_s": 28.400000000000002,
+      "duration_s": 3.520000000000003,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "sky",
+      "start_s": 28.52,
+      "end_s": 36.24,
+      "duration_s": 7.720000000000002,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "lavender",
+      "start_s": 42.32,
+      "end_s": 42.54625,
+      "duration_s": 0.22625000000000028,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 62.34,
+      "end_s": 62.525000000000006,
+      "duration_s": 0.18500000000000227,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "cream",
+      "start_s": 86.38,
+      "end_s": 86.60249999999999,
+      "duration_s": 0.2224999999999966,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    }
+  ],
+  "completed": [
+    1.0,
+    3.8400000000000016,
+    3.4799999999999986,
+    2.6199999999999974,
+    3.520000000000003,
+    7.720000000000002
+  ],
+  "unfinished": [
+    {
+      "body_id": "lavender",
+      "start_s": 42.32,
+      "end_s": 42.54625,
+      "duration_s": 0.22625000000000028,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 62.34,
+      "end_s": 62.525000000000006,
+      "duration_s": 0.18500000000000227,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "cream",
+      "start_s": 86.38,
+      "end_s": 86.60249999999999,
+      "duration_s": 0.2224999999999966,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    }
+  ],
+  "maximum_recovery_duration_s": 7.720000000000002,
+  "maximum_supported_low_motion_topple_s": {
+    "lavender": 0.02,
+    "graphite": 0.04000000000000313,
+    "sky": 0.02
+  },
+  "stall_metric": "50 Hz; local recovery, up cosine <0.6, torso z >-0.05m, horizontal speed <0.04m/s, projection over a remaining tile"
+}

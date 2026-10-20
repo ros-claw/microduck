@@ -91,6 +91,10 @@ scripts/contact_skip.sh
 | [`policies`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/policies) / [`training`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/training) | 导出策略与训练源码 |
 | [`artifacts`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/artifacts) / [`docs`](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/README.md) | 结果、失败、产物清单与方法 |
 
+## 起身恢复优化（待审阅）
+
+[新版英文影片与方法](docs/jev-getup/README.zh-CN.md)：定位原片未完成的倒地恢复，加入有界翻身重试和站稳后的缓启动，并保留失败实验与完整恢复统计。上方已确认影片继续保留。
+
 ## 贡献与署名
 
 行为变更请附复现命令、seed/模型哈希、接触证据和局限，并保留冻结参考。项目代码采用 Apache-2.0；机器人资产与上游策略来自 **Pollen Robotics**，上游 3D 模型另有 CC BY-SA-NC 条款。见 [LICENSE](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/LICENSE)、[THIRD_PARTY](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/THIRD_PARTY.md)、[上游锁定文件](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/upstream.lock.yaml)。ROSClaw/Jev 仅在实际调用过的实验中标注参与；Duckverse 原生 Agent 已用候选核心扩展实测；Practice 是事后导入的仿真记录，不代表在线学习。

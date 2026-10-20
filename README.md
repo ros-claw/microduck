@@ -91,6 +91,10 @@ For each game’s exact command, policy and asset requirements, follow its metho
 | [`policies`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/policies) / [`training`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/training) | Exported policies and training source |
 | [`artifacts`](https://github.com/ros-claw/microduck/tree/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/artifacts) / [`docs`](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/docs/README.md) | Results, failures, manifests and methods |
 
+## Recovery-control development
+
+[New English get-up review](docs/jev-getup/README.md) diagnoses the original unfinished recovery, adds bounded motor-only retries and preserves failures and inclusive recovery measurements. This iteration awaits user review; the accepted films above remain available.
+
 ## Contributing and attribution
 
 Include reproducible commands, seed/model hashes, contact evidence and limitations with behavior changes; preserve frozen references. Project code is Apache-2.0. Robot assets and upstream policies come from **Pollen Robotics**; upstream 3D models have their separate CC BY-SA-NC terms. See [LICENSE](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/LICENSE), [THIRD_PARTY](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/THIRD_PARTY.md), and [upstream lock](https://github.com/ros-claw/microduck/blob/8ce0daab08cd4f0e3d25cb5b15e91167dc8aa666/upstream.lock.yaml). ROSClaw/Jev integrations are credited only where actually exercised; Duckverse native-agent execution is demonstrated with the linked candidate core extension; Practice imports are retrospective simulation records, not online learning.

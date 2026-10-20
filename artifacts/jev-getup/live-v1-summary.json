@@ -1,0 +1,103 @@
+{
+  "source": "artifacts/jev-getup/live-v1-70002",
+  "outcome": {
+    "status": "WINNER",
+    "winner": "sky",
+    "alive": [
+      "sky"
+    ],
+    "rule": "LastDuckAlive",
+    "support_rule": "any remaining grounded tile",
+    "supporting_tiles_at_win": [
+      12
+    ],
+    "stable_supported_s": 13.452749999999995,
+    "loaded_fraction": 0.9000018583556866,
+    "max_unsupported_gap_s": 0.00925000000000864,
+    "eliminated": [
+      "cream",
+      "graphite",
+      "lavender"
+    ]
+  },
+  "episodes": [
+    {
+      "body_id": "sky",
+      "start_s": 14.700000000000001,
+      "end_s": 15.48,
+      "duration_s": 0.7799999999999994,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 10.88,
+      "end_s": 20.42,
+      "duration_s": 9.540000000000001,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "cream",
+      "start_s": 54.300000000000004,
+      "end_s": 54.7145,
+      "duration_s": 0.41449999999999676,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 56.0,
+      "end_s": 63.88,
+      "duration_s": 7.880000000000003,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "sky",
+      "start_s": 57.04,
+      "end_s": 66.94,
+      "duration_s": 9.899999999999999,
+      "completed": true,
+      "ended_by": "RECOVERY_COMPLETED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 85.0,
+      "end_s": 85.44,
+      "duration_s": 0.4399999999999977,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    }
+  ],
+  "completed": [
+    0.7799999999999994,
+    9.540000000000001,
+    7.880000000000003,
+    9.899999999999999
+  ],
+  "unfinished": [
+    {
+      "body_id": "cream",
+      "start_s": 54.300000000000004,
+      "end_s": 54.7145,
+      "duration_s": 0.41449999999999676,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    },
+    {
+      "body_id": "graphite",
+      "start_s": 85.0,
+      "end_s": 85.44,
+      "duration_s": 0.4399999999999977,
+      "completed": false,
+      "ended_by": "ELIMINATED"
+    }
+  ],
+  "maximum_recovery_duration_s": 9.899999999999999,
+  "maximum_supported_low_motion_topple_s": {
+    "graphite": 0.5800000000000023,
+    "sky": 0.52
+  },
+  "stall_metric": "50 Hz; local recovery, up cosine <0.6, torso z >-0.05m, horizontal speed <0.04m/s, projection over a remaining tile"
+}
