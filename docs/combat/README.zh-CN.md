@@ -1,75 +1,74 @@
-# 功夫鸭：双鸭攻防开发实验室
+# 功夫鸭 Duck Fu：双鸭对决与四鸭团战
 
 [English](README.md) · **简体中文**
 
-当前实现是固定场地内的双鸭原型：教练鸭承诺一次突进，防守鸭根据当前
-可见逼近速度闪避，再转向回顶。关节由已有强化学习策略及新训练的运动
-候选驱动，MuJoCo 决定实际接触。**还没有通过完整格斗验收。**
+Duck Fu 是基于 **Pollen Robotics 原生 Microduck** 的物理仿真游戏。两只鸭子单挑，或四只鸭子组成红蓝两队，在固定八角擂台上接近、低头蓄势、突进顶撞、侧闪、转向反顶及倒地恢复。机器人没有添加手臂；动作结果来自关节驱动、真实接触、重力与支撑变化。
 
-[10 秒正常速度候选片段](media/duel-candidate-01.mp4)
-· [不同初态 2](media/duel-candidate-02.mp4)
-· [不同初态 3](media/duel-candidate-03.mp4)
-· [已有运动策略对照](media/duel-greybox.mp4)
-· [反顶失败样本](media/duel-failure.mp4)。
+![功夫鸭：实际仿真画面](media/duck_fu_cover.jpg)
 
-以上全部静音、无特效、固定镜头、连续正常速度。候选片段使用 R1 第 50
-次检查点及开发时看过的初态；不是成功率证明，也不是自主比赛。
+[英文主片](media/duck_fu_team_hero.mp4) · [竖屏短片](media/duck_fu_team_short.mp4) · [连续正常速度、无声完整比赛](media/duck_fu_team_reference.mp4) · [技术特写与慢动作](media/duck_fu_team_technical.mp4) · [连续双鸭比赛](media/duck_fu_duel_reference.mp4)
 
-最新 R2/50 与 0.36 m 入场距离的连续片段：
-[样本 1](media/near-duel-01.mp4) · [样本 2](media/near-duel-02.mp4)
-· [样本 3](media/near-duel-03.mp4) · [未反顶成功的样本](media/near-duel-04.mp4)。
-它们是冻结近距验证中最早三段完整回顶接触及第一段缺失回顶，属于诊断选片，
-不能拿来估算成功率。候选中仍能看到不理想的头部姿态，未作遮掩。
+影片为 1080p、50 fps，慢放与回放均明确标记。技术版展示实际碰撞凸包、测得的接触响应及恢复过程。英文解说、合成配乐和接触触发拟音属于后期制作，不参与仿真，也不冒充机器人麦克风录音；附英文及中文字幕。慢动作读取记录下来的真实积分状态，没有生成补帧。
 
-## 本轮真正实现了什么
+## 方法
 
-- 独立 `combat/` 功能域、严格配置、固定实验地面／圆形擂台、逐物理步审计。
-- 每鸭独立动作历史，同一时刻先完成全部决策，再写电机目标、推进物理。
-- 标准 61 维观测、14 维关节输出、50 Hz 电机和 4 kHz 物理时钟；无根节点
-  平移、额外推力、碰撞豁免或提高力矩。
-- 每鸭 70 个外观零件各自对应凸包，独立碰撞层避免原生壳与新增壳重复受力。
-  原生自碰撞、脚地接触、质量惯量与原始材质保留，力矩仍为 ±0.6405 Nm。
-- 有承诺方向的突进、基于公开运动的闪避、收招／脱离、回顶尝试和恢复优先权。
-- 真实 GPU 运动训练、归一化导出校验、CPU 双鸭评估及闭环重放。
+**运动控制。** 每只鸭子独立维护 61 维观测及上一帧动作历史，学习策略以 50 Hz 输出 14 个关节的位置偏移。此次针对实际部署的受限 PD 模型训练了接触推进、侧向闪避和格斗步行；站立与坐起采用上游学习策略。技能结束时使用自身训练过的零指令制动阶段，根据真实足部支撑和身体、头部稳定程度完成切换。没有对策略输出增加低通滤波，也不会在切换时清空动作历史。
 
-凸包仍是近似碰撞，不是渲染三角形级精确模型。没有用特效遮掩穿模；物理
-合格也不自动说明动作足够有力或好看。
+**战术。** 34 维公开观测输入 `34 → 64 tanh → 64 tanh → 9 动作` 分类策略，选择接近、左右绕步、突进、左右闪避、防守、回中和后退。先用明确标注的规则轨迹蒸馏进行初始化，再通过在线 PPO 与冻结的历史策略、当前快照及规则对手对抗。半马尔可夫优势估计使用真实动作持续时间；队友提前淘汰时，不会提前获得最终团队奖励。队友共享策略参数，目标分配采用公开状态下的最短距离协调，淘汰后可更换目标。
 
-## 做成和没做成的部分
+突进有低头蓄势、锁定方向、执行和制动阶段，可能扑空。对手通过实际头部姿态及近期相对运动判断威胁，不能读取隐藏攻击阶段、动作选择、未来轨迹或随机种子。动作可行性判断使用与物理擂台一致的八角形边界。
 
-12 组配对开发初态 × 3 种防守，共 36 次：站立对照 12/12 发生接触；闪避
-组 12/12 避开第一次突进；闪避后回顶组 10/12 形成反向接触。
+**物理。** 所有鸭子保持相同原生质量与惯性，质量为 **0.73724318 kg**，关节力矩限制为 **±0.6405 Nm**。最终模型采用 MuJoCo 3.12、Newton 求解器 80 次迭代、0.125 毫秒物理步长；电机策略仍为 50 Hz。鸭子之间通过每只 70 个无附加质量的原生可视零件凸包接触，分离碰撞掩码，避免原生碰撞体与代理重复响应；保留原生自碰撞和落地接触，队友之间同样发生碰撞。凸包对凹面仍有近似，不能称为精确三角网格接触或已经验证的真机数字孪生。
 
-**主要问题仍是攻击强度与可靠性。** 原策略多数只让站立对手移动几毫米。
-新训练策略早期曾顶动约 1.8／3.9 cm，但另一次无效；最终 R1/149 策略在
-更大的 40 组评估里，仅 **2/40** 同时达到「真实接触、顶动至少 1 cm、
-结束后稳定」，远未通过 80% 目标，已经拒绝晋升。第二版 R2/50 在另 40 组新初态里为 13/40，仍低于 80%。两个版本各 160 次配对变体运行
-均通过本轮数值物理门，不能据此把身体能力也算通过。
+**裁判。** 真实跌出擂台并失去支撑判出界；持续无法站稳按公开的十秒倒地读秒处理。恢复需要持续、稳定的足部支撑，不能一帧站直就算成功。不使用血条、预设赢家、根节点瞬移、额外根节点外力、临时无敌或删除淘汰身体。超时及同时淘汰允许平局；数值异常判 **NO_CONTEST_PHYSICS**，不计为任何一队获胜。
 
-近距离入场校准后，另 40 组新初态也只有 14/40 次攻击效果合格，站立目标接触 34/40，首次闪避 37/40，回顶接触 21/40，仍未通过身体门。第二版奖励缺乏稳定的有效命中信号，已停止继续堆训练。实测回查发现，原靶场
-1.2 秒驱动中，约 1.16 秒才首次碰到矮靶。下一轮应先校准近距离、有充分
-接触时间、分质量／摩擦阶段的物理靶课程，再做同等质量真实双鸭验证。
-没有因训练失败而改比赛力矩、摩擦或裁判标准。
+角色用队色与名称区分：ROOK／张三、BOLT／莽哥、SHADE／老六、ANCHOR／稳哥。名字服务于辨识，不表示四个独立大模型人格。
 
-本轮最终 163 项项目测试、另 2 项训练契约测试通过。灰盒和候选各 4 万物理步
-闭环重放零状态误差；旧生存赛 401,126 步也重新验证一致。
+## 评估与边界
 
-**身体门：未通过。观看门：待真实观众评审。** 因此仍保留在双鸭研发阶段，
-没有扩到四鸭、没有自博弈，也没有宣称 Jev／ROSClaw 格斗开赛回执、
-自主进化或真机迁移。没有新建 Release／Tag。
+[最终结果与验收](RESULTS.md) 分开报告运动、恢复、对战、物理数值与人类观看验收。[机器可读汇总](../../artifacts/combat/complete-summary.json) 索引冻结协议及压缩原始报告。完整对战采用每个对手 **32 个基础种子 × 双向换边**，并轮换场地方向；64 局是配对观测，不能当作 64 个独立种子夸大统计强度。
 
-## 方法、失败与复现
+主片从物理通过且结束完整的比赛中选择，目的是看清交互，不能用精选影片证明成功率。另有连续正常速度完整参考及闭环重放。有效响应事件要求实际正接触冲量和可测位移／失衡，是描述性证据，不是因果伤害模型，也不直接决定胜负。
 
-[源码审计](00_source_audit.md) · [规则与范围](01_scope_and_rules.md)
-· [碰撞与物理契约](02_physics_contract.md) · [全部实验与失败](03_experiments.md)
-· [训练源码及预算](../../training/combat/README.md)
-· [英文页的可执行复现命令](README.md#reproduce-a-recorded-candidate)。
+倒地后不保证每次快速站起，尤其是持续干扰及临近边缘时。旧翻滚恢复策略因自碰撞异常被拒绝，最终比赛默认停用。没有宣称已经学会短踢或翻滚逃脱。数值无效、扑空、平局及恢复失败都保留在评估里；失败训练与求解器试验见[实验记录](03_experiments.md)和[早期实验室](EARLY_LAB.zh-CN.md)。
 
-原有跳绳、跑酷、生存赛代码与已确认展示保留。Pollen Robotics 的模型与
-策略仍遵守其独立许可；本项目不自行作商业使用授权结论。
+当前战术与运动均在本地运行，**没有把 Jev 或网络大模型放进反射或战术循环**。ROSClaw 格斗 MCP 适配器提供严格类型的 SIM 工具和只读状态检查；官方 daemon 授权执行回执的完整验证仍待完成，执行器报告不冒充授权回执。没有宣称真机部署或自主进化。影片观感验收保留为待真人观看。
 
-历史录像保留匹配源码版本。最终审计补充了最深接触的世界坐标；重新录制的
-四段轨迹、控制、接触和决策与最新展示片段逐项一致，并重新通过闭环重放。
-[一致性证据](../../artifacts/combat/final-capture-equivalence.json)
-· [最终重放](../../artifacts/combat/final-reference-replay.json)
-· [极值位置](../../artifacts/combat/worst-contact-positions.json)。
+成片对应种子 **50006** 与 `configs/combat/team_film.yaml`：红队使用冻结的团队 PPO 战术，蓝队使用冻结的主动进攻规则，四只鸭子都使用学习得到的关节运动策略。精确复现用该配置及 `--brain learned --seed 50006 --capture`；普通示例 `team_final.yaml` 的蓝队则使用反击规则。选片偏差见[选片记录](../../artifacts/combat/team-film-selection.json)。
+
+## 本地运行与重放
+
+使用 `feat/duck-fu` 分支、Python 3.13 及仓库锁定的上游资产，在仓库根目录执行：
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -c requirements-combat.txt -e '.[dev,combat-audit]'
+export MICRODUCK_ROOT="$PWD/.assets"
+.venv/bin/python scripts/bootstrap.py
+
+PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/run_combat.py \
+  --config configs/combat/team_final.yaml --brain learned --seed 50001 \
+  --capture --out artifacts/combat/local/my-team-match
+PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/replay_combat.py \
+  --run artifacts/combat/local/my-team-match
+PYTHONPATH=src .venv/bin/python scripts/combat_director.py \
+  --run artifacts/combat/local/my-team-match --edition reference --out out/my-reference.plan.json
+PYTHONPATH=src .venv/bin/python scripts/render_combat_film.py \
+  --plan out/my-reference.plan.json --out out/my-reference.mp4
+```
+
+双鸭使用 `configs/combat/duel_final_learned.yaml`。新种子可能平局、无法提供适合剪辑的动作，或因数值问题判无效。输出必须使用新目录。规则战术配置用 `--brain rule`；不支持的模式明确报错，不静默替换。
+
+```bash
+PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/eval_combat.py \
+  --protocol configs/combat/eval_motors_v5.yaml --out artifacts/combat/local/my-motor-eval
+PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/eval_combat_matches.py \
+  --protocol configs/combat/eval_duel_final.yaml --jobs 8 --out artifacts/combat/local/my-duel-crossplay
+.venv/bin/python -m pytest tests -q
+```
+
+[训练源码、导出与检查点](../../training/combat/README.md) · [物理契约](02_physics_contract.md) · [来源审计](00_source_audit.md) · [规则与范围](01_scope_and_rules.md)
+
+代码采用 Apache-2.0，Pollen Robotics 模型与预训练策略遵循各自上游条款，见 [THIRD_PARTY](../../THIRD_PARTY.md)。用户确认完成前不发布 Release 或 tag。
+
+[最终源码与资产锁定](../../configs/combat/complete.source.lock.yaml) · [Delivery / 交付清单](DELIVERY.md)

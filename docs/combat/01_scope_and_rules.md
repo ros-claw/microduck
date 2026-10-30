@@ -1,38 +1,17 @@
-# CF-00–03 scope and candidate rules
+# Duck Fu scope and rules
 
-The current deliverable is a **duel development lab**, using a disclosed,
-one-exchange coach and a reactive public-state defender. It is not self-play,
-a complete fighting game or four independent model agents.
+The full competition implements **1v1 and red/blue 2v2** on a fixed octagonal platform. `team_ringout_v1` uses real ring-out and a public ten-second down count. There are no collapsing tiles, traps, health points, external root pushes, scripted winners or eliminated-body deletion.
 
-`duel_lab.yaml` has a large fixed flat stage. `duel_v1.yaml` uses a fixed disc
-(radius 0.7 m) and visible lower receiver. Neither contains collapsing tiles,
-traps, trainer pushes or root assistance. Only two players are implemented;
-team/learned/Jev tactical modes fail rather than silently falling back.
+All robots decide from the same 50 Hz public snapshot before the shared physical clock advances. Each has one motor owner and its own continuous previous-action history. Team identity affects targeting and event attribution, never body mass, torque, friction, collision immunity or the referee.
 
-Attack commitment fixes heading at launch. Dodge uses observed distance and
-relative closing speed, never the coach's future commands/phase. Windup,
-active drive, braking, separation and stable support are recorded. Maximum
-durations are safety bounds, not proof that the body has completed a skill.
-A counter is presently a dodge followed by facing and another dash.
+Maneuvers commit to their launch direction. A physical low-head wind-up precedes the active bump; a trained zero-command stage brakes the body before switching motor skills. Motion/history and actual visible head pose can trigger a defensive replan while navigating. The opponent's hidden controller phase, actions and future seed are not observations. A public recovery guard preempts a maneuver when actual balance is lost. The unqualified upstream rolling recovery is disabled in the final profile.
 
-`CONTACT` means a measured contact. `CONTACTED_ATTACK` links an active attack
-to it; **it is not a qualified effective strike**. Ground support and prolonged
-contact are not scored as enemy damage. No health bar exists. Misses are
-reported only for completed attack windows; interrupted actions are retained
-as interrupted, not silently counted as completed misses or successes.
+`CONTACT` records actual positive-force contact. `CONTACTED_ATTACK` links contact to a particular active attack; it alone does not prove useful response. `VALID_STRIKE` additionally requires the measured directional impulse and observed target displacement or imbalance while the attacker remains upright. It is an observed response event, not a damage estimate. Friendly contacts remain physical but cannot earn an enemy-strike reward. Each attack is credited at most once. Misses and interrupted actions are retained separately.
 
-`sparring_v1`: after the opponent is down, the attacker retreats using its own
-walking policy. Contacts remain enabled. This is not proof of recovery under
-continued attack. `contact_stress_v1` omits that retreat, but recovery in that
-mode has not passed a battery.
+Ring-out requires no stage foot support and trunk z below −0.15 m, held for 0.12 s. An ordinary airborne step is not elimination. The down count begins from actual tilt/body contact. Recovery requires upright >0.94, real foot support and horizontal speed <0.16 m/s held for 0.3 s. Changing the motor name does not clear the count. Bodies that are eliminated keep their last control targets and remain in the shared simulation.
 
-Referee candidate: no stage support plus trunk below −0.15 m held 0.12 s is
-ring-out; a normal airborne step is not elimination. DOWN requires tilt and
-non-foot stage contact. Recovery requires upright >0.94, real stage foot
-support, speed <0.16 m/s held 0.3 s. Public down-count is 10 s. Re-labelling a
-roll does not clear it. Simultaneous losses are handled before assigning a
-winner; timeout is a draw. A physics fault is no-contest. Eliminated bodies
-remain physical, with their last motor targets held.
+A team wins only when the other team has no active participants. Simultaneous elimination is a draw. Timeout is a draw; a remaining numerical fault is `NO_CONTEST_PHYSICS`. All conditions are evaluated symmetrically. The video director cannot change an outcome.
 
-These are development rules, not calibrated competition standards. No winner
-is selected by film logic. Human viewing gate: **PENDING_HUMAN_REVIEW**.
+The historical one-exchange `sparring_v1` lab remains available for paired motor experiments. A disclosed coach retreats after knocking its target down. This lab is not used as evidence of recovery under continued attack; interference stress and autonomous matches are reported separately.
+
+[Current methods](README.md) · [Qualification and limitations](RESULTS.md) · [Historical first-round scope](EARLY_LAB.md)

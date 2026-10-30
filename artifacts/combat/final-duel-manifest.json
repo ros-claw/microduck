@@ -1,0 +1,168 @@
+{
+  "schema": "duckfu.match-run.v1",
+  "stage": "COMPETITION_DEVELOPMENT",
+  "seed": 32001,
+  "config": {
+    "schema": "duckfu.match.v1",
+    "mode": "simulation",
+    "players": 2,
+    "ruleset": "team_ringout_v1",
+    "arena": "fixed_octagon",
+    "radius_m": 0.65,
+    "duration_s": 45.0,
+    "separation_m": 0.8,
+    "heading_rad": 0.0,
+    "swap": false,
+    "down_count_s": 10.0,
+    "dash_start_distance_m": 0.36,
+    "dash_speed": 0.4,
+    "dash_active_s": 2.2,
+    "dash_windup_s": 0.36,
+    "dash_contact_min_s": 1.0,
+    "dash_neck_rad": -0.3,
+    "dash_head_rad": -0.15,
+    "evade_speed": 0.3,
+    "evade_distance_m": 0.2,
+    "evade_forward_speed": 0.0,
+    "candidate_motor_path": "policies/candidates/duckfu_contact_v1_100.onnx",
+    "candidate_motor_sha256": "51c7a7b87315116ef05e01cfd9abeaa665131af241e3d2c6922464a2ea502525",
+    "evade_motor_path": "policies/candidates/duckfu_evade_v1_200.onnx",
+    "evade_motor_sha256": "c6e634ee0ddaa16df84ef7a091e1305173e0714c4357189c8cbf6ba1724dec74",
+    "walk_motor_path": "policies/candidates/duckfu_locomotion_v1_200.onnx",
+    "walk_motor_sha256": "b91e76f00d12c07211365a74a2a317f9abfbc58af486ee427d49d5dd4a68389e",
+    "trained_motor_braking": true,
+    "threat_closing_m_s": 0.25,
+    "allow_recovery_roll": false,
+    "tactics_path": "policies/tactics/solo_012.npz",
+    "tactics_sha256": "e5f3ab748191c39e5248037f46ed33a4800800643c82deb98e725dd977a97133",
+    "opponent_path": "",
+    "opponent_sha256": "",
+    "red_style": "pressure",
+    "blue_style": "counter",
+    "physics_profile": "physics_octagon.yaml"
+  },
+  "physics": {
+    "schema": "duckfu.physics.v1",
+    "dt": 0.000125,
+    "motor_hz": 50,
+    "iterations": 80,
+    "contact_ref_s": 0.0005,
+    "torque_limit_Nm": 0.6405,
+    "collision": "visual_convex_parts",
+    "actuator": "position_servo_simulation_only",
+    "native_ccd": false
+  },
+  "probe": null,
+  "training": false,
+  "capture": true,
+  "mujoco_version": "3.12.0",
+  "source_sha256": {
+    "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+    "src/microduck_lab/combat/arena.py": "c190497acd58d8149b11915e8a90c14be829b6c9c3f9bc42bdec3b35ebf774e7",
+    "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+    "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+    "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+    "src/microduck_lab/combat/episode.py": "8794e0ce6c8c6e94e5227cd7386685bb9c33fa6c7b40d31b53bb35d848b5e2e7",
+    "src/microduck_lab/combat/events.py": "c11edfc3a690002072a43149ec3ead9f6d9be5efc826675921d8bbdc4f789c43",
+    "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+    "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+    "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+    "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+    "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+    "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+    "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+    "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+    "src/microduck_lab/combat/replay.py": "ec557448b1069b578cab491bdfe2d48f5662bafa6bda765bd2196d1b63959e78",
+    "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+    "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+    "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+  },
+  "robot_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+  "policies_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+    "sitstand": "c6c40e35e726eabd803d633e090d112994f469921152448367953fbaf9799bc8",
+    "roulade": "3d60da08fc13f29c1b57f41977aa898132c0d60042100149d8e775affcbca32b"
+  },
+  "spawns": {
+    "lavender": {
+      "xy": [
+        -0.4,
+        0.0
+      ],
+      "yaw": 0.0,
+      "team": "RED",
+      "display_name": "ROOK",
+      "chinese_name": "张三",
+      "role": "competitor"
+    },
+    "cream": {
+      "xy": [
+        0.4,
+        0.0
+      ],
+      "yaw": 3.141592653589793,
+      "team": "BLUE",
+      "display_name": "BOLT",
+      "chinese_name": "莽哥",
+      "role": "competitor"
+    }
+  },
+  "steps": 360000,
+  "duration_s": 45.0,
+  "state_spec": 16383,
+  "physical": {
+    "finite": true,
+    "clock_ok": true,
+    "external_forces_zero": true,
+    "model_unchanged": true,
+    "solver_warnings": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "torque_max_Nm": 0.6405,
+    "penetration_max_m": 0.00033817327682161906,
+    "penetrating_p99_m": 9.456620865996483e-06
+  },
+  "performance": {
+    "wall_s": 35.904606913914904,
+    "real_time_factor": 1.2533210601049682,
+    "policy_call_p50_ms": 0.07966393604874611,
+    "policy_call_p95_ms": 0.13829204253852367,
+    "policy_inference_s": 0.4152616609353572,
+    "decision_p95_ms": 0.2752389293164014
+  },
+  "result": {
+    "kind": "TIMEOUT_DRAW",
+    "winner": null,
+    "time_s": 45.0
+  },
+  "film_gate": "PENDING_HUMAN_REVIEW",
+  "motor_gate": "SEE_FROZEN_QUALIFICATION_REPORT",
+  "tactical_backend": "learned_categorical",
+  "notes": [
+    "Upstream motor priors transfer from BAM to capped position servos; new Duck Fu candidates are trained with matched capped position servos. Simulation only; no hardware validation.",
+    "CONTACTED_ATTACK alone is not VALID_STRIKE; see frozen motor qualification and separate observed-response events. No health/contact damage."
+  ],
+  "hashes": {
+    "contacts_full.jsonl.gz": "cd7178c4c67d8ab3931a68cbe47d96d1c0b50c860e907b7c18164bf0e85d9760",
+    "contacts_summary.json": "b49e7eb667cfb7a720328ae96e3a15ae7c88604c7f2edf45f4cb4ff04924c61c",
+    "controls.npz": "6c1520abfa144e596b31bdb36a90ca47c7c5da1a5d105681d32bc099eda86bbd",
+    "initial_state.npz": "050a79033739bd7e33482a3edf6c1affbc5b5fa1b78b31296b91a6a2e53b58ef",
+    "metrics.json": "b409849c4b29b7cf42e4ed244d7033c910cac0ac6b371f8bd25f8dd6d3243812",
+    "model_inventory.json": "4f6bb842a32feb2f6163ddac899a14a67b198d1ed233d7ac6a8fe2cc0898a375",
+    "referee.json": "a2f1ea8e64ff86d1b7bf2004776e303e2e4c426f357b72628bde959183a9ab18",
+    "runtime_events.jsonl": "df61fafaa64b320c5c6b942383ace775debd57dbd5ddfbc1e1bccc2c483abdd9",
+    "scene.mjb": "e4e9c117090dee7a7ee1efcdfd876453038df3e8ca40bebb9ab0c9347ea770b1",
+    "states.npy": "d1a78fb784895ff1f856da1408d141458100aa10fb20eb7931c3fbb7a265a383",
+    "tactical_decisions.jsonl.gz": "8b00fa61a9fc9d39fa674006bbfd073153e6575f7021b97dae76f622d1b25c2c",
+    "transitions.json": "067b02068e06d0e33b42f1ea27fab07d45f4cfa9ac452adfc18ff499b30575c9"
+  }
+}

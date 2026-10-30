@@ -44,12 +44,15 @@
 
 [全英文解说版与角色介绍](docs/jev-rumble/ENGLISH_FILM.md) · [高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
 
-## 研发中：功夫鸭双鸭实验室
+## 功夫鸭：双鸭对决与四鸭团战
 
-[方法、正常速度片段和未通过的验收](docs/combat/README.zh-CN.md)。
-独立双鸭场景实现突进承诺、基于公开运动的闪避、回顶尝试及按零件凸包碰撞。
-**身体能力仍未通过验收**：最新候选仅 14/40 次达到攻击效果标准，仍未达 80% 目标。
-四鸭格斗与自博弈尚未进入。
+[![功夫鸭：实际物理仿真片段](docs/combat/media/duck_fu_preview.gif)](docs/combat/media/duck_fu_team_hero.mp4)
+
+原生无臂 Microduck 在固定八角擂台上单挑及红蓝两队对抗。学习得到的运动策略驱动 14 个关节，规则或 PPO 战术选择有执行承诺的顶撞、侧闪、反顶尝试及恢复。真实出界与公开倒地读秒决定胜负，队友同样碰撞，不使用额外根节点外力或基于血条的击退。
+
+[英文主片](docs/combat/media/duck_fu_team_hero.mp4) · [竖屏短片](docs/combat/media/duck_fu_team_short.mp4) · [连续完整比赛](docs/combat/media/duck_fu_team_reference.mp4) · [技术慢动作](docs/combat/media/duck_fu_team_technical.mp4) · [方法与复现](docs/combat/README.zh-CN.md) · [评估与限制](docs/combat/RESULTS.md)
+
+这是等待用户观感验收的仿真开发分支。格斗循环没有使用 Jev 或网络大模型；不宣称已取得 ROSClaw 格斗授权回执或完成真机迁移。早期失败的运动策略和求解器方案与当前结果一起保留。
 
 ## 方法
 
@@ -76,7 +79,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout jev-survival-2026-10-10
+git checkout feat/duck-fu
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

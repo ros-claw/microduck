@@ -1,0 +1,190 @@
+{
+  "schema": "duckfu.match-run.v1",
+  "stage": "COMPETITION_DEVELOPMENT",
+  "seed": 50006,
+  "config": {
+    "schema": "duckfu.match.v1",
+    "mode": "simulation",
+    "players": 4,
+    "ruleset": "team_ringout_v1",
+    "arena": "fixed_octagon",
+    "radius_m": 0.85,
+    "duration_s": 60.0,
+    "separation_m": 0.85,
+    "heading_rad": 1.5707963267948966,
+    "swap": false,
+    "down_count_s": 10.0,
+    "dash_start_distance_m": 0.36,
+    "dash_speed": 0.4,
+    "dash_active_s": 2.2,
+    "dash_windup_s": 0.36,
+    "dash_contact_min_s": 1.0,
+    "dash_neck_rad": -0.3,
+    "dash_head_rad": -0.15,
+    "evade_speed": 0.3,
+    "evade_distance_m": 0.2,
+    "evade_forward_speed": 0.0,
+    "candidate_motor_path": "policies/candidates/duckfu_contact_v1_100.onnx",
+    "candidate_motor_sha256": "51c7a7b87315116ef05e01cfd9abeaa665131af241e3d2c6922464a2ea502525",
+    "evade_motor_path": "policies/candidates/duckfu_evade_v1_200.onnx",
+    "evade_motor_sha256": "c6e634ee0ddaa16df84ef7a091e1305173e0714c4357189c8cbf6ba1724dec74",
+    "walk_motor_path": "policies/candidates/duckfu_locomotion_v1_200.onnx",
+    "walk_motor_sha256": "b91e76f00d12c07211365a74a2a317f9abfbc58af486ee427d49d5dd4a68389e",
+    "trained_motor_braking": true,
+    "threat_closing_m_s": 0.25,
+    "allow_recovery_roll": false,
+    "tactics_path": "policies/tactics/team_008.npz",
+    "tactics_sha256": "5409ee8f831ca0b7e645621cad2c689780ff8d730150a89c44f03e1b6b4a6a48",
+    "opponent_path": "",
+    "opponent_sha256": "",
+    "red_style": "pressure",
+    "blue_style": "pressure",
+    "physics_profile": "physics_octagon.yaml"
+  },
+  "physics": {
+    "schema": "duckfu.physics.v1",
+    "dt": 0.000125,
+    "motor_hz": 50,
+    "iterations": 80,
+    "contact_ref_s": 0.0005,
+    "torque_limit_Nm": 0.6405,
+    "collision": "visual_convex_parts",
+    "actuator": "position_servo_simulation_only",
+    "native_ccd": false
+  },
+  "probe": null,
+  "training": false,
+  "capture": true,
+  "mujoco_version": "3.12.0",
+  "source_sha256": {
+    "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+    "src/microduck_lab/combat/arena.py": "c190497acd58d8149b11915e8a90c14be829b6c9c3f9bc42bdec3b35ebf774e7",
+    "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+    "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+    "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+    "src/microduck_lab/combat/episode.py": "8794e0ce6c8c6e94e5227cd7386685bb9c33fa6c7b40d31b53bb35d848b5e2e7",
+    "src/microduck_lab/combat/events.py": "c11edfc3a690002072a43149ec3ead9f6d9be5efc826675921d8bbdc4f789c43",
+    "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+    "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+    "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+    "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+    "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+    "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+    "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+    "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+    "src/microduck_lab/combat/replay.py": "ec557448b1069b578cab491bdfe2d48f5662bafa6bda765bd2196d1b63959e78",
+    "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+    "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+    "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+  },
+  "robot_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+  "policies_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+    "sitstand": "c6c40e35e726eabd803d633e090d112994f469921152448367953fbaf9799bc8",
+    "roulade": "3d60da08fc13f29c1b57f41977aa898132c0d60042100149d8e775affcbca32b"
+  },
+  "spawns": {
+    "lavender": {
+      "xy": [
+        0.19999999999999998,
+        -0.425
+      ],
+      "yaw": 1.5707963267948966,
+      "team": "RED",
+      "display_name": "ROOK",
+      "chinese_name": "张三",
+      "role": "competitor"
+    },
+    "cream": {
+      "xy": [
+        0.20000000000000004,
+        0.425
+      ],
+      "yaw": 4.71238898038469,
+      "team": "BLUE",
+      "display_name": "BOLT",
+      "chinese_name": "莽哥",
+      "role": "competitor"
+    },
+    "coral": {
+      "xy": [
+        -0.20000000000000004,
+        -0.425
+      ],
+      "yaw": 1.5707963267948966,
+      "team": "RED",
+      "display_name": "SHADE",
+      "chinese_name": "老六",
+      "role": "competitor"
+    },
+    "cyan": {
+      "xy": [
+        -0.19999999999999998,
+        0.425
+      ],
+      "yaw": 4.71238898038469,
+      "team": "BLUE",
+      "display_name": "ANCHOR",
+      "chinese_name": "稳哥",
+      "role": "competitor"
+    }
+  },
+  "steps": 399360,
+  "duration_s": 49.92,
+  "state_spec": 16383,
+  "physical": {
+    "finite": true,
+    "clock_ok": true,
+    "external_forces_zero": true,
+    "model_unchanged": true,
+    "solver_warnings": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "torque_max_Nm": 0.6405,
+    "penetration_max_m": 0.0005951114509431362,
+    "penetrating_p99_m": 8.127442423513212e-06
+  },
+  "performance": {
+    "wall_s": 85.5932398000732,
+    "real_time_factor": 0.5832236297703187,
+    "policy_call_p50_ms": 0.05272100679576397,
+    "policy_call_p95_ms": 0.1298154704272747,
+    "policy_inference_s": 0.641809995053336,
+    "decision_p95_ms": 0.506051117554307
+  },
+  "result": {
+    "kind": "WIN",
+    "winner": "RED",
+    "time_s": 49.92
+  },
+  "film_gate": "PENDING_HUMAN_REVIEW",
+  "motor_gate": "SEE_FROZEN_QUALIFICATION_REPORT",
+  "tactical_backend": "learned_categorical",
+  "notes": [
+    "Upstream motor priors transfer from BAM to capped position servos; new Duck Fu candidates are trained with matched capped position servos. Simulation only; no hardware validation.",
+    "CONTACTED_ATTACK alone is not VALID_STRIKE; see frozen motor qualification and separate observed-response events. No health/contact damage."
+  ],
+  "hashes": {
+    "contacts_full.jsonl.gz": "009f78ba73e090dbe9620c456e20f525c98d3361e4af7891dcb4f6c08d43d884",
+    "contacts_summary.json": "5b6546f3fcc55a8905048630c5f7266e9659b3d0033080c6ed6540cfda7d0de0",
+    "controls.npz": "42962e219b774ce5de4e7361be5095a954e72a4a8b6eebcfb4206bf4d7acd7ad",
+    "initial_state.npz": "87bfb3d5ac1c9c2101e397c662a53129d602a298709c870e4bcd31d5f02c93d4",
+    "metrics.json": "ac6760410587f7dccb5cd577582a44c1f58f4356f835de0c45f7e410a880cf30",
+    "model_inventory.json": "ae285d106dcabb928053e8f33bea9df3dfdb2ec52dbb61accc1a88ce34e56037",
+    "referee.json": "df612b8968842f127acf69546ec5e23162c25bcfd5d8cff10293424d7ea9c68f",
+    "runtime_events.jsonl": "9ad2abf3c4af5bc4f524507680c6a40d2939d613aaf6166e505e2276662492da",
+    "scene.mjb": "4b63d5e1a3a9b07159c6718a7cb5f13f327ca35fb80dff94241f9f90808abfe6",
+    "states.npy": "c3aa033e8af511f5dc3eb0b760e023276604328543a679faf37cec86b84ff514",
+    "tactical_decisions.jsonl.gz": "efb3452574b88528e8e23e7c1f4f61863ac2dc8be46a6dfc3f2e1915d595a8fa",
+    "transitions.json": "df7d290a76d195c59291a1595596ac275c06cc3535c03ac711e866a8fe93b839"
+  }
+}

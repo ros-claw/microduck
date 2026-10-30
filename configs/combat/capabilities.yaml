@@ -1,38 +1,42 @@
 schema: duckfu.capabilities.v1
-stage: CF00-03 development
+stage: complete simulation competition; human acceptance pending
 motor_contract: legacy61.v1
 capabilities:
   stand_motor:
-    status: available
+    status: available_prior
     source: upstream alpha_stand
-    qualification: existing motor prior, not combat recovery proof
   walk_motor:
-    status: available
-    source: upstream alpha_walking
-    qualification: command range probed; small translation/pure-turn commands are unreliable
+    status: trained_candidate
+    source: duckfu_locomotion_v1_200
+    qualification: twelve CPU command/stop cases and complete-game evaluation; see RESULTS
   dash_bump:
-    status: unqualified
-    reason: contact is repeatable but displacement of a standing robot is only millimetres
-    candidate_training: training/combat/README.md
+    status: qualified_in_frozen_motor_battery
+    qualification: 40/40 effect-and-stable attacks on fresh paired starts
+    evidence: artifacts/combat/complete-motor-validation.json.gz
   evade_step:
-    status: unqualified
-    reason: promising paired development results; no frozen 40-state motor/holdout qualification
+    status: qualified_in_frozen_motor_battery
+    qualification: 37/40 first-attack-avoided and stable
   counter_sequence:
-    status: unqualified
-    reason: contact after dodge is repeatable but misses and weak reaction remain
+    status: available
+    qualification: 37/40 counter contacts; contact is not a damage or game-win estimate
   recover_guard:
-    status: unqualified
-    reason: local guard exists; R0-R3 contact-conditioned recovery batteries pending
+    status: available_with_limits
+    qualification: R0 39/40 within 3 s; R3 40/40; nominal R1 stress 32/50 within 3 s and 50/50 within 10 s
+    limitation: dynamic interference differs from reset-pose recovery; rolling recovery disabled
   short_kick:
     status: missing
   roll_escape:
-    status: missing
+    status: rejected_unqualified
   learned_tactics:
-    status: missing
+    status: candidate
+    method: explicitly labelled rule distillation followed by online semi-Markov PPO
+    promotion: requires held-out comparison; never automatic
   team_2v2:
-    status: missing
+    status: implemented_candidate
+    physics: one shared world; friendly collisions enabled; equal bodies
   rosclaw_combat_receipts:
-    status: missing
+    status: pending
+    implemented: typed SIM MCP executor adapter and read-only status
+    limitation: no official daemon-authorized combat receipt is claimed
   film_gate:
-    status: unqualified
-    reason: PENDING_HUMAN_REVIEW
+    status: PENDING_HUMAN_REVIEW

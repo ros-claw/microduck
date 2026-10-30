@@ -1,3 +1,5 @@
+> Historical first-round record. Subsequent training, complete matches and current qualification are in [RESULTS.md](RESULTS.md) and the [current methods](README.md). Earlier unqualified statements below describe their named versions.
+
 # Experiments and failed qualification
 
 These are development experiments. Existing survival results are never counted
@@ -129,3 +131,29 @@ head-pose tracking while retaining root-upright rewards; head movement was
 therefore underconstrained. This is a task/reward design gap to fix in the
 next curriculum, not evidence of an intended fighting technique. No third
 reward version was trained in this round.
+
+## Continuation: from the failed lab to complete competition
+
+The later implementation preserves the failures above. Restoring the native head objective and using a full-mass target close enough to contact produced a useful new drive motor. A separate lateral motor addressed the native sidestep's insufficient displacement. A third, matched-PD walking curriculum addressed head drift during reverse + side + turn commands after motor switches. The selected walking checkpoint remained supported and settled in all twelve CPU command/stop cases; its largest head deviation was approximately 0.323 rad. Earlier checkpoint 100 barely translated backward and was rejected in favor of checkpoint 200.
+
+A measured zero-command exit was then needed. Requiring an exact HOME head pose stalled attacks: the contact motor's zero-command equilibrium has about 0.33 rad head-pitch offset under gravity. The final exit requires stable support, low planar speed, bounded head displacement and low measured head motion for a dwell. It does not overwrite joints or blend outputs.
+
+A physical low-head wind-up of 0.36 s gives the defender an observable cue before contact drive. Only actual head pose and observed closing history trigger defenses. With the final motor package on forty fresh paired starts, contact drive passed **40/40** effect-and-stable attacks, median standing-target displacement **0.1178 m**; evade passed **37/40** first-attack-avoided and stable, while counter contact occurred **37/40**. All 160 rows passed numerical checks. The matched-body no-contact-drive ablation passed 0/40 attack-effect tests; this is an ablation within the new motor package, not a same-setting comparison against every upstream walking policy. The historical stronger native baseline is retained in its original report.
+
+### Solver and platform failures
+
+| Rejected configuration | Observed failure | Response |
+| --- | --- | --- |
+| libccd + circular cylinder, 4 kHz | A full team run reached 8.84 mm stage penetration at the cylinder rim | Preserve the failing capture; benchmark the exact local input tape |
+| Native convex detector, 4/8/16 kHz | The local rim improved, but full matches still exposed self or duck contact failures; more substeps alone did not solve them | Reject as the final competition profile |
+| Upstream walking under capped combat PD | Reverse/orbit switching could drive the head into its chassis | Train the actual command mixture under the deployed body model |
+| Rolling recovery prior | A retry produced >3 mm native self penetration | Disable this unqualified primitive, keep collisions and the down count |
+| libccd + fixed octagonal convex-mesh stage, 8 kHz | Both previously failing full sixty-second regression seeds passed, maxima 0.324 and 0.711 mm | Freeze for larger motor, training and held-out game checks |
+
+No rejected match is converted to a winner. The fixed octagon is an explicitly supported game design, not a hidden barrier or runtime shape change; public boundary distance and action masks use its actual faces.
+
+### Recovery and tactical learning
+
+With rolling retries disabled, the new R0 battery recovered all 40 starts within the ten-second observation window; 39/40 met the three-second target. The near-edge/initial-friction R3 battery completed all 40, all within three seconds. Dynamic contact stress is reported separately, including attempted courses with no qualifying fall, numerical rejection and incomplete recovery. A coach commanded to retreat is not automatically proof that it physically cleared the recovering duck.
+
+The 1v1 tactical actor completed actual online PPO after rule distillation. Initial four-player training was stopped before an invalid batch could update the actor; its last valid actor/critic/optimizer checkpoint was retained. The final team run resumes that checkpoint on the frozen corrected motor/physics package. Frozen cross-play compares rule, distilled and PPO tactics with the **same** motor package and keeps numerical no-contests. Training reward or an attractive clip is not a promotion criterion. Current counts, frozen weights and all final rates are in [RESULTS](RESULTS.md).

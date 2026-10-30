@@ -298,7 +298,7 @@ def main():
             elif s["caption"].startswith("RECOVERY"):
                 en, cn = (
                     "Stable foot support.",
-                    "恢复要求持续的足部支撑与稳定运动。",
+                    "稳定足部支撑。",
                 )
             else:
                 continue

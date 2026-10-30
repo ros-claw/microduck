@@ -62,8 +62,8 @@ def check(video, plan_path):
             ):
                 raise ValueError("Changed solved-contact measurement source")
             matched = False
-            with gzip.open(log_path, "rt") as stream:
-                for line in stream:
+            with gzip.open(log_path, "rt") as log_stream:
+                for line in log_stream:
                     step, contacts = json.loads(line)
                     if step == measured["source_step"]:
                         matched = measured["raw_contact"] in contacts

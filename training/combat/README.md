@@ -1,102 +1,71 @@
-# Duck Fu motor experiments — candidates, not accepted skills
+# Duck Fu — motor training and tactical self-play
 
-The first duel lab exposed weak attack effects. These experiments test a
-simulation-only capped position-servo dash against a free **0.73724318 kg**
-box. A free box is a curriculum target, not proof of defeating another robot.
-No force, support impulse or root velocity is injected during an episode.
+Three new motor skills address measured deployment failures: weak contact drive, insufficient lateral motion, and unstable reverse/orbit control. These are simulation policies for the fixed, torque-limited position-servo model. They are not hardware-validated BAM policies.
 
-## Source and contracts
+## Rebuild the training source
 
-Training base: `18052aaf7d98942921a8d57319f40d3692f96bcd` in a new
-`feat/duck-fu-motor` worktree. The old dirty training worktree was preserved.
+Base training commit: `18052aaf7d98942921a8d57319f40d3692f96bcd`.
+Completed training source: `1bb01ff9c1780c13c753f660894f30cf96c30a18` in the local `feat/duck-fu-motor` branch.
 
-- [R1 source patch](duckfu-r1.patch): completed first reward version, checkpoint
-  50/149 candidates. [Current R2 patch](duckfu.patch): supported delayed impact
-  payout, stopped after an unsuccessful early run.
-- The delivery checkout is a training dependency for the shared
-  `microduck_lab.combat.world.external_parts` geometry builder. Set both source
-  directories on `PYTHONPATH`; do not quietly train with native-only geometry.
-- 61D standard observation semantics, 14 standard motor outputs, 50 Hz;
-  normalization included by the official exporter. There is no combat flag
-  hidden inside a legacy velocity/head/body command slot.
-- Native mass/inertia, position-servo gains and ±0.6405 Nm torque cap.
-  GPU training: 0.5 ms / 40 substeps, MuJoCo 3.10 + Warp; CPU duel: 0.25 ms /
-  80 substeps, MuJoCo 3.12/libccd. Backend/timestep differences are declared;
-  CPU qualification is mandatory and failed for R1/149.
-- Training keeps startup domain randomization and finite-state termination;
-  runtime velocity pushes are removed. Reset is the only pose/velocity write
-  boundary. Foot/head/body conventions come from the inherited task factory.
-
-## Actual runs
-
-1. Initial build smoke exposed a wrong reset API name; fixed to the installed
-   `write_root_link_*_to_sim` methods. Failed log retained.
-2. A 64-env/5-iteration build/export passed, but inspection then found inherited
-   random spawn directions and a doubled height offset in the new fixed-target
-   setting. That training attempt was stopped at iteration 12; it is not a
-   valid combat result.
-3. Corrected spawn/floor: 64 envs × 5 iterations, no NaN termination; normalized
-   exporter parity passed. Walking actor import matched ONNX within about
-   3.10e-6 on 128 observations. Its critic/optimizer are new initialization,
-   **not the original walking PPO state**.
-4. R1: 256 envs × 150 iterations, roughly 12 minutes of learning-loop wall time.
-   Checkpoints 0/50/100/149. Official export parity: about 3.58e-6 max error.
-   The last checkpoint failed CPU qualification, **2/40** effect-and-stable
-   attacks. Earlier checkpoint 50 is a developmental film candidate only.
-5. R2: delayed stable-support target payout, fresh 64-env/5-iteration smoke and
-   export parity. Warm start from R1/50 with a new smoke-template critic and reset optimizer. Early
-   run stopped because the target-effect signal remained absent. No R2 motor
-   is presented as a finished skill. See the raw stopped log for exact last
-   iteration and interruption.
-6. CPU target tests then located a short contact window in the original task;
-   [results](target-reachability.json.gz) and [friction variations](target-friction-reachability.json.gz)
-   are retained before any further task changes.
-
-The initial/corrected [budgets](budget.json) cap local GPU time at 0.67 h,
-checkpoints and disk use; no paid cloud compute is used. Both reward revisions
-and failed configurations remain inspectable. Learned skill qualification has
-not passed, and no model is promoted to Champion.
-
-## Rebuild and smoke
-
-Use a clean checkout of the pinned training base, its own AGENTS.md and a
-working architecture-appropriate GPU environment. Install the delivery
-repository and its dependencies too. Choose **one** patch from the same base;
-R2 is not applied on top of R1.
+The [complete source patch](duckfu-complete.patch) applies directly to that base. It includes all combat factories, registered tasks, custom MDP functions, the official exporter metadata and contract tests. It **replaces**, rather than stacks on, the historical R1/R2/contact patches. Set both this delivery repository and the patched training source on `PYTHONPATH`: the collision-part builder is shared with deployment.
 
 ```bash
-git apply /path/to/delivery/training/combat/duckfu-r1.patch
-export PYTHONPATH="$PWD/src:/path/to/delivery/src"
-train Mjlab-DuckFu-DashBump-MicroDuck-v0 \
-  --env.scene.num-envs 64 --agent.max-iterations 5 \
-  --agent.logger tensorboard --agent.run-name smoke
-python -m pytest tests/test_duckfu_cfg.py -q
+git clone https://github.com/pollen-robotics/microduck_rl.git duckfu-training
+cd duckfu-training
+git checkout 18052aaf7d98942921a8d57319f40d3692f96bcd
+git apply /path/to/microduck/training/combat/duckfu-complete.patch
+uv sync
+export PYTHONPATH="$PWD/src:/path/to/microduck/src"
+uv run python -m pytest tests/test_duckfu_cfg.py tests/test_duckfu_contact_cfg.py \
+  tests/test_duckfu_skill_transitions.py -q
 ```
 
-Use `scripts/seed_duckfu_from_onnx.py --template <new-model_0.pt> --policy
-<alpha_walking.onnx> --output <seed/model_0.pt>` for the numerically checked
-actor import. It creates a candidate checkpoint, not a faithful original PPO
-resume. Run the official `scripts/export.py` with `--checkpoint-file`,
-`--device cpu --num-envs 1 --onnx-file`, then
-`scripts/check_duckfu_export.py --checkpoint ... --onnx ... --out ...`.
+## Frozen physical and observation contracts
 
-Training checkpoints, normalizers (inside checkpoints), TensorBoard files and
-full local logs remain under the dedicated training worktree / local evidence
-directory. Compact logs, source patches, ONNX candidates and CPU reports are
-tracked. There is no promise of bit-identical GPU retraining across machines.
-An exact actor is identified by its weight digest, never just `best.onnx`.
+All tasks use the standard **61D actor observation → 14 joint offsets**, a baked observation normalizer and 50 Hz unfiltered output. Physical twist and head-pose command slots keep their original meanings. Each task keeps all native self contacts, the same robot mass/inertia and the 70 external component hulls, ±0.6405 Nm torque caps and the deployed PD gains. Reset randomization is initialization-only; there are no timed root pushes.
 
-[Checkpoint audit](checkpoints_manifest.json) · [Parity](candidate-149-parity.json)
-· [CPU result](../../artifacts/combat/rejected-candidate-149-validation.json.gz)
-· [Runtime methods and films](../../docs/combat/README.md).
+GPU training uses MuJoCo 3.10/Warp at 0.5 ms / 40 substeps. The final CPU game uses MuJoCo 3.12/libccd at 0.125 ms / 160 substeps. This backend/timestep difference is explicit: a GPU reward curve alone never qualifies a motor. All deployed candidates are exported by `scripts/export.py`, checked numerically against the normalized Torch actor, then exercised in the actual CPU model.
 
-The subsequent 0.36 m launch calibration passed only 14/40 body tests. Undesired
-head elevation is visible in candidate clips: the inherited head-pose tracking
-reward was removed, leaving head technique underconstrained. The next task
-should retain a meaningful head-pose objective, calibrate contact time and
-moving-start distributions, and stage target difficulty explicitly. None of
-these future fixes is claimed as trained here.
+| Task | Curriculum | Selected export |
+| --- | --- | --- |
+| `Mjlab-DuckFu-Contact-MicroDuck-v1` | Native head tracking; drive a free full-mass 0.73724318 kg box for 1.8 s, then brake; bounded progress reward requires support | `duckfu_contact_v1_100.onnx` |
+| `Mjlab-DuckFu-EvadeStep-MicroDuck-v1` | Random left/right physical lateral command for 1 s, then 0.8 s braking; reward supported lateral progress | `duckfu_evade_v1_200.onnx` |
+| `Mjlab-DuckFu-Locomotion-MicroDuck-v1` | Two held physical command bursts with zero intervals; forward, reverse, lateral and combined orbit/turn commands; meaningful head tracking | `duckfu_locomotion_v1_200.onnx` |
 
-Re-run the independent target geometry probe with
-`scripts/probe_duckfu_target.py --suite geometry --out <new-file.json>` or
-`--suite friction`; these never change a match robot's properties.
+Each long run followed a **64-environment × 5-iteration smoke**. The three bounded runs used 512 environments and a maximum of 501 iterations each; contact training stopped after 212 iterations after CPU evidence established the earlier checkpoint, while evasion and locomotion completed 501. Selected checkpoints are chosen on development tests, not held-out game outcomes. One reward version was used for each of these three corrected tasks. Historical failed R1/R2 versions remain separate.
+
+[Selected full checkpoints](selected-checkpoints.json) include actor, critic, normalizer and optimizer, distributed as lossless `.pt.gz` archives in [checkpoints](checkpoints). The [full local checkpoint/log inventory](complete-checkpoints-manifest.json) records the remaining run artifacts. [Contact log](contact-v1.log.gz), [evade log](evade-v1.log.gz), [locomotion log](locomotion-v1.log.gz), parity reports and resource budgets are retained here. GPU retraining is not promised to be bit-identical across machines.
+
+```bash
+# Repeat the smoke before extending any experiment.
+uv run train Mjlab-DuckFu-Contact-MicroDuck-v1 \
+  --env.scene.num-envs 64 --agent.max-iterations 5 --agent.logger tensorboard
+# Official exporter; do not hand-export an actor without its normalizer.
+uv run scripts/export.py Mjlab-DuckFu-Contact-MicroDuck-v1 \
+  --checkpoint-file /path/to/model_100.pt --device cpu --num-envs 1 \
+  --onnx-file /tmp/contact.onnx
+```
+
+The upstream walking actor supplied an explicitly verified initialization, not a faithful resume of its unavailable original PPO checkpoint. The critic/optimizer were initialized afresh for that seed. Training uses an all-joint servo-order mapping; no head-command flag is hidden in a velocity slot and no action EMA is added at deployment. Head-bias EMA is a training reward statistic only.
+
+## Tactical learning
+
+High-level policies use fixed physical feature scales, 34 public inputs, two 64-unit tanh layers and nine categorical maneuvers. Initial rule-trajectory distillation is labelled separately from PPO. The first 1v1 run made twelve PPO updates with sixteen real games per update after twelve teacher games. Team training resumes an actor/critic/optimizer checkpoint and fine-tunes the shared red-team actor with frozen body policies and a frozen opponent in every episode.
+
+Opponent sampling is 50% historical, 25% latest snapshot and 25% rules. Online training samples categorical actions; final evaluation uses the frozen actor's masked argmax. Semi-Markov discounts use actual maneuver seconds (`gamma_per_second=0.985`, `lambda_per_second=0.95`); eliminated teammates retain the real absorbing wait until the team result. Physics faults abort a batch **before its PPO update**. A run that stopped after a rejected batch is not labelled complete.
+
+```bash
+# Torch may use a different environment; rollouts must use CPU MuJoCo 3.12.
+MICRODUCK_COMBAT_PYTHON=/path/to/delivery/.venv/bin/python \
+  PYTHONPATH=src OPENBLAS_NUM_THREADS=1 \
+  /path/to/torch/python scripts/train_combat_tactics.py \
+  --config configs/combat/match_motors_v5.yaml --updates 12 \
+  --games-per-update 16 --jobs 8 --seed 100001 \
+  --out training/combat/local/new-solo-training
+```
+
+[All tactical checkpoints and frozen opponent pools](tactical-checkpoints-manifest.json) are archived with update metrics, including the rejected earlier team run. Full CPU rollout manifests and transition traces are retained for [solo training](tactics-solo-v1-rollout-audit.json.gz) and [final team training](tactics-team-v5-rollout-audit.json.gz). The [distillation audit](solo-distillation-audit.json) distinguishes actual action counts from the minimum-one floor used for weighted loss.
+
+The actual final training counts, selected weights and held-out comparison are in [results](../../docs/combat/RESULTS.md). Learned tactics are not automatically promoted because PPO ran: compare the rule, distilled and PPO actors on the same body/physics package and disclose regression or no gain. No network LLM/Jev is called by this trainer or the game loop.
+
+[Earlier failed experiments](EARLY_EXPERIMENTS.md) · [Methods and films](../../docs/combat/README.md) · [中文项目说明](../../docs/combat/README.zh-CN.md)

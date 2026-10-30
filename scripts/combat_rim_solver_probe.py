@@ -49,6 +49,9 @@ def main():
                 n: DuckRuntime(m, d, CombatBank({}), prefix=n + "/", name=n)
                 for n in manifest["spawns"]
             }
+            initial_positions = {
+                n: duck.trunk_pos().copy() for n, duck in ducks.items()
+            }
             audit = ContactAudit(m, ducks)
             stage_impulse = 0.0
             for k in range(round(0.3 / m.opt.timestep)):
@@ -67,12 +70,40 @@ def main():
                     native_ccd=native,
                     dt=m.opt.timestep,
                     stage_normal_impulse_Ns=stage_impulse,
+                    duck_duck_normal_impulse_Ns=sum(
+                        e["summed_normal_impulse_Ns"] for e in result["episodes"]
+                    ),
+                    pair_impulses=[
+                        dict(
+                            pair=e["actor_pair"],
+                            impulse_on_second_Ns=e["normal_impulse_on_second_Ns"],
+                        )
+                        for e in result["episodes"]
+                    ],
                     maximum_penetration_m=result["penetration_max_m"],
                     categories=result["categories"],
                     finite=bool(np.isfinite(d.qpos).all()),
                     warnings=[int(w.number) for w in d.warning],
                     final_root_positions={
                         n: duck.trunk_pos().tolist() for n, duck in ducks.items()
+                    },
+                    root_displacements_m={
+                        n: (duck.trunk_pos() - initial_positions[n]).tolist()
+                        for n, duck in ducks.items()
+                    },
+                    final_upright={
+                        n: float(-duck.projected_gravity()[2])
+                        for n, duck in ducks.items()
+                    },
+                    instantaneous_ringout_predicate={
+                        n: bool(duck.trunk_pos()[2] < -0.15 and not audit.support[n])
+                        for n, duck in ducks.items()
+                    },
+                    instantaneous_down_predicate={
+                        n: bool(
+                            -duck.projected_gravity()[2] < 0.55 and audit.body_ground[n]
+                        )
+                        for n, duck in ducks.items()
                     },
                 )
             )

@@ -1,3 +1,5 @@
+> Historical first-round record. Subsequent training, complete matches and current qualification are in [RESULTS.md](RESULTS.md) and the [current methods](README.md). Earlier unqualified statements below describe their named versions.
+
 # CF-00 source audit — 2026-10-30
 
 Development branch `feat/duck-fu` was created in a separate worktree from

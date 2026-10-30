@@ -1,10 +1,12 @@
 # Physics contract and collision coverage
 
-CPU profile: Euler integration at 0.25 ms, 50 Hz motors (**80 physical substeps**),
+Final CPU profile: Euler integration at 0.125 ms, 50 Hz motors (**160 physical substeps**),
 Newton solver with 80 iterations, libccd convex contacts, contact `solref`
 0.5 ms / damping ratio 1, explicit ±0.6405 Nm actuator force limits. Native
 mass, inertia, position-servo gains, joint damping and materials are preserved.
 Exact values and exclusions are exported in every run's `model_inventory.json`.
+
+The final competition uses a fixed octagonal convex-mesh stage and libccd. The exploratory `native_ccd` flag refers to MuJoCo native **convex collision detection**, not continuous collision detection. Circular-cylinder rim failures and native-convex self-contact failures were retained as rejected experiments, not solved by loosening numerical thresholds. The 4 kHz circular profiles remain historical. The same body model is used for 1v1 and 2v2; all six duck pairs in 2v2, including teammates, collide. The table below illustrates the two-duck masks; four-duck masks use the same formula with four distinct external bits.
 
 ## Why the collision representation changed
 
