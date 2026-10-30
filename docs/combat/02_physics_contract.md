@@ -67,3 +67,8 @@ It is a fixed-input local numerical comparison, not whole-game equivalence.
 No runtime root pose/velocity edits, external force, mass/friction/gain changes
 or torque enlargement are used. Reset and read-only recorded-state rendering
 are explicitly separate boundaries.
+
+Replay verification uses strict equality in the locked local runtime. A
+cross-hardware tolerant acceptance protocol is not implemented in this first
+round; a different machine may fail that strict test without proving the same
+kind of physical discrepancy. Old actor snapshots are kept separately.

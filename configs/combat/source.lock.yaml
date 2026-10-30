@@ -1,5 +1,6 @@
 schema: duckfu.source-lock.v1
 base_commit: 1034ed000c352476cf213ebe1544eb8c7db8b0e7
+source_parent_commit: c2776f564f4d46ac53d92493518975c0fb9a9a23
 branch: feat/duck-fu
 reviewed_getup_commit: 5db0586ca451454c09796f79a985ef924b0d6c4b
 robot:
@@ -121,10 +122,16 @@ configuration_files:
   configs/combat/capabilities.yaml: e5220d2992196c6ae04a53831de68dfbc4a81392f00e5183631bd9d88c012233
   configs/combat/duel_candidate.yaml: ddf999af0773a1ed8b6eac97da32cefe14f3bf50d4e6a7b15b365e960ec691e0
   configs/combat/duel_candidate_r2.yaml: ea967dda093fcffa539ef23357f47eb56aa664a3c05a59d6ad060e4105ba03b5
+  configs/combat/duel_candidate_r2_near.yaml: 88aa2c8df54ba5063d6ac07fa72469295029bf9a1dfe2672522e3ac97ac99fb8
   configs/combat/duel_lab.yaml: 0f9daeb5f9569cecd426d2e2fa860f72c3027379c7ec19e69c7bb5f4e53fa336
+  configs/combat/duel_lab_near.yaml: 8f884e1bdff89b62fe10acb5a27b7b2cf471689da7cd391b2c4748994e2e6cba
   configs/combat/duel_v1.yaml: 70837128b04805b77fd5e7e94c616273c51cb8d2d4e1428e0d8d0aacd27ced6c
   configs/combat/eval_protocol.yaml: a970ed7a75b098694fe05a36b81e4f7222dc21193b66c2cdf69deab3ae34763c
+  configs/combat/eval_protocol_near.yaml: de957324b614b315806794475ad9c67bc9cd46da0c4d260ed7842a03cbc2ac5e
   configs/combat/eval_protocol_r2.yaml: dd49adbff2672ae9d49b2501e6c32ebce248e121e9bbd478f13ad5a4e9040cc4
+  configs/combat/near_reference_01.yaml: a564e130241d14c93b145aa0318649fee56b2c5e2ef13163e5f01df15edbc96b
+  configs/combat/near_reference_02.yaml: 4a7d8cb247d57fa0caccab3d9aa4b58bcd85e2303d6e31a2c30355200f0768a7
+  configs/combat/near_reference_03.yaml: 02e57bcacef3b9c710f559a9aa4cb9fdbac8b587d66f89ef714b0272a90fcf3a
   configs/combat/physics_profile.yaml: 1e541bfc88bb4f215d61422f452ccdc1596242f6bb159d39665a831b88c4b936
   configs/combat/reference_01.yaml: 878b4054689c2bba89c3d8c28d362e39233a7bbad0349693111db5387033b506
   configs/combat/reference_02.yaml: 66e80477244ced6e38a92788a903133f24a0bd13aabadac5434fbf735ea6072a
@@ -152,10 +159,10 @@ environment:
     scipy: 1.18.1
 sources:
   src/microduck_lab/combat/__init__.py: 0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2
-  src/microduck_lab/combat/config.py: 4216b37d379e50e66f7162d0d9e2bfc562010291c001da7c7c41fabcaf8064bb
-  src/microduck_lab/combat/contacts.py: 110cd9f9044818b7d5fc08b21b848a533b0a53ea1a18189e0f1a5e56e8f811b6
+  src/microduck_lab/combat/config.py: 93c28cbd32441bc8b9e82e3bdda3b89368e12c2bccfa0da6eb99d7b091afbd72
+  src/microduck_lab/combat/contacts.py: c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f
   src/microduck_lab/combat/episode.py: dc5dd2a29213cfb2e1ff7dfc331334f4366018071d77ee8f0fc0a51e918c437a
-  src/microduck_lab/combat/maneuver.py: eada1670393970f4debf0060a2a5070747cb960d2b54aa9779101b235b3f75a5
+  src/microduck_lab/combat/maneuver.py: 6dfec5a05dba01049a51d26590e5d61261cf997940f763070cb037cc0a095654
   src/microduck_lab/combat/observations.py: f06dc34d412e7159f9e677868602f41092e280e38de73d8dd34b24ca882e8489
   src/microduck_lab/combat/referee.py: 8dcf9ab2e6b977e17c0d1a3554b5c0442c2030c93e6e942cfad242e6f0790378
   src/microduck_lab/combat/replay.py: a21e0a197e257f7b524f5c3c579205d0ae32792493913c48d634d2d2e4c1282a
@@ -165,5 +172,5 @@ sources:
 combat_training:
   base_commit: 18052aaf7d98942921a8d57319f40d3692f96bcd
   branch: feat/duck-fu-motor
-  patch_sha256: 08b7eecae0a2515b303839de17c4a5c09bfa0d19729d29626a347173fc36deeb
+  patch_sha256: f25768c46648e95b8d374674189bd8a01cd18667dce442232ccdfa46ff70640f
   r1_patch_sha256: 12eeb03d0744276c04061049b15746742a269b9ce0fca8101cd7be478b67ab93

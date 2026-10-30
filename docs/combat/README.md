@@ -100,3 +100,14 @@ No Release or tag is created for this work. Pollen Robotics assets and model
 terms remain separate from project code; see the repository attribution.
 
 Large raw reports/logs are losslessly compressed; the [compact final summary](../../artifacts/combat/final-summary.json) is directly readable. Source snapshots preserve old replay versions.
+
+Replay source versions: R1 films use `a330f0f544e4cb0ae8dc4e62ff64a1ca3e2c2e7c`;
+the R2 near-entry films use `c2776f564f4d46ac53d92493518975c0fb9a9a23`.
+The final audit adds world coordinates to worst-depth records. Its four
+recaptures have bit-identical integration states, motor histories, contacts
+and decisions to those R2 films, and the final implementation was independently
+replayed again. [Equivalence](../../artifacts/combat/final-capture-equivalence.json)
+· [Final replay](../../artifacts/combat/final-reference-replay.json)
+· [Worst-contact positions](../../artifacts/combat/worst-contact-positions.json).
+Use the matching historical source worktree/snapshot when verifying an older
+manifest; the verifier intentionally rejects changed actors.

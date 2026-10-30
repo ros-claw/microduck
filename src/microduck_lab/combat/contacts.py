@@ -24,7 +24,10 @@ class ContactAudit:
         }
         self.stage, self.receiver = m.geom("stage").id, m.geom("receiver").id
         self.depths = {k: array("d") for k in CATEGORIES}
-        self.maxima = {k: dict(depth_m=0.0, step=None, geoms=None) for k in CATEGORIES}
+        self.maxima = {
+            k: dict(depth_m=0.0, step=None, geoms=None, position_world_m=None)
+            for k in CATEGORIES
+        }
         self.support = {n: False for n in ducks}
         self.body_ground = {n: False for n in ducks}
         self.touching = {n: False for n in ducks}
@@ -59,7 +62,12 @@ class ContactAudit:
             if depth > 0:
                 self.depths[cat].append(depth)
             if depth > self.maxima[cat]["depth_m"]:
-                self.maxima[cat] = dict(depth_m=depth, step=step, geoms=[a, b])
+                self.maxima[cat] = dict(
+                    depth_m=depth,
+                    step=step,
+                    geoms=[a, b],
+                    position_world_m=contact.pos.tolist(),
+                )
             mujoco.mj_contactForce(m, d, j, self.force)
             fn = max(0.0, float(self.force[0]))
             normal = contact.frame[:3]

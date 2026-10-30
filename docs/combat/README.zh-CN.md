@@ -67,3 +67,9 @@
 
 原有跳绳、跑酷、生存赛代码与已确认展示保留。Pollen Robotics 的模型与
 策略仍遵守其独立许可；本项目不自行作商业使用授权结论。
+
+历史录像保留匹配源码版本。最终审计补充了最深接触的世界坐标；重新录制的
+四段轨迹、控制、接触和决策与最新展示片段逐项一致，并重新通过闭环重放。
+[一致性证据](../../artifacts/combat/final-capture-equivalence.json)
+· [最终重放](../../artifacts/combat/final-reference-replay.json)
+· [极值位置](../../artifacts/combat/worst-contact-positions.json)。
