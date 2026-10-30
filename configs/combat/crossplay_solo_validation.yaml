@@ -1,0 +1,20 @@
+schema: duckfu.crossplay.v1
+split: validation
+seed_base: 15001
+base_seeds: 32
+candidates:
+- id: native_rules
+  config: configs/combat/duel_native_rules.yaml
+- id: trained_motor_rules
+  config: configs/combat/match_motors_v1.yaml
+- id: learned_solo_012
+  config: configs/combat/duel_learned_solo_v1.yaml
+opponents:
+- id: pressure
+  style: pressure
+- id: counter
+  style: counter
+- id: frozen_distilled
+  style: pressure
+  policy_path: policies/tactics/solo_distilled.npz
+  policy_sha256: 434175d8e9ffd79f62868ca1998621867f8bd2255b9afe34b3f20eccdfc52a9d

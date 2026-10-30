@@ -317,6 +317,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 if competition:
                     for name in set(referee.eliminated) - previously_eliminated:
                         controllers[name].finish(completed * physics.dt, "ELIMINATED")
+                        controllers[name].eliminated_at = completed * physics.dt
                         controllers[name].phase = "ELIMINATED"
                 if referee.result:
                     break
@@ -380,6 +381,12 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             elif c.trace:
                 c.trace[-1]["reward"] += terminal_reward
                 c.trace[-1]["terminal"] = True
+                if c.eliminated_at is not None:
+                    # An eliminated actor waits for its team's result. Keep
+                    # these real seconds in semi-MDP discounting too.
+                    waiting = max(0.0, completed * physics.dt - c.eliminated_at)
+                    c.trace[-1]["duration_s"] += waiting
+                    c.trace[-1]["absorbing_wait_s"] = waiting
             c.finish(completed * physics.dt, "EPISODE_END", final=True)
         write_json(
             out / "transitions.json", {n: c.trace for n, c in controllers.items()}
@@ -461,7 +468,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         ),
         result=result,
         film_gate="PENDING_HUMAN_REVIEW",
-        motor_gate="UNQUALIFIED",
+        motor_gate="SEE_FROZEN_QUALIFICATION_REPORT",
         tactical_backend=(
             "learned_categorical" if config.tactics_path else "public_state_rule"
         )

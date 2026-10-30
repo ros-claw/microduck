@@ -10,6 +10,8 @@ from microduck_lab.combat.recovery import RecoveryGuard
 from microduck_lab.combat.referee import Referee
 from microduck_lab.combat.strikes import StrikeAudit
 from microduck_lab.combat.learning import semi_mdp_gae
+from microduck_lab.combat.arena import build_match, match_inventory
+from microduck_lab.combat.config import Physics
 
 
 def body(name="a", **kw):
@@ -139,3 +141,32 @@ def test_semi_mdp_gae_discounts_seconds_and_stops_at_terminal():
     trajectory[0]["terminal"] = True
     _, terminal = semi_mdp_gae(trajectory)
     assert terminal[0] == 0.0
+
+
+def test_four_ducks_share_one_world_and_friendly_contacts_are_not_exempt():
+    model, data, ducks, spawns, teams = build_match(
+        MatchConfig(players=4, radius_m=0.85), Physics(), 10201
+    )
+    assert model.nu == 56 and model.neq == 0 and len(ducks) == 4
+    inventory = match_inventory(model, ducks)
+    assert list(inventory["mass_by_duck"].values()) == pytest.approx([0.73724318] * 4)
+    assert len({id(d.last_action) for d in ducks.values()}) == 4
+    first = {}
+    for name, duck in ducks.items():
+        assert len(duck.act_ids) == 14 and duck.get_obs().shape == (61,)
+        shell = [
+            g
+            for g in range(model.ngeom)
+            if model.body(int(model.geom_bodyid[g])).name.startswith(name + "/")
+            and "_combat_shell" in model.body(int(model.geom_bodyid[g])).name
+        ]
+        assert len(shell) == 70
+        first[name] = shell[0]
+    for a in ducks:
+        for b in ducks:
+            if a != b:
+                assert (
+                    model.geom_contype[first[a]] & model.geom_conaffinity[first[b]]
+                ) != 0
+    assert teams["lavender"] == teams["coral"]
+    assert np.all(data.xfrc_applied == 0) and np.all(data.qfrc_applied == 0)

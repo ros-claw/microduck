@@ -211,6 +211,28 @@ def plan(run, edition):
         s.update(output_start_s=at, frames=frames)
         at += frames / 50
         timeline.append(s)
+    if edition != "reference":
+        outcome = manifest["result"]
+        caption = (
+            f"{outcome['winner']} TEAM WINS"
+            if outcome["kind"] == "WIN"
+            else outcome["kind"].replace("_", " ")
+        )
+        timeline.append(
+            dict(
+                run=str(run.resolve()),
+                start_s=duration - manifest["physics"]["dt"],
+                end_s=duration - manifest["physics"]["dt"],
+                speed=0.0,
+                view="wide",
+                kind="result",
+                caption=caption + " / ROSCLAW x MICRODUCK",
+                source_manifest_sha256=digest(run / "manifest.json"),
+                output_start_s=at,
+                frames=100,
+            )
+        )
+        at += 2.0
     result = dict(
         schema="duckfu.film-plan.v1",
         edition=edition,

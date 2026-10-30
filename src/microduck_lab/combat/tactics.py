@@ -163,6 +163,7 @@ class Pilot:
         self.last_selector_time = -1.0
         self.last_target_check = -10.0
         self.pending_reward = 0.0
+        self.eliminated_at = None
 
     @property
     def active_attack(self):

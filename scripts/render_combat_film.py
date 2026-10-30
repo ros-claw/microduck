@@ -125,11 +125,14 @@ def render(plan_path, out, width=1920, height=1080):
                     n: d.xpos[m.body(n + "/trunk_base").id].copy()
                     for n in manifest["spawns"]
                 }
+                event_time = (
+                    manifest["duration_s"] if shot["kind"] == "result" else source_time
+                )
                 eliminated = {
                     e["actor"]
                     for e in events
                     if e["state"] in ("RING_OUT", "DOWN_COUNT")
-                    and e["time_s"] <= source_time
+                    and e["time_s"] <= event_time
                 }
                 alive = [n for n in positions if n not in eliminated]
                 if shot["view"] in ("pair", "collision") and focus:
@@ -166,6 +169,25 @@ def render(plan_path, out, width=1920, height=1080):
                 renderer.update_scene(d, camera=camera, scene_option=opt)
                 frame = Image.fromarray(renderer.render()).convert("RGB")
                 draw = ImageDraw.Draw(frame)
+                if plan["edition"] in ("hero", "short"):
+                    radius = manifest["config"]["radius_m"]
+                    ring = [
+                        project(
+                            [radius * math.cos(a), radius * math.sin(a), 0.0006],
+                            renderer.scene,
+                            m,
+                            width,
+                            height,
+                        )
+                        for a in np.linspace(0, 2 * math.pi, 97)
+                    ]
+                    for j in range(len(ring) - 1):
+                        if ring[j] is not None and ring[j + 1] is not None:
+                            draw.line(
+                                [ring[j], ring[j + 1]],
+                                fill=COLORS["RED" if j < 48 else "BLUE"],
+                                width=max(2, width // 640),
+                            )
                 scale = width / 1920
                 top = round(90 * max(scale, 0.65))
                 draw.rectangle((0, 0, width, top), fill=(12, 17, 25))
@@ -243,6 +265,8 @@ def render(plan_path, out, width=1920, height=1080):
                         "CONTINUOUS 1x" if plan["continuous"] else "MATCH 1x / EDITED"
                     )
                 )
+                if shot["kind"] == "result":
+                    speed = "FINAL RESULT / FRAME HOLD"
                 clock = f"{source_time:05.2f}s"
                 label(
                     draw,
