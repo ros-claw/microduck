@@ -1,0 +1,38 @@
+schema: duckfu.capabilities.v1
+stage: CF00-03 development
+motor_contract: legacy61.v1
+capabilities:
+  stand_motor:
+    status: available
+    source: upstream alpha_stand
+    qualification: existing motor prior, not combat recovery proof
+  walk_motor:
+    status: available
+    source: upstream alpha_walking
+    qualification: command range probed; small translation/pure-turn commands are unreliable
+  dash_bump:
+    status: unqualified
+    reason: contact is repeatable but displacement of a standing robot is only millimetres
+    candidate_training: training/combat/README.md
+  evade_step:
+    status: unqualified
+    reason: promising paired development results; no frozen 40-state motor/holdout qualification
+  counter_sequence:
+    status: unqualified
+    reason: contact after dodge is repeatable but misses and weak reaction remain
+  recover_guard:
+    status: unqualified
+    reason: local guard exists; R0-R3 contact-conditioned recovery batteries pending
+  short_kick:
+    status: missing
+  roll_escape:
+    status: missing
+  learned_tactics:
+    status: missing
+  team_2v2:
+    status: missing
+  rosclaw_combat_receipts:
+    status: missing
+  film_gate:
+    status: unqualified
+    reason: PENDING_HUMAN_REVIEW

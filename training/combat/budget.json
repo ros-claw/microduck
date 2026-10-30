@@ -1,0 +1,33 @@
+{
+  "schema": "duckfu.training-budget.v1",
+  "experiment": "free-target dash motor candidate",
+  "gpus": 1,
+  "smoke": {
+    "envs": 64,
+    "iterations": 5,
+    "wall_limit_seconds": 600
+  },
+  "candidate": {
+    "envs": 256,
+    "iterations": 150,
+    "wall_limit_seconds": 1200,
+    "per_revision_iterations": 150,
+    "maximum_total_iterations": 312,
+    "second_revision_wall_limit_seconds": 1000
+  },
+  "gpu_hours_limit": 0.67,
+  "checkpoint_count_limit": 24,
+  "disk_limit_bytes": 1073741824,
+  "stop": [
+    "numerical failure",
+    "contact truncation",
+    "export mismatch",
+    "no CPU behavior improvement",
+    "budget reached"
+  ],
+  "cancellation": "SIGINT to the recorded experiment PID; no unrelated process is stopped",
+  "cloud_compute": false,
+  "qualification": "Free block is a training target, never proof of duck combat effectiveness",
+  "reward_revisions_limit": 2,
+  "note": "R1 final failed 2/40 attack-effect tests; R2 is last reward revision before returning to task/target analysis. Cumulative single-GPU wall budget remains 0.67 h."
+}

@@ -1,0 +1,424 @@
+/home/nvidia/workspace/microduck/microduck_rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:283: UserWarning: 
+    Found GPU0 NVIDIA GB10 which is of cuda capability 12.1.
+    Minimum and Maximum cuda capability supported by this version of PyTorch is
+    (8.0) - (12.0)
+    
+  warnings.warn(
+/home/nvidia/workspace/microduck/microduck_rl/.venv/lib/python3.12/site-packages/mjlab/entity/entity.py:149: UserWarning: Actuator config matched 14 joint(s) but the same expressions also match 7 site(s): imu, left_foot, head_camera, tof, head_imu, mouth_tip, right_foot. Add a separate config with transmission_type=TransmissionType.SITE if those should be actuated too.
+  self._add_actuators()
+[mdp] Patches 1-2 active: NaN-safe reward/advantage
+[mdp] Patch 4 active: ONNX export filters passive_* joints
+[INFO] Training with: device=cuda:0, seed=42, rank=0
+[INFO] Logging experiment in directory: logs/rsl_rl/duckfu_dash/2026-10-30_05-59-17_smoke-r2-stable-impact
+Setting seed: 42
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "aarch64"
+     "cuda:0"   : "NVIDIA GB10" (122 GiB, sm_121, mempool enabled)
+   Kernel cache:
+     /home/nvidia/.cache/warp/1.12.0
+Terrain generation took 0.0003 seconds.
+Warp DeprecationWarning: The symbol `warp.context.runtime` will soon be removed from the public API. It can still be accessed from `warp._src.context.runtime` but might be changed or removed without notice.
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 2.18 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 0.31 ms  (cached)
+Module _nxn_broadphase__locals__kernel_e73b1315 e73b131 load on device 'cuda:0' took 0.30 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_056f3f03 056f3f0 load on device 'cuda:0' took 1.15 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_bd5ecce0 bd5ecce load on device 'cuda:0' took 1.39 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_079dfa94 079dfa9 load on device 'cuda:0' took 1.52 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_a573e946 a573e94 load on device 'cuda:0' took 0.33 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 1.24 ms  (cached)
+Module _efc_contact_init__locals__kernel_fda71e14 fda71e1 load on device 'cuda:0' took 0.34 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_7974b597 cc0fc30 load on device 'cuda:0' took 0.35 ms  (cached)
+Module _efc_contact_update__locals__kernel_90315d53 90315d5 load on device 'cuda:0' took 0.31 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 2.07 ms  (cached)
+Module mujoco_warp._src.forward f60f76d load on device 'cuda:0' took 1.16 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 0.60 ms  (cached)
+Module mujoco_warp._src.forward 8ebfcb1 load on device 'cuda:0' took 1.47 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 0.30 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_37ca3f47 b319ac8 load on device 'cuda:0' took 30.12 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_b16bf393 b7e5d5f load on device 'cuda:0' took 29.35 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 1.26 ms  (cached)
+Module solve_init_jaref__locals__kernel_af106063 af10606 load on device 'cuda:0' took 0.31 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_19197cab 19197ca load on device 'cuda:0' took 0.28 ms  (cached)
+Module update_constraint_efc__locals__kernel_32935e9d 32935e9 load on device 'cuda:0' took 0.30 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_f02e74ab f02e74a load on device 'cuda:0' took 0.31 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_54853d50 5fd09ff load on device 'cuda:0' took 0.55 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_a458a9b8 e47f115 load on device 'cuda:0' took 30.87 ms  (cached)
+Module linesearch_jv_fused__locals__kernel_d54ab32b d54ab32 load on device 'cuda:0' took 0.63 ms  (cached)
+Module linesearch_prepare_gauss__locals__kernel_32809bfd 32809bf load on device 'cuda:0' took 0.31 ms  (cached)
+Module update_constraint_efc__locals__kernel_3c1a9816 3c1a981 load on device 'cuda:0' took 0.30 ms  (cached)
+Module _contact_sort__locals__contact_sort_304c86df 6c97b35 load on device 'cuda:0' took 0.29 ms  (cached)
+Module _tile_euler_dense__locals__euler_dense_3af92912 e0e9e42 load on device 'cuda:0' took 29.47 ms  (cached)
+Module _tile_euler_dense__locals__euler_dense_162f47da 4d6e4c0 load on device 'cuda:0' took 29.83 ms  (cached)
+Module reset_data__locals__reset_xfrc_applied_e7898c5c e7898c5 load on device 'cuda:0' took 0.38 ms  (cached)
+Module reset_data__locals__reset_qM_10d3c793 10d3c79 load on device 'cuda:0' took 0.25 ms  (cached)
+Module reset_data__locals__reset_mocap_ff71f630 ff71f63 load on device 'cuda:0' took 0.25 ms  (cached)
+Module reset_data__locals__reset_contact_df686d47 df686d4 load on device 'cuda:0' took 0.27 ms  (cached)
+Module reset_data__locals__reset_nworld_6e0d904e 6e0d904 load on device 'cuda:0' took 0.36 ms  (cached)
+Module mujoco_warp._src.render_util 94fd13e load on device 'cuda:0' took 0.59 ms  (cached)
+Module mujoco_warp._src.bvh 08f985a load on device 'cuda:0' took 0.69 ms  (cached)
+Module mujoco_warp._src.ray c8f2bb3 load on device 'cuda:0' took 0.70 ms  (cached)
+
++---------------------------------+
+|         Base Environment        |
++------------------------+--------+
+| Property               | Value  |
++------------------------+--------+
+| Number of environments | 64     |
+| Environment device     | cuda:0 |
+| Environment seed       | 42     |
+| Physics step-size      | 0.0005 |
+| Environment step-size  | 0.02   |
++------------------------+--------+
+
+[INFO] <EventManager> contains 3 active terms.
++-------------------------------------+
+| Active Event Terms in Mode: 'reset' |
++--------+----------------------------+
+| Index  | Name                       |
++--------+----------------------------+
+|   0    | reset_base                 |
+|   1    | reset_robot_joints         |
+|   2    | reset_action_history       |
+|   3    | randomize_com              |
+|   4    | randomize_head_com         |
+|   5    | randomize_armature         |
+|   6    | reset_target               |
++--------+----------------------------+
++---------------------------------------+
+| Active Event Terms in Mode: 'startup' |
++-------+-------------------------------+
+| Index | Name                          |
++-------+-------------------------------+
+|   0   | foot_friction                 |
+|   1   | encoder_bias                  |
+|   2   | base_com                      |
+|   3   | expand_bam_friction_fields    |
+|   4   | randomize_mass_inertia        |
++-------+-------------------------------+
++---------------------------------------------------+
+|       Active Event Terms in Mode: 'interval'      |
++-------+-----------------+-------------------------+
+| Index | Name            | Interval time range (s) |
++-------+-----------------+-------------------------+
+|   0   | duckfu_commands |       (0.02, 0.02)      |
++-------+-----------------+-------------------------+
++-----------------------------+
+| Domain Randomization Fields |
++-------+---------------------+
+| Index | Field Name          |
++-------+---------------------+
+|   0   | geom_friction       |
+|   1   | body_ipos           |
+|   2   | body_subtreemass    |
+|   3   | dof_invweight0      |
+|   4   | body_invweight0     |
+|   5   | tendon_length0      |
+|   6   | tendon_invweight0   |
+|   7   | dof_frictionloss    |
+|   8   | dof_damping         |
+|   9   | body_mass           |
+|   10  | body_inertia        |
+|   11  | body_iquat          |
+|   12  | dof_armature        |
++-------+---------------------+
+
+Module repeat_array_kernel_39317a34 b712927 load on device 'cuda:0' took 0.30 ms  (cached)
+Module repeat_array_kernel_39317a34 18fcc7e load on device 'cuda:0' took 0.28 ms  (cached)
+Module repeat_array_kernel_39317a34 5cde7e8 load on device 'cuda:0' took 0.31 ms  (cached)
+Module repeat_array_kernel_39317a34 0fe3117 load on device 'cuda:0' took 0.32 ms  (cached)
+[INFO] <CommandManager> contains 3 active terms.
++------------------------------------------------+
+|              Active Command Terms              |
++-------+-----------+----------------------------+
+| Index | Name      |            Type            |
++-------+-----------+----------------------------+
+|   0   | twist     | VelocityCommandCommandOnly |
+|   1   | head_pose |     UniformPoseCommand     |
+|   2   | body_pose |     UniformPoseCommand     |
++-------+-----------+----------------------------+
+
+[INFO] <ActionManager> contains 1 active terms.
++---------------------------------+
+| Active Action Terms (shape: 14) |
++-------+-----------+-------------+
+| Index | Name      |   Dimension |
++-------+-----------+-------------+
+|   0   | joint_pos |          14 |
++-------+-----------+-------------+
+
+[INFO] <ObservationManager> contains 2 groups.
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'actor' (shape: (61,)) |
++-----------+----------------------------------+------------+
+|   Index   | Name                             |   Shape    |
++-----------+----------------------------------+------------+
+|     0     | base_ang_vel                     |    (3,)    |
+|     1     | projected_gravity                |    (3,)    |
+|     2     | joint_pos                        |   (14,)    |
+|     3     | joint_vel                        |   (14,)    |
+|     4     | actions                          |   (14,)    |
+|     5     | command                          |    (3,)    |
+|     6     | head_command                     |    (4,)    |
+|     7     | body_command                     |    (6,)    |
++-----------+----------------------------------+------------+
++------------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (76,)) |
++----------+------------------------------------+------------+
+|  Index   | Name                               |   Shape    |
++----------+------------------------------------+------------+
+|    0     | base_lin_vel                       |    (3,)    |
+|    1     | base_ang_vel                       |    (3,)    |
+|    2     | projected_gravity                  |    (3,)    |
+|    3     | joint_pos                          |   (14,)    |
+|    4     | joint_vel                          |   (14,)    |
+|    5     | actions                            |   (14,)    |
+|    6     | command                            |    (3,)    |
+|    7     | foot_height                        |    (2,)    |
+|    8     | foot_air_time                      |    (2,)    |
+|    9     | foot_contact                       |    (2,)    |
+|    10    | foot_contact_forces                |    (6,)    |
+|    11    | head_command                       |    (4,)    |
+|    12    | body_command                       |    (6,)    |
++----------+------------------------------------+------------+
+
+[INFO] <TerminationManager> contains 4 active terms.
++------------------------------------------+
+|         Active Termination Terms         |
++-------+-----------------------+----------+
+| Index | Name                  | Time Out |
++-------+-----------------------+----------+
+|   0   | time_out              |   True   |
+|   1   | fell_over             |  False   |
+|   2   | out_of_terrain_bounds |   True   |
+|   3   | nan_state             |  False   |
++-------+-----------------------+----------+
+
+[INFO] <RewardManager> contains 7 active terms.
++-----------------------------------------+
+|           Active Reward Terms           |
++-------+------------------------+--------+
+| Index | Name                   | Weight |
++-------+------------------------+--------+
+|   0   | upright                |    2.0 |
+|   1   | dof_pos_limits         |   -1.0 |
+|   2   | action_rate_l2         | -0.002 |
+|   3   | duckfu_approach        |    6.0 |
+|   4   | duckfu_target_frontier |   80.0 |
+|   5   | duckfu_stable          |    2.0 |
+|   6   | duckfu_late_motion     |   -0.2 |
++-------+------------------------+--------+
+
+[INFO] <NullCurriculumManager> (inactive)
+[INFO] <MetricsManager> contains 1 active terms.
++-------------------------+
+|   Active Metrics Terms  |
++-------+-----------------+
+| Index | Name            |
++-------+-----------------+
+|   0   | mean_action_acc |
++-------+-----------------+
+
+[INFO] <NullRecorderManager> (inactive)
+Module mujoco_warp._src.io 4b387a0 load on device 'cuda:0' took 1.28 ms  (cached)
+Module _tile_cholesky_factorize__locals__cholesky_factorize_68698e2e e5a5250 load on device 'cuda:0' took 21.00 ms  (cached)
+Module _tile_cholesky_factorize__locals__cholesky_factorize_a02b7349 3d3b894 load on device 'cuda:0' took 20.90 ms  (cached)
+Module _tile_cholesky_solve__locals__cholesky_solve_8f106300 2c9154f load on device 'cuda:0' took 19.77 ms  (cached)
+Module _tile_cholesky_solve__locals__cholesky_solve_8c82e9f1 95f6085 load on device 'cuda:0' took 20.04 ms  (cached)
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 actor :  ('actor',)
+	 critic :  ('critic',)
+--------------------------------------------------------------------------------
+Actor Model: MLPModel(
+  (obs_normalizer): EmpiricalNormalization()
+  (distribution): GaussianDistribution()
+  (mlp): MLP(
+    (0): Linear(in_features=61, out_features=512, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=512, out_features=256, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=256, out_features=128, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=128, out_features=14, bias=True)
+  )
+)
+Critic Model: MLPModel(
+  (obs_normalizer): EmpiricalNormalization()
+  (mlp): MLP(
+    (0): Linear(in_features=76, out_features=512, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=512, out_features=256, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=256, out_features=128, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=128, out_features=1, bias=True)
+  )
+)
+Storing git diff for 'microduck_rl' in: logs/rsl_rl/duckfu_dash/2026-10-30_05-59-17_smoke-r2-stable-impact/git/microduck_rl.diff
+################################################################################
+[1m                             Learning iteration 0/5                             [0m 
+
+                               Run name: smoke-r2-stable-impact
+                            Total steps: 1536 
+                       Steps per second: 543 
+                        Collection time: 2.611s 
+                          Learning time: 0.214s 
+                        Mean value loss: 0.2462
+                    Mean surrogate loss: 0.0195
+                      Mean entropy loss: -2.6449
+                            Mean reward: 0.94
+                    Mean episode length: 12.56
+                        Mean action std: 0.20
+                 Episode_Reward/upright: 0.1645
+          Episode_Reward/dof_pos_limits: 0.0000
+          Episode_Reward/action_rate_l2: -0.0002
+         Episode_Reward/duckfu_approach: 0.0048
+  Episode_Reward/duckfu_target_frontier: 0.0000
+           Episode_Reward/duckfu_stable: 0.1815
+      Episode_Reward/duckfu_late_motion: -0.0001
+        Episode_Metrics/mean_action_acc: 0.3539
+             Metrics/twist/error_vel_xy: 0.0033
+            Metrics/twist/error_vel_yaw: 0.0221
+           Episode_Termination/time_out: 1.4167
+          Episode_Termination/fell_over: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 2.82s
+                           Time elapsed: 00:00:02
+                                    ETA: 00:00:11
+
+################################################################################
+[1m                             Learning iteration 1/5                             [0m 
+
+                               Run name: smoke-r2-stable-impact
+                            Total steps: 3072 
+                       Steps per second: 493 
+                        Collection time: 3.052s 
+                          Learning time: 0.058s 
+                        Mean value loss: 0.1084
+                    Mean surrogate loss: 0.0030
+                      Mean entropy loss: -2.6372
+                            Mean reward: 1.71
+                    Mean episode length: 28.80
+                        Mean action std: 0.20
+                 Episode_Reward/upright: 0.3083
+          Episode_Reward/dof_pos_limits: 0.0000
+          Episode_Reward/action_rate_l2: -0.0007
+         Episode_Reward/duckfu_approach: 0.0526
+  Episode_Reward/duckfu_target_frontier: 0.0000
+           Episode_Reward/duckfu_stable: 0.4641
+      Episode_Reward/duckfu_late_motion: -0.0009
+        Episode_Metrics/mean_action_acc: 0.3921
+             Metrics/twist/error_vel_xy: 0.0155
+            Metrics/twist/error_vel_yaw: 0.0752
+           Episode_Termination/time_out: 0.7083
+          Episode_Termination/fell_over: 0.6667
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 3.11s
+                           Time elapsed: 00:00:05
+                                    ETA: 00:00:08
+
+################################################################################
+[1m                             Learning iteration 2/5                             [0m 
+
+                               Run name: smoke-r2-stable-impact
+                            Total steps: 4608 
+                       Steps per second: 455 
+                        Collection time: 3.291s 
+                          Learning time: 0.082s 
+                        Mean value loss: 0.0953
+                    Mean surrogate loss: -0.0254
+                      Mean entropy loss: -2.6307
+                            Mean reward: 1.92
+                    Mean episode length: 36.17
+                        Mean action std: 0.20
+                 Episode_Reward/upright: 0.3120
+          Episode_Reward/dof_pos_limits: 0.0000
+          Episode_Reward/action_rate_l2: -0.0011
+         Episode_Reward/duckfu_approach: 0.0795
+  Episode_Reward/duckfu_target_frontier: 0.0000
+           Episode_Reward/duckfu_stable: 0.5367
+      Episode_Reward/duckfu_late_motion: -0.0011
+        Episode_Metrics/mean_action_acc: 0.4037
+             Metrics/twist/error_vel_xy: 0.0256
+            Metrics/twist/error_vel_yaw: 0.0948
+           Episode_Termination/time_out: 0.5833
+          Episode_Termination/fell_over: 0.6250
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 3.37s
+                           Time elapsed: 00:00:09
+                                    ETA: 00:00:06
+
+################################################################################
+[1m                             Learning iteration 3/5                             [0m 
+
+                               Run name: smoke-r2-stable-impact
+                            Total steps: 6144 
+                       Steps per second: 390 
+                        Collection time: 3.853s 
+                          Learning time: 0.076s 
+                        Mean value loss: 0.0388
+                    Mean surrogate loss: -0.0334
+                      Mean entropy loss: -2.6220
+                            Mean reward: 2.06
+                    Mean episode length: 40.79
+                        Mean action std: 0.20
+                 Episode_Reward/upright: 0.3493
+          Episode_Reward/dof_pos_limits: -0.0000
+          Episode_Reward/action_rate_l2: -0.0010
+         Episode_Reward/duckfu_approach: 0.0694
+  Episode_Reward/duckfu_target_frontier: 0.0000
+           Episode_Reward/duckfu_stable: 0.5779
+      Episode_Reward/duckfu_late_motion: -0.0003
+        Episode_Metrics/mean_action_acc: 0.3958
+             Metrics/twist/error_vel_xy: 0.0387
+            Metrics/twist/error_vel_yaw: 0.1016
+           Episode_Termination/time_out: 0.3333
+          Episode_Termination/fell_over: 1.0417
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 3.93s
+                           Time elapsed: 00:00:13
+                                    ETA: 00:00:03
+
+################################################################################
+[1m                             Learning iteration 4/5                             [0m 
+
+                               Run name: smoke-r2-stable-impact
+                            Total steps: 7680 
+                       Steps per second: 398 
+                        Collection time: 3.780s 
+                          Learning time: 0.073s 
+                        Mean value loss: 0.0614
+                    Mean surrogate loss: -0.0311
+                      Mean entropy loss: -2.6100
+                            Mean reward: 2.15
+                    Mean episode length: 46.93
+                        Mean action std: 0.20
+                 Episode_Reward/upright: 0.2801
+          Episode_Reward/dof_pos_limits: -0.0001
+          Episode_Reward/action_rate_l2: -0.0014
+         Episode_Reward/duckfu_approach: 0.0818
+  Episode_Reward/duckfu_target_frontier: 0.0000
+           Episode_Reward/duckfu_stable: 0.5426
+      Episode_Reward/duckfu_late_motion: -0.0001
+        Episode_Metrics/mean_action_acc: 0.3989
+             Metrics/twist/error_vel_xy: 0.0455
+            Metrics/twist/error_vel_yaw: 0.1312
+           Episode_Termination/time_out: 0.1250
+          Episode_Termination/fell_over: 1.5833
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 3.85s
+                           Time elapsed: 00:00:17
+                                    ETA: 00:00:00
+

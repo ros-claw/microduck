@@ -44,6 +44,14 @@ The selected match replays with zero state error and approximately **1.64 mm** m
 
 [English edition, characters and subtitles](docs/jev-rumble/ENGLISH_FILM.md) · [HQ films and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
 
+## Development: Duck Fu duel lab
+
+[Duck Fu methods, normal-speed clips and failed qualification](docs/combat/README.md).
+An isolated two-duck lab adds committed dashes, public-state evasion, counter
+attempts and per-component convex contacts. Motor qualification is still
+**unqualified**; R1/149 passed 2/40 and R2/50 passed 13/40 attack-effect
+tests; neither met the 80% target. Four-duck combat and self-play are pending.
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.

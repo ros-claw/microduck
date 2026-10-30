@@ -1,0 +1,482 @@
+[
+  {
+    "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/candidate50-stand-101",
+    "seed": 101,
+    "config": {
+      "schema": "duckfu.duel.v1",
+      "mode": "simulation",
+      "ruleset": "sparring_v1",
+      "arena": "lab",
+      "radius_m": 1.5,
+      "duration_s": 8.0,
+      "separation_m": 0.54,
+      "lateral_offset_m": 0.0,
+      "heading_rad": 0.0,
+      "swap": false,
+      "defense": "stand",
+      "evade_sign": 1,
+      "dash_speed": 0.4,
+      "evade_speed": 0.3,
+      "threat_distance_m": 0.4,
+      "down_count_s": 10.0,
+      "physics_profile": "physics_profile.yaml",
+      "candidate_motor_path": "/home/nvidia/workspace/microduck/duck-fu/training/combat/local/dash-candidate-50.onnx",
+      "candidate_motor_sha256": "262eaad5afd755296c6b860a676d72026c1d66ed79bcf71eedc21109f7d270eb"
+    },
+    "command": null,
+    "physical": {
+      "finite": true,
+      "clock_ok": true,
+      "external_forces_zero": true,
+      "model_unchanged": true,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "torque_max_Nm": 0.6405,
+      "penetration_max_m": 7.379258579010874e-05,
+      "penetrating_p99_m": 6.91353548204314e-07
+    },
+    "performance": {
+      "wall_s": 3.3751986529678106,
+      "real_time_factor": 2.3702308582535148,
+      "policy_call_p50_ms": 0.049280584789812565,
+      "policy_call_p95_ms": 0.06327448645606637,
+      "policy_inference_s": 0.07039583218283951,
+      "decision_p95_ms": 0.1698026550002395
+    },
+    "result": {
+      "kind": "TIMEOUT_DRAW",
+      "winner": null,
+      "time_s": 8.0
+    },
+    "metrics": {
+      "lavender": {
+        "displacement_xy_m": [
+          0.25048405695876197,
+          -0.07694193374330431
+        ],
+        "path_length_m": 0.8264044452170529,
+        "speed_max_m_s": 0.40317439612845263,
+        "minimum_upright": 0.9928130507469177,
+        "foot_support_fraction": 0.9,
+        "positive_work_J": 15.920212846201615,
+        "torque_saturation_fraction": 3.794642857142857e-05,
+        "down_fraction": 0.0
+      },
+      "cream": {
+        "displacement_xy_m": [
+          0.018474813702582304,
+          -2.977466160704104e-06
+        ],
+        "path_length_m": 0.03769233577149418,
+        "speed_max_m_s": 0.161693895547413,
+        "minimum_upright": 0.9996637105941772,
+        "foot_support_fraction": 0.985,
+        "positive_work_J": 0.20672759524519352,
+        "torque_saturation_fraction": 0.0,
+        "down_fraction": 0.0
+      }
+    },
+    "first_attack_s": 2.38,
+    "first_attack_end_s": 3.58,
+    "first_exchange_contact": true,
+    "first_exchange_impulse_Ns": 0.16613775592286842,
+    "defender_lateral_max_m": 0.00048244020467711726,
+    "actor": "lavender",
+    "defender": "cream",
+    "episodes": 2,
+    "events": [
+      {
+        "time_s": 2.24,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "WINDUP",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "time_s": 2.38,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "ACTIVE",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.34775,
+        "event_id": 0,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.5615,
+        "event_id": 1,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "time_s": 3.58,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "RECOVERY",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "ATTACK_WINDOW_ENDED",
+        "time_s": 3.58,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACTED_ATTACK",
+        "time_s": 3.58,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "time_s": 4.68,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "READY",
+        "skill": "approach_orbit",
+        "attack_id": "lavender:1"
+      }
+    ]
+  },
+  {
+    "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/candidate50-stand-102",
+    "seed": 102,
+    "config": {
+      "schema": "duckfu.duel.v1",
+      "mode": "simulation",
+      "ruleset": "sparring_v1",
+      "arena": "lab",
+      "radius_m": 1.5,
+      "duration_s": 8.0,
+      "separation_m": 0.54,
+      "lateral_offset_m": 0.0,
+      "heading_rad": 0.0,
+      "swap": false,
+      "defense": "stand",
+      "evade_sign": 1,
+      "dash_speed": 0.4,
+      "evade_speed": 0.3,
+      "threat_distance_m": 0.4,
+      "down_count_s": 10.0,
+      "physics_profile": "physics_profile.yaml",
+      "candidate_motor_path": "/home/nvidia/workspace/microduck/duck-fu/training/combat/local/dash-candidate-50.onnx",
+      "candidate_motor_sha256": "262eaad5afd755296c6b860a676d72026c1d66ed79bcf71eedc21109f7d270eb"
+    },
+    "command": null,
+    "physical": {
+      "finite": true,
+      "clock_ok": true,
+      "external_forces_zero": true,
+      "model_unchanged": true,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "torque_max_Nm": 0.6405,
+      "penetration_max_m": 0.0001134968548428053,
+      "penetrating_p99_m": 7.386191687575893e-07
+    },
+    "performance": {
+      "wall_s": 3.450616813963279,
+      "real_time_factor": 2.318426076064769,
+      "policy_call_p50_ms": 0.04904845263808966,
+      "policy_call_p95_ms": 0.06828400073572992,
+      "policy_inference_s": 0.04457523301243782,
+      "decision_p95_ms": 0.17980355769395812
+    },
+    "result": {
+      "kind": "TIMEOUT_DRAW",
+      "winner": null,
+      "time_s": 8.0
+    },
+    "metrics": {
+      "lavender": {
+        "displacement_xy_m": [
+          0.23625117108662963,
+          -0.05088672175941872
+        ],
+        "path_length_m": 0.8179765992224822,
+        "speed_max_m_s": 0.40034885435659795,
+        "minimum_upright": 0.9941200613975525,
+        "foot_support_fraction": 0.9025,
+        "positive_work_J": 16.843692970286064,
+        "torque_saturation_fraction": 5.8035714285714285e-05,
+        "down_fraction": 0.0
+      },
+      "cream": {
+        "displacement_xy_m": [
+          0.03848180038659216,
+          -0.008650971187508988
+        ],
+        "path_length_m": 0.05936464541824307,
+        "speed_max_m_s": 0.21597303764904383,
+        "minimum_upright": 0.9994121193885803,
+        "foot_support_fraction": 0.9775,
+        "positive_work_J": 0.47980574628229783,
+        "torque_saturation_fraction": 0.0,
+        "down_fraction": 0.0
+      }
+    },
+    "first_attack_s": 2.34,
+    "first_attack_end_s": 3.6,
+    "first_exchange_contact": true,
+    "first_exchange_impulse_Ns": 0.18166919148648217,
+    "defender_lateral_max_m": 0.0009267717599252921,
+    "actor": "lavender",
+    "defender": "cream",
+    "episodes": 3,
+    "events": [
+      {
+        "time_s": 2.2,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "WINDUP",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "time_s": 2.34,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "ACTIVE",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.30425,
+        "event_id": 0,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.57425,
+        "event_id": 1,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "time_s": 3.6,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "RECOVERY",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "ATTACK_WINDOW_ENDED",
+        "time_s": 3.6,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACTED_ATTACK",
+        "time_s": 3.6,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.75,
+        "event_id": 2,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "time_s": 4.9,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "READY",
+        "skill": "approach_orbit",
+        "attack_id": "lavender:1"
+      }
+    ]
+  },
+  {
+    "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/candidate50-stand-103",
+    "seed": 103,
+    "config": {
+      "schema": "duckfu.duel.v1",
+      "mode": "simulation",
+      "ruleset": "sparring_v1",
+      "arena": "lab",
+      "radius_m": 1.5,
+      "duration_s": 8.0,
+      "separation_m": 0.54,
+      "lateral_offset_m": 0.0,
+      "heading_rad": 0.0,
+      "swap": false,
+      "defense": "stand",
+      "evade_sign": 1,
+      "dash_speed": 0.4,
+      "evade_speed": 0.3,
+      "threat_distance_m": 0.4,
+      "down_count_s": 10.0,
+      "physics_profile": "physics_profile.yaml",
+      "candidate_motor_path": "/home/nvidia/workspace/microduck/duck-fu/training/combat/local/dash-candidate-50.onnx",
+      "candidate_motor_sha256": "262eaad5afd755296c6b860a676d72026c1d66ed79bcf71eedc21109f7d270eb"
+    },
+    "command": null,
+    "physical": {
+      "finite": true,
+      "clock_ok": true,
+      "external_forces_zero": true,
+      "model_unchanged": true,
+      "solver_warnings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "torque_max_Nm": 0.6405,
+      "penetration_max_m": 8.841531752945032e-05,
+      "penetrating_p99_m": 8.285941083355544e-07
+    },
+    "performance": {
+      "wall_s": 3.183267168002203,
+      "real_time_factor": 2.513141240677183,
+      "policy_call_p50_ms": 0.04735251422971487,
+      "policy_call_p95_ms": 0.05574976094067097,
+      "policy_inference_s": 0.04126618639566004,
+      "decision_p95_ms": 0.16906658420339227
+    },
+    "result": {
+      "kind": "TIMEOUT_DRAW",
+      "winner": null,
+      "time_s": 8.0
+    },
+    "metrics": {
+      "lavender": {
+        "displacement_xy_m": [
+          0.20137576710323501,
+          -0.028129825910701574
+        ],
+        "path_length_m": 0.8706052229552728,
+        "speed_max_m_s": 0.4419556615189112,
+        "minimum_upright": 0.9934394955635071,
+        "foot_support_fraction": 0.8875,
+        "positive_work_J": 17.1625490253279,
+        "torque_saturation_fraction": 0.00040848214285714283,
+        "down_fraction": 0.0
+      },
+      "cream": {
+        "displacement_xy_m": [
+          -0.0020788131439308244,
+          0.0007818471270607723
+        ],
+        "path_length_m": 0.01178287118590328,
+        "speed_max_m_s": 0.043128204411453604,
+        "minimum_upright": 0.9996887445449829,
+        "foot_support_fraction": 0.9925,
+        "positive_work_J": 0.03463950225782113,
+        "torque_saturation_fraction": 0.0,
+        "down_fraction": 0.0
+      }
+    },
+    "first_attack_s": 2.42,
+    "first_attack_end_s": 3.68,
+    "first_exchange_contact": true,
+    "first_exchange_impulse_Ns": 0.0726694849166564,
+    "defender_lateral_max_m": 0.00027051509447742727,
+    "actor": "lavender",
+    "defender": "cream",
+    "episodes": 2,
+    "events": [
+      {
+        "time_s": 2.24,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "WINDUP",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "time_s": 2.42,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "ACTIVE",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.50075,
+        "event_id": 0,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "time_s": 3.68,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "RECOVERY",
+        "skill": "dash_bump",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "ATTACK_WINDOW_ENDED",
+        "time_s": 3.68,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACTED_ATTACK",
+        "time_s": 3.68,
+        "actor": "lavender",
+        "attack_id": "lavender:1"
+      },
+      {
+        "state": "CONTACT",
+        "time_s": 3.80575,
+        "event_id": 1,
+        "actors": [
+          "cream",
+          "lavender"
+        ]
+      },
+      {
+        "time_s": 4.98,
+        "state": "MANEUVER",
+        "actor": "lavender",
+        "phase": "READY",
+        "skill": "approach_orbit",
+        "attack_id": "lavender:1"
+      }
+    ]
+  }
+]

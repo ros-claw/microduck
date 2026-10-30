@@ -44,6 +44,13 @@
 
 [全英文解说版与角色介绍](docs/jev-rumble/ENGLISH_FILM.md) · [高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
 
+## 研发中：功夫鸭双鸭实验室
+
+[方法、正常速度片段和未通过的验收](docs/combat/README.zh-CN.md)。
+独立双鸭场景实现突进承诺、基于公开运动的闪避、回顶尝试及按零件凸包碰撞。
+**身体能力仍未通过验收**：R1/149 仅 2/40，R2/50 为 13/40 次达到攻击效果标准，均未达 80% 目标。
+四鸭格斗与自博弈尚未进入。
+
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。
