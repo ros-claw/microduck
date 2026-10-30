@@ -1,0 +1,15 @@
+{
+  "experiment": "contact-v1-task-correction",
+  "device": "one local NVIDIA GB10; no paid cloud",
+  "maximum_iterations": 501,
+  "number_of_environments": 512,
+  "maximum_gpu_hours": 1.5,
+  "maximum_checkpoint_count": 14,
+  "maximum_new_disk_bytes": 1073741824,
+  "required_smoke": "64 environments x 5 iterations",
+  "independent_pretraining_probe": "artifacts/combat/local/task-revision-contact-probe.json",
+  "corrections": ["near head-height target and longer measured contact window", "retain native head-pose tracking", "immediate bounded frontier feedback; no stationary approach annuity"],
+  "stop_conditions": ["non-finite state or solver warnings", "two checkpoint evaluations without target effect improvement", "persistent collapse or loss of normal head posture", "resource or disk limit"],
+  "cancel": "SIGINT only the PID created for this experiment",
+  "not_authorized": ["paid cloud", "stopping unrelated processes", "publishing a release"]
+}

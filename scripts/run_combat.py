@@ -2,7 +2,10 @@
 
 import argparse
 import json
-from microduck_lab.combat.config import load
+from pathlib import Path
+import yaml
+from microduck_lab.combat.config import load, strict_load, Physics
+from microduck_lab.combat.match_config import MatchConfig
 from microduck_lab.combat.episode import run
 
 
@@ -14,9 +17,17 @@ def main():
     p.add_argument("--capture", action="store_true")
     p.add_argument("--out", required=True)
     a = p.parse_args()
-    if a.brain != "rule":
+    content = yaml.safe_load(Path(a.config).read_text())
+    competition = isinstance(content, dict) and content.get("schema") == "duckfu.match.v1"
+    if a.brain == "jev" or (a.brain == "learned" and not competition):
         p.error(f"{a.brain} combat is not implemented/qualified; no fallback")
-    config, physics = load(a.config)
+    if competition:
+        config = strict_load(a.config, MatchConfig)
+        physics = strict_load(Path(a.config).parent / config.physics_profile, Physics)
+        if (a.brain == "learned") != bool(config.tactics_path):
+            p.error("Brain must match the explicit tactical policy in the config")
+    else:
+        config, physics = load(a.config)
     result = run(a.out, config, physics, a.seed, a.capture)
     print(
         json.dumps(

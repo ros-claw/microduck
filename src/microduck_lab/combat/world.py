@@ -21,7 +21,7 @@ POLICIES = {
 NAMES = ("lavender", "cream")
 
 
-def external_parts(spec, index):
+def external_parts(spec, index, players=2):
     """Separate collision layers avoid overlapping native+proxy responses.
 
     Native type1/type2 become per-robot self-contact layers; type1 retains
@@ -29,8 +29,10 @@ def external_parts(spec, index):
     other duck's visual hull pieces. No broad AABB and no duplicate pair shell.
     """
     own1, own2 = 1 << (2 + 2 * index), 1 << (3 + 2 * index)
-    external = 1 << (6 + index)
-    opponent = 1 << (7 - index)
+    if players not in (2, 4) or not 0 <= index < players:
+        raise ValueError("Collision layers support exactly two or four ducks")
+    external = 1 << (2 + 2 * players + index)
+    opponent = sum(1 << (2 + 2 * players + j) for j in range(players) if j != index)
     geoms = list(spec.geoms)
     children = {}
     for i, g in enumerate(geoms):

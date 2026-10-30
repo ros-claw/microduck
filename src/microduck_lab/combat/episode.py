@@ -28,7 +28,7 @@ def source_hashes():
     return {str(p.relative_to(ROOT)): digest(p) for p in sorted(paths)}
 
 
-def run(out, config, physics, seed=101, capture=False, probe=None):
+def run(out, config, physics, seed=101, capture=False, probe=None, training=False):
     if type(seed) is not int or not 0 <= seed < 2**31:
         raise ValueError("Invalid seed")
     if probe is not None and (len(probe) != 3 or not np.isfinite(probe).all()):
@@ -41,14 +41,34 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     source = source_hashes()
-    m, d, ducks, spawns = build(config, physics, seed)
+    competition = config.schema == "duckfu.match.v1"
+    teams = None
+    if competition:
+        from .arena import build_match
+        from .tactics import Pilot
+        from .learning import FrozenSelector
+        m, d, ducks, spawns, teams = build_match(config, physics, seed)
+    else:
+        m, d, ducks, spawns = build(config, physics, seed)
     if config.candidate_motor_path:
         next(iter(ducks.values())).bank.paths["dash_candidate"] = (
             config.candidate_motor_path
         )
+        candidate_metadata = next(iter(ducks.values())).bank.get("dash_candidate").get_modelmeta().custom_metadata_map
     audit = ContactAudit(m, ducks)
-    controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}
-    referee = Referee(ducks, config.down_count_s)
+    if competition:
+        controllers = {}
+        for i, n in enumerate(ducks):
+            path = config.tactics_path if teams[n] == "RED" else config.opponent_path
+            sha = config.tactics_sha256 if teams[n] == "RED" else config.opponent_sha256
+            selector = FrozenSelector(path, sha, seed+10007*(i+1), training and teams[n] == "RED") if path else None
+            controllers[n] = Pilot(n, teams[n], teams, config, selector)
+    else:
+        controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}
+    referee = Referee(ducks, config.down_count_s, teams)
+    if competition:
+        from .strikes import StrikeAudit
+        strikes = StrikeAudit(teams)
     nsteps = round(config.duration_s / physics.dt)
     nstate = mujoco.mj_stateSize(m, STATE)
     state = np.empty(nstate)
@@ -102,17 +122,24 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
                 # cannot see controls, phases, future commands or evaluator seed.
                 public = snapshot(ducks, audit, config)
                 commands = {}
+                alive = [n for n in ducks if n not in referee.eliminated]
                 for n in ducks:
                     other = next(public[o] for o in ducks if o != n)
-                    commands[n] = controllers[n].choose(now, public[n], other)
+                    if n in referee.eliminated:
+                        commands[n] = MotorCommand("eliminated_hold")
+                    else:
+                        commands[n] = (controllers[n].choose(now, public, alive) if competition
+                                       else controllers[n].choose(now, public[n], other))
                     if (
-                        config.candidate_motor_path
+                        not competition and config.candidate_motor_path
                         and controllers[n].skill == "dash_bump"
                         and commands[n].owner == "maneuver"
+                        and (candidate_metadata.get("duckfu_scope") != "forward_active" or controllers[n].phase == "ACTIVE")
                     ):
                         cmd = commands[n]
                         commands[n] = MotorCommand(
-                            cmd.owner, "dash_candidate", cmd.twist
+                            cmd.owner, "dash_candidate", cmd.twist,
+                            cmd.head if candidate_metadata.get("duckfu_head_commands") == "native" else (0.,0.,0.,0.)
                         )
                     if probe is not None:
                         commands[n] = (
@@ -128,7 +155,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
                         time_s=now,
                         actor=n,
                         observation=asdict(public[n]),
-                        opponent=asdict(other),
+                        opponent=({o:asdict(public[o]) for o in public if o != n} if competition else asdict(other)),
                         command=asdict(commands[n]),
                         phase=controllers[n].phase,
                         skill=controllers[n].skill,
@@ -201,7 +228,14 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
             completed = step + 1
             if completed % physics.substeps == 0:
                 finite &= bool(np.isfinite(d.qpos).all() and np.isfinite(d.qvel).all())
+                before_public = public
                 public = snapshot(ducks, audit, config)
+                if competition:
+                    for event in strikes.observe(completed*physics.dt, audit.episodes, controllers, before_public, public):
+                        controllers[event["actor"]].pending_reward += .3
+                    for controller in controllers.values():
+                        if controller.decision is not None:
+                            controller.pending_reward -= .001/physics.motor_hz
                 fault = not (finite and clock_ok and external_zero) or bool(
                     any(w.number for w in d.warning)
                 )
@@ -239,6 +273,24 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
         + audit.events
         + referee.events
     )
+    if competition:
+        all_events += [e for c in controllers.values() for e in c.guard.events]
+        result_for_learning = referee.finish(completed * physics.dt)
+        # Each transition spans its actual maneuver duration (semi-MDP).
+        # A terminal team result is the only winner reward; no scripted damage.
+        for n, c in controllers.items():
+            winner = result_for_learning["winner"]
+            terminal_reward = ((3. if winner == teams[n] else -3.) if winner else 0.)
+            if c.decision is not None:
+                c.pending_reward += terminal_reward
+            elif c.trace:
+                c.trace[-1]["reward"] += terminal_reward
+                c.trace[-1]["terminal"] = True
+            c.finish(completed * physics.dt, "EPISODE_END", final=True)
+        write_json(out / "transitions.json", {n:c.trace for n,c in controllers.items()})
+        all_events = ([e for c in controllers.values() for e in c.events]
+                      + [e for c in controllers.values() for e in c.guard.events]
+                      + audit.events + referee.events + strikes.events)
     # Attribute attack results after contact episode consolidation. CONTACTED is
     # deliberately not VALID_STRIKE: its effectiveness remains unqualified.
     linked = {a for e in audit.episodes for a in e["attacks"]}
@@ -279,12 +331,13 @@ def run(out, config, physics, seed=101, capture=False, probe=None):
         dict(result=result, eliminated=referee.eliminated, events=referee.events),
     )
     manifest = dict(
-        schema="duckfu.run.v1",
-        stage="CF00-03 DEVELOPMENT",
+        schema="duckfu.match-run.v1" if competition else "duckfu.run.v1",
+        stage="COMPETITION_DEVELOPMENT" if competition else "CF00-03 DEVELOPMENT",
         seed=seed,
         config=config.dict(),
         physics=asdict(physics),
         probe=probe,
+        training=training,
         capture=capture,
         mujoco_version=mujoco.__version__,
         source_sha256=source,

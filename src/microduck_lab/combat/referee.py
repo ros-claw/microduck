@@ -2,7 +2,7 @@
 
 
 class Referee:
-    def __init__(self, names, down_count):
+    def __init__(self, names, down_count, teams=None):
         self.names = tuple(names)
         self.down_count = down_count
         self.down_since = dict.fromkeys(names, None)
@@ -10,6 +10,9 @@ class Referee:
         self.eliminated = {}
         self.events = []
         self.result = None
+        self.teams = teams
+        if teams is not None and set(teams) != set(self.names):
+            raise ValueError("Every competitor needs a team")
 
     def update(self, now, bodies, physics_fault=False):
         if physics_fault:
@@ -60,10 +63,11 @@ class Referee:
             self.eliminated[name] = reason
             self.events.append(dict(state=reason, actor=name, time_s=now))
         alive = [n for n in self.names if n not in self.eliminated]
-        if len(alive) <= 1:
+        remaining = sorted({self.teams[n] for n in alive}) if self.teams is not None else alive
+        if len(remaining) <= 1:
             self.result = dict(
                 kind="WIN" if alive else "DRAW",
-                winner=alive[0] if alive else None,
+                winner=remaining[0] if alive else None,
                 time_s=now,
             )
 

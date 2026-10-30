@@ -119,7 +119,7 @@ class Maneuver:
                 if elapsed >= 0.12 and me.upright > 0.9 and me.foot_support:
                     self.transition(now, "ACTIVE", "dash_bump", me)
                 return MotorCommand(
-                    "maneuver", "walk", (0.0, 0.0, 0.0), (-0.12, -0.10, 0.0, 0.0)
+                    "maneuver", "walk", (0.0, 0.0, 0.0), (self.c.dash_neck_rad, self.c.dash_head_rad, 0.0, 0.0)
                 )
             if self.phase == "ACTIVE":
                 if me.touching_opponent and self.contact_since is None:
@@ -128,11 +128,11 @@ class Maneuver:
                 # contact develop, then brake once closing motion is arrested.
                 impact_finished = (
                     self.contact_since is not None
-                    and now - self.contact_since >= 0.16
+                    and now - self.contact_since >= self.c.dash_contact_min_s
                     and closing < 0.05
                 )
                 # Heading locked at launch. No perfect mid-dash pursuit.
-                if moved >= 0.27 or elapsed >= 1.25 or impact_finished:
+                if moved >= 0.27 or elapsed >= self.c.dash_active_s or impact_finished:
                     self.transition(now, "RECOVERY", "dash_bump", me)
                     self.last_dash_end = now
                     self.events.append(
@@ -151,7 +151,7 @@ class Maneuver:
                     "maneuver",
                     "walk",
                     (self.c.dash_speed, 0.0, float(np.clip(2 * error, -0.5, 0.5))),
-                    (-0.12, -0.1, 0.0, 0.0),
+                    (self.c.dash_neck_rad, self.c.dash_head_rad, 0.0, 0.0),
                 )
             if self.phase in ("RECOVERY", "STABILIZE"):
                 if (
@@ -169,20 +169,20 @@ class Maneuver:
                 )
         if self.skill == "evade_step":
             if self.phase == "ACTIVE":
-                if moved >= 0.12 or elapsed >= 1.15:
+                if moved >= self.c.evade_distance_m or elapsed >= 1.15:
                     self.evaded = True
                     self.transition(now, "RECOVERY", "evade_step", me)
                 else:
                     return MotorCommand(
                         "maneuver",
                         "walk",
-                        (-0.26, self.c.evade_sign * self.c.evade_speed, 0.0),
+                        (self.c.evade_forward_speed, self.c.evade_sign * self.c.evade_speed, 0.0),
                     )
             if me.speed > 0.15 or elapsed < 0.12:
                 return MotorCommand("maneuver", "walk")
             self.transition(now, "READY", "approach_orbit", me)
         if self.role in ("evade", "counter") and not self.evaded:
-            if dist < self.c.threat_distance_m and closing > 0.18:
+            if dist < self.c.threat_distance_m and closing > self.c.threat_closing_m_s:
                 self.transition(now, "ACTIVE", "evade_step", me)
                 self.events.append(
                     dict(
@@ -196,7 +196,7 @@ class Maneuver:
                 return MotorCommand(
                     "maneuver",
                     "walk",
-                    (-0.26, self.c.evade_sign * self.c.evade_speed, 0.0),
+                    (self.c.evade_forward_speed, self.c.evade_sign * self.c.evade_speed, 0.0),
                 )
             return MotorCommand("tactics")
         if self.role == "evade":

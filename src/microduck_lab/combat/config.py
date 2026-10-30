@@ -57,7 +57,14 @@ class Config:
     evade_sign: int = 1
     dash_speed: float = 0.45
     dash_start_distance_m: float = 0.40
+    dash_active_s: float = 1.25
+    dash_contact_min_s: float = 0.16
+    dash_neck_rad: float = -0.12
+    dash_head_rad: float = -0.10
     evade_speed: float = 0.30
+    evade_distance_m: float = 0.12
+    evade_forward_speed: float = -0.26
+    threat_closing_m_s: float = 0.18
     threat_distance_m: float = 0.40
     down_count_s: float = 10.0
     physics_profile: str = "physics_profile.yaml"
@@ -101,6 +108,14 @@ class Config:
             raise ValueError("Invalid down-count/offset")
         if not 0.26 <= self.dash_start_distance_m <= 0.44:
             raise ValueError("Dash entry is outside the calibration envelope")
+        if not (0.4 <= self.dash_active_s <= 2.5 and 0.1 <= self.dash_contact_min_s <= 1.5):
+            raise ValueError("Invalid bounded attack/contact duration")
+        if not (-0.4 <= self.dash_neck_rad <= 0.4 and -0.3 <= self.dash_head_rad <= 0.3):
+            raise ValueError("Head commands exceed the probed native range")
+        if not .10 <= self.evade_distance_m <= .24:
+            raise ValueError("Invalid bounded evade travel")
+        if not (-.30 <= self.evade_forward_speed <= 0. and .08 <= self.threat_closing_m_s <= .25):
+            raise ValueError("Invalid public threat/evade parameters")
         if bool(self.candidate_motor_path) != bool(self.candidate_motor_sha256):
             raise ValueError("Candidate motor requires an explicit file and digest")
         if self.candidate_motor_sha256 and (
