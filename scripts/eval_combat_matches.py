@@ -11,12 +11,13 @@ import yaml
 from microduck_lab.combat.config import Physics, strict_load
 from microduck_lab.combat.match_config import MatchConfig
 from microduck_lab.combat.episode import run, write_json
-from microduck_lab.combat.world import digest
+from microduck_lab.combat.world import digest, ROOT
 
 
 def trial(job):
     directory, cfg, seed, candidate, opponent, side = job
-    manifest = run(directory, cfg, Physics(), seed)
+    physics = strict_load(ROOT / "configs/combat" / cfg.physics_profile, Physics)
+    manifest = run(directory, cfg, physics, seed)
     events = [
         json.loads(s)
         for s in (directory / "runtime_events.jsonl").read_text().splitlines()
@@ -84,7 +85,7 @@ def main():
         raise ValueError("Strict frozen cross-play protocol required")
     if (
         not 1 <= protocol["base_seeds"] <= 64
-        or not 1 <= a.jobs <= 4
+        or not 1 <= a.jobs <= 8
         or protocol["split"] not in ("development", "validation", "final_holdout")
     ):
         raise ValueError("Invalid evaluation split/budget")

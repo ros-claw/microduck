@@ -13,7 +13,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from microduck_lab.combat.config import Config, Physics
+from microduck_lab.combat.config import Config, Physics, strict_load
 from microduck_lab.combat.contacts import ContactAudit
 from microduck_lab.combat.observations import snapshot
 from microduck_lab.combat.recovery import RecoveryGuard
@@ -52,13 +52,13 @@ def lowest_native(m, d, prefix):
 
 
 def trial(job):
-    seed, side, group = job
+    seed, side, group, physics_path = job
     cfg = Config(
         defense="absent",
         arena="fixed_disc" if group == "R3" else "lab",
         radius_m=0.75 if group == "R3" else 1.5,
     )
-    physics = Physics()
+    physics = strict_load(physics_path, Physics) if physics_path else Physics()
     m, d, ducks, _ = build(cfg, physics, seed)
     duck = ducks["lavender"]
     rng = np.random.default_rng(seed)
@@ -144,6 +144,7 @@ def main():
     p.add_argument("--count", type=int, default=40)
     p.add_argument("--seed", type=int, default=6101)
     p.add_argument("--group", choices=["R0", "R3"], default="R0")
+    p.add_argument("--physics-profile", default="")
     a = p.parse_args()
     if not 4 <= a.count <= 80:
         p.error("Use 4–80 independent reset poses")
@@ -152,7 +153,13 @@ def main():
         raise FileExistsError(path)
     with ProcessPoolExecutor(max_workers=4) as pool:
         rows = list(
-            pool.map(trial, [(a.seed + i, i % 4, a.group) for i in range(a.count)])
+            pool.map(
+                trial,
+                [
+                    (a.seed + i, i % 4, a.group, a.physics_profile)
+                    for i in range(a.count)
+                ],
+            )
         )
     times = [r["completed_s"] for r in rows if r["completed_s"] is not None]
     summary = dict(

@@ -16,6 +16,7 @@ class Physics:
     torque_limit_Nm: float = 0.6405
     collision: str = "visual_convex_parts"
     actuator: str = "position_servo_simulation_only"
+    native_ccd: bool = False
 
     def __post_init__(self):
         if (
@@ -23,7 +24,7 @@ class Physics:
             or self.actuator != "position_servo_simulation_only"
         ):
             raise ValueError("Unsupported physics/actuator contract")
-        if self.dt not in (0.000125, 0.00025) or self.motor_hz != 50:
+        if self.dt not in (0.0000625, 0.000125, 0.00025) or self.motor_hz != 50:
             raise ValueError("Only calibrated-rate 50 Hz CPU profiles are supported")
         if (
             self.iterations != 80
@@ -33,6 +34,8 @@ class Physics:
             raise ValueError("Physics calibration constants are locked")
         if self.collision not in ("native", "visual_convex_parts"):
             raise ValueError("Unsupported convex collision profile")
+        if type(self.native_ccd) is not bool:
+            raise ValueError("native_ccd must be a boolean")
         if not math.isclose(self.substeps * self.dt, 1 / self.motor_hz, abs_tol=1e-12):
             raise ValueError("Physics must divide the motor period")
 
@@ -77,8 +80,21 @@ class Config:
     candidate_motor_sha256: str = ""
     evade_motor_path: str = ""
     evade_motor_sha256: str = ""
+    walk_motor_path: str = ""
+    walk_motor_sha256: str = ""
+    trained_motor_braking: bool = False
 
     def __post_init__(self):
+        if type(self.trained_motor_braking) is not bool:
+            raise ValueError("Braking contract flag must be a boolean")
+        if bool(self.walk_motor_path) != bool(self.walk_motor_sha256) or (
+            self.walk_motor_sha256
+            and (
+                len(self.walk_motor_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in self.walk_motor_sha256)
+            )
+        ):
+            raise ValueError("Walk motor needs its exact file and digest")
         if self.schema != "duckfu.duel.v1" or self.mode != "simulation":
             raise ValueError("Unsupported contract; this is a simulation duel lab")
         if self.ruleset not in (

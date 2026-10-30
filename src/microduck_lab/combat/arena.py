@@ -7,6 +7,7 @@ import numpy as np
 from .world import ASSETS, ROBOT, POLICIES, CombatBank, external_parts, model_inventory
 from ..sim.runtime import DuckRuntime, apply_current_limit
 from ..sim.composer import _yaw_quat
+from .geometry import add_stage
 
 IDENTITIES = ("lavender", "cream", "coral", "cyan")
 DISPLAY_NAMES = ("ROOK", "BOLT", "SHADE", "ANCHOR")
@@ -21,7 +22,8 @@ def build_match(config, physics, seed):
     s = mujoco.MjSpec()
     s.option.timestep, s.option.iterations = physics.dt, physics.iterations
     s.option.solver = mujoco.mjtSolver.mjSOL_NEWTON
-    s.option.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_NATIVECCD)
+    if not physics.native_ccd:
+        s.option.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_NATIVECCD)
     s.visual.global_.offwidth, s.visual.global_.offheight = 1920, 1920
     s.visual.headlight.ambient = [0.4, 0.4, 0.4]
     s.worldbody.add_light(pos=[-1, -1, 3], dir=[0.1, 0.1, -1], diffuse=[0.8, 0.8, 0.8])
@@ -38,11 +40,9 @@ def build_match(config, physics, seed):
         contype=1,
         conaffinity=stage_affinity,
     )
-    s.worldbody.add_geom(
-        name="stage",
-        type=mujoco.mjtGeom.mjGEOM_CYLINDER,
-        pos=[0, 0, -0.04],
-        size=[config.radius_m, 0.04, 0],
+    add_stage(
+        s,
+        config,
         rgba=[0.38, 0.42, 0.46, 1],
         contype=1,
         conaffinity=stage_affinity,

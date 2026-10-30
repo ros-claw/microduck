@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 import math
 import numpy as np
+from .geometry import boundary_distance
 
 
 @dataclass(frozen=True)
@@ -29,11 +30,7 @@ def snapshot(ducks, audit, config):
     result = {}
     for name, duck in ducks.items():
         p = duck.trunk_pos()
-        distance = (
-            config.radius_m - np.linalg.norm(p[:2])
-            if config.arena == "fixed_disc"
-            else config.radius_m - max(abs(p[0]), abs(p[1]))
-        )
+        distance = boundary_distance(p, config)
         result[name] = Body(
             name,
             tuple(p[:2]),

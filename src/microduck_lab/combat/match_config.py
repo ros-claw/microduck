@@ -31,6 +31,11 @@ class MatchConfig:
     candidate_motor_sha256: str = ""
     evade_motor_path: str = ""
     evade_motor_sha256: str = ""
+    walk_motor_path: str = ""
+    walk_motor_sha256: str = ""
+    trained_motor_braking: bool = True
+    threat_closing_m_s: float = 0.25
+    allow_recovery_roll: bool = False
     tactics_path: str = ""
     tactics_sha256: str = ""
     opponent_path: str = ""
@@ -40,11 +45,19 @@ class MatchConfig:
     physics_profile: str = "physics_profile.yaml"
 
     def __post_init__(self):
+        if (
+            type(self.trained_motor_braking) is not bool
+            or type(self.allow_recovery_roll) is not bool
+        ):
+            raise ValueError("Braking contract flag must be boolean")
         if self.schema != "duckfu.match.v1" or self.mode != "simulation":
             raise ValueError("Competition is simulation only")
         if self.players not in (2, 4) or type(self.players) is not int:
             raise ValueError("Choose 1v1 or 2v2")
-        if self.ruleset != "team_ringout_v1" or self.arena != "fixed_disc":
+        if self.ruleset != "team_ringout_v1" or self.arena not in (
+            "fixed_disc",
+            "fixed_octagon",
+        ):
             raise ValueError("Frozen ring-out/down-count rules required")
         if type(self.swap) is not bool:
             raise ValueError("swap must be a boolean")
@@ -68,11 +81,18 @@ class MatchConfig:
             and -0.4 <= self.dash_neck_rad <= 0.4
             and -0.3 <= self.dash_head_rad <= 0.3
             and -0.3 <= self.evade_forward_speed <= 0.0
+            and 0.05 <= self.threat_closing_m_s <= 0.25
         ):
             raise ValueError("Uncalibrated motor parameters")
         if not 0.1 <= self.dash_windup_s <= 0.4:
             raise ValueError("Invalid visible wind-up duration")
-        for key in ("candidate_motor", "evade_motor", "tactics", "opponent"):
+        for key in (
+            "candidate_motor",
+            "evade_motor",
+            "walk_motor",
+            "tactics",
+            "opponent",
+        ):
             path = getattr(self, key + "_path")
             sha = getattr(self, key + "_sha256")
             if bool(path) != bool(sha) or (

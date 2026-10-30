@@ -91,7 +91,7 @@ class CombatBank(PolicyBank):
                 or s.get_outputs()[0].shape != [1, 14]
             ):
                 raise ValueError(f"Invalid legacy 61D/14D policy: {name}")
-            if name in ("dash_candidate", "evade_candidate"):
+            if name in ("dash_candidate", "evade_candidate", "walk_candidate"):
                 meta = s.get_modelmeta().custom_metadata_map
                 required = {
                     "duckfu_motor_schema": "legacy61.v1",
@@ -112,7 +112,8 @@ def build(config, physics, seed):
     s.option.timestep = physics.dt
     s.option.solver = mujoco.mjtSolver.mjSOL_NEWTON
     s.option.iterations = physics.iterations
-    s.option.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_NATIVECCD)
+    if not physics.native_ccd:
+        s.option.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_NATIVECCD)
     s.visual.global_.offwidth, s.visual.global_.offheight = 1920, 1080
     s.visual.headlight.ambient = [0.45, 0.45, 0.45]
     s.worldbody.add_light(pos=[0, -1, 3], dir=[0, 0, -1], diffuse=[0.8, 0.8, 0.8])
@@ -210,6 +211,9 @@ def model_inventory(m):
                 )
             )
     return dict(
+        collision_algorithm="libccd"
+        if m.opt.disableflags & int(mujoco.mjtDisableBit.mjDSBL_NATIVECCD)
+        else "native_convex",
         collision_geoms=rows,
         exclusions=m.exclude_signature.tolist(),
         mass_by_duck={

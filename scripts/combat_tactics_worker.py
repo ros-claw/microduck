@@ -5,6 +5,7 @@ import mujoco
 from microduck_lab.combat.config import Physics, strict_load
 from microduck_lab.combat.match_config import MatchConfig
 from microduck_lab.combat.episode import run
+from microduck_lab.combat.world import ROOT
 
 
 def main():
@@ -19,7 +20,8 @@ def main():
             "Tactical rollouts require the locked CPU MuJoCo 3.12.0 runtime"
         )
     cfg = strict_load(a.config, MatchConfig)
-    run(a.out, cfg, Physics(), a.seed, training=a.training)
+    physics = strict_load(ROOT / "configs/combat" / cfg.physics_profile, Physics)
+    run(a.out, cfg, physics, a.seed, training=a.training)
 
 
 if __name__ == "__main__":

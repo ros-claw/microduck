@@ -35,6 +35,14 @@ def plan(run, edition):
         for k in ("finite", "external_forces_zero", "model_unchanged", "clock_ok")
     ):
         raise ValueError("Physical audit failed")
+    physical = manifest["physical"]
+    if (
+        physical["penetration_max_m"] > 0.003
+        or physical["penetrating_p99_m"] > 0.0015
+        or any(physical["solver_warnings"])
+        or manifest["result"]["kind"] == "NO_CONTEST_PHYSICS"
+    ):
+        raise ValueError("Numerically invalid competitions cannot become final films")
     events = [
         json.loads(s) for s in (run / "runtime_events.jsonl").read_text().splitlines()
     ]
@@ -190,16 +198,18 @@ def plan(run, edition):
         ]
         if recoveries:
             e = recoveries[0]
+            recovery_shot = shot(
+                run,
+                e["time_s"] - e["duration_s"] - 0.5,
+                e["time_s"] + 0.5,
+                1.0,
+                "pair",
+                "RECOVERY / STABLE FOOT SUPPORT, NOT ONE UPRIGHT FRAME",
+            )
+            recovery_shot["focus_actor"] = e["actor"]
             shots.insert(
                 -1,
-                shot(
-                    run,
-                    e["time_s"] - e["duration_s"] - 0.5,
-                    e["time_s"] + 0.5,
-                    1.0,
-                    "pair",
-                    "RECOVERY / STABLE FOOT SUPPORT, NOT ONE UPRIGHT FRAME",
-                ),
+                recovery_shot,
             )
     else:
         raise ValueError(edition)

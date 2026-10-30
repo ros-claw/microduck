@@ -44,6 +44,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         and digest(config.evade_motor_path) != config.evade_motor_sha256
     ):
         raise ValueError("Evade motor digest differs")
+    if (
+        config.walk_motor_path
+        and digest(config.walk_motor_path) != config.walk_motor_sha256
+    ):
+        raise ValueError("Walk motor digest differs")
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     source = source_hashes()
@@ -68,6 +73,9 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             .custom_metadata_map
         )
     bank = next(iter(ducks.values())).bank
+    if config.walk_motor_path:
+        bank.paths["walk_candidate"] = config.walk_motor_path
+        bank.get("walk_candidate")
     if config.evade_motor_path:
         if digest(config.evade_motor_path) != config.evade_motor_sha256:
             raise ValueError("Evade motor digest differs")
@@ -211,6 +219,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                         )
                     if n in referee.eliminated:
                         commands[n] = MotorCommand("eliminated_hold")
+                    if config.walk_motor_path and commands[n].policy == "walk":
+                        cmd = commands[n]
+                        commands[n] = MotorCommand(
+                            cmd.owner, "walk_candidate", cmd.twist, cmd.head
+                        )
                     row = dict(
                         sim_step=step,
                         time_s=now,
@@ -338,6 +351,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         and digest(config.evade_motor_path) != config.evade_motor_sha256
     ):
         raise RuntimeError("Evade motor changed during simulation")
+    if (
+        config.walk_motor_path
+        and digest(config.walk_motor_path) != config.walk_motor_sha256
+    ):
+        raise RuntimeError("Walk motor changed during simulation")
     if competition:
         for path, sha in (
             (config.tactics_path, config.tactics_sha256),

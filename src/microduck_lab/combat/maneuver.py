@@ -8,6 +8,7 @@ import math
 import numpy as np
 from .observations import relative
 from .motion import OpponentMotionEstimator, facing_twist
+from .braking import SkillBrake
 
 
 @dataclass(frozen=True)
@@ -35,8 +36,11 @@ class Maneuver:
         self.stable_since = None
         self.contact_since = None
         self.motion = OpponentMotionEstimator()
+        self.brake = SkillBrake()
 
     def transition(self, now, phase, skill, me):
+        if phase == "RECOVERY":
+            self.brake.reset()
         self.phase, self.skill, self.since, self.origin = (
             phase,
             skill,
@@ -155,7 +159,12 @@ class Maneuver:
                             attack_id=self.attack_id,
                         )
                     )
-                    return MotorCommand("maneuver", "walk")
+                    return MotorCommand(
+                        "maneuver",
+                        "dash_candidate"
+                        if self.c.trained_motor_braking and self.c.candidate_motor_path
+                        else "walk",
+                    )
                 error = math.atan2(
                     math.sin(self.aim - me.yaw), math.cos(self.aim - me.yaw)
                 )
@@ -166,6 +175,12 @@ class Maneuver:
                     (self.c.dash_neck_rad, self.c.dash_head_rad, 0.0, 0.0),
                 )
             if self.phase in ("RECOVERY", "STABILIZE"):
+                if (
+                    self.c.trained_motor_braking
+                    and self.c.candidate_motor_path
+                    and not self.brake.ready(now, me)
+                ):
+                    return MotorCommand("maneuver", "dash_candidate")
                 if (
                     elapsed >= 0.16
                     and dist > 0.32
@@ -200,6 +215,12 @@ class Maneuver:
                             0.0,
                         ),
                     )
+            if (
+                self.c.trained_motor_braking
+                and self.c.evade_motor_path
+                and not self.brake.ready(now, me)
+            ):
+                return MotorCommand("maneuver", "evade_candidate")
             if me.speed > 0.15 or elapsed < 0.12:
                 return MotorCommand("maneuver", "walk")
             self.transition(now, "READY", "approach_orbit", me)

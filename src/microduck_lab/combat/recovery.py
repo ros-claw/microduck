@@ -8,10 +8,15 @@ from collections import deque
 
 
 class RecoveryGuard:
-    def __init__(self, name, moving_delay_s=0.8, moving_first_roll=True):
+    def __init__(
+        self, name, moving_delay_s=0.8, moving_first_roll=False, allow_roll=False
+    ):
         if not 0.5 <= moving_delay_s <= 2.0 or type(moving_first_roll) is not bool:
             raise ValueError("Invalid bounded recovery calibration")
         self.name = name
+        if type(allow_roll) is not bool:
+            raise ValueError("Recovery roll flag must be boolean")
+        self.allow_roll = allow_roll
         self.moving_delay_s, self.moving_first_roll = moving_delay_s, moving_first_roll
         self.active = False
         self.started = None
@@ -81,6 +86,8 @@ class RecoveryGuard:
                 self.burst_policy = (
                     "sitstand" if self.burst_policy == "roulade" else "roulade"
                 )
+            if not self.allow_roll:
+                self.burst_policy = "sitstand"
             self.attempt += 1
             self.burst_since = now
             duration = 0.5 if self.burst_policy == "roulade" else 0.8

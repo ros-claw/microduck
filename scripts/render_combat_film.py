@@ -135,7 +135,9 @@ def render(plan_path, out, width=1920, height=1080):
                     and e["time_s"] <= event_time
                 }
                 alive = [n for n in positions if n not in eliminated]
-                if shot["view"] in ("pair", "collision") and focus:
+                if shot.get("focus_actor"):
+                    selected = [shot["focus_actor"]]
+                elif shot["view"] in ("pair", "collision") and focus:
                     selected = [focus["actor"], focus["target"]]
                 else:
                     selected = alive or list(positions)
@@ -153,7 +155,7 @@ def render(plan_path, out, width=1920, height=1080):
                             )
                         )
                     )
-                    target_distance = max(1.08, span * 2.5 + 0.65)
+                    target_distance = max(0.88, span * 2.5 + 0.65)
                     if vertical:
                         target_distance = max(1.65, target_distance * 1.3)
                 look = target if look is None else look + 0.09 * (target - look)
@@ -179,13 +181,19 @@ def render(plan_path, out, width=1920, height=1080):
                             width,
                             height,
                         )
-                        for a in np.linspace(0, 2 * math.pi, 97)
+                        for a in np.linspace(
+                            0,
+                            2 * math.pi,
+                            9 if manifest["config"]["arena"] == "fixed_octagon" else 97,
+                        )
                     ]
                     for j in range(len(ring) - 1):
                         if ring[j] is not None and ring[j + 1] is not None:
                             draw.line(
                                 [ring[j], ring[j + 1]],
-                                fill=COLORS["RED" if j < 48 else "BLUE"],
+                                fill=COLORS[
+                                    "RED" if j < (len(ring) - 1) / 2 else "BLUE"
+                                ],
                                 width=max(2, width // 640),
                             )
                 scale = width / 1920

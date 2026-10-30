@@ -13,7 +13,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from microduck_lab.combat.config import Config, Physics
+from microduck_lab.combat.config import Config, Physics, strict_load
 from microduck_lab.combat.contacts import ContactAudit
 from microduck_lab.combat.observations import snapshot
 from microduck_lab.combat.recovery import RecoveryGuard
@@ -22,7 +22,7 @@ from microduck_lab.combat.episode import source_hashes
 
 
 def trial(job):
-    seed, index, group, moving_delay, first_roll, course = job
+    seed, index, group, moving_delay, first_roll, course, physics_path = job
     rng = np.random.default_rng(seed)
     separation = (
         float(rng.uniform(0.335, 0.350))
@@ -40,12 +40,12 @@ def trial(job):
         defense="stand",
         heading_rad=(index % 4) * np.pi / 2,
     )
-    physics = Physics()
+    physics = strict_load(physics_path, Physics) if physics_path else Physics()
     m, d, ducks, _ = build(cfg, physics, seed)
     frozen_source = source_hashes()
     audit, guard = (
         ContactAudit(m, ducks),
-        RecoveryGuard("cream", moving_delay, first_roll),
+        RecoveryGuard("cream", moving_delay, first_roll, allow_roll=first_roll),
     )
     last_contact, fall, recovered = None, None, None
     body, policies = [], []
@@ -153,6 +153,7 @@ def main():
     p.add_argument("--moving-delay", type=float, default=0.8)
     p.add_argument("--first-roll", action=argparse.BooleanOptionalAction, default=True)
     p.add_argument("--course", choices=["roll", "trip"], default="roll")
+    p.add_argument("--physics-profile", default="")
     a = p.parse_args()
     if not 4 <= a.count <= 160:
         p.error("Use a bounded 4–160 attempted trajectories")
@@ -171,6 +172,7 @@ def main():
                         a.moving_delay,
                         a.first_roll,
                         a.course,
+                        a.physics_profile,
                     )
                     for i in range(a.count)
                 ],

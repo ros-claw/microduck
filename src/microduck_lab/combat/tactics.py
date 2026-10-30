@@ -11,6 +11,8 @@ from .maneuver import MotorCommand
 from .observations import relative
 from .recovery import RecoveryGuard
 from .motion import OpponentMotionEstimator, facing_twist
+from .braking import SkillBrake
+from .geometry import boundary_distance
 
 ACTIONS = (
     "APPROACH",
@@ -107,8 +109,9 @@ def choose_target(name, public, teams, alive, previous=None):
 
 
 class RuleSelector:
-    def __init__(self, style):
+    def __init__(self, style, threat_speed=0.25):
         self.style = style
+        self.threat_speed = threat_speed
 
     def select(self, obs, mask, context):
         dist, closing, angle, boundary, side, head_cue = context
@@ -117,7 +120,7 @@ class RuleSelector:
         elif (
             self.style in ("counter", "defensive")
             and dist < 0.40
-            and (closing > 0.18 or head_cue)
+            and (closing > self.threat_speed or head_cue)
             and mask[4 if side > 0 else 5]
         ):
             action = 4 if side > 0 else 5
@@ -146,10 +149,12 @@ class Pilot:
     def __init__(self, name, team, teams, config, selector=None):
         self.name, self.team, self.teams, self.c = name, team, teams, config
         self.selector = selector or RuleSelector(
-            config.red_style if team == "RED" else config.blue_style
+            config.red_style if team == "RED" else config.blue_style,
+            config.threat_closing_m_s,
         )
-        self.guard = RecoveryGuard(name)
+        self.guard = RecoveryGuard(name, allow_roll=config.allow_recovery_roll)
         self.motion = OpponentMotionEstimator()
+        self.brake = SkillBrake()
         self.events, self.trace = [], []
         self.phase, self.skill = "READY", "approach_orbit"
         self.action, self.target = None, None
@@ -208,14 +213,12 @@ class Pilot:
         mask[0] = dist >= 0.23 and not me.touching_opponent
         for action, side in ((1, 1), (2, -1), (4, 1), (5, -1)):
             delta = np.array([-math.sin(me.yaw), math.cos(me.yaw)]) * side * 0.19
-            mask[action] = (
-                np.linalg.norm(np.array(me.xy) + delta) < self.c.radius_m - 0.06
-            )
+            mask[action] = boundary_distance(np.array(me.xy) + delta, self.c) > 0.06
         mask[4:6] &= dist < 0.55
         backward = (
             np.array(me.xy) - np.array([math.cos(me.yaw), math.sin(me.yaw)]) * 0.15
         )
-        mask[8] = dist < 0.5 and np.linalg.norm(backward) < self.c.radius_m - 0.06
+        mask[8] = dist < 0.5 and boundary_distance(backward, self.c) > 0.06
         head_cue = (
             other.neck_pitch_delta < -0.22
             and other.head_pitch_delta < -0.02
@@ -272,7 +275,7 @@ class Pilot:
         _, dist, angle, closing = relative(me, other)
         estimated_closing = self.motion.update(now, me, other)
         visible_threat = dist < 0.4 and (
-            estimated_closing > 0.18
+            estimated_closing > self.c.threat_closing_m_s
             or (
                 other.neck_pitch_delta < -0.22
                 and other.head_pitch_delta < -0.02
@@ -311,6 +314,7 @@ class Pilot:
             self.origin, self.aim = np.array(me.xy), me.yaw + angle
             self.last_selector_time = now
             self.phase = "WINDUP" if action == 3 else "ACTIVE"
+            self.brake.reset()
             self.skill = (
                 "approach_orbit",
                 "approach_orbit",
@@ -375,12 +379,23 @@ class Pilot:
                         attack_id=self.attack_id,
                         target=self.target,
                     )
-                    return MotorCommand("maneuver", "walk")
+                    return MotorCommand(
+                        "maneuver",
+                        "dash_candidate"
+                        if self.c.trained_motor_braking and self.c.candidate_motor_path
+                        else "walk",
+                    )
                 motor = "dash_candidate" if self.c.candidate_motor_path else "walk"
                 yaw_command = float(np.clip(2 * wrap(self.aim - me.yaw), -0.5, 0.5))
                 return MotorCommand(
                     "maneuver", motor, (self.c.dash_speed, 0.0, yaw_command), head
                 )
+            if (
+                self.c.trained_motor_braking
+                and self.c.candidate_motor_path
+                and not self.brake.ready(now, me)
+            ):
+                return MotorCommand("maneuver", "dash_candidate")
             if (
                 phase_elapsed >= 0.3
                 and (dist > 0.33 or phase_elapsed >= 1.0)
@@ -407,6 +422,12 @@ class Pilot:
                     motor,
                     (self.c.evade_forward_speed, side * self.c.evade_speed, 0.0),
                 )
+            if (
+                self.c.trained_motor_braking
+                and self.c.evade_motor_path
+                and not self.brake.ready(now, me)
+            ):
+                return MotorCommand("maneuver", "evade_candidate")
             if phase_elapsed >= 0.24:
                 self.finish(now)
             return MotorCommand("maneuver", "walk")

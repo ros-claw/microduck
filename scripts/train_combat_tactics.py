@@ -13,6 +13,8 @@ import math
 from pathlib import Path
 import time
 import subprocess
+import os
+import sys
 
 import numpy as np
 import torch
@@ -49,7 +51,7 @@ def collect(job):
     config_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(config_path, cfg.dict())
     command = [
-        str(ROOT.parent / "rosclaw-microduck/.venv/bin/python"),
+        os.environ.get("MICRODUCK_COMBAT_PYTHON", sys.executable),
         str(ROOT / "scripts/combat_tactics_worker.py"),
         "--config",
         str(config_path),
@@ -61,7 +63,7 @@ def collect(job):
     if stochastic:
         command.append("--training")
     process = subprocess.run(
-        command, cwd=ROOT, capture_output=True, text=True, timeout=180
+        command, cwd=ROOT, capture_output=True, text=True, timeout=600
     )
     if process.returncode:
         raise RuntimeError(f"Locked CPU rollout failed: {process.stderr[-2000:]}")
@@ -116,7 +118,8 @@ def distill_rules(model, games):
     return dict(
         teacher="public-state frozen rule trajectories; actor distillation only",
         samples=len(rows),
-        action_counts=counts.tolist(),
+        action_counts=torch.bincount(actions, minlength=len(ACTIONS)).tolist(),
+        loss_weight_count_floor=counts.tolist(),
         loss=float(loss.detach()),
     )
 
@@ -182,7 +185,7 @@ def main():
     p.add_argument("--resume-checkpoint", default="")
     a = p.parse_args()
     if not (
-        1 <= a.updates <= 30 and 4 <= a.games_per_update <= 32 and 1 <= a.jobs <= 4
+        1 <= a.updates <= 30 and 4 <= a.games_per_update <= 32 and 1 <= a.jobs <= 8
     ):
         p.error("Bounded local CPU experiment required")
     out = Path(a.out)
@@ -225,7 +228,7 @@ def main():
             model.load_state_dict(checkpoint["model"])
             optimizer.load_state_dict(checkpoint["optimizer"])
             warm = dict(
-                initialization="resume 1v1 actor/critic/optimizer for parameter-shared team PPO",
+                initialization="resume actor/critic/optimizer for parameter-shared PPO",
                 checkpoint_sha256=digest(a.resume_checkpoint),
             )
         else:
