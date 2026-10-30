@@ -1,8 +1,8 @@
 # 功夫鸭 Duck Fu V2 首轮实施报告
 
-执行日期：2026-10-30（UTC）。依据两份日期标为 2026-10-31 的用户优化文档实施。  
-工作目录：`/home/nvidia/workspace/microduck/duck-fu-v2`。  
-分支：`feat/duck-fu-v2`；冻结执行代码：`1e5f3a6`。  
+执行日期：2026-10-30（UTC）。依据两份日期标为 2026-10-31 的用户优化文档实施。
+工作目录：`/home/nvidia/workspace/microduck/duck-fu-v2`。
+分支：`feat/duck-fu-v2`；冻结执行代码：`1e5f3a6`。
 V1 保留在 `/home/nvidia/workspace/microduck/duck-fu`，交付版本 `1c45c12`。
 
 ## 1. 本轮完成范围
