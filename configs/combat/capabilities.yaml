@@ -1,0 +1,42 @@
+schema: duckfu.capabilities.v1
+stage: complete simulation competition; human acceptance pending
+motor_contract: legacy61.v1
+capabilities:
+  stand_motor:
+    status: available_prior
+    source: upstream alpha_stand
+  walk_motor:
+    status: trained_candidate
+    source: duckfu_locomotion_v1_200
+    qualification: twelve CPU command/stop cases and complete-game evaluation; see RESULTS
+  dash_bump:
+    status: qualified_in_frozen_motor_battery
+    qualification: 40/40 effect-and-stable attacks on fresh paired starts
+    evidence: artifacts/combat/complete-motor-validation.json.gz
+  evade_step:
+    status: qualified_in_frozen_motor_battery
+    qualification: 37/40 first-attack-avoided and stable
+  counter_sequence:
+    status: available
+    qualification: 37/40 counter contacts; contact is not a damage or game-win estimate
+  recover_guard:
+    status: available_with_limits
+    qualification: R0 39/40 within 3 s; R3 40/40; nominal R1 stress 32/50 within 3 s and 50/50 within 10 s
+    limitation: dynamic interference differs from reset-pose recovery; rolling recovery disabled
+  short_kick:
+    status: missing
+  roll_escape:
+    status: rejected_unqualified
+  learned_tactics:
+    status: candidate
+    method: explicitly labelled rule distillation followed by online semi-Markov PPO
+    promotion: requires held-out comparison; never automatic
+  team_2v2:
+    status: implemented_candidate
+    physics: one shared world; friendly collisions enabled; equal bodies
+  rosclaw_combat_receipts:
+    status: pending
+    implemented: typed SIM MCP executor adapter and read-only status
+    limitation: no official daemon-authorized combat receipt is claimed
+  film_gate:
+    status: PENDING_HUMAN_REVIEW

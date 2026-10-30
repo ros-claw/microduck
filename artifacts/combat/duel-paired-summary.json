@@ -1,0 +1,256 @@
+{
+  "schema": "duckfu.paired-crossplay-summary.v1",
+  "source_report_sha256": "4f393ca00cf470fa13744a79289913d2a702ac2a0e3bf60093ec403d16b70b7f",
+  "split": "final_holdout",
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 1030,
+  "matrix": {
+    "rule vs rule_pressure": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 8,
+      "draws": 49,
+      "losses": 7,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 702,
+      "counter_sequences": 0,
+      "maximum_penetration_m": 0.0008962135278557047,
+      "maximum_contact_duration_s": 0.5134999999999633,
+      "completed_misses": 25,
+      "interrupted_attacks": 120,
+      "guard_recoveries": 67,
+      "red_win_rate_all_scheduled_games": 0.125,
+      "paired_seed_bootstrap95_win_rate": [
+        0.0625,
+        0.203125
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "rule vs rule_counter": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 12,
+      "draws": 20,
+      "losses": 32,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 135,
+      "counter_sequences": 4,
+      "maximum_penetration_m": 0.0017444866572485526,
+      "maximum_contact_duration_s": 0.9463750000001079,
+      "completed_misses": 160,
+      "interrupted_attacks": 70,
+      "guard_recoveries": 28,
+      "red_win_rate_all_scheduled_games": 0.1875,
+      "paired_seed_bootstrap95_win_rate": [
+        0.109375,
+        0.265625
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "rule vs historical_distilled": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 12,
+      "draws": 36,
+      "losses": 16,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 515,
+      "counter_sequences": 3,
+      "maximum_penetration_m": 0.002149776558795579,
+      "maximum_contact_duration_s": 0.7006250000000258,
+      "completed_misses": 40,
+      "interrupted_attacks": 108,
+      "guard_recoveries": 29,
+      "red_win_rate_all_scheduled_games": 0.1875,
+      "paired_seed_bootstrap95_win_rate": [
+        0.109375,
+        0.265625
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "distilled vs rule_pressure": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 18,
+      "draws": 26,
+      "losses": 20,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 424,
+      "counter_sequences": 6,
+      "maximum_penetration_m": 0.0016039990681577325,
+      "maximum_contact_duration_s": 0.4853749999999604,
+      "completed_misses": 41,
+      "interrupted_attacks": 127,
+      "guard_recoveries": 39,
+      "red_win_rate_all_scheduled_games": 0.28125,
+      "paired_seed_bootstrap95_win_rate": [
+        0.171875,
+        0.390625
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "distilled vs rule_counter": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 16,
+      "draws": 34,
+      "losses": 14,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 179,
+      "counter_sequences": 10,
+      "maximum_penetration_m": 0.0016039990681577325,
+      "maximum_contact_duration_s": 0.9576250000001116,
+      "completed_misses": 175,
+      "interrupted_attacks": 73,
+      "guard_recoveries": 29,
+      "red_win_rate_all_scheduled_games": 0.25,
+      "paired_seed_bootstrap95_win_rate": [
+        0.140625,
+        0.359375
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "distilled vs historical_distilled": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 21,
+      "draws": 25,
+      "losses": 18,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 371,
+      "counter_sequences": 11,
+      "maximum_penetration_m": 0.0012048193075835819,
+      "maximum_contact_duration_s": 0.28612499999998237,
+      "completed_misses": 43,
+      "interrupted_attacks": 129,
+      "guard_recoveries": 35,
+      "red_win_rate_all_scheduled_games": 0.328125,
+      "paired_seed_bootstrap95_win_rate": [
+        0.21875,
+        0.4375
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "learned vs rule_pressure": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 6,
+      "draws": 47,
+      "losses": 11,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 707,
+      "counter_sequences": 0,
+      "maximum_penetration_m": 0.0006243219288353252,
+      "maximum_contact_duration_s": 10.021875000002346,
+      "completed_misses": 22,
+      "interrupted_attacks": 146,
+      "guard_recoveries": 78,
+      "red_win_rate_all_scheduled_games": 0.09375,
+      "paired_seed_bootstrap95_win_rate": [
+        0.03125,
+        0.1875
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "learned vs rule_counter": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 12,
+      "draws": 29,
+      "losses": 23,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 132,
+      "counter_sequences": 1,
+      "maximum_penetration_m": 0.001275630183124533,
+      "maximum_contact_duration_s": 0.3014999999999807,
+      "completed_misses": 181,
+      "interrupted_attacks": 67,
+      "guard_recoveries": 28,
+      "red_win_rate_all_scheduled_games": 0.1875,
+      "paired_seed_bootstrap95_win_rate": [
+        0.09375,
+        0.296875
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "learned vs historical_distilled": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 11,
+      "draws": 31,
+      "losses": 22,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 516,
+      "counter_sequences": 5,
+      "maximum_penetration_m": 0.0018569508542604536,
+      "maximum_contact_duration_s": 0.3849999999999715,
+      "completed_misses": 44,
+      "interrupted_attacks": 139,
+      "guard_recoveries": 42,
+      "red_win_rate_all_scheduled_games": 0.171875,
+      "paired_seed_bootstrap95_win_rate": [
+        0.09375,
+        0.25
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    }
+  },
+  "paired_comparisons": {
+    "distilled minus rule": {
+      "mean_win_rate_difference": 0.11979166666666666,
+      "paired_seed_bootstrap95": [
+        0.05208333333333333,
+        0.1875
+      ],
+      "base_seeds": 32,
+      "opponents": [
+        "historical_distilled",
+        "rule_counter",
+        "rule_pressure"
+      ],
+      "note": "Same base seeds and motor/physics package; no-contests remain in scheduled-game denominators. This is a win-rate comparison, not evidence that every maneuver improved."
+    },
+    "learned minus rule": {
+      "mean_win_rate_difference": -0.015625,
+      "paired_seed_bootstrap95": [
+        -0.07291666666666666,
+        0.041666666666666664
+      ],
+      "base_seeds": 32,
+      "opponents": [
+        "historical_distilled",
+        "rule_counter",
+        "rule_pressure"
+      ],
+      "note": "Same base seeds and motor/physics package; no-contests remain in scheduled-game denominators. This is a win-rate comparison, not evidence that every maneuver improved."
+    }
+  },
+  "film_gate": "PENDING_HUMAN_REVIEW"
+}

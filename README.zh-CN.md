@@ -44,6 +44,16 @@
 
 [全英文解说版与角色介绍](docs/jev-rumble/ENGLISH_FILM.md) · [高清影片与完整回放数据](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [方法与运行](docs/jev-rumble/README.zh-CN.md) · [核验与限制](docs/jev-rumble/VALIDATION.md)
 
+## 功夫鸭：双鸭对决与四鸭团战
+
+[![功夫鸭：实际物理仿真片段](docs/combat/media/duck_fu_preview.gif)](docs/combat/media/duck_fu_team_hero.mp4)
+
+原生无臂 Microduck 在固定八角擂台上单挑及红蓝两队对抗。学习得到的运动策略驱动 14 个关节，规则或 PPO 战术选择有执行承诺的顶撞、侧闪、反顶尝试及恢复。真实出界与公开倒地读秒决定胜负，队友同样碰撞，不使用额外根节点外力或基于血条的击退。
+
+[英文主片](docs/combat/media/duck_fu_team_hero.mp4) · [竖屏短片](docs/combat/media/duck_fu_team_short.mp4) · [连续完整比赛](docs/combat/media/duck_fu_team_reference.mp4) · [技术慢动作](docs/combat/media/duck_fu_team_technical.mp4) · [方法与复现](docs/combat/README.zh-CN.md) · [评估与限制](docs/combat/RESULTS.md)
+
+这是等待用户观感验收的仿真开发分支。格斗循环没有使用 Jev 或网络大模型；不宣称已取得 ROSClaw 格斗授权回执或完成真机迁移。早期失败的运动策略和求解器方案与当前结果一起保留。
+
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。
@@ -69,7 +79,7 @@ flowchart LR
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout jev-survival-2026-10-10
+git checkout feat/duck-fu
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

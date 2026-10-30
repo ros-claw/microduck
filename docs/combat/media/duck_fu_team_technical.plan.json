@@ -1,0 +1,178 @@
+{
+  "schema": "duckfu.film-plan.v1",
+  "edition": "technical",
+  "fps": 50,
+  "shots": [
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 0.0,
+      "end_s": 17,
+      "speed": 1.0,
+      "view": "wide",
+      "caption": "01 / SHARED WORLD / 50 Hz MOTOR POLICIES",
+      "kind": "match",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 0.0,
+      "frames": 850
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 2.0,
+      "end_s": 7.0,
+      "speed": 0.5,
+      "view": "pair",
+      "caption": "02 / MANEUVER COMMITMENT / PUBLIC STATE ONLY",
+      "kind": "replay",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 17.0,
+      "frames": 500
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 3.3,
+      "end_s": 4.8,
+      "speed": 0.25,
+      "view": "collision",
+      "caption": "03 / VISUAL-COMPONENT CONVEX COLLIDERS",
+      "kind": "replay",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 27.0,
+      "frames": 300
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 3.9465,
+      "end_s": 3.9465,
+      "speed": 0.0,
+      "frames": 100,
+      "view": "collision",
+      "kind": "contact_detail",
+      "caption": "CONTACT DETAIL / PEAK SINGLE-CONTACT NORMAL FORCE",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "measurement": {
+        "schema": "duckfu.contact-detail.v1",
+        "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+        "source_contact_log_sha256": "009f78ba73e090dbe9620c456e20f525c98d3361e4af7891dcb4f6c08d43d884",
+        "source_step": 31572,
+        "source_time_s": 3.9465,
+        "source_contact_episode_id": 5,
+        "actor": "lavender",
+        "target": "cream",
+        "attack_id": "lavender:1",
+        "normal_force_N": 152.38020583964317,
+        "position_world_m": [
+          0.21287664659201314,
+          0.030270475874329933,
+          0.11000656856304916
+        ],
+        "normal_world": [
+          -0.9393356425704549,
+          0.33447028207205914,
+          -0.0760143473785582
+        ],
+        "geometry_ids": [
+          42,
+          193
+        ],
+        "raw_contact": [
+          42,
+          193,
+          -1.4317388491574495e-05,
+          152.38020583964317,
+          152.38020583964317,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.21287664659201314,
+          0.030270475874329933,
+          0.11000656856304916,
+          -0.9393356425704549,
+          0.33447028207205914,
+          -0.0760143473785582
+        ],
+        "note": "Peak individual solved normal force within the first measured-response contact episode; frame hold is explicitly marked, not two seconds of sustained force."
+      },
+      "focus_pair": [
+        "lavender",
+        "cream"
+      ],
+      "output_start_s": 33.0
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 3.3,
+      "end_s": 4.8,
+      "speed": 0.25,
+      "view": "pair",
+      "caption": "04 / REAL CONTACT IMPULSE / NO ROOT FORCE",
+      "kind": "replay",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 35.0,
+      "frames": 300
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 0.0,
+      "end_s": 30,
+      "speed": 1.0,
+      "view": "follow",
+      "caption": "05 / TACTICS SELECT. LEARNED MOTORS ACT. PHYSICS DECIDES.",
+      "kind": "match",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 41.0,
+      "frames": 1500
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 12.86,
+      "end_s": 15.08,
+      "speed": 1.0,
+      "view": "pair",
+      "caption": "RECOVERY / STABLE FOOT SUPPORT, NOT ONE UPRIGHT FRAME",
+      "kind": "match",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "focus_actor": "lavender",
+      "output_start_s": 71.0,
+      "frames": 111
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 24.92,
+      "end_s": 49.91975,
+      "speed": 1.0,
+      "view": "wide",
+      "caption": "06 / REAL RING-OUT + TEN-SECOND DOWN COUNT / NO INVINCIBILITY",
+      "kind": "match",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 73.22,
+      "frames": 1250
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "start_s": 49.919875000000005,
+      "end_s": 49.919875000000005,
+      "speed": 0.0,
+      "view": "wide",
+      "kind": "result",
+      "caption": "RED TEAM WINS / ROSCLAW x MICRODUCK",
+      "source_manifest_sha256": "5e050b68c1a330f846eab31a47cd45d3e42a37ce2201e7cc455299d79486c7a4",
+      "output_start_s": 98.22,
+      "frames": 100
+    }
+  ],
+  "duration_s": 100.22,
+  "continuous": false,
+  "simulation_only": true,
+  "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+  "source_seed": 50006,
+  "source_result": {
+    "kind": "WIN",
+    "winner": "RED",
+    "time_s": 49.92
+  },
+  "director_sha256": "ea73501a7bf781e57723e70a970c15090e4e901fc19262114332afa3a8aaa9ea",
+  "slow_motion_uses_actual_states": true,
+  "film_gate": "PENDING_HUMAN_REVIEW",
+  "audio": "optional post-produced foley; never sensor audio"
+}

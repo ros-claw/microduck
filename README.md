@@ -44,6 +44,16 @@ The selected match replays with zero state error and approximately **1.64 mm** m
 
 [English edition, characters and subtitles](docs/jev-rumble/ENGLISH_FILM.md) · [HQ films and full replay data](https://github.com/ros-claw/microduck/releases/tag/jev-survival-2026-10-10) · [Methods and reproduction](docs/jev-rumble/README.md) · [Validation and limitations](docs/jev-rumble/VALIDATION.md)
 
+## Duck Fu — duels and four-robot team combat
+
+[![Duck Fu: actual simulation excerpt](docs/combat/media/duck_fu_preview.gif)](docs/combat/media/duck_fu_team_hero.mp4)
+
+Native armless Microducks duel and fight in red/blue teams on a fixed octagonal platform. Learned motor policies drive all 14 joints; local rule or PPO tactics choose committed bumps, sidesteps, counter attempts and recovery. Physical ring-out and a public down count decide the result. Teammates collide; there is no added root force or health-based knockback.
+
+[English main film](docs/combat/media/duck_fu_team_hero.mp4) · [Vertical short](docs/combat/media/duck_fu_team_short.mp4) · [Continuous match](docs/combat/media/duck_fu_team_reference.mp4) · [Technical slow motion](docs/combat/media/duck_fu_team_technical.mp4) · [Methods / reproduction](docs/combat/README.md) · [Evaluation / limitations](docs/combat/RESULTS.md)
+
+This is a simulation development branch awaiting user film acceptance. Jev/network LLMs are not used in Duck Fu's game loop; ROSClaw combat authorization receipts and hardware transfer are not claimed. Earlier failed motor/solver versions remain documented alongside current results.
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.
@@ -69,7 +79,7 @@ Validated: Linux, Python 3.13, MuJoCo 3.12. Policy inference runs on CPU; EGL ac
 ```bash
 git clone https://github.com/ros-claw/microduck.git
 cd microduck
-git checkout jev-survival-2026-10-10
+git checkout feat/duck-fu
 python3 -m venv .venv
 .venv/bin/python -m pip install "mujoco==3.12.0" -e ".[dev,rosclaw]"
 export MICRODUCK_ROOT="$PWD/.assets"

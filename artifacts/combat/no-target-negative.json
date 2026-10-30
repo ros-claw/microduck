@@ -1,0 +1,131 @@
+{
+  "schema": "duckfu.run.v1",
+  "stage": "CF00-03 DEVELOPMENT",
+  "seed": 101,
+  "config": {
+    "schema": "duckfu.duel.v1",
+    "mode": "simulation",
+    "ruleset": "sparring_v1",
+    "arena": "lab",
+    "radius_m": 1.5,
+    "duration_s": 10.0,
+    "separation_m": 0.571529875841583,
+    "lateral_offset_m": -0.007028948332921343,
+    "heading_rad": 0.0,
+    "swap": false,
+    "defense": "absent",
+    "evade_sign": -1,
+    "dash_speed": 0.4,
+    "evade_speed": 0.3,
+    "threat_distance_m": 0.4,
+    "down_count_s": 10.0,
+    "physics_profile": "physics_profile.yaml",
+    "candidate_motor_path": "policies/candidates/duckfu_dash_r1_50.onnx",
+    "candidate_motor_sha256": "262eaad5afd755296c6b860a676d72026c1d66ed79bcf71eedc21109f7d270eb"
+  },
+  "physics": {
+    "schema": "duckfu.physics.v1",
+    "dt": 0.00025,
+    "motor_hz": 50,
+    "iterations": 80,
+    "contact_ref_s": 0.0005,
+    "torque_limit_Nm": 0.6405,
+    "collision": "visual_convex_parts",
+    "actuator": "position_servo_simulation_only"
+  },
+  "probe": null,
+  "capture": true,
+  "mujoco_version": "3.12.0",
+  "source_sha256": {
+    "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+    "src/microduck_lab/combat/config.py": "4216b37d379e50e66f7162d0d9e2bfc562010291c001da7c7c41fabcaf8064bb",
+    "src/microduck_lab/combat/contacts.py": "110cd9f9044818b7d5fc08b21b848a533b0a53ea1a18189e0f1a5e56e8f811b6",
+    "src/microduck_lab/combat/episode.py": "dc5dd2a29213cfb2e1ff7dfc331334f4366018071d77ee8f0fc0a51e918c437a",
+    "src/microduck_lab/combat/maneuver.py": "eada1670393970f4debf0060a2a5070747cb960d2b54aa9779101b235b3f75a5",
+    "src/microduck_lab/combat/observations.py": "f06dc34d412e7159f9e677868602f41092e280e38de73d8dd34b24ca882e8489",
+    "src/microduck_lab/combat/referee.py": "8dcf9ab2e6b977e17c0d1a3554b5c0442c2030c93e6e942cfad242e6f0790378",
+    "src/microduck_lab/combat/replay.py": "a21e0a197e257f7b524f5c3c579205d0ae32792493913c48d634d2d2e4c1282a",
+    "src/microduck_lab/combat/world.py": "6a21d28589fa61fd0d1354944a245304dbb1056b082eccaf87b25df906023d60",
+    "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+    "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+  },
+  "robot_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+  "policies_sha256": {
+    "stand": "1569268713e40deea795dd2922dba50d3621e15a872855408b6b1b125b1c094b",
+    "walk": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+    "sitstand": "c6c40e35e726eabd803d633e090d112994f469921152448367953fbaf9799bc8",
+    "roulade": "3d60da08fc13f29c1b57f41977aa898132c0d60042100149d8e775affcbca32b"
+  },
+  "spawns": {
+    "lavender": {
+      "xy": [
+        -0.2857649379207915,
+        0.0
+      ],
+      "yaw": 0.0,
+      "role": "coach_attacker"
+    },
+    "cream": {
+      "xy": [
+        0.9,
+        1.0
+      ],
+      "yaw": 3.141592653589793,
+      "role": "absent"
+    }
+  },
+  "steps": 40000,
+  "duration_s": 10.0,
+  "state_spec": 16383,
+  "physical": {
+    "finite": true,
+    "clock_ok": true,
+    "external_forces_zero": true,
+    "model_unchanged": true,
+    "solver_warnings": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "torque_max_Nm": 0.5102407122071725,
+    "penetration_max_m": 9.393912087849593e-05,
+    "penetrating_p99_m": 1.1609911213159275e-06
+  },
+  "performance": {
+    "wall_s": 4.893511397996917,
+    "real_time_factor": 2.043522368026637,
+    "policy_call_p50_ms": 0.07020845077931881,
+    "policy_call_p95_ms": 0.13332900125533342,
+    "policy_inference_s": 0.1127557884901762,
+    "decision_p95_ms": 0.17760909395292385
+  },
+  "result": {
+    "kind": "TIMEOUT_DRAW",
+    "winner": null,
+    "time_s": 10.0
+  },
+  "film_gate": "PENDING_HUMAN_REVIEW",
+  "motor_gate": "UNQUALIFIED",
+  "tactical_backend": "public_state_rule_with_fixed_coach",
+  "notes": [
+    "Existing BAM-trained policies transferred to capped position servos; simulation-only, not matched new training or hardware validation.",
+    "No new policy trained; contacted attacks are not automatically qualified effective strikes."
+  ],
+  "hashes": {
+    "contacts_full.jsonl.gz": "67755114cabed569676a410c1c6a2dd9259eaf36f67f9756285227cadbfbf6a0",
+    "contacts_summary.json": "5f40418501737aaba635bdcc9bf85e91a8cf674b2c439ab8e23b56dfa938870d",
+    "controls.npz": "4262b0e8189c619ee17a2a6ef33d67e6332830f7bf7aa7d473ec3fb502b8f8bd",
+    "initial_state.npz": "16c358c25a8928f572fd07404688070b9e23343415ba827ab3cf8d32a97a200f",
+    "metrics.json": "d2726ce384d318d2e1516a842faf593d18fc386ba0f4b0d23f13bd92db7da354",
+    "model_inventory.json": "95daf9c201add5e7496afc602e79ecfe5dbae42b235cae5d921c01f52b78017c",
+    "referee.json": "0323fb16fd5eb417edd8fdd2d55ec210053561dae5ed3b1fa61727b6860e110e",
+    "runtime_events.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scene.mjb": "23146c1659d43501af19a2f5bf5937286f26c805b5afcb4babf694d6da0a5565",
+    "states.npy": "c7acce600e44afa42c0428959643534725fc94d04936fa87aff9448df248b368",
+    "tactical_decisions.jsonl.gz": "65ce81197f90294aec18f90b7ce8e47be116b90b4555e4df7d8274a5af55476d"
+  }
+}

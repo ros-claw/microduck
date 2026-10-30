@@ -12,10 +12,12 @@ dependencies = [
     "imageio>=2.34",
     "imageio-ffmpeg>=0.5",
     "pillow>=10.0",
+    "pyyaml>=6,<7",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+combat-audit = ["scipy>=1.11"]
 rosclaw = ["mcp>=1.0,<2.0"]
 
 [build-system]

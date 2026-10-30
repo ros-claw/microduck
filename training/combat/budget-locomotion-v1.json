@@ -1,0 +1,14 @@
+{
+  "experiment": "matched-PD combat locomotion and command transitions",
+  "failure_source": "native-rim-regression-201102: upstream walk head target drifts during reverse/orbit and reaches native chassis self contact",
+  "maximum_iterations": 501,
+  "number_of_environments": 512,
+  "maximum_gpu_hours": 1.5,
+  "maximum_checkpoint_count": 14,
+  "maximum_new_disk_bytes": 1073741824,
+  "required_smoke": "64 environments x 5 iterations",
+  "unchanged": ["native mass/inertia/self collision", "0.6405 Nm torque cap", "61D observation and 14D motor outputs", "50 Hz unfiltered motor execution"],
+  "stop_conditions": ["non-finite states or solver warning", "two CPU evaluations without meaningful improvement", "head pose drift or self-contact instability", "resource budget"],
+  "cloud": false,
+  "cancel": "SIGINT only this experiment's PID"
+}

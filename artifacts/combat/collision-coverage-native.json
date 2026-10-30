@@ -1,0 +1,57 @@
+{
+  "schema": "duckfu.coverage.v1",
+  "robot_sha256": "7a6fdf437f5a80c7348ad801f43f906b997a834389cb70cca5e1e8517ba38044",
+  "bodies": {
+    "jaw_soft": {
+      "visual_vertices": 79478,
+      "native_external_hulls": 3,
+      "outside_union_fraction": 0.0047937794106545206,
+      "maximum_halfspace_gap_lower_bound_m": 0.002291652444420242,
+      "worst_visual_point_body_frame_m": [
+        0.0010000003102523403,
+        -9.137779999999466e-05,
+        -0.08130000211673791
+      ],
+      "legacy_aabb_corner_gap_to_visual_hull_lower_bound_m": 0.036223323154016066
+    },
+    "trunk_base": {
+      "visual_vertices": 65346,
+      "native_external_hulls": 1,
+      "outside_union_fraction": 0.8390261071833012,
+      "maximum_halfspace_gap_lower_bound_m": 0.05965770243426349,
+      "worst_visual_point_body_frame_m": [
+        0.03450000027270534,
+        -0.016099999449091313,
+        0.03250000132053279
+      ],
+      "legacy_aabb_corner_gap_to_visual_hull_lower_bound_m": 0.04344836492345809
+    },
+    "ankle_left": {
+      "visual_vertices": 30753,
+      "native_external_hulls": 1,
+      "outside_union_fraction": 0.4367703963840926,
+      "maximum_halfspace_gap_lower_bound_m": 0.021319013081146854,
+      "worst_visual_point_body_frame_m": [
+        -0.000960469351974181,
+        0.00919999831614451,
+        -0.03220000203028389
+      ]
+    },
+    "ankle_right": {
+      "visual_vertices": 30798,
+      "native_external_hulls": 1,
+      "outside_union_fraction": 0.4360997467368011,
+      "maximum_halfspace_gap_lower_bound_m": 0.021319013178360772,
+      "worst_visual_point_body_frame_m": [
+        -0.0009604690938766465,
+        0.009199998414450997,
+        -0.032200001639316564
+      ]
+    }
+  },
+  "limitations": [
+    "Vertex coverage and convex halfspace bounds only; not visual triangle-exact collision.",
+    "Native mesh geoms use convex hulls; uncovered vertices expose missing surface coverage.",
+    "No additional legacy AABB shells used by the combat world."
+  ]
+}

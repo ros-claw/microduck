@@ -1,0 +1,497 @@
+diff --git a/scripts/check_duckfu_export.py b/scripts/check_duckfu_export.py
+new file mode 100644
+index 0000000..24096cb
+--- /dev/null
++++ b/scripts/check_duckfu_export.py
+@@ -0,0 +1,58 @@
++"""Compare official normalized export with the matching actor checkpoint."""
++
++import argparse
++import json
++import numpy as np
++import onnxruntime as ort
++import torch
++from torch import nn
++
++p = argparse.ArgumentParser()
++p.add_argument("--checkpoint", required=True)
++p.add_argument("--onnx", required=True)
++p.add_argument("--out", required=True)
++a = p.parse_args()
++c = torch.load(a.checkpoint, map_location="cpu", weights_only=False)["actor_state_dict"]
++net = nn.Sequential(
++    nn.Linear(61, 512),
++    nn.ELU(),
++    nn.Linear(512, 256),
++    nn.ELU(),
++    nn.Linear(256, 128),
++    nn.ELU(),
++    nn.Linear(128, 14),
++)
++net.load_state_dict(
++    {k.removeprefix("mlp."): v for k, v in c.items() if k.startswith("mlp.")}
++)
++obs = np.random.default_rng(1030).normal(size=(128, 61)).astype(np.float32)
++with torch.no_grad():
++    expected = net(
++        (torch.from_numpy(obs) - c["obs_normalizer._mean"])
++        / (c["obs_normalizer._std"] + 0.01)
++    ).numpy()
++o = ort.SessionOptions()
++o.intra_op_num_threads = 1
++o.inter_op_num_threads = 1
++session = ort.InferenceSession(
++    a.onnx, sess_options=o, providers=["CPUExecutionProvider"]
++)
++actual = np.concatenate(
++    [session.run(None, {session.get_inputs()[0].name: x[None]})[0] for x in obs]
++)
++np.testing.assert_allclose(actual, expected, rtol=2e-4, atol=2e-4)
++from pathlib import Path
++
++Path(a.out).write_text(
++    json.dumps(
++        dict(
++            passed=True,
++            samples=len(obs),
++            max_abs_error=float(np.abs(actual - expected).max()),
++            normalization_baked=True,
++        ),
++        indent=2,
++    )
++    + "\n"
++)
++print("Normalized export parity passed", float(np.abs(actual - expected).max()))
+diff --git a/scripts/export.py b/scripts/export.py
+index 2a449de..15f9847 100644
+--- a/scripts/export.py
++++ b/scripts/export.py
+@@ -242,6 +242,10 @@ def run_export(task_id: str, cfg: ExportConfig):
+         metadata["hop_centering"] = "v1"
+     if task_id == "Mjlab-SweepRopeHop-Flat-MicroDuck":
+         metadata["hop_height_command"] = "sweep-v1"
++    if task_id == "Mjlab-DuckFu-DashBump-MicroDuck-v0":
++        metadata.update(duckfu_motor_schema="legacy61.v1",
++                        duckfu_training_actuator="position_servo_simulation_only",
++                        duckfu_motor_hz="50", duckfu_normalization_baked="true")
+     attach_metadata_to_onnx(onnx_path, metadata)
+ 
+     print(f"Written {onnx_path}")
+diff --git a/scripts/seed_duckfu_from_onnx.py b/scripts/seed_duckfu_from_onnx.py
+new file mode 100644
+index 0000000..8626c18
+--- /dev/null
++++ b/scripts/seed_duckfu_from_onnx.py
+@@ -0,0 +1,76 @@
++"""Initialize PPO's actor from an existing normalized ONNX; not a policy export.
++
++The resulting actor is checked numerically against ONNX before any training.
++Final trained policies must still use scripts/export.py to bake normalization.
++"""
++
++import argparse
++from pathlib import Path
++import numpy as np
++import onnx
++from onnx import numpy_helper
++import onnxruntime as ort
++import torch
++from torch import nn
++
++p = argparse.ArgumentParser()
++p.add_argument("--template", required=True)
++p.add_argument("--policy", required=True)
++p.add_argument("--output", required=True)
++a = p.parse_args()
++checkpoint = torch.load(a.template, map_location="cpu", weights_only=False)
++weights = {
++    x.name: torch.from_numpy(numpy_helper.to_array(x).copy())
++    for x in onnx.load(a.policy).graph.initializer
++}
++actor = checkpoint["actor_state_dict"]
++for name in list(actor):
++    if name in weights:
++        actor[name] = weights[name]
++divisors = [v for k, v in weights.items() if k.startswith("onnx::Div")]
++if len(divisors) != 1:
++    raise ValueError("Unexpected normalization graph")
++actor["obs_normalizer._std"] = divisors[0] - 0.01
++if (actor["obs_normalizer._std"] < 0).any():
++    raise ValueError("Unexpected normalization epsilon")
++actor["obs_normalizer._var"] = actor["obs_normalizer._std"].square()
++actor["obs_normalizer.count"].fill_(100000)
++actor["distribution.std_param"].fill_(0.15)
++mlp = nn.Sequential(
++    nn.Linear(61, 512),
++    nn.ELU(),
++    nn.Linear(512, 256),
++    nn.ELU(),
++    nn.Linear(256, 128),
++    nn.ELU(),
++    nn.Linear(128, 14),
++)
++mlp.load_state_dict(
++    {k.removeprefix("mlp."): v for k, v in actor.items() if k.startswith("mlp.")}
++)
++obs = np.random.default_rng(7).normal(size=(128, 61)).astype(np.float32)
++with torch.no_grad():
++    actual = mlp(
++        (torch.from_numpy(obs) - actor["obs_normalizer._mean"])
++        / (actor["obs_normalizer._std"] + 0.01)
++    ).numpy()
++session = ort.InferenceSession(a.policy)
++expected = (
++    session.run(None, {session.get_inputs()[0].name: obs})[0]
++    if session.get_inputs()[0].shape[0] != 1
++    else np.concatenate(
++        [session.run(None, {session.get_inputs()[0].name: x[None]})[0] for x in obs]
++    )
++)
++np.testing.assert_allclose(actual, expected, rtol=2e-4, atol=2e-4)
++checkpoint["optimizer_state_dict"]["state"] = {}
++checkpoint["iter"] = 0
++checkpoint["infos"] = None
++Path(a.output).parent.mkdir(parents=True, exist_ok=True)
++torch.save(checkpoint, a.output)
++print(
++    "seed parity max absolute error",
++    float(np.abs(actual - expected).max()),
++    "saved",
++    a.output,
++)
+diff --git a/src/mjlab_microduck/tasks/__init__.py b/src/mjlab_microduck/tasks/__init__.py
+index a626408..26ce288 100644
+--- a/src/mjlab_microduck/tasks/__init__.py
++++ b/src/mjlab_microduck/tasks/__init__.py
+@@ -383,3 +383,11 @@ register_mjlab_task(
+     rl_cfg=MicroduckRopeHopRlCfg,
+     runner_cls=MicroduckOnPolicyRunner,
+ )
++
++# Duck Fu: limited-budget free-target motor candidate (not a qualified duel).
++from .microduck_duckfu_env_cfg import make_duckfu_env_cfg, DuckFuRlCfg
++register_mjlab_task(
++    task_id='Mjlab-DuckFu-DashBump-MicroDuck-v0',
++    env_cfg=make_duckfu_env_cfg(),play_env_cfg=make_duckfu_env_cfg(play=True),
++    rl_cfg=DuckFuRlCfg,runner_cls=MicroduckOnPolicyRunner,
++)
+diff --git a/src/mjlab_microduck/tasks/mdp.py b/src/mjlab_microduck/tasks/mdp.py
+index 960c014..2c94e1b 100644
+--- a/src/mjlab_microduck/tasks/mdp.py
++++ b/src/mjlab_microduck/tasks/mdp.py
+@@ -8176,3 +8176,65 @@ def sweep_height_tracking(env):
+     target = sweep_body_command(env)[:, 2]
+     good = ropehop_clean_posture(env) & ~_sensor_any_contact(env, "sweep_contact")
+     return torch.exp(-((height-target)/.025).square()) * good.float()
++
++
++# ── Duck Fu free-target curriculum (CF05 candidate, simulation only) ──────────
++def duckfu_reset_target(env, env_ids):
++    """Only the episode reset boundary writes target pose/velocity."""
++    target = env.scene["target"]
++    n = len(env_ids)
++    pose = target.data.default_root_state[env_ids, :7].clone()
++    pose[:, :3] += env.scene.env_origins[env_ids]
++    pose[:, 0] += torch.empty(n, device=env.device).uniform_(-0.035, 0.035)
++    pose[:, 1] += torch.empty(n, device=env.device).uniform_(-0.015, 0.015)
++    target.write_root_link_pose_to_sim(pose, env_ids=env_ids)
++    target.write_root_link_velocity_to_sim(
++        torch.zeros((n, 6), device=env.device), env_ids=env_ids
++    )
++
++
++def duckfu_commands(env, env_ids):
++    """Physical velocity command: short drive then zero target for braking."""
++    term = env.command_manager.get_term("twist")
++    command = term.command
++    command[env_ids] = 0.0
++    t = env.episode_length_buf[env_ids] * env.step_dt
++    command[env_ids, 0] = torch.where(t < 1.2, 0.4, 0.0)
++
++
++def duckfu_approach(env):
++    robot, target = env.scene["robot"], env.scene["target"]
++    gap = torch.linalg.norm(
++        target.data.root_link_pos_w[:, :2] - robot.data.root_link_pos_w[:, :2], dim=-1
++    )
++    up = (-robot.data.projected_gravity_b[:, 2]).clamp(0.0, 1.0)
++    return torch.exp(-gap.square() / 0.08) * up
++
++
++def duckfu_target_frontier(env):
++    """Bounded forward progress, never a per-step contact-count jackpot."""
++    target = env.scene["target"]
++    x = target.data.root_link_pos_w[:, 0] - env.scene.env_origins[:, 0]
++    if not hasattr(env, "_duckfu_target_origin"):
++        env._duckfu_target_origin = x.clone()
++        env._duckfu_frontier = torch.zeros_like(x)
++    fresh = env.episode_length_buf <= 1
++    env._duckfu_target_origin[fresh] = x[fresh]
++    env._duckfu_frontier[fresh] = 0.0
++    progress = (x - env._duckfu_target_origin).clamp(0.0, 0.12)
++    delta = (progress - env._duckfu_frontier).clamp(0.0, 0.5 * env.step_dt)
++    env._duckfu_frontier = torch.maximum(env._duckfu_frontier, progress)
++    up = (-env.scene["robot"].data.projected_gravity_b[:, 2]).clamp(0.0, 1.0)
++    return delta / env.step_dt * (up > 0.85)
++
++
++def duckfu_stable(env):
++    robot = env.scene["robot"]
++    up = (-robot.data.projected_gravity_b[:, 2]).clamp(0.0, 1.0)
++    z = robot.data.root_link_pos_w[:, 2] - env.scene.env_origins[:, 2]
++    return torch.exp(-((z - 0.12) / 0.03).square()) * up.square()
++
++
++def duckfu_late_motion(env):
++    speed = env.scene["robot"].data.root_link_lin_vel_w[:, :2].square().sum(-1)
++    return speed * (env.episode_length_buf * env.step_dt > 1.5)
+diff --git a/src/mjlab_microduck/tasks/microduck_duckfu_env_cfg.py b/src/mjlab_microduck/tasks/microduck_duckfu_env_cfg.py
+new file mode 100644
+index 0000000..38bedeb
+--- /dev/null
++++ b/src/mjlab_microduck/tasks/microduck_duckfu_env_cfg.py
+@@ -0,0 +1,176 @@
++"""CF05 candidate: motor-only dash into a 737 g free physical target.
++
++Target is a curriculum block, not another robot. Final qualification must use
++CPU duel profile. Position servos and visual-part hull collision masks are
++shared with the delivery implementation; no runtime pushes or root edits.
++"""
++
++from copy import deepcopy
++import mujoco
++from dataclasses import dataclass
++import numpy as np
++from mjlab.terrains.terrain_generator import (
++    SubTerrainCfg,
++    TerrainGeneratorCfg,
++    TerrainOutput,
++    TerrainGeometry,
++)
++from mjlab.entity import EntityCfg
++from mjlab.managers import EventTermCfg, RewardTermCfg, TerminationTermCfg
++from mjlab_microduck.robot.microduck_constants import (
++    MICRODUCK_STANDUP_PD_ROBOT_CFG,
++    get_standup_spec,
++)
++from .microduck_velocity_env_cfg import make_microduck_velocity_env_cfg, MicroduckRlCfg
++from . import mdp
++
++
++def combat_robot_spec():
++    from microduck_lab.combat.world import external_parts
++
++    s = get_standup_spec()
++    external_parts(s, 0)
++    for a in s.actuators:
++        a.forcelimited = True
++        a.forcerange = [-0.6405, 0.6405]
++    for g in s.geoms:
++        if g.contype or g.conaffinity:
++            g.solref = [0.0005, 1.0]
++            g.solimp = [0.99, 0.99, 0.001, 0.5, 2.0]
++            g.margin = 0.0
++    return s
++
++
++def target_spec():
++    s = mujoco.MjSpec()
++    b = s.worldbody.add_body(name="target", pos=[0.28, 0, 0.09])
++    b.add_freejoint()
++    for name, layer, affinity, mass in [
++        ("support", 16, 17, 0.73724318),
++        ("external", 128, 64, 0.0),
++    ]:
++        b.add_geom(
++            name="target_" + name,
++            type=mujoco.mjtGeom.mjGEOM_BOX,
++            size=[0.045, 0.05, 0.09],
++            mass=mass,
++            contype=layer,
++            conaffinity=affinity,
++            friction=[1.0, 0.005, 0.0001],
++            solref=[0.0005, 1.0],
++            solimp=[0.99, 0.99, 0.001, 0.5, 2.0],
++            rgba=[0.7, 0.3, 0.2, 1.0],
++        )
++    return s
++
++
++@dataclass(kw_only=True)
++class DuckFuFloor(SubTerrainCfg):
++    def function(self, difficulty, spec, rng):
++        ox, oy = self.size[0] / 2, self.size[1] / 2
++        g = spec.body("terrain").add_geom(
++            type=mujoco.mjtGeom.mjGEOM_BOX,
++            pos=[ox, oy, -0.04],
++            size=[ox, oy, 0.04],
++            contype=1,
++            conaffinity=20,
++            friction=[1.0, 0.005, 0.0001],
++            solref=[0.0005, 1.0],
++            solimp=[0.99, 0.99, 0.001, 0.5, 2.0],
++        )
++        return TerrainOutput(
++            origin=np.array([ox, oy, 0.0]),
++            geometries=[TerrainGeometry(geom=g, color=(0.4, 0.4, 0.4, 1))],
++        )
++
++
++def make_duckfu_env_cfg(play=False):
++    cfg = make_microduck_velocity_env_cfg(play=play)
++    cfg.scene.entities["robot"] = deepcopy(MICRODUCK_STANDUP_PD_ROBOT_CFG)
++    cfg.scene.entities["robot"].spec_fn = combat_robot_spec
++    cfg.scene.entities["robot"].collisions = ()
++    cfg.scene.entities["robot"].init_state.pos = (0.0, 0.0, 0.12)
++    cfg.scene.entities["target"] = EntityCfg(
++        spec_fn=target_spec, init_state=EntityCfg.InitialStateCfg(pos=(0.28, 0.0, 0.09))
++    )
++    cfg.scene.terrain.terrain_type = "generator"
++    cfg.scene.terrain.terrain_generator = TerrainGeneratorCfg(
++        size=(3.0, 3.0),
++        num_rows=1,
++        num_cols=1,
++        sub_terrains={"floor": DuckFuFloor()},
++        border_width=0.0,
++        color_scheme="none",
++    )
++    cfg.events["reset_base"].params["pose_range"] = {
++        "x": (-0.005, 0.005),
++        "y": (-0.005, 0.005),
++        "z": (0.0, 0.003),
++        "yaw": (-0.025, 0.025),
++    }
++    cfg.events["reset_base"].params["velocity_range"] = {}
++    cfg.sim.nconmax = 256
++    cfg.sim.njmax = 5000
++    cfg.sim.mujoco.timestep = 0.0005
++    cfg.sim.mujoco.iterations = 80
++    cfg.sim.mujoco.integrator = "euler"
++    cfg.decimation = 40
++    cfg.episode_length_s = 2.5
++    # Foot contacts with terrain keep native layers. Base plane layer1 receives
++    # type4/16 via robot/target affinity bit1; visual hulls ignore terrain.
++    cfg.events.pop("randomize_joint_friction", None)
++    cfg.events.pop("randomize_motor_gains", None)
++    cfg.events.pop("push_robot", None)
++    cfg.events.pop("randomize_body_mass", None)
++    for k in list(cfg.events):
++        if cfg.events[k].mode == "interval":
++            cfg.events.pop(k)
++    cfg.events["reset_target"] = EventTermCfg(
++        func=mdp.duckfu_reset_target, mode="reset"
++    )
++    cfg.events["duckfu_commands"] = EventTermCfg(
++        func=mdp.duckfu_commands, mode="interval", interval_range_s=(0.02, 0.02)
++    )
++    cfg.commands["twist"].ranges.lin_vel_x = (0.4, 0.4)
++    cfg.commands["twist"].ranges.lin_vel_y = (0.0, 0.0)
++    cfg.commands["twist"].ranges.ang_vel_z = (0.0, 0.0)
++    cfg.commands["twist"].rel_standing_envs = 0.0
++    for name in ("head_pose", "body_pose"):
++        cfg.commands[name].ranges = tuple((0.0, 0.0) for _ in cfg.commands[name].ranges)
++    for group in ("actor", "critic"):
++        for term in cfg.observations[group].terms.values():
++            term.delay_min_lag = 0
++            term.delay_max_lag = 0
++    # Retain NaN and official fall guards; no rule-based contact termination.
++    for key in list(cfg.curriculum):
++        cfg.curriculum.pop(key)
++    for key in list(cfg.rewards):
++        if key not in (
++            "upright",
++            "action_rate_l2",
++            "joint_pos_limits",
++            "joint_vel_limits",
++            "dof_pos_limits",
++            "dof_vel_limits",
++        ):
++            cfg.rewards.pop(key)
++    cfg.rewards["duckfu_approach"] = RewardTermCfg(func=mdp.duckfu_approach, weight=1.0)
++    cfg.rewards["duckfu_target_frontier"] = RewardTermCfg(
++        func=mdp.duckfu_target_frontier, weight=12.0
++    )
++    cfg.rewards["duckfu_stable"] = RewardTermCfg(func=mdp.duckfu_stable, weight=2.0)
++    cfg.rewards["duckfu_late_motion"] = RewardTermCfg(
++        func=mdp.duckfu_late_motion, weight=-0.2
++    )
++    cfg.rewards["action_rate_l2"].weight = -0.002
++    return cfg
++
++
++DuckFuRlCfg = deepcopy(MicroduckRlCfg)
++DuckFuRlCfg.experiment_name = "duckfu_dash"
++DuckFuRlCfg.run_name = "free_target_pd_candidate"
++DuckFuRlCfg.save_interval = 50
++DuckFuRlCfg.max_iterations = 301
++DuckFuRlCfg.algorithm.symmetry_cfg = None
++DuckFuRlCfg.algorithm.learning_rate = 3e-4
++DuckFuRlCfg.actor.distribution_cfg["init_std"] = 0.2
+diff --git a/tests/test_duckfu_cfg.py b/tests/test_duckfu_cfg.py
+new file mode 100644
+index 0000000..1789a62
+--- /dev/null
++++ b/tests/test_duckfu_cfg.py
+@@ -0,0 +1,62 @@
++from types import SimpleNamespace
++import torch
++import pytest
++from mjlab_microduck.tasks.microduck_duckfu_env_cfg import (
++    make_duckfu_env_cfg,
++    target_spec,
++    combat_robot_spec,
++)
++from mjlab_microduck.tasks import mdp
++
++
++def test_pd_and_spawn_contract():
++    cfg = make_duckfu_env_cfg()
++    assert cfg.decimation * cfg.sim.mujoco.timestep == pytest.approx(0.02)
++    assert cfg.scene.entities["robot"].init_state.pos[2] == 0.12
++    reset = cfg.events["reset_base"].params["pose_range"]
++    assert reset["z"] == (0.0, 0.003) and abs(reset["yaw"][0]) < 0.03
++    assert all(
++        c.mode != "interval" or name == "duckfu_commands"
++        for name, c in cfg.events.items()
++    )
++    assert cfg.rewards["duckfu_target_frontier"].weight > 0
++    assert cfg.rewards["duckfu_late_motion"].weight < 0
++    m = target_spec().compile()
++    assert sum(m.body_mass) == pytest.approx(0.73724318)
++    r = combat_robot_spec().compile()
++    assert r.nu == 14 and r.nv == 20
++    assert max(r.actuator_forcerange[:, 1]) == pytest.approx(0.6405)
++    assert sum(r.body_mass) == pytest.approx(0.73724318)
++    assert cfg.sim.nconmax >= 256
++
++
++def test_bounded_target_progress_no_hold_reward_and_reset_clears_history():
++    target = SimpleNamespace(
++        data=SimpleNamespace(root_link_pos_w=torch.tensor([[0.28, 0.0, 0.09]]))
++    )
++    robot = SimpleNamespace(
++        data=SimpleNamespace(projected_gravity_b=torch.tensor([[0.0, 0.0, -1.0]]))
++    )
++
++    class Scene(dict):
++        pass
++
++    scene = Scene(robot=robot, target=target)
++    scene.env_origins = torch.zeros((1, 3))
++    env = SimpleNamespace(
++        scene=scene, episode_length_buf=torch.zeros(1, dtype=torch.long), step_dt=0.02
++    )
++    assert mdp.duckfu_target_frontier(env).item() == 0.0
++    env.episode_length_buf[:] = 2
++    target.data.root_link_pos_w[:, 0] += 0.01
++    assert mdp.duckfu_target_frontier(env).item() > 0
++    assert mdp.duckfu_target_frontier(env).item() == 0.0
++    env.episode_length_buf[:] = 0
++    target.data.root_link_pos_w[:, 0] = 0.28
++    assert mdp.duckfu_target_frontier(env).item() == 0.0
++    env.episode_length_buf[:] = 2
++    target.data.root_link_pos_w[:, 0] += 0.005
++    assert mdp.duckfu_target_frontier(env).item() == pytest.approx(0.25, abs=1e-5)
++    robot.data.projected_gravity_b[:, 2] = 0.2
++    target.data.root_link_pos_w[:, 0] += 0.01
++    assert mdp.duckfu_target_frontier(env).item() == 0.0

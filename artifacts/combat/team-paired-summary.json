@@ -1,0 +1,120 @@
+{
+  "schema": "duckfu.paired-crossplay-summary.v1",
+  "source_report_sha256": "dc3585f0839fcd0cdc2dfd3c7f1bb392f166683e9d4627afeb302bb483f9677d",
+  "split": "final_holdout",
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 1030,
+  "matrix": {
+    "team_learned vs rule_pressure": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 6,
+      "draws": 53,
+      "losses": 5,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 1750,
+      "counter_sequences": 0,
+      "maximum_penetration_m": 0.002428903360287092,
+      "maximum_contact_duration_s": 14.501375000023735,
+      "completed_misses": 113,
+      "interrupted_attacks": 314,
+      "guard_recoveries": 180,
+      "red_win_rate_all_scheduled_games": 0.09375,
+      "paired_seed_bootstrap95_win_rate": [
+        0.03125,
+        0.171875
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "team_learned vs rule_counter": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 10,
+      "draws": 33,
+      "losses": 20,
+      "no_contest": 1,
+      "physical_pass": 63,
+      "valid_strikes": 391,
+      "counter_sequences": 9,
+      "maximum_penetration_m": 0.0030228067839594623,
+      "maximum_contact_duration_s": 2.0009999999995727,
+      "completed_misses": 415,
+      "interrupted_attacks": 182,
+      "guard_recoveries": 73,
+      "red_win_rate_all_scheduled_games": 0.15625,
+      "paired_seed_bootstrap95_win_rate": [
+        0.078125,
+        0.234375
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "team_learned vs historical_distilled": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 3,
+      "draws": 55,
+      "losses": 6,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 1514,
+      "counter_sequences": 14,
+      "maximum_penetration_m": 0.0026136689487893114,
+      "maximum_contact_duration_s": 2.5607500000002568,
+      "completed_misses": 202,
+      "interrupted_attacks": 332,
+      "guard_recoveries": 142,
+      "red_win_rate_all_scheduled_games": 0.046875,
+      "paired_seed_bootstrap95_win_rate": [
+        0.0,
+        0.109375
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    },
+    "rule vs rule_pressure": {
+      "games": 64,
+      "base_seeds": 32,
+      "paired_sides": true,
+      "wins": 4,
+      "draws": 59,
+      "losses": 1,
+      "no_contest": 0,
+      "physical_pass": 64,
+      "valid_strikes": 1763,
+      "counter_sequences": 0,
+      "maximum_penetration_m": 0.0021117223362556404,
+      "maximum_contact_duration_s": 1.98474999999958,
+      "completed_misses": 95,
+      "interrupted_attacks": 260,
+      "guard_recoveries": 163,
+      "red_win_rate_all_scheduled_games": 0.0625,
+      "paired_seed_bootstrap95_win_rate": [
+        0.0,
+        0.140625
+      ],
+      "independent_base_seeds": 32,
+      "numerical_rejections_are_not_dropped": true
+    }
+  },
+  "paired_comparisons": {
+    "team_learned minus rule": {
+      "mean_win_rate_difference": 0.03125,
+      "paired_seed_bootstrap95": [
+        -0.078125,
+        0.125
+      ],
+      "base_seeds": 32,
+      "opponents": [
+        "rule_pressure"
+      ],
+      "note": "Same base seeds and motor/physics package; no-contests remain in scheduled-game denominators. This is a win-rate comparison, not evidence that every maneuver improved."
+    }
+  },
+  "film_gate": "PENDING_HUMAN_REVIEW"
+}

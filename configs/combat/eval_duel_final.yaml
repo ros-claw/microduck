@@ -1,0 +1,20 @@
+schema: duckfu.crossplay.v1
+split: final_holdout
+seed_base: 40001
+base_seeds: 32
+candidates:
+- id: rule
+  config: configs/combat/duel_final_rule.yaml
+- id: distilled
+  config: configs/combat/duel_final_distilled.yaml
+- id: learned
+  config: configs/combat/duel_final_learned.yaml
+opponents:
+- id: rule_pressure
+  style: pressure
+- id: rule_counter
+  style: counter
+- id: historical_distilled
+  style: counter
+  policy_path: policies/tactics/solo_distilled.npz
+  policy_sha256: 434175d8e9ffd79f62868ca1998621867f8bd2255b9afe34b3f20eccdfc52a9d

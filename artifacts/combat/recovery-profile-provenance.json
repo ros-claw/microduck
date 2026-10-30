@@ -1,0 +1,47 @@
+{
+  "schema": "duckfu.recovery-command-provenance.v1",
+  "evidence_kind": "record of actual commands used, added alongside immutable original reports",
+  "note": "The old harness accepted --physics-profile but did not embed the resolved Physics fields in each row. These commands used the final libccd/8kHz profile. The updated harness embeds it for future runs. R3 is a reset-pose battery on the legacy radius0.75m disc, not the final octagonal arena. Nominal R1 is a commanded-retreat stress course; clearance is not guaranteed.",
+  "profile": {
+    "schema": "duckfu.physics.v1",
+    "dt": 0.000125,
+    "motor_hz": 50,
+    "iterations": 80,
+    "contact_ref_s": 0.0005,
+    "torque_limit_Nm": 0.6405,
+    "collision": "visual_convex_parts",
+    "actuator": "position_servo_simulation_only",
+    "native_ccd": false
+  },
+  "profile_sha256": "34ffdb26e56035cbfe578f8db321965a6d72f0191a59329fdc637458ff5eef1b",
+  "runs": [
+    {
+      "group": "R0",
+      "seed_base": 28001,
+      "raw_report_sha256": "c8da8f54ab690aa90d0388ba78acccc6ca9cebeb2f05352ae6a2399f48fe5836",
+      "compressed_report": "recovery-v5-R0-28001.json.gz",
+      "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/combat_recovery_probe.py --group R0 --count 40 --seed 28001 --physics-profile configs/combat/physics_octagon.yaml --out <fresh-output>"
+    },
+    {
+      "group": "R3",
+      "seed_base": 28101,
+      "raw_report_sha256": "fe791435ce0e976e2b2172b46e87b554319d7a14ee6b8ff40df12eb0154b8b48",
+      "compressed_report": "recovery-v5-R3-28101.json.gz",
+      "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/combat_recovery_probe.py --group R3 --count 40 --seed 28101 --physics-profile configs/combat/physics_octagon.yaml --out <fresh-output>"
+    },
+    {
+      "group": "R1",
+      "seed_base": 29001,
+      "raw_report_sha256": "ca38d28a14b1e0f3c7b4e4f5879b649f207357aca7af51c25a39b93ac64035d7",
+      "compressed_report": "recovery-v5-R1-29001.json.gz",
+      "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/combat_recovery_impact.py --group R1 --count 160 --seed 29001 --physics-profile configs/combat/physics_octagon.yaml --course trip --no-first-roll --out <fresh-output>"
+    },
+    {
+      "group": "R2",
+      "seed_base": 29201,
+      "raw_report_sha256": "c654ad6866573e72b8bbc512fb574aca04677dd4ab40091e359b637441cb15c3",
+      "compressed_report": "recovery-v5-R2-29201.json.gz",
+      "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/combat_recovery_impact.py --group R2 --count 160 --seed 29201 --physics-profile configs/combat/physics_octagon.yaml --course trip --no-first-roll --out <fresh-output>"
+    }
+  ]
+}
