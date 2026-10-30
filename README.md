@@ -49,8 +49,8 @@ The selected match replays with zero state error and approximately **1.64 mm** m
 [Duck Fu methods, normal-speed clips and failed qualification](docs/combat/README.md).
 An isolated two-duck lab adds committed dashes, public-state evasion, counter
 attempts and per-component convex contacts. Motor qualification is still
-**unqualified**; R1/149 passed 2/40 and R2/50 passed 13/40 attack-effect
-tests; neither met the 80% target. Four-duck combat and self-play are pending.
+**unqualified**; The latest motor candidate passed 14/40 attack-effect tests, below
+the 80% target. Four-duck combat and self-play are pending.
 
 ## How it works
 

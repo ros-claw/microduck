@@ -44,12 +44,12 @@ Training base: `18052aaf7d98942921a8d57319f40d3692f96bcd` in a new
    The last checkpoint failed CPU qualification, **2/40** effect-and-stable
    attacks. Earlier checkpoint 50 is a developmental film candidate only.
 5. R2: delayed stable-support target payout, fresh 64-env/5-iteration smoke and
-   export parity. Warm start from R1/50 with a fresh critic/optimizer. Early
+   export parity. Warm start from R1/50 with a new smoke-template critic and reset optimizer. Early
    run stopped because the target-effect signal remained absent. No R2 motor
    is presented as a finished skill. See the raw stopped log for exact last
    iteration and interruption.
 6. CPU target tests then located a short contact window in the original task;
-   [results](target-reachability.json) and [friction variations](target-friction-reachability.json)
+   [results](target-reachability.json.gz) and [friction variations](target-friction-reachability.json.gz)
    are retained before any further task changes.
 
 The initial/corrected [budgets](budget.json) cap local GPU time at 0.67 h,
@@ -87,5 +87,16 @@ tracked. There is no promise of bit-identical GPU retraining across machines.
 An exact actor is identified by its weight digest, never just `best.onnx`.
 
 [Checkpoint audit](checkpoints_manifest.json) · [Parity](candidate-149-parity.json)
-· [CPU result](../../artifacts/combat/rejected-candidate-149-validation.json)
+· [CPU result](../../artifacts/combat/rejected-candidate-149-validation.json.gz)
 · [Runtime methods and films](../../docs/combat/README.md).
+
+The subsequent 0.36 m launch calibration passed only 14/40 body tests. Undesired
+head elevation is visible in candidate clips: the inherited head-pose tracking
+reward was removed, leaving head technique underconstrained. The next task
+should retain a meaningful head-pose objective, calibrate contact time and
+moving-start distributions, and stage target difficulty explicitly. None of
+these future fixes is claimed as trained here.
+
+Re-run the independent target geometry probe with
+`scripts/probe_duckfu_target.py --suite geometry --out <new-file.json>` or
+`--suite friction`; these never change a match robot's properties.

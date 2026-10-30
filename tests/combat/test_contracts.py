@@ -190,3 +190,39 @@ def test_contact_normal_vector_sign_matches_two_free_body_response():
     assert audit.episodes[0]["normal_impulse_on_second_Ns"][0] < 0
     assert audit.episodes[0]["attacks"] == []
     assert not audit.support["lavender"]
+
+
+def test_launch_distance_is_a_bounded_physical_calibration_parameter():
+    me = body()
+    opponent = body("b", xy=(0.35, 0))
+    near = Maneuver("a", "coach_attacker", Config(dash_start_distance_m=0.33))
+    far = Maneuver("a", "coach_attacker", Config(dash_start_distance_m=0.4))
+    near.choose(1.0, me, opponent)
+    far.choose(1.0, me, opponent)
+    assert near.phase == "READY" and far.phase == "WINDUP"
+    with pytest.raises(ValueError):
+        Config(dash_start_distance_m=0.1)
+
+
+def test_unavailable_learned_brain_never_creates_a_fake_rule_run(tmp_path):
+    import subprocess
+    import sys
+
+    root = __import__("pathlib").Path(__file__).resolve().parents[2]
+    out = tmp_path / "must-not-exist"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts/run_combat.py"),
+            "--config",
+            "unused.yaml",
+            "--brain",
+            "learned",
+            "--out",
+            str(out),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0 and "no fallback" in result.stderr
+    assert not out.exists()

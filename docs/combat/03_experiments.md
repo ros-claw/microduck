@@ -13,7 +13,7 @@ stance and relaxed back, instead of making an effective turn. Combining a
 translation with turning produced a usable reorientation candidate.
 
 These are measured input-response findings, not universal robot speed limits.
-[Full command data](../../artifacts/combat/command-range-calibration.json).
+[Full command data](../../artifacts/combat/command-range-calibration.json.gz).
 
 ## Reactive duel calibration
 
@@ -36,7 +36,7 @@ mostly displaced it by only millimetres. This fails the intended fighting-body
 standard, even though posture was stable and the physical contacts are real.
 All 36 retained runs passed the initial numerical proposal; largest contact
 penetration was about **0.183 mm**. This is this experiment's result, not a
-universal guarantee. [Raw rows](../../artifacts/combat/first-exchange-calibration.json).
+universal guarantee. [Raw rows](../../artifacts/combat/first-exchange-calibration.json.gz).
 
 The first three initial states and a failed counter state were captured at
 4 kHz, with continuous 50 fps normal-speed movies. The earlier trained motor
@@ -69,7 +69,7 @@ candidate, not promoted. These data were inspected during diagnosis and are
 now development data, not a final holdout. The comparison is of complete motor
 skill variants including their head-command adapter, not a policy-only ablation.
 Defender movement in evade/counter rows is self-actuated; it is not reported as
-impact-caused displacement. [Full rejection](../../artifacts/combat/rejected-candidate-149-validation.json).
+impact-caused displacement. [Full rejection](../../artifacts/combat/rejected-candidate-149-validation.json.gz).
 
 R2 removed the close-range reward annuity and paid target progress only after
 supported stable braking. Its corrected smoke and normalized export passed.
@@ -79,7 +79,7 @@ measured in CPU before rejection: 40 new initial states × 4 variants, all 160
 passing the numerical proposal; 27/40 standing-target contacts, **13/40**
 effect-and-stable attacks and 17/40 counter contacts. This is still below the
 80% body gate. Its seeds differ from R1, so this is not a matched causal
-policy-improvement estimate. [R2 result](../../artifacts/combat/rejected-candidate-r2-50-validation.json).
+policy-improvement estimate. [R2 result](../../artifacts/combat/rejected-candidate-r2-50-validation.json.gz).
 
 ## Return to task definition
 
@@ -97,8 +97,8 @@ followed by full-mass/full-friction CPU duck tests. It must retain the current
 referee and numerical thresholds. No new reward revision or self-play was
 launched after this diagnosis in this round.
 
-[Reachability](../../training/combat/target-reachability.json)
-· [Friction probe](../../training/combat/target-friction-reachability.json)
+[Reachability](../../training/combat/target-reachability.json.gz)
+· [Friction probe](../../training/combat/target-friction-reachability.json.gz)
 · [Training source, budget and failures](../../training/combat/README.md).
 
 ## Gates
@@ -107,3 +107,25 @@ Physics: passed on the reported batteries, with convex approximation limits.
 Motor: **UNQUALIFIED**. Gameplay: not a qualified competition. Film:
 **PENDING_HUMAN_REVIEW**. No 2v2, self-play, Jev combat, ROSClaw combat receipt,
 autonomous evolution or hardware deployment is claimed.
+
+## Entry calibration after the training failure
+
+The first actor source was frozen at `a330f0f`. A bounded explicit
+`dash_start_distance_m` was then added; existing defaults remain 0.40 m.
+Four development seeds at each of 0.30/0.33/0.36 m showed that the closest
+entry broke all four initial evades. 0.36 m retained evasion and was frozen
+for a new 40-state / 160-run validation. It produced 34/40 standing-target
+contacts, **14/40** effect-and-stable attacks, 37/40 first-attack evades and
+21/40 counter contacts. All 160 passed the numerical proposal; max penetration
+was 0.345 mm. This is still far below the body target, not a successful motor
+promotion. Different validation seeds prevent a policy-only causal comparison.
+
+[Compact final result](../../artifacts/combat/final-summary.json)
+· [Full final rows](../../artifacts/combat/final-motor-validation.json.gz)
+· [Calibration measurements](../../artifacts/combat/entry-distance-measurements.json.gz).
+
+The latest examples also expose undesired head elevation. Training removed
+head-pose tracking while retaining root-upright rewards; head movement was
+therefore underconstrained. This is a task/reward design gap to fix in the
+next curriculum, not evidence of an intended fighting technique. No third
+reward version was trained in this round.

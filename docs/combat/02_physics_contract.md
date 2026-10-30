@@ -49,6 +49,11 @@ transformed using that frame, with direction tested against two separating
 free bodies. Pair episodes debounce brief separation; attacks are separately
 identified so contact chatter is not scored repeatedly.
 
+Contacts and proprioceptive sensor readings follow MuJoCo's last solved
+stage (at most one physics step old); free-joint positions/velocities come
+from the current integration state. All actors use the same snapshot and
+declared contact age. This is ideal simulation state, not onboard perception.
+
 Depth statistics use **only penetrating samples** for P99 and distinguish
 duck–duck, duck–stage, self and receiver contacts. The initial proposed gate is
 max ≤3 mm and penetrating P99 ≤1.5 mm. Passing that gate alone does not prove

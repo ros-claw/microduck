@@ -211,7 +211,7 @@ class Maneuver:
             self.evaded and (closing < 0.03 or dist > 0.24)
         )
         if (
-            dist < 0.40
+            dist < self.c.dash_start_distance_m
             and abs(angle) < 0.22
             and now - self.last_dash_end > 0.65
             and counter_window

@@ -45,7 +45,8 @@ def main(out):
     )
     result = dict(
         schema="duckfu.source-lock.v1",
-        base_commit=git(ROOT, "rev-parse", "HEAD"),
+        base_commit=git(ROOT, "merge-base", "HEAD", "origin/main"),
+        source_parent_commit=git(ROOT, "rev-parse", "HEAD"),
         branch=git(ROOT, "branch", "--show-current"),
         reviewed_getup_commit="5db0586ca451454c09796f79a985ef924b0d6c4b",
         robot=dict(path=ROBOT, sha256=digest(ASSETS / ROBOT)),

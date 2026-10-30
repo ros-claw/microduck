@@ -56,6 +56,7 @@ class Config:
     defense: str = "counter"
     evade_sign: int = 1
     dash_speed: float = 0.45
+    dash_start_distance_m: float = 0.40
     evade_speed: float = 0.30
     threat_distance_m: float = 0.40
     down_count_s: float = 10.0
@@ -98,6 +99,8 @@ class Config:
             raise ValueError("Commands exceed the development search envelope")
         if not (8 <= self.down_count_s <= 15) or abs(self.lateral_offset_m) > 0.15:
             raise ValueError("Invalid down-count/offset")
+        if not 0.26 <= self.dash_start_distance_m <= 0.44:
+            raise ValueError("Dash entry is outside the calibration envelope")
         if bool(self.candidate_motor_path) != bool(self.candidate_motor_sha256):
             raise ValueError("Candidate motor requires an explicit file and digest")
         if self.candidate_motor_sha256 and (

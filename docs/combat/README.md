@@ -7,7 +7,7 @@ commits to a dash; a public-state defender evades, faces it again and attempts
 a counter. Existing learned motors and a newly trained candidate move the
 joints. **This is an early lab, not a qualified fighting game.**
 
-[10 s continuous, normal-speed motor candidate](media/duel-candidate-01.mp4)
+[Earlier R1/50: 10 s continuous motor candidate](media/duel-candidate-01.mp4)
 · [Initial state 2](media/duel-candidate-02.mp4)
 · [Initial state 3](media/duel-candidate-03.mp4)
 · [Existing-motor baseline](media/duel-greybox.mp4)
@@ -18,6 +18,13 @@ All samples are silent, no-FX and have a fixed unobstructed camera. Labels
 identify coach/defender roles; there is no network model choosing reflexes and
 no script moving roots. The candidate examples use the **R1/50** motor and
 previously viewed development states. They are not a success-rate claim.
+
+Current R2/50, 0.36 m entry: [continuous sample 1](media/near-duel-01.mp4)
+· [sample 2](media/near-duel-02.mp4) · [sample 3](media/near-duel-03.mp4)
+· [missing-counter failure](media/near-duel-04.mp4).
+These are the first three completed counter-contact sequences and first missing
+counter from the frozen near-entry validation, selected for diagnosis. They
+are not an unselected sample or qualification proof.
 
 ## Method and evidence
 
@@ -39,13 +46,16 @@ evading defenders avoided the first attack 12/12. Counter contacts occurred
 10/12 in the existing-motor baseline. Contact alone does not establish useful
 attack strength. The new final R1/149 motor failed the larger 40-state body
 criterion: **2/40** effect-and-stable attacks, so it is rejected. R2/50 then passed 13/40 on 40 different new states, still below 80%.
+Near-entry calibration followed by 40 further new states gave 14/40
+effect-and-stable attacks, 34/40 standing-target contacts, 37/40 successful
+first-attack evades and 21/40 counter contacts. The body gate still failed.
 Two reward versions were investigated; the target course needs better calibrated contact
 time and curriculum. **Motor Gate: UNQUALIFIED. Film Gate: PENDING_HUMAN_REVIEW.**
 
 The baseline and candidate selected clips each regenerated 40,000 physical
 steps with zero integration-state error and identical contact/controller logs.
 The accepted survival baseline also regenerated all 401,126 steps with zero
-error. First-round test suite: 161 passed; separate training contract tests:
+error. Final first-round test suite: 163 passed; separate training contract tests:
 2 passed. No four-duck combat, self-play, Jev combat, combat ROSClaw receipts,
 real hardware or autonomous evolution is claimed.
 
@@ -78,9 +88,15 @@ For initial states 2/3 use their reference YAML and seeds 102/103.
 --count 12 --jobs 4 --out <fresh-dir>` runs the 36-case development comparison.
 `eval_combat.py --protocol configs/combat/eval_protocol.yaml --out <fresh-dir>`
 repeats the **failed R1/149 motor protocol**, not a game win-rate evaluation.
+Historical R1 reference captures use actor source snapshot
+`a330f0f544e4cb0ae8dc4e62ff64a1ca3e2c2e7c`. Current near-reference captures
+use the latest source and `near_reference_01.yaml` / seed 4002 (then
+`near_reference_02.yaml` / 4005 and `near_reference_03.yaml` / 4006).
 Full state/contact captures stay local; videos, compact evidence, configurations
 and candidate weights are tracked. New captures are replayed by advancing the
 actual controllers and physics, not by merely setting recorded poses.
 
 No Release or tag is created for this work. Pollen Robotics assets and model
 terms remain separate from project code; see the repository attribution.
+
+Large raw reports/logs are losslessly compressed; the [compact final summary](../../artifacts/combat/final-summary.json) is directly readable. Source snapshots preserve old replay versions.

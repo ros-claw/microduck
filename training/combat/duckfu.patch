@@ -1,12 +1,13 @@
 diff --git a/scripts/check_duckfu_export.py b/scripts/check_duckfu_export.py
 new file mode 100644
-index 0000000..24096cb
+index 0000000..407eec3
 --- /dev/null
 +++ b/scripts/check_duckfu_export.py
 @@ -0,0 +1,58 @@
 +"""Compare official normalized export with the matching actor checkpoint."""
 +
 +import argparse
++from pathlib import Path
 +import json
 +import numpy as np
 +import onnxruntime as ort
@@ -47,7 +48,6 @@ index 0000000..24096cb
 +    [session.run(None, {session.get_inputs()[0].name: x[None]})[0] for x in obs]
 +)
 +np.testing.assert_allclose(actual, expected, rtol=2e-4, atol=2e-4)
-+from pathlib import Path
 +
 +Path(a.out).write_text(
 +    json.dumps(

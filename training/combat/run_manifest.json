@@ -1,0 +1,76 @@
+{
+  "schema": "duckfu.training-evidence.v1",
+  "training_base": "18052aaf7d98942921a8d57319f40d3692f96bcd",
+  "r1_patch_sha256": "12eeb03d0744276c04061049b15746742a269b9ce0fca8101cd7be478b67ab93",
+  "r2_patch_sha256": "f25768c46648e95b8d374674189bd8a01cd18667dce442232ccdfa46ff70640f",
+  "checkpoint_archive_local": "/home/nvidia/workspace/microduck/duck-fu/training/combat/local/checkpoints-and-configs.tar.gz",
+  "checkpoint_archive_sha256": "020d06248e677ad62a944a9ba5c3a030adbe346a867e1b717b0dfdf920f30908",
+  "files": [
+    {
+      "path": "logs/rsl_rl/duckfu_dash/walk-teacher-seed/model_0.pt",
+      "sha256": "335fa84d3dd0face1825d8ceefdada4235960013bfd3fd2772f0d51eb63c6bd3",
+      "bytes": 1616152
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_05-41-40_candidate-v2-spawn-fixed/model_50.pt",
+      "sha256": "71151105315dcbba76becc1ca71a7a27a8a14dd5d9b9471c7fb093f0ef240b4b",
+      "bytes": 4843281
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_05-41-40_candidate-v2-spawn-fixed/model_149.pt",
+      "sha256": "1bb70cc90998d9f6837d50953e586f825920fab07784e90ca51cd2741890fcbc",
+      "bytes": 4843363
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/r2-warm-start/model_0.pt",
+      "sha256": "f9f0467d24c4f6f81659ef9a5024a4d2bc24cbd7e99a2fdcd00365e3fa92d5f9",
+      "bytes": 1616152
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_06-00-35_candidate-r2-stable-impact/model_50.pt",
+      "sha256": "df91e878cf5224c166201e45c10687744e6600b7b2122b5502016e2d1ee5c761",
+      "bytes": 4843281
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_05-41-40_candidate-v2-spawn-fixed/events.out.tfevents.1793338903.spark-291e.8907.0",
+      "sha256": "7f8ed1db66ab29360a8f3788e2ed6b7c196ff4ba47fb1b5d4e07d7e38f73609e",
+      "bytes": 244114
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_05-41-40_candidate-v2-spawn-fixed/params/env.yaml",
+      "sha256": "7276d06b1b244536032861e6f19882c079c228d21b4759c3bb367ada1970aac9",
+      "bytes": 43193
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_05-41-40_candidate-v2-spawn-fixed/params/agent.yaml",
+      "sha256": "bfdaaa21dcd5f95d4b64189d119d6c7160f3e5b819777859270cd5d586d42b98",
+      "bytes": 1349
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_06-00-35_candidate-r2-stable-impact/events.out.tfevents.1793340045.spark-291e.34940.0",
+      "sha256": "489ecb1c0d22cba4dd964248bdb26ae2ef1fffb8c6277ec900264c666805ad5b",
+      "bytes": 90934
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_06-00-35_candidate-r2-stable-impact/params/env.yaml",
+      "sha256": "603d82a811c5c58da84261a29479fe3eb281cc5fc7c407be6f76e21fa1f34148",
+      "bytes": 43193
+    },
+    {
+      "path": "logs/rsl_rl/duckfu_dash/2026-10-30_06-00-35_candidate-r2-stable-impact/params/agent.yaml",
+      "sha256": "bdd6ef5c3396a90df6c14b01939b9ac15b251b671a6b02870c963a3bbb89e5d7",
+      "bytes": 1347
+    }
+  ],
+  "candidate_models": {
+    "policies/candidates/duckfu_dash_149.onnx": "c93d49cce3d939d41e5b62d869b0f32766eba0547fb273ed8e3eeb56089bcb0c",
+    "policies/candidates/duckfu_dash_r1_50.onnx": "262eaad5afd755296c6b860a676d72026c1d66ed79bcf71eedc21109f7d270eb",
+    "policies/candidates/duckfu_dash_r2_50.onnx": "c86d22896184a6405ffac9e028ed6169a4d7ccd61353520a423161e1352b529d"
+  },
+  "promotion": "NONE",
+  "notes": [
+    "Full checkpoints include actor/critic/normalizer; original walking optimizer was not resumed.",
+    "Smoke-template critic initializes each new objective; optimizer state is reset.",
+    "No Release/tag publication."
+  ]
+}
