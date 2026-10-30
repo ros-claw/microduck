@@ -1,0 +1,2479 @@
+{
+  "schema": "duckfu.diagnosis-batch.v1",
+  "selection": "10 purposive old runs, now development data; no fresh holdout claim",
+  "runs": [
+    {
+      "file": "00-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/rule/rule_pressure/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.5000000000000009,
+            "approach_orbit:ACTIVE": 13.219999999999807,
+            "dash_bump:WINDUP": 3.960000000000003,
+            "dash_bump:ACTIVE": 15.019999999999769,
+            "dash_bump:RECOVERY": 7.839999999999921,
+            "recover_guard:STABILIZE": 1.4600000000000009,
+            "retreat:ACTIVE": 2.0000000000000013
+          },
+          "state_seconds": {
+            "standing_low_motion": 6.01999999999996,
+            "free_motion": 36.80000000000015,
+            "standing_contact": 0.7200000000000003,
+            "recovering": 1.1400000000000006,
+            "down_or_recovering": 0.32
+          },
+          "decisions": {
+            "0": 47,
+            "3": 11,
+            "8": 4
+          },
+          "end_reasons": {
+            "COMPLETE": 35,
+            "PUBLIC_THREAT_REPLAN": 25,
+            "RECOVERY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 57,
+            "1": 62,
+            "2": 62,
+            "3": 11,
+            "4": 59,
+            "5": 59,
+            "6": 62,
+            "7": 62,
+            "8": 59
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.319999999999953,
+            "not_facing": 1.0600000000000005
+          },
+          "reward": {
+            "total": 1.7579599999999935,
+            "terminal": 0.0,
+            "legacy_contact_reward": 1.7999999999999998,
+            "residual_time_or_new_components": -0.042040000000006295,
+            "discounted_transition_sum": 1.289853580384452,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 47,
+              "median_s": 0.35999999999999943,
+              "p90_s": 0.4000000000000011,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 11,
+              "median_s": 2.52,
+              "p90_s": 3.1400000000000006,
+              "max_s": 3.1799999999999997
+            },
+            "8": {
+              "count": 4,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.5000000000000009,
+            "approach_orbit:ACTIVE": 11.63999999999984,
+            "dash_bump:WINDUP": 3.960000000000003,
+            "dash_bump:ACTIVE": 15.379999999999761,
+            "dash_bump:RECOVERY": 9.019999999999897,
+            "retreat:ACTIVE": 3.5000000000000027
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.51999999999997,
+            "free_motion": 38.74000000000046,
+            "standing_contact": 0.7200000000000003,
+            "down_or_recovering": 0.02
+          },
+          "decisions": {
+            "0": 42,
+            "3": 11,
+            "8": 7
+          },
+          "end_reasons": {
+            "COMPLETE": 35,
+            "PUBLIC_THREAT_REPLAN": 24,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 54,
+            "1": 60,
+            "2": 60,
+            "3": 11,
+            "4": 57,
+            "5": 57,
+            "6": 60,
+            "7": 60,
+            "8": 56
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.079999999999958,
+            "not_facing": 0.23999999999999996,
+            "outside_attack_distance": 0.06
+          },
+          "reward": {
+            "total": 2.0564999999999887,
+            "terminal": 0.0,
+            "legacy_contact_reward": 2.1,
+            "residual_time_or_new_components": -0.04350000000001142,
+            "discounted_transition_sum": 1.5022491132561242,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 42,
+              "median_s": 0.31000000000000005,
+              "p90_s": 0.40000000000000013,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 11,
+              "median_s": 2.7799999999999994,
+              "p90_s": 3.0200000000000005,
+              "max_s": 3.3400000000000034
+            },
+            "8": {
+              "count": 7,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "01-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/rule/rule_counter/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.9600000000000013,
+            "approach_orbit:ACTIVE": 9.879999999999878,
+            "dash_bump:WINDUP": 2.1600000000000015,
+            "dash_bump:ACTIVE": 7.019999999999938,
+            "dash_bump:RECOVERY": 5.4599999999999715,
+            "retreat:ACTIVE": 7.999999999999917,
+            "center:ACTIVE": 10.019999999999875,
+            "brace_rebound:ACTIVE": 0.5000000000000001
+          },
+          "state_seconds": {
+            "standing_low_motion": 3.6000000000000028,
+            "free_motion": 41.08000000000082,
+            "standing_contact": 0.32
+          },
+          "decisions": {
+            "0": 19,
+            "3": 6,
+            "8": 16,
+            "7": 21,
+            "1": 7,
+            "6": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 58,
+            "PUBLIC_THREAT_REPLAN": 11,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 34,
+            "1": 46,
+            "2": 70,
+            "3": 6,
+            "4": 43,
+            "5": 67,
+            "6": 70,
+            "7": 70,
+            "8": 41
+          },
+          "missed_reference_opportunity_seconds": {
+            "not_facing": 0.04,
+            "locked_brake_recovery": 0.5000000000000001
+          },
+          "reward": {
+            "total": 0.556959999999997,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.6,
+            "residual_time_or_new_components": -0.043040000000002965,
+            "discounted_transition_sum": 0.44969044564068855,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 19,
+              "median_s": 0.40000000000000013,
+              "p90_s": 0.4000000000000007,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 6,
+              "median_s": 2.33,
+              "p90_s": 2.8000000000000003,
+              "max_s": 3.1799999999999997
+            },
+            "8": {
+              "count": 16,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 21,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 7,
+              "median_s": 0.5599999999999952,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "6": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.0600000000000014,
+            "approach_orbit:ACTIVE": 6.319999999999953,
+            "evade_step:ACTIVE": 10.919999999999856,
+            "evade_step:RECOVERY": 3.2600000000000025,
+            "center:ACTIVE": 10.999999999999854,
+            "retreat:ACTIVE": 8.939999999999898,
+            "dash_bump:WINDUP": 0.36000000000000004,
+            "dash_bump:ACTIVE": 1.4400000000000008,
+            "dash_bump:RECOVERY": 0.7000000000000003
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.339999999999974,
+            "free_motion": 39.34000000000055,
+            "standing_contact": 0.32
+          },
+          "decisions": {
+            "0": 13,
+            "5": 4,
+            "7": 20,
+            "8": 18,
+            "3": 1,
+            "4": 8,
+            "1": 4
+          },
+          "end_reasons": {
+            "COMPLETE": 61,
+            "PUBLIC_THREAT_REPLAN": 4,
+            "BOUNDARY_PREEMPTION": 2,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 35,
+            "1": 62,
+            "2": 62,
+            "3": 1,
+            "4": 59,
+            "5": 59,
+            "6": 68,
+            "7": 68,
+            "8": 40
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 1.9800000000000013,
+            "not_facing": 2.0000000000000013,
+            "locked_brake_recovery": 0.5400000000000001
+          },
+          "reward": {
+            "total": -0.041940000000000026,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.0,
+            "residual_time_or_new_components": -0.041940000000000026,
+            "discounted_transition_sum": -0.03043286981948375,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 13,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.4000000000000003,
+              "max_s": 0.40000000000000213
+            },
+            "5": {
+              "count": 4,
+              "median_s": 1.6300000000000008,
+              "p90_s": 2.4000000000000012,
+              "max_s": 2.460000000000001
+            },
+            "7": {
+              "count": 20,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 18,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5000000000000009
+            },
+            "3": {
+              "count": 1,
+              "median_s": 2.5,
+              "p90_s": 2.5,
+              "max_s": 2.5
+            },
+            "4": {
+              "count": 8,
+              "median_s": 0.9200000000000017,
+              "p90_s": 1.0339999999999991,
+              "max_s": 1.1600000000000001
+            },
+            "1": {
+              "count": 4,
+              "median_s": 0.5600000000000005,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "02-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/distilled/rule_pressure/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "WIN",
+        "winner": "BLUE",
+        "time_s": 43.08
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.4000000000000008,
+            "approach_orbit:ACTIVE": 10.379999999999868,
+            "evade_step:ACTIVE": 4.7599999999999865,
+            "evade_step:RECOVERY": 1.580000000000001,
+            "center:ACTIVE": 2.2800000000000016,
+            "dash_bump:WINDUP": 2.520000000000002,
+            "dash_bump:ACTIVE": 9.439999999999888,
+            "dash_bump:RECOVERY": 5.419999999999972,
+            "retreat:ACTIVE": 2.0000000000000013,
+            "recover_guard:STABILIZE": 3.3000000000000025
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.559999999999991,
+            "free_motion": 34.65999999999982,
+            "standing_contact": 0.5600000000000002,
+            "recovering": 1.520000000000001,
+            "down_or_recovering": 1.7800000000000011
+          },
+          "decisions": {
+            "0": 38,
+            "4": 6,
+            "7": 2,
+            "3": 7,
+            "8": 4,
+            "2": 2
+          },
+          "end_reasons": {
+            "COMPLETE": 28,
+            "PUBLIC_THREAT_REPLAN": 27,
+            "RECOVERY_PREEMPTION": 1,
+            "BOUNDARY_PREEMPTION": 3
+          },
+          "mask_available": {
+            "0": 56,
+            "1": 58,
+            "2": 46,
+            "3": 7,
+            "4": 54,
+            "5": 42,
+            "6": 59,
+            "7": 59,
+            "8": 31
+          },
+          "missed_reference_opportunity_seconds": {
+            "not_facing": 1.580000000000001,
+            "locked_brake_recovery": 3.740000000000003,
+            "locked_evade_or_handoff": 0.7200000000000003
+          },
+          "reward": {
+            "total": -2.1371000000000038,
+            "terminal": -3.0,
+            "legacy_contact_reward": 0.8999999999999999,
+            "residual_time_or_new_components": -0.037100000000003686,
+            "discounted_transition_sum": -0.8877599671220162,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 38,
+              "median_s": 0.22000000000000064,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000213
+            },
+            "4": {
+              "count": 6,
+              "median_s": 1.009999999999999,
+              "p90_s": 1.2400000000000009,
+              "max_s": 1.3800000000000003
+            },
+            "7": {
+              "count": 2,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "3": {
+              "count": 7,
+              "median_s": 2.740000000000002,
+              "p90_s": 2.8799999999999986,
+              "max_s": 3.0
+            },
+            "8": {
+              "count": 4,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 2,
+              "median_s": 0.33000000000000007,
+              "p90_s": 0.49799999999999933,
+              "max_s": 0.5399999999999991
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.4600000000000009,
+            "approach_orbit:ACTIVE": 9.559999999999885,
+            "dash_bump:WINDUP": 3.6000000000000028,
+            "dash_bump:ACTIVE": 13.399999999999803,
+            "dash_bump:RECOVERY": 8.159999999999915,
+            "retreat:ACTIVE": 4.000000000000003,
+            "recover_guard:STABILIZE": 1.9000000000000012,
+            "center:ACTIVE": 1.0000000000000004
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.2399999999999975,
+            "free_motion": 36.32000000000008,
+            "standing_contact": 0.6200000000000002,
+            "recovering": 1.1600000000000006,
+            "down_or_recovering": 0.7400000000000003
+          },
+          "decisions": {
+            "0": 33,
+            "3": 10,
+            "8": 8,
+            "7": 2
+          },
+          "end_reasons": {
+            "COMPLETE": 33,
+            "PUBLIC_THREAT_REPLAN": 18,
+            "RECOVERY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 47,
+            "1": 47,
+            "2": 53,
+            "3": 10,
+            "4": 44,
+            "5": 50,
+            "6": 53,
+            "7": 53,
+            "8": 49
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 3.5800000000000027,
+            "not_facing": 0.1
+          },
+          "reward": {
+            "total": 5.060279999999989,
+            "terminal": 3.0,
+            "legacy_contact_reward": 2.1,
+            "residual_time_or_new_components": -0.03972000000001108,
+            "discounted_transition_sum": 3.049264866721243,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 33,
+              "median_s": 0.3200000000000003,
+              "p90_s": 0.4000000000000018,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 10,
+              "median_s": 2.459999999999999,
+              "p90_s": 3.136000000000004,
+              "max_s": 3.280000000000001
+            },
+            "8": {
+              "count": 8,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 2,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "03-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/distilled/rule_counter/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.700000000000001,
+            "approach_orbit:ACTIVE": 12.359999999999825,
+            "dash_bump:WINDUP": 2.880000000000002,
+            "dash_bump:ACTIVE": 8.159999999999915,
+            "dash_bump:RECOVERY": 6.93999999999994,
+            "evade_step:ACTIVE": 4.779999999999986,
+            "evade_step:RECOVERY": 1.620000000000001,
+            "center:ACTIVE": 1.0000000000000004,
+            "retreat:ACTIVE": 5.559999999999969
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.099999999999979,
+            "free_motion": 39.6400000000006,
+            "standing_contact": 0.25999999999999995
+          },
+          "decisions": {
+            "0": 28,
+            "3": 8,
+            "5": 1,
+            "4": 4,
+            "2": 2,
+            "7": 2,
+            "8": 12,
+            "1": 6
+          },
+          "end_reasons": {
+            "COMPLETE": 45,
+            "PUBLIC_THREAT_REPLAN": 17,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 53,
+            "1": 61,
+            "2": 57,
+            "3": 8,
+            "4": 58,
+            "5": 54,
+            "6": 63,
+            "7": 63,
+            "8": 60
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 0.7000000000000003
+          },
+          "reward": {
+            "total": 0.5566999999999975,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.6,
+            "residual_time_or_new_components": -0.04330000000000245,
+            "discounted_transition_sum": 0.4182283686822814,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 28,
+              "median_s": 0.3799999999999999,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000036
+            },
+            "3": {
+              "count": 8,
+              "median_s": 2.1799999999999984,
+              "p90_s": 2.475999999999999,
+              "max_s": 2.979999999999997
+            },
+            "5": {
+              "count": 1,
+              "median_s": 1.0,
+              "p90_s": 1.0,
+              "max_s": 1.0
+            },
+            "4": {
+              "count": 4,
+              "median_s": 1.330000000000001,
+              "p90_s": 1.6299999999999992,
+              "max_s": 1.7199999999999989
+            },
+            "2": {
+              "count": 2,
+              "median_s": 0.5599999999999996,
+              "p90_s": 0.5600000000000003,
+              "max_s": 0.5600000000000005
+            },
+            "7": {
+              "count": 2,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 12,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 6,
+              "median_s": 0.5600000000000023,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.8800000000000012,
+            "approach_orbit:ACTIVE": 9.939999999999877,
+            "evade_step:ACTIVE": 17.099999999999724,
+            "evade_step:RECOVERY": 4.799999999999986,
+            "center:ACTIVE": 5.659999999999967,
+            "retreat:ACTIVE": 3.5000000000000027,
+            "dash_bump:WINDUP": 0.36000000000000004,
+            "dash_bump:ACTIVE": 0.9400000000000005,
+            "dash_bump:RECOVERY": 0.8200000000000004
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.279999999999997,
+            "free_motion": 40.460000000000726,
+            "standing_contact": 0.25999999999999995
+          },
+          "decisions": {
+            "0": 28,
+            "5": 10,
+            "7": 9,
+            "8": 7,
+            "4": 6,
+            "3": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 52,
+            "PUBLIC_THREAT_REPLAN": 7,
+            "BOUNDARY_PREEMPTION": 2
+          },
+          "mask_available": {
+            "0": 54,
+            "1": 58,
+            "2": 56,
+            "3": 4,
+            "4": 55,
+            "5": 53,
+            "6": 61,
+            "7": 61,
+            "8": 48
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 2.840000000000002,
+            "not_facing": 2.680000000000002
+          },
+          "reward": {
+            "total": 0.25803999999999905,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.3,
+            "residual_time_or_new_components": -0.04196000000000094,
+            "discounted_transition_sum": 0.16628280719223093,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 28,
+              "median_s": 0.39999999999999925,
+              "p90_s": 0.4000000000000009,
+              "max_s": 0.40000000000000213
+            },
+            "5": {
+              "count": 10,
+              "median_s": 1.4400000000000004,
+              "p90_s": 1.9639999999999982,
+              "max_s": 2.3599999999999994
+            },
+            "7": {
+              "count": 9,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 7,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "4": {
+              "count": 6,
+              "median_s": 1.2300000000000022,
+              "p90_s": 1.6599999999999984,
+              "max_s": 1.6600000000000001
+            },
+            "3": {
+              "count": 1,
+              "median_s": 2.120000000000001,
+              "p90_s": 2.120000000000001,
+              "max_s": 2.120000000000001
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "04-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/learned/rule_pressure/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.540000000000001,
+            "approach_orbit:ACTIVE": 14.359999999999783,
+            "dash_bump:WINDUP": 3.2400000000000024,
+            "dash_bump:ACTIVE": 14.03999999999979,
+            "dash_bump:RECOVERY": 7.979999999999918,
+            "retreat:ACTIVE": 1.5000000000000009,
+            "evade_step:ACTIVE": 1.560000000000001,
+            "evade_step:RECOVERY": 0.7800000000000004
+          },
+          "state_seconds": {
+            "standing_low_motion": 6.2599999999999545,
+            "free_motion": 38.080000000000354,
+            "standing_contact": 0.6600000000000003
+          },
+          "decisions": {
+            "0": 47,
+            "3": 9,
+            "8": 3,
+            "2": 2,
+            "5": 2
+          },
+          "end_reasons": {
+            "COMPLETE": 37,
+            "PUBLIC_THREAT_REPLAN": 25,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 61,
+            "1": 59,
+            "2": 63,
+            "3": 9,
+            "4": 56,
+            "5": 60,
+            "6": 63,
+            "7": 63,
+            "8": 56
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.219999999999955,
+            "locked_evade_or_handoff": 0.5600000000000002,
+            "not_facing": 0.19999999999999998
+          },
+          "reward": {
+            "total": 1.7565399999999902,
+            "terminal": 0.0,
+            "legacy_contact_reward": 1.7999999999999998,
+            "residual_time_or_new_components": -0.0434600000000096,
+            "discounted_transition_sum": 1.2944971842506776,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 47,
+              "median_s": 0.33999999999999986,
+              "p90_s": 0.4000000000000011,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 9,
+              "median_s": 2.620000000000001,
+              "p90_s": 3.283999999999999,
+              "max_s": 3.539999999999999
+            },
+            "8": {
+              "count": 3,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 2,
+              "median_s": 0.5300000000000002,
+              "p90_s": 0.5540000000000005,
+              "max_s": 0.5600000000000005
+            },
+            "5": {
+              "count": 2,
+              "median_s": 1.17,
+              "p90_s": 1.3219999999999996,
+              "max_s": 1.3599999999999994
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.600000000000001,
+            "approach_orbit:ACTIVE": 14.099999999999788,
+            "dash_bump:WINDUP": 3.6000000000000028,
+            "dash_bump:ACTIVE": 15.219999999999764,
+            "dash_bump:RECOVERY": 8.479999999999908,
+            "center:ACTIVE": 1.5000000000000009,
+            "retreat:ACTIVE": 0.5000000000000001
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.879999999999963,
+            "free_motion": 38.46000000000041,
+            "standing_contact": 0.6600000000000003
+          },
+          "decisions": {
+            "0": 46,
+            "3": 10,
+            "7": 3,
+            "8": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 40,
+            "PUBLIC_THREAT_REPLAN": 19,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 59,
+            "1": 55,
+            "2": 60,
+            "3": 10,
+            "4": 52,
+            "5": 57,
+            "6": 60,
+            "7": 60,
+            "8": 50
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.239999999999955,
+            "not_facing": 0.38000000000000006
+          },
+          "reward": {
+            "total": 2.056599999999991,
+            "terminal": 0.0,
+            "legacy_contact_reward": 2.1,
+            "residual_time_or_new_components": -0.04340000000000899,
+            "discounted_transition_sum": 1.4429974202599187,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 46,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 10,
+              "median_s": 2.59,
+              "p90_s": 3.289999999999998,
+              "max_s": 3.5599999999999987
+            },
+            "7": {
+              "count": 3,
+              "median_s": 0.5,
+              "p90_s": 0.5000000000000014,
+              "max_s": 0.5000000000000018
+            },
+            "8": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "05-40001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-holdout-40001/learned/rule_counter/00-0",
+      "seed": 40001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.8600000000000012,
+            "approach_orbit:ACTIVE": 12.459999999999823,
+            "dash_bump:WINDUP": 2.520000000000002,
+            "dash_bump:ACTIVE": 6.759999999999944,
+            "dash_bump:RECOVERY": 5.819999999999964,
+            "center:ACTIVE": 6.999999999999939,
+            "retreat:ACTIVE": 6.999999999999939,
+            "evade_step:ACTIVE": 1.3000000000000007,
+            "evade_step:RECOVERY": 0.27999999999999997
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.000000000000003,
+            "free_motion": 40.9400000000008,
+            "standing_contact": 0.06
+          },
+          "decisions": {
+            "0": 33,
+            "3": 7,
+            "2": 9,
+            "7": 13,
+            "8": 14,
+            "4": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 52,
+            "PUBLIC_THREAT_REPLAN": 23,
+            "BOUNDARY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 60,
+            "1": 74,
+            "2": 50,
+            "3": 7,
+            "4": 71,
+            "5": 47,
+            "6": 77,
+            "7": 77,
+            "8": 64
+          },
+          "missed_reference_opportunity_seconds": {},
+          "reward": {
+            "total": 0.2573599999999988,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.3,
+            "residual_time_or_new_components": -0.04264000000000118,
+            "discounted_transition_sum": 0.13101750337491488,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 33,
+              "median_s": 0.2999999999999998,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 7,
+              "median_s": 2.2399999999999984,
+              "p90_s": 2.315999999999999,
+              "max_s": 2.3399999999999963
+            },
+            "2": {
+              "count": 9,
+              "median_s": 0.46000000000000085,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "7": {
+              "count": 13,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5000000000000018
+            },
+            "8": {
+              "count": 14,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "4": {
+              "count": 1,
+              "median_s": 1.5800000000000018,
+              "p90_s": 1.5800000000000018,
+              "max_s": 1.5800000000000018
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.0800000000000014,
+            "approach_orbit:ACTIVE": 7.359999999999931,
+            "evade_step:ACTIVE": 11.359999999999847,
+            "evade_step:RECOVERY": 4.279999999999997,
+            "center:ACTIVE": 12.499999999999822,
+            "retreat:ACTIVE": 6.499999999999949,
+            "dash_bump:WINDUP": 0.36000000000000004,
+            "dash_bump:ACTIVE": 0.5600000000000002
+          },
+          "state_seconds": {
+            "standing_low_motion": 3.980000000000003,
+            "free_motion": 40.960000000000804,
+            "standing_contact": 0.06
+          },
+          "decisions": {
+            "0": 16,
+            "5": 9,
+            "7": 25,
+            "8": 13,
+            "2": 4,
+            "4": 2,
+            "3": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 64,
+            "PUBLIC_THREAT_REPLAN": 5,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 49,
+            "1": 62,
+            "2": 55,
+            "3": 3,
+            "4": 59,
+            "5": 52,
+            "6": 70,
+            "7": 70,
+            "8": 39
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 2.920000000000002,
+            "not_facing": 1.7800000000000011
+          },
+          "reward": {
+            "total": -0.04292000000000003,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.0,
+            "residual_time_or_new_components": -0.04292000000000003,
+            "discounted_transition_sum": -0.03112996400917739,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 16,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000213
+            },
+            "5": {
+              "count": 9,
+              "median_s": 1.1600000000000001,
+              "p90_s": 1.9520000000000024,
+              "max_s": 2.0800000000000054
+            },
+            "7": {
+              "count": 25,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 13,
+              "median_s": 0.5,
+              "p90_s": 0.5000000000000007,
+              "max_s": 0.5000000000000036
+            },
+            "2": {
+              "count": 4,
+              "median_s": 0.559999999999997,
+              "p90_s": 0.5600000000000012,
+              "max_s": 0.5600000000000023
+            },
+            "4": {
+              "count": 2,
+              "median_s": 1.8399999999999999,
+              "p90_s": 1.9360000000000006,
+              "max_s": 1.9600000000000009
+            },
+            "3": {
+              "count": 1,
+              "median_s": 0.9200000000000017,
+              "p90_s": 0.9200000000000017,
+              "max_s": 0.9200000000000017
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "06-50001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-holdout-50001/team_learned/rule_pressure/00-0",
+      "seed": 50001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.8000000000000012,
+            "approach_orbit:ACTIVE": 12.419999999999824,
+            "dash_bump:WINDUP": 4.679999999999988,
+            "dash_bump:ACTIVE": 19.419999999999675,
+            "dash_bump:RECOVERY": 13.179999999999808,
+            "retreat:ACTIVE": 4.999999999999981,
+            "center:ACTIVE": 3.5000000000000027
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.299999999999975,
+            "free_motion": 53.7400000000028,
+            "standing_contact": 0.9600000000000005
+          },
+          "decisions": {
+            "0": 22,
+            "3": 13,
+            "2": 4,
+            "8": 10,
+            "7": 7,
+            "1": 6
+          },
+          "end_reasons": {
+            "COMPLETE": 50,
+            "PUBLIC_THREAT_REPLAN": 11,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 34,
+            "1": 41,
+            "2": 62,
+            "3": 13,
+            "4": 38,
+            "5": 59,
+            "6": 62,
+            "7": 62,
+            "8": 44
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 4.379999999999995,
+            "attack_in_progress": 0.02,
+            "selector_did_not_attack_or_mask_blocked": 0.3,
+            "outside_attack_distance": 0.8000000000000004,
+            "not_facing": 0.23999999999999996
+          },
+          "reward": {
+            "total": 2.9417999999999815,
+            "terminal": 0.0,
+            "legacy_contact_reward": 3.0,
+            "residual_time_or_new_components": -0.05820000000001846,
+            "discounted_transition_sum": 2.0023065618880334,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 22,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000013,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 13,
+              "median_s": 2.9400000000000004,
+              "p90_s": 3.296000000000003,
+              "max_s": 3.5799999999999983
+            },
+            "2": {
+              "count": 4,
+              "median_s": 0.5600000000000023,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "8": {
+              "count": 10,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 7,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 6,
+              "median_s": 0.5600000000000023,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.1200000000000014,
+            "approach_orbit:ACTIVE": 6.979999999999939,
+            "dash_bump:WINDUP": 2.880000000000002,
+            "dash_bump:ACTIVE": 12.099999999999831,
+            "dash_bump:RECOVERY": 6.91999999999994,
+            "retreat:ACTIVE": 19.399999999999675,
+            "center:ACTIVE": 7.499999999999928,
+            "recover_guard:STABILIZE": 2.1000000000000014
+          },
+          "state_seconds": {
+            "standing_low_motion": 3.920000000000003,
+            "free_motion": 53.14000000000271,
+            "standing_contact": 0.8400000000000004,
+            "recovering": 1.9400000000000013,
+            "down_or_recovering": 0.16
+          },
+          "decisions": {
+            "0": 24,
+            "3": 8,
+            "8": 40,
+            "7": 14,
+            "1": 3
+          },
+          "end_reasons": {
+            "COMPLETE": 65,
+            "PUBLIC_THREAT_REPLAN": 21,
+            "BOUNDARY_PREEMPTION": 1,
+            "RECOVERY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 44,
+            "1": 89,
+            "2": 84,
+            "3": 9,
+            "4": 86,
+            "5": 81,
+            "6": 89,
+            "7": 89,
+            "8": 67
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 4.519999999999992,
+            "not_facing": 6.179999999999956,
+            "outside_attack_distance": 1.3600000000000008,
+            "selector_did_not_attack_or_mask_blocked": 0.1
+          },
+          "reward": {
+            "total": 1.4447199999999918,
+            "terminal": 0.0,
+            "legacy_contact_reward": 1.5,
+            "residual_time_or_new_components": -0.05528000000000821,
+            "discounted_transition_sum": 0.8943459551399975,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 24,
+              "median_s": 0.14000000000000057,
+              "p90_s": 0.3999999999999999,
+              "max_s": 0.40000000000000013
+            },
+            "3": {
+              "count": 8,
+              "median_s": 2.9099999999999993,
+              "p90_s": 3.0680000000000005,
+              "max_s": 3.3200000000000003
+            },
+            "8": {
+              "count": 40,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 14,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 3,
+              "median_s": 0.5599999999999987,
+              "p90_s": 0.5600000000000016,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "coral": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.9800000000000013,
+            "approach_orbit:ACTIVE": 21.199999999999637,
+            "dash_bump:WINDUP": 3.960000000000003,
+            "dash_bump:ACTIVE": 14.91999999999977,
+            "dash_bump:RECOVERY": 10.25999999999987,
+            "retreat:ACTIVE": 7.179999999999935,
+            "center:ACTIVE": 0.5000000000000001
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.979999999999982,
+            "free_motion": 54.3800000000029,
+            "standing_contact": 0.6400000000000002
+          },
+          "decisions": {
+            "0": 45,
+            "3": 11,
+            "2": 7,
+            "8": 15,
+            "7": 1,
+            "1": 10
+          },
+          "end_reasons": {
+            "COMPLETE": 58,
+            "PUBLIC_THREAT_REPLAN": 29,
+            "TARGET_ELIMINATED": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 59,
+            "1": 86,
+            "2": 82,
+            "3": 11,
+            "4": 79,
+            "5": 78,
+            "6": 89,
+            "7": 89,
+            "8": 73
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 2.780000000000002,
+            "not_facing": 1.0800000000000005,
+            "outside_attack_distance": 0.6000000000000002
+          },
+          "reward": {
+            "total": 2.0419799999999886,
+            "terminal": 0.0,
+            "legacy_contact_reward": 2.1,
+            "residual_time_or_new_components": -0.05802000000001151,
+            "discounted_transition_sum": 1.3782634722566842,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 45,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000213,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 11,
+              "median_s": 2.66,
+              "p90_s": 3.0,
+              "max_s": 3.1199999999999974
+            },
+            "2": {
+              "count": 7,
+              "median_s": 0.5599999999999952,
+              "p90_s": 0.5599999999999987,
+              "max_s": 0.5599999999999987
+            },
+            "8": {
+              "count": 15,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5000000000000036
+            },
+            "7": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 10,
+              "median_s": 0.4599999999999973,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "cyan": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.3400000000000007,
+            "approach_orbit:ACTIVE": 5.1799999999999775,
+            "dash_bump:WINDUP": 1.0800000000000005,
+            "dash_bump:ACTIVE": 4.060000000000001,
+            "dash_bump:RECOVERY": 2.620000000000002,
+            "retreat:ACTIVE": 5.499999999999971,
+            "center:ACTIVE": 1.5000000000000009,
+            "brace_rebound:ACTIVE": 1.0000000000000004,
+            "recover_guard:STABILIZE": 0.14,
+            "approach_orbit:ELIMINATED": 37.580000000000275
+          },
+          "state_seconds": {
+            "standing_low_motion": 2.2600000000000016,
+            "free_motion": 19.71999999999967,
+            "standing_contact": 0.3,
+            "recovering": 0.06,
+            "down_or_recovering": 0.08,
+            "eliminated": 37.580000000000275
+          },
+          "decisions": {
+            "0": 18,
+            "3": 3,
+            "8": 11,
+            "7": 2,
+            "6": 2
+          },
+          "end_reasons": {
+            "COMPLETE": 26,
+            "PUBLIC_THREAT_REPLAN": 10
+          },
+          "mask_available": {
+            "0": 25,
+            "1": 32,
+            "2": 36,
+            "3": 3,
+            "4": 28,
+            "5": 32,
+            "6": 36,
+            "7": 36,
+            "8": 25
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 2.1400000000000015,
+            "not_facing": 0.25999999999999995,
+            "outside_attack_distance": 0.21999999999999997,
+            "selector_did_not_attack_or_mask_blocked": 0.02
+          },
+          "reward": {
+            "total": 0.5795599999999973,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.6,
+            "residual_time_or_new_components": -0.020440000000002678,
+            "discounted_transition_sum": 0.5432752468774092,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 18,
+              "median_s": 0.3400000000000001,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000036
+            },
+            "3": {
+              "count": 3,
+              "median_s": 2.66,
+              "p90_s": 2.692,
+              "max_s": 2.7
+            },
+            "8": {
+              "count": 11,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 2,
+              "median_s": 19.29,
+              "p90_s": 34.322,
+              "max_s": 38.08
+            },
+            "6": {
+              "count": 2,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "07-50001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-holdout-50001/team_learned/rule_counter/00-0",
+      "seed": 50001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.720000000000001,
+            "approach_orbit:ACTIVE": 13.139999999999809,
+            "dash_bump:WINDUP": 4.679999999999988,
+            "dash_bump:ACTIVE": 17.579999999999714,
+            "dash_bump:RECOVERY": 11.619999999999841,
+            "retreat:ACTIVE": 9.499999999999886,
+            "recover_guard:STABILIZE": 1.7600000000000011
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.99999999999996,
+            "free_motion": 51.28000000000242,
+            "standing_contact": 0.9600000000000005,
+            "recovering": 0.8600000000000004,
+            "down_or_recovering": 0.9000000000000005
+          },
+          "decisions": {
+            "0": 33,
+            "3": 13,
+            "8": 19,
+            "1": 10,
+            "2": 4
+          },
+          "end_reasons": {
+            "COMPLETE": 46,
+            "PUBLIC_THREAT_REPLAN": 31,
+            "RECOVERY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 48,
+            "1": 77,
+            "2": 79,
+            "3": 13,
+            "4": 74,
+            "5": 76,
+            "6": 79,
+            "7": 79,
+            "8": 75
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 2.580000000000002,
+            "outside_attack_distance": 0.7400000000000003,
+            "selector_did_not_attack_or_mask_blocked": 0.36000000000000004,
+            "attack_in_progress": 1.4800000000000009,
+            "not_facing": 0.14
+          },
+          "reward": {
+            "total": 2.0434799999999895,
+            "terminal": 0.0,
+            "legacy_contact_reward": 2.1,
+            "residual_time_or_new_components": -0.05652000000001056,
+            "discounted_transition_sum": 1.3211818826444828,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 33,
+              "median_s": 0.22000000000000242,
+              "p90_s": 0.4000000000000003,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 13,
+              "median_s": 2.360000000000003,
+              "p90_s": 3.331999999999999,
+              "max_s": 3.54
+            },
+            "8": {
+              "count": 19,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 10,
+              "median_s": 0.34999999999999787,
+              "p90_s": 0.559999999999999,
+              "max_s": 0.5600000000000023
+            },
+            "2": {
+              "count": 4,
+              "median_s": 0.14000000000000057,
+              "p90_s": 0.37799999999999806,
+              "max_s": 0.4799999999999969
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.0400000000000014,
+            "approach_orbit:ACTIVE": 6.95999999999994,
+            "evade_step:ACTIVE": 15.199999999999765,
+            "evade_step:RECOVERY": 3.0600000000000023,
+            "center:ACTIVE": 6.999999999999939,
+            "retreat:ACTIVE": 8.999999999999897,
+            "dash_bump:WINDUP": 2.1600000000000015,
+            "dash_bump:ACTIVE": 8.579999999999906,
+            "dash_bump:RECOVERY": 5.99999999999996
+          },
+          "state_seconds": {
+            "standing_low_motion": 6.079999999999958,
+            "free_motion": 52.70000000000264,
+            "standing_contact": 1.2200000000000006
+          },
+          "decisions": {
+            "0": 16,
+            "4": 7,
+            "7": 13,
+            "8": 18,
+            "1": 1,
+            "3": 6,
+            "5": 4,
+            "2": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 61,
+            "PUBLIC_THREAT_REPLAN": 3,
+            "BOUNDARY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 38,
+            "1": 56,
+            "2": 62,
+            "3": 6,
+            "4": 53,
+            "5": 59,
+            "6": 66,
+            "7": 66,
+            "8": 51
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 2.960000000000002,
+            "not_facing": 2.4000000000000017,
+            "outside_attack_distance": 0.16,
+            "locked_brake_recovery": 2.4600000000000017,
+            "selector_did_not_attack_or_mask_blocked": 0.48000000000000015,
+            "attack_in_progress": 0.19999999999999998
+          },
+          "reward": {
+            "total": 1.4425399999999917,
+            "terminal": 0.0,
+            "legacy_contact_reward": 1.5,
+            "residual_time_or_new_components": -0.05746000000000828,
+            "discounted_transition_sum": 0.9306464611371987,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 16,
+              "median_s": 0.39999999999999925,
+              "p90_s": 0.40000000000000213,
+              "max_s": 0.4000000000000057
+            },
+            "4": {
+              "count": 7,
+              "median_s": 1.62,
+              "p90_s": 1.7679999999999993,
+              "max_s": 1.7800000000000011
+            },
+            "7": {
+              "count": 13,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 18,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 1,
+              "median_s": 0.5599999999999987,
+              "p90_s": 0.5599999999999987,
+              "max_s": 0.5599999999999987
+            },
+            "3": {
+              "count": 6,
+              "median_s": 2.6699999999999964,
+              "p90_s": 3.1499999999999995,
+              "max_s": 3.26
+            },
+            "5": {
+              "count": 4,
+              "median_s": 2.179999999999998,
+              "p90_s": 2.274,
+              "max_s": 2.280000000000001
+            },
+            "2": {
+              "count": 1,
+              "median_s": 0.37999999999999545,
+              "p90_s": 0.37999999999999545,
+              "max_s": 0.37999999999999545
+            }
+          }
+        },
+        "coral": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.2400000000000015,
+            "approach_orbit:ACTIVE": 21.159999999999638,
+            "dash_bump:WINDUP": 2.880000000000002,
+            "dash_bump:ACTIVE": 8.599999999999905,
+            "dash_bump:RECOVERY": 6.379999999999952,
+            "recover_guard:STABILIZE": 1.9000000000000012,
+            "retreat:ACTIVE": 7.999999999999917,
+            "center:ACTIVE": 8.8399999999999
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.199999999999998,
+            "free_motion": 53.16000000000271,
+            "standing_contact": 0.7400000000000003,
+            "recovering": 1.1000000000000005,
+            "down_or_recovering": 0.8000000000000004
+          },
+          "decisions": {
+            "0": 29,
+            "3": 8,
+            "8": 16,
+            "2": 21,
+            "7": 15,
+            "1": 5
+          },
+          "end_reasons": {
+            "COMPLETE": 69,
+            "PUBLIC_THREAT_REPLAN": 22,
+            "RECOVERY_PREEMPTION": 1,
+            "BOUNDARY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 49,
+            "1": 91,
+            "2": 62,
+            "3": 8,
+            "4": 88,
+            "5": 59,
+            "6": 94,
+            "7": 94,
+            "8": 77
+          },
+          "missed_reference_opportunity_seconds": {},
+          "reward": {
+            "total": 1.1456399999999944,
+            "terminal": 0.0,
+            "legacy_contact_reward": 1.2,
+            "residual_time_or_new_components": -0.054360000000005515,
+            "discounted_transition_sum": 0.790212230733092,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 29,
+              "median_s": 0.379999999999999,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000036
+            },
+            "3": {
+              "count": 8,
+              "median_s": 2.2199999999999998,
+              "p90_s": 2.5020000000000007,
+              "max_s": 2.8800000000000026
+            },
+            "8": {
+              "count": 16,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 21,
+              "median_s": 0.5599999999999987,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "7": {
+              "count": 15,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "1": {
+              "count": 5,
+              "median_s": 0.13999999999999702,
+              "p90_s": 0.5599999999999994,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "cyan": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.3200000000000016,
+            "approach_orbit:ACTIVE": 9.639999999999883,
+            "evade_step:ACTIVE": 20.379999999999654,
+            "evade_step:RECOVERY": 5.659999999999967,
+            "center:ACTIVE": 16.999999999999726,
+            "brace_rebound:ACTIVE": 0.5000000000000001,
+            "retreat:ACTIVE": 4.499999999999992
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.59999999999999,
+            "free_motion": 54.32000000000289,
+            "standing_contact": 1.0800000000000005
+          },
+          "decisions": {
+            "0": 21,
+            "5": 12,
+            "7": 30,
+            "6": 1,
+            "2": 4,
+            "8": 9,
+            "4": 5,
+            "1": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 72,
+            "PUBLIC_THREAT_REPLAN": 7,
+            "BOUNDARY_PREEMPTION": 3,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 49,
+            "1": 65,
+            "2": 73,
+            "3": 0,
+            "4": 62,
+            "5": 70,
+            "6": 83,
+            "7": 83,
+            "8": 42
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 3.920000000000003,
+            "not_facing": 1.8400000000000012
+          },
+          "reward": {
+            "total": -0.05568000000000005,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.0,
+            "residual_time_or_new_components": -0.05568000000000005,
+            "discounted_transition_sum": -0.03675719281355325,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 21,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.4000000000000057
+            },
+            "5": {
+              "count": 12,
+              "median_s": 1.0300000000000007,
+              "p90_s": 1.8579999999999994,
+              "max_s": 2.299999999999997
+            },
+            "7": {
+              "count": 30,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5000000000000009
+            },
+            "6": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 4,
+              "median_s": 0.5599999999999996,
+              "p90_s": 0.5600000000000017,
+              "max_s": 0.5600000000000023
+            },
+            "8": {
+              "count": 9,
+              "median_s": 0.5,
+              "p90_s": 0.5000000000000007,
+              "max_s": 0.5000000000000036
+            },
+            "4": {
+              "count": 5,
+              "median_s": 2.2799999999999976,
+              "p90_s": 2.9120000000000004,
+              "max_s": 3.280000000000001
+            },
+            "1": {
+              "count": 1,
+              "median_s": 0.17999999999999972,
+              "p90_s": 0.17999999999999972,
+              "max_s": 0.17999999999999972
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "08-32001.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/duel-final-reference-v2-32001",
+      "seed": 32001,
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 45.0
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.9400000000000013,
+            "approach_orbit:ACTIVE": 10.099999999999874,
+            "dash_bump:WINDUP": 2.520000000000002,
+            "dash_bump:ACTIVE": 7.279999999999933,
+            "dash_bump:RECOVERY": 5.939999999999961,
+            "retreat:ACTIVE": 9.719999999999882,
+            "center:ACTIVE": 7.499999999999928
+          },
+          "state_seconds": {
+            "standing_low_motion": 3.740000000000003,
+            "free_motion": 40.68000000000076,
+            "standing_contact": 0.5800000000000002
+          },
+          "decisions": {
+            "0": 25,
+            "3": 7,
+            "8": 20,
+            "2": 5,
+            "7": 12
+          },
+          "end_reasons": {
+            "COMPLETE": 54,
+            "PUBLIC_THREAT_REPLAN": 13,
+            "BOUNDARY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 46,
+            "1": 68,
+            "2": 57,
+            "3": 7,
+            "4": 65,
+            "5": 54,
+            "6": 69,
+            "7": 69,
+            "8": 57
+          },
+          "missed_reference_opportunity_seconds": {
+            "not_facing": 0.25999999999999995,
+            "locked_brake_recovery": 0.32
+          },
+          "reward": {
+            "total": 0.5584399999999969,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.6,
+            "residual_time_or_new_components": -0.04156000000000304,
+            "discounted_transition_sum": 0.4216742141527157,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 25,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000036
+            },
+            "3": {
+              "count": 7,
+              "median_s": 2.28,
+              "p90_s": 2.7199999999999998,
+              "max_s": 2.900000000000002
+            },
+            "8": {
+              "count": 20,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 5,
+              "median_s": 0.5599999999999987,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "7": {
+              "count": 12,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.9600000000000013,
+            "approach_orbit:ACTIVE": 10.019999999999875,
+            "evade_step:ACTIVE": 13.259999999999806,
+            "evade_step:RECOVERY": 3.4600000000000026,
+            "center:ACTIVE": 9.999999999999876,
+            "retreat:ACTIVE": 4.000000000000003,
+            "dash_bump:WINDUP": 0.36000000000000004,
+            "dash_bump:ACTIVE": 1.2400000000000007,
+            "dash_bump:RECOVERY": 0.7000000000000003
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.14,
+            "free_motion": 40.2800000000007,
+            "standing_contact": 0.5800000000000002
+          },
+          "decisions": {
+            "0": 22,
+            "5": 10,
+            "7": 19,
+            "8": 8,
+            "4": 2,
+            "3": 1,
+            "1": 3,
+            "2": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 57,
+            "PUBLIC_THREAT_REPLAN": 7,
+            "BOUNDARY_PREEMPTION": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 46,
+            "1": 55,
+            "2": 53,
+            "3": 2,
+            "4": 52,
+            "5": 50,
+            "6": 66,
+            "7": 66,
+            "8": 41
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_evade_or_handoff": 2.2400000000000015,
+            "not_facing": 2.4400000000000017,
+            "locked_brake_recovery": 0.3
+          },
+          "reward": {
+            "total": -0.042540000000000036,
+            "terminal": 0.0,
+            "legacy_contact_reward": 0.0,
+            "residual_time_or_new_components": -0.042540000000000036,
+            "discounted_transition_sum": -0.030978170120856765,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 22,
+              "median_s": 0.39999999999999925,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000213
+            },
+            "5": {
+              "count": 10,
+              "median_s": 1.31,
+              "p90_s": 1.8739999999999994,
+              "max_s": 2.0
+            },
+            "7": {
+              "count": 19,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "8": {
+              "count": 8,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "4": {
+              "count": 2,
+              "median_s": 1.3900000000000015,
+              "p90_s": 1.5100000000000011,
+              "max_s": 1.540000000000001
+            },
+            "3": {
+              "count": 1,
+              "median_s": 2.3000000000000007,
+              "p90_s": 2.3000000000000007,
+              "max_s": 2.3000000000000007
+            },
+            "1": {
+              "count": 3,
+              "median_s": 0.5599999999999987,
+              "p90_s": 0.5600000000000016,
+              "max_s": 0.5600000000000023
+            },
+            "2": {
+              "count": 1,
+              "median_s": 0.5600000000000023,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "09-50006.json.gz",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu/artifacts/combat/local/team-final-reference-v2-50006",
+      "seed": 50006,
+      "result": {
+        "kind": "WIN",
+        "winner": "RED",
+        "time_s": 49.92
+      },
+      "actors": {
+        "lavender": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.740000000000001,
+            "approach_orbit:ACTIVE": 16.199999999999743,
+            "dash_bump:WINDUP": 3.2400000000000024,
+            "dash_bump:ACTIVE": 13.619999999999798,
+            "dash_bump:RECOVERY": 7.099999999999937,
+            "retreat:ACTIVE": 4.499999999999992,
+            "recover_guard:STABILIZE": 1.520000000000001,
+            "center:ACTIVE": 2.0000000000000013
+          },
+          "state_seconds": {
+            "standing_low_motion": 4.57999999999999,
+            "free_motion": 42.640000000001066,
+            "standing_contact": 1.1800000000000006,
+            "recovering": 1.1800000000000006,
+            "down_or_recovering": 0.34
+          },
+          "decisions": {
+            "0": 23,
+            "3": 9,
+            "1": 14,
+            "8": 9,
+            "2": 3,
+            "7": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 44,
+            "PUBLIC_THREAT_REPLAN": 11,
+            "RECOVERY_PREEMPTION": 1,
+            "BOUNDARY_PREEMPTION": 2,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 38,
+            "1": 53,
+            "2": 43,
+            "3": 9,
+            "4": 49,
+            "5": 39,
+            "6": 59,
+            "7": 59,
+            "8": 40
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 1.720000000000001,
+            "not_facing": 0.8600000000000004
+          },
+          "reward": {
+            "total": 5.354839999999987,
+            "terminal": 3.0,
+            "legacy_contact_reward": 2.4,
+            "residual_time_or_new_components": -0.04516000000001297,
+            "discounted_transition_sum": 3.065815434832164,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 23,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.40000000000000036,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 9,
+              "median_s": 2.84,
+              "p90_s": 3.260000000000005,
+              "max_s": 3.5799999999999983
+            },
+            "1": {
+              "count": 14,
+              "median_s": 0.5600000000000009,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            },
+            "8": {
+              "count": 9,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 3,
+              "median_s": 0.5600000000000005,
+              "p90_s": 0.5600000000000019,
+              "max_s": 0.5600000000000023
+            },
+            "7": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        },
+        "cream": {
+          "phase_seconds": {
+            "approach_orbit:READY": 2.2800000000000016,
+            "approach_orbit:ACTIVE": 12.719999999999818,
+            "dash_bump:WINDUP": 1.4400000000000008,
+            "dash_bump:ACTIVE": 4.739999999999987,
+            "dash_bump:RECOVERY": 3.1000000000000023,
+            "retreat:ACTIVE": 12.499999999999822,
+            "center:ACTIVE": 13.019999999999811,
+            "recover_guard:STABILIZE": 0.12000000000000001
+          },
+          "state_seconds": {
+            "standing_low_motion": 2.780000000000002,
+            "free_motion": 45.84000000000157,
+            "standing_contact": 1.1800000000000006,
+            "recovering": 0.04,
+            "down_or_recovering": 0.08
+          },
+          "decisions": {
+            "0": 30,
+            "3": 4,
+            "8": 25,
+            "7": 24,
+            "1": 9
+          },
+          "end_reasons": {
+            "COMPLETE": 72,
+            "PUBLIC_THREAT_REPLAN": 19,
+            "BOUNDARY_PREEMPTION": 1
+          },
+          "mask_available": {
+            "0": 45,
+            "1": 88,
+            "2": 88,
+            "3": 6,
+            "4": 84,
+            "5": 84,
+            "6": 92,
+            "7": 92,
+            "8": 55
+          },
+          "missed_reference_opportunity_seconds": {
+            "not_facing": 3.2200000000000024,
+            "locked_brake_recovery": 1.4400000000000008,
+            "outside_attack_distance": 0.9200000000000005
+          },
+          "reward": {
+            "total": -2.146500000000004,
+            "terminal": -3.0,
+            "legacy_contact_reward": 0.8999999999999999,
+            "residual_time_or_new_components": -0.04650000000000398,
+            "discounted_transition_sum": -0.7150681426041189,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 30,
+              "median_s": 0.3999999999999986,
+              "p90_s": 0.3999999999999999,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 4,
+              "median_s": 2.3,
+              "p90_s": 2.617999999999999,
+              "max_s": 2.719999999999999
+            },
+            "8": {
+              "count": 25,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 24,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5000000000000036
+            },
+            "1": {
+              "count": 9,
+              "median_s": 0.5599999999999952,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "coral": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.580000000000001,
+            "approach_orbit:ACTIVE": 14.359999999999783,
+            "dash_bump:WINDUP": 3.960000000000003,
+            "dash_bump:ACTIVE": 17.119999999999724,
+            "dash_bump:RECOVERY": 10.399999999999867,
+            "retreat:ACTIVE": 1.0000000000000004,
+            "center:ACTIVE": 1.5000000000000009
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.53999999999997,
+            "free_motion": 43.660000000001226,
+            "standing_contact": 0.7200000000000003
+          },
+          "decisions": {
+            "0": 41,
+            "3": 11,
+            "8": 2,
+            "2": 7
+          },
+          "end_reasons": {
+            "COMPLETE": 35,
+            "PUBLIC_THREAT_REPLAN": 23,
+            "BOUNDARY_PREEMPTION": 1,
+            "TARGET_ELIMINATED": 1,
+            "EPISODE_END": 1
+          },
+          "mask_available": {
+            "0": 58,
+            "1": 47,
+            "2": 61,
+            "3": 11,
+            "4": 37,
+            "5": 51,
+            "6": 61,
+            "7": 61,
+            "8": 41
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.859999999999942,
+            "not_facing": 1.3400000000000007,
+            "outside_attack_distance": 0.16
+          },
+          "reward": {
+            "total": 4.453159999999992,
+            "terminal": 3.0,
+            "legacy_contact_reward": 1.5,
+            "residual_time_or_new_components": -0.04684000000000843,
+            "discounted_transition_sum": 2.4327573258564112,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 41,
+              "median_s": 0.379999999999999,
+              "p90_s": 0.40000000000000213,
+              "max_s": 0.4000000000000057
+            },
+            "3": {
+              "count": 11,
+              "median_s": 2.740000000000002,
+              "p90_s": 3.1999999999999993,
+              "max_s": 3.5600000000000005
+            },
+            "8": {
+              "count": 2,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "2": {
+              "count": 7,
+              "median_s": 0.33999999999999986,
+              "p90_s": 0.5600000000000023,
+              "max_s": 0.5600000000000023
+            }
+          }
+        },
+        "cyan": {
+          "phase_seconds": {
+            "approach_orbit:READY": 1.4200000000000008,
+            "approach_orbit:ACTIVE": 11.519999999999843,
+            "dash_bump:WINDUP": 3.960000000000003,
+            "dash_bump:ACTIVE": 18.419999999999696,
+            "dash_bump:RECOVERY": 9.79999999999988,
+            "retreat:ACTIVE": 1.5000000000000009,
+            "center:ACTIVE": 1.0800000000000005,
+            "approach_orbit:ELIMINATED": 2.2200000000000015
+          },
+          "state_seconds": {
+            "standing_low_motion": 5.719999999999966,
+            "free_motion": 41.26000000000085,
+            "standing_contact": 0.7200000000000003,
+            "eliminated": 2.2200000000000015
+          },
+          "decisions": {
+            "0": 39,
+            "3": 11,
+            "8": 3,
+            "7": 1
+          },
+          "end_reasons": {
+            "COMPLETE": 30,
+            "PUBLIC_THREAT_REPLAN": 23,
+            "BOUNDARY_PREEMPTION": 1
+          },
+          "mask_available": {
+            "0": 51,
+            "1": 54,
+            "2": 46,
+            "3": 11,
+            "4": 50,
+            "5": 42,
+            "6": 54,
+            "7": 54,
+            "8": 50
+          },
+          "missed_reference_opportunity_seconds": {
+            "locked_brake_recovery": 6.739999999999944,
+            "not_facing": 1.5000000000000009,
+            "attack_in_progress": 0.02,
+            "selector_did_not_attack_or_mask_blocked": 0.21999999999999997,
+            "outside_attack_distance": 0.27999999999999997
+          },
+          "reward": {
+            "total": -0.6457000000000145,
+            "terminal": -3.0,
+            "legacy_contact_reward": 2.4,
+            "residual_time_or_new_components": -0.045700000000014285,
+            "discounted_transition_sum": 0.1739053304841899,
+            "discounted_note": "Transition-start approximation; old logs lack within-transition reward timestamps."
+          },
+          "duration_by_action": {
+            "0": {
+              "count": 39,
+              "median_s": 0.35999999999999943,
+              "p90_s": 0.40000000000000213,
+              "max_s": 0.40000000000000213
+            },
+            "3": {
+              "count": 11,
+              "median_s": 2.980000000000002,
+              "p90_s": 3.5600000000000023,
+              "max_s": 4.920000000000002
+            },
+            "8": {
+              "count": 3,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            },
+            "7": {
+              "count": 1,
+              "median_s": 0.5,
+              "p90_s": 0.5,
+              "max_s": 0.5
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -14,6 +14,18 @@ from microduck_lab.combat.episode import run, write_json
 from probe_combat_transition import summarize
 
 
+def qualifies_intervention(
+    delay_s, progress_m, role, current_target, requested_target, plan_matches
+):
+    return bool(
+        delay_s >= 0.12
+        and progress_m >= 0.03
+        and role == "PEEL"
+        and current_target == requested_target
+        and plan_matches
+    )
+
+
 def analyze_team(directory):
     directory = Path(directory)
     m = json.loads((directory / "manifest.json").read_text())
@@ -57,6 +69,48 @@ def analyze_team(directory):
         ]
         contact = min(contacts, key=lambda e: e["start_step"]) if contacts else None
         time = contact["start_step"] * dt if contact else change["time_s"]
+        progress, role, current_target, plan_matches = 0.0, None, None, False
+        if contact:
+            first = frames[round(change["time_s"] * 50) * round(0.02 / dt)]
+            last = frames[int(time * 50) * round(0.02 / dt)]
+            delta = (
+                np.array(first[target]["observation"]["xy"])
+                - first[actor]["observation"]["xy"]
+            )
+            delta /= max(1e-9, np.linalg.norm(delta))
+            progress = float(
+                (
+                    np.array(last[actor]["observation"]["xy"])
+                    - first[actor]["observation"]["xy"]
+                )
+                @ delta
+            )
+            role, current_target = last[actor].get("role"), last[actor].get("target")
+            current_plans = [
+                e
+                for e in events
+                if e["state"] == "TEAM_PLAN"
+                and e["time_s"] <= time
+                and actor in e.get("assignments", {})
+            ]
+            if current_plans:
+                assignment = current_plans[-1]["assignments"][actor]
+                plan_matches = (
+                    assignment["role"] == "PEEL"
+                    and assignment["target"] == target
+                    and assignment.get("protected") == protected
+                )
+        qualified = bool(
+            contact
+            and qualifies_intervention(
+                time - change["time_s"],
+                progress,
+                role,
+                current_target,
+                target,
+                plan_matches,
+            )
+        )
         proximity = {}
         for label, start, end in [
             ("before", time - 0.6, time),
@@ -83,11 +137,13 @@ def analyze_team(directory):
             proximity["before_seconds"] >= 0.58 and proximity["after_seconds"] >= 0.98
         )
         relief = bool(
-            contact and full and proximity["after"] < proximity["before"] - 0.1
+            qualified and full and proximity["after"] < proximity["before"] - 0.1
         )
         interventions.append(
             dict(
                 state="TEAM_INTERVENTION"
+                if qualified
+                else "UNRESOLVED_PLANNED_CONTACT"
                 if contact
                 else "RETARGET_WITHOUT_QUALIFIED_CONTACT",
                 actor=actor,
@@ -101,8 +157,14 @@ def analyze_team(directory):
                 if contact
                 else None,
                 pressure_proximity=proximity,
+                intervention_schema="duckfu.team-intervention.v2",
+                actor_progress_toward_initial_target_m=progress,
+                contact_delay_s=time - change["time_s"] if contact else None,
+                role_at_contact=role,
+                actual_target_at_contact=current_target,
+                current_plan_matches=plan_matches,
                 pressure_relief_observed=relief,
-                note="Planned target change plus new measured contact; proximity change is observational, not a saved-win counterfactual.",
+                note="Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual.",
             )
         )
     angular_seconds, longest, streak = 0.0, 0.0, 0.0

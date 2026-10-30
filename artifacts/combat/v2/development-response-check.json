@@ -1,0 +1,52 @@
+{
+  "schema": "duckfu.response-batch.v2",
+  "runs": [
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-course-r11/dynamic/83003-0",
+      "source_manifest_sha256": "8743602325d87078d044581c292906ef0c2c5a29b07d71021ad8106f6eaff49f",
+      "measurement_source_sha256": "449e0a85c9526490fb4d5b51ea72c9d9c129e36a62d4ce2c872c9458116888d5",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 4.554875,
+          "last_contact_s": 4.737,
+          "forward_impulse_Ns": 0.1220973399143168,
+          "response": {
+            "time_s": 4.8,
+            "displacement_m": 0.011111000822675928,
+            "stagger": false,
+            "attacker_upright": 0.9995908737182617,
+            "target_upright": 0.9999744892120361
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.05999999999999961,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:1",
+          "attack_id": "lavender:1",
+          "evade_s": 1.84,
+          "evade_active_end_s": 2.72,
+          "response_s": 4.8,
+          "latency_after_evade_s": 2.0799999999999996,
+          "after_active": true
+        }
+      ],
+      "limitations": [
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ]
+    }
+  ]
+}

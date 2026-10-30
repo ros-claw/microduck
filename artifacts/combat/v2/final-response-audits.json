@@ -1,0 +1,2271 @@
+{
+  "schema": "duckfu.response-batch.v2",
+  "runs": [
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91001-0",
+      "source_manifest_sha256": "a5ac3eabfed77871f95ed15abc2a194ee82be1ef32af9e0aff0925de09eb7205",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 2.926875,
+          "last_contact_s": 3.51825,
+          "forward_impulse_Ns": 0.5192768895937057,
+          "launch_s": 2.46,
+          "response": {
+            "time_s": 3.52,
+            "displacement_m": -0.05723764360274945,
+            "stagger": true,
+            "attacker_upright": 0.998881459236145,
+            "target_upright": 0.7610034942626953,
+            "known_forward_impulse_Ns": 0.5192768895937057
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 7.88225,
+          "last_contact_s": 8.20825,
+          "forward_impulse_Ns": 0.04961589940543107,
+          "launch_s": 7.18,
+          "response": {
+            "time_s": 7.96,
+            "displacement_m": 0.013336989631845987,
+            "stagger": false,
+            "attacker_upright": 0.9991787075996399,
+            "target_upright": 0.9978822469711304,
+            "known_forward_impulse_Ns": 0.04961589940543107
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 8.734375,
+          "last_contact_s": 9.27325,
+          "forward_impulse_Ns": 0.09162205274142213,
+          "launch_s": 8.86,
+          "response": {
+            "time_s": 9.24,
+            "displacement_m": 0.010455193750000341,
+            "stagger": false,
+            "attacker_upright": 0.9999299049377441,
+            "target_upright": 0.9999948143959045,
+            "known_forward_impulse_Ns": 0.09162205274142213
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 11.743500000000001,
+          "last_contact_s": 12.275500000000001,
+          "forward_impulse_Ns": 0.23151181278038507,
+          "launch_s": 11.16,
+          "response": {
+            "time_s": 11.84,
+            "displacement_m": 0.02528803852502471,
+            "stagger": false,
+            "attacker_upright": 0.9942042827606201,
+            "target_upright": 0.999190092086792,
+            "known_forward_impulse_Ns": 0.23151181278038507
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91001-0",
+      "source_manifest_sha256": "22a5e4c793b1d81628813319d37d15c455e714864e1ea438a2f9f64f493474cc",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 2.926875,
+          "last_contact_s": 3.51825,
+          "forward_impulse_Ns": 0.5192768895937057,
+          "launch_s": 2.46,
+          "response": {
+            "time_s": 3.52,
+            "displacement_m": -0.05723764360274945,
+            "stagger": true,
+            "attacker_upright": 0.998881459236145,
+            "target_upright": 0.7610034942626953,
+            "known_forward_impulse_Ns": 0.5192768895937057
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91001-0",
+      "source_manifest_sha256": "34c3d04ee344ca4f5313b449587b901fa21e09238d05c2123f77ef9b33cddaf6",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 12.610125,
+          "last_contact_s": 12.94375,
+          "forward_impulse_Ns": 0.08304537824024748,
+          "launch_s": 12.040000000000001,
+          "response": {
+            "time_s": 12.94,
+            "displacement_m": 0.010494495101059775,
+            "stagger": false,
+            "attacker_upright": 0.9992737174034119,
+            "target_upright": 0.9870391488075256,
+            "known_forward_impulse_Ns": 0.08304537824024748
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91001-1",
+      "source_manifest_sha256": "d005ee0da15ad3b93d4e861593c175211be10c642b1c4694379685f4197c2347",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 2.8885,
+          "last_contact_s": 3.79825,
+          "forward_impulse_Ns": 0.45513473788675096,
+          "launch_s": 2.48,
+          "response": {
+            "time_s": 3.72,
+            "displacement_m": 0.012254886420698018,
+            "stagger": false,
+            "attacker_upright": 0.998306930065155,
+            "target_upright": 0.9977742433547974,
+            "known_forward_impulse_Ns": 0.45513473788675096
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 5.4165,
+          "last_contact_s": 5.417,
+          "forward_impulse_Ns": 0.04578836158226356,
+          "launch_s": 5.0,
+          "response": {
+            "time_s": 5.46,
+            "displacement_m": 0.01120049729689497,
+            "stagger": false,
+            "attacker_upright": 0.9995296597480774,
+            "target_upright": 0.9999398589134216,
+            "known_forward_impulse_Ns": 0.04578836158226356
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 7.269375,
+          "last_contact_s": 7.86425,
+          "forward_impulse_Ns": 0.08610701236582267,
+          "launch_s": 6.86,
+          "response": {
+            "time_s": 7.36,
+            "displacement_m": 0.011673658771257384,
+            "stagger": false,
+            "attacker_upright": 0.9984666705131531,
+            "target_upright": 0.9982964396476746,
+            "known_forward_impulse_Ns": 0.08610701236582267
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 11.190875,
+          "last_contact_s": 11.57775,
+          "forward_impulse_Ns": 0.057533596045666074,
+          "launch_s": 10.68,
+          "response": {
+            "time_s": 11.32,
+            "displacement_m": 0.010413266724859104,
+            "stagger": false,
+            "attacker_upright": 0.9998797178268433,
+            "target_upright": 0.9999278783798218,
+            "known_forward_impulse_Ns": 0.057533596045666074
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91001-1",
+      "source_manifest_sha256": "c61e94f35959cfa931ed077e562cc4741e429023a09231fd3f266ae980e37cea",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 2.8885,
+          "last_contact_s": 3.79825,
+          "forward_impulse_Ns": 0.45513473788675096,
+          "launch_s": 2.48,
+          "response": {
+            "time_s": 3.72,
+            "displacement_m": 0.012254886420698018,
+            "stagger": false,
+            "attacker_upright": 0.998306930065155,
+            "target_upright": 0.9977742433547974,
+            "known_forward_impulse_Ns": 0.45513473788675096
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 5.4165,
+          "last_contact_s": 5.417,
+          "forward_impulse_Ns": 0.04578836158226356,
+          "launch_s": 5.0,
+          "response": {
+            "time_s": 5.46,
+            "displacement_m": 0.01120049729689497,
+            "stagger": false,
+            "attacker_upright": 0.9995296597480774,
+            "target_upright": 0.9999398589134216,
+            "known_forward_impulse_Ns": 0.04578836158226356
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 7.269375,
+          "last_contact_s": 7.454625,
+          "forward_impulse_Ns": 0.08610701236582267,
+          "launch_s": 6.86,
+          "response": {
+            "time_s": 7.36,
+            "displacement_m": 0.011673658771257384,
+            "stagger": false,
+            "attacker_upright": 0.9984666705131531,
+            "target_upright": 0.9982964396476746,
+            "known_forward_impulse_Ns": 0.08610701236582267
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91001-1",
+      "source_manifest_sha256": "63cdf5c13d5697e86688db49f498cea50906f911cfa6212572e7baba091ecacb",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 9.199125,
+          "last_contact_s": 9.686125,
+          "forward_impulse_Ns": 0.09074206286619216,
+          "launch_s": 8.58,
+          "response": {
+            "time_s": 9.32,
+            "displacement_m": 0.01164201969179773,
+            "stagger": false,
+            "attacker_upright": 0.9996379017829895,
+            "target_upright": 0.9995821714401245,
+            "known_forward_impulse_Ns": 0.09074206286619216
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91002-0",
+      "source_manifest_sha256": "fc0d75d5ef4e4d871d4dc57317b85a438a490f8813c481736a56535abce6b36d",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 6.784625,
+          "last_contact_s": 7.516125,
+          "forward_impulse_Ns": 0.25945759708820115,
+          "launch_s": 6.32,
+          "response": {
+            "time_s": 7.46,
+            "displacement_m": 0.0120898061977208,
+            "stagger": false,
+            "attacker_upright": 0.9993826746940613,
+            "target_upright": 0.9991440176963806,
+            "known_forward_impulse_Ns": 0.25945759708820115
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.040000000000000036,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.784625,
+          "last_contact_s": 7.909,
+          "forward_impulse_Ns": 0.5084749479074767,
+          "launch_s": 6.5600000000000005,
+          "response": {
+            "time_s": 8.06,
+            "displacement_m": 0.010604773212123518,
+            "stagger": false,
+            "attacker_upright": 0.9994875192642212,
+            "target_upright": 0.9995260238647461,
+            "known_forward_impulse_Ns": 0.5084749479074767
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.08000000000000007,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 12.996875000000001,
+          "last_contact_s": 12.997,
+          "forward_impulse_Ns": 0.026518211323250683,
+          "launch_s": 12.58,
+          "response": {
+            "time_s": 13.04,
+            "displacement_m": 0.01119779531416247,
+            "stagger": false,
+            "attacker_upright": 0.9997053146362305,
+            "target_upright": 0.9996305108070374,
+            "known_forward_impulse_Ns": 0.026518211323250683
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:3",
+          "attack_id": "lavender:3",
+          "evade_s": 10.4,
+          "evade_active_end_s": 11.0,
+          "response_s": 13.04,
+          "latency_after_evade_s": 2.039999999999999,
+          "after_active": false
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91002-0",
+      "source_manifest_sha256": "9ff10f417e1a6c068610e354450ebba25f411da6b38e587db130e30c48c3f00c",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 10.239875,
+          "last_contact_s": 10.637875000000001,
+          "forward_impulse_Ns": 0.25465704231924297,
+          "launch_s": 9.8,
+          "response": {
+            "time_s": 10.7,
+            "displacement_m": 0.01011281710292443,
+            "stagger": false,
+            "attacker_upright": 0.9996071457862854,
+            "target_upright": 0.9983205795288086,
+            "known_forward_impulse_Ns": 0.25465704231924297
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.09999999999999964,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:2",
+          "attack_id": "lavender:1",
+          "evade_s": 5.9,
+          "evade_active_end_s": 7.08,
+          "response_s": 10.7,
+          "latency_after_evade_s": 3.619999999999999,
+          "after_active": true
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91002-0",
+      "source_manifest_sha256": "b02cbf9a4cc6f79a0884ed5ca71ef0d1152b50bceddefb61e915990792f17af5",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.239,
+          "last_contact_s": 6.23975,
+          "forward_impulse_Ns": 0.25990237528452753,
+          "launch_s": 5.28,
+          "response": {
+            "time_s": 6.26,
+            "displacement_m": 0.015004689430617097,
+            "stagger": false,
+            "attacker_upright": 0.997031033039093,
+            "target_upright": 0.9999186396598816,
+            "known_forward_impulse_Ns": 0.25990237528452753
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.019999999999999574,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91002-1",
+      "source_manifest_sha256": "a88a14914c89b753d44b1b5669b92ff249098d3e7e26f0fef0a1886c20bf3706",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 9.384625,
+          "last_contact_s": 9.616125,
+          "forward_impulse_Ns": 0.028276886586526884,
+          "launch_s": 8.94,
+          "response": {
+            "time_s": 9.44,
+            "displacement_m": 0.011102817773541792,
+            "stagger": false,
+            "attacker_upright": 0.9997900724411011,
+            "target_upright": 0.999161958694458,
+            "known_forward_impulse_Ns": 0.028276886586526884
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 11.810500000000001,
+          "last_contact_s": 12.39525,
+          "forward_impulse_Ns": 0.12202167887892804,
+          "launch_s": 11.36,
+          "response": {
+            "time_s": 12.08,
+            "displacement_m": 0.010913691359656716,
+            "stagger": false,
+            "attacker_upright": 0.9993618130683899,
+            "target_upright": 0.99677574634552,
+            "known_forward_impulse_Ns": 0.12202167887892804
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:2",
+          "attack_id": "lavender:2",
+          "evade_s": 7.04,
+          "evade_active_end_s": 7.42,
+          "response_s": 9.44,
+          "latency_after_evade_s": 2.0199999999999996,
+          "after_active": false
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91002-1",
+      "source_manifest_sha256": "bf7f24946d110701a3ded1292da7825106603cbf7f2c591b530512951cad1948",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.546625,
+          "last_contact_s": 7.651375,
+          "forward_impulse_Ns": 0.44357286434029447,
+          "launch_s": 6.22,
+          "response": {
+            "time_s": 7.3,
+            "displacement_m": 0.01408285137979682,
+            "stagger": false,
+            "attacker_upright": 0.9991620182991028,
+            "target_upright": 0.997463583946228,
+            "known_forward_impulse_Ns": 0.44357286434029447
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 10.5725,
+          "last_contact_s": 11.654,
+          "forward_impulse_Ns": 0.3655984348582008,
+          "launch_s": 10.24,
+          "response": {
+            "time_s": 11.2,
+            "displacement_m": 0.012868548419231409,
+            "stagger": false,
+            "attacker_upright": 0.9991003274917603,
+            "target_upright": 0.998513400554657,
+            "known_forward_impulse_Ns": 0.3655984348582008
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91002-1",
+      "source_manifest_sha256": "23561763a4fe94a9349e8de45ee996a259333f3557110ece6eec11454069139c",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 3.249,
+          "last_contact_s": 3.249375,
+          "forward_impulse_Ns": 0.036930654836861934,
+          "launch_s": 2.7,
+          "response": {
+            "time_s": 3.3,
+            "displacement_m": 0.011551818907077106,
+            "stagger": false,
+            "attacker_upright": 0.9997653961181641,
+            "target_upright": 0.9978062510490417,
+            "known_forward_impulse_Ns": 0.036930654836861934
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91003-0",
+      "source_manifest_sha256": "cc02d3a43c481b444beb49ebc8afdcce6829a93f0a09572d0e2645a35f3e5e51",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 5.355875,
+          "last_contact_s": 5.44425,
+          "forward_impulse_Ns": 0.07146541231634311,
+          "launch_s": 5.0200000000000005,
+          "response": {
+            "time_s": 5.46,
+            "displacement_m": 0.012132187393175533,
+            "stagger": false,
+            "attacker_upright": 0.9998337030410767,
+            "target_upright": 0.9999470710754395,
+            "known_forward_impulse_Ns": 0.07146541231634311
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.080875,
+          "last_contact_s": 7.0545,
+          "forward_impulse_Ns": 0.14782523308498263,
+          "launch_s": 5.6000000000000005,
+          "response": {
+            "time_s": 6.42,
+            "displacement_m": 0.010569852971993577,
+            "stagger": false,
+            "attacker_upright": 0.998254656791687,
+            "target_upright": 0.9979372024536133,
+            "known_forward_impulse_Ns": 0.14782523308498263
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 9.924,
+          "last_contact_s": 10.516375,
+          "forward_impulse_Ns": 0.3471953116076114,
+          "launch_s": 9.6,
+          "response": {
+            "time_s": 10.48,
+            "displacement_m": 0.013623291735755704,
+            "stagger": false,
+            "attacker_upright": 0.9999935030937195,
+            "target_upright": 0.999886691570282,
+            "known_forward_impulse_Ns": 0.3471953116076114
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:1",
+          "attack_id": "lavender:1",
+          "evade_s": 2.1,
+          "evade_active_end_s": 3.44,
+          "response_s": 5.46,
+          "latency_after_evade_s": 2.02,
+          "after_active": false
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91003-0",
+      "source_manifest_sha256": "9e8b8d3dcb85ca15a9888abd559ff98509aed90490c9e19fb7f7e01cb4323041",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91003-0",
+      "source_manifest_sha256": "8030b11d298894cc8c4db3a1f1b3f46555c097a8aa6e988710ba91ed34c49a49",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.8705,
+          "last_contact_s": 7.5512500000000005,
+          "forward_impulse_Ns": 0.02922382318726473,
+          "launch_s": 6.5600000000000005,
+          "response": {
+            "time_s": 7.08,
+            "displacement_m": 0.010607613954303496,
+            "stagger": false,
+            "attacker_upright": 0.9998244643211365,
+            "target_upright": 0.9995031356811523,
+            "known_forward_impulse_Ns": 0.02922382318726473
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91003-1",
+      "source_manifest_sha256": "060ac7093f56b5649fb5dbb7762f0b49be03895423d02022f5063791772eeb1d",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 5.163,
+          "last_contact_s": 5.582,
+          "forward_impulse_Ns": 0.2281516127380743,
+          "launch_s": 4.86,
+          "response": {
+            "time_s": 5.6,
+            "displacement_m": 0.02891034093525056,
+            "stagger": false,
+            "attacker_upright": 0.9997841715812683,
+            "target_upright": 0.997919499874115,
+            "known_forward_impulse_Ns": 0.2281516127380743
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.09999999999999964,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 8.385875,
+          "last_contact_s": 9.071875,
+          "forward_impulse_Ns": 0.05667944481117827,
+          "launch_s": 7.78,
+          "response": {
+            "time_s": 8.5,
+            "displacement_m": 0.011462937445130533,
+            "stagger": false,
+            "attacker_upright": 0.9992217421531677,
+            "target_upright": 0.9981802701950073,
+            "known_forward_impulse_Ns": 0.05667944481117827
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 9.5455,
+          "last_contact_s": 9.54625,
+          "forward_impulse_Ns": 0.047281344554100754,
+          "launch_s": 9.1,
+          "response": {
+            "time_s": 9.6,
+            "displacement_m": 0.01232464021228232,
+            "stagger": false,
+            "attacker_upright": 0.9999448657035828,
+            "target_upright": 0.9995546340942383,
+            "known_forward_impulse_Ns": 0.047281344554100754
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 12.887375,
+          "last_contact_s": 13.764625,
+          "forward_impulse_Ns": 0.29327016104850545,
+          "launch_s": 12.5,
+          "response": {
+            "time_s": 13.38,
+            "displacement_m": 0.014430547381591163,
+            "stagger": false,
+            "attacker_upright": 0.9993178844451904,
+            "target_upright": 0.9989997744560242,
+            "known_forward_impulse_Ns": 0.29327016104850545
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:1",
+          "attack_id": "lavender:1",
+          "evade_s": 2.1,
+          "evade_active_end_s": 3.2600000000000002,
+          "response_s": 5.6,
+          "latency_after_evade_s": 2.3399999999999994,
+          "after_active": true
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91003-1",
+      "source_manifest_sha256": "9b3c041e934aafc35a32f76d0db3aad4278cb919e80e0ae0aa049531cd8cbc30",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 6.3008750000000004,
+          "last_contact_s": 6.552125,
+          "forward_impulse_Ns": 0.026006702530854145,
+          "launch_s": 5.84,
+          "response": {
+            "time_s": 6.36,
+            "displacement_m": 0.011400373215950242,
+            "stagger": false,
+            "attacker_upright": 0.999758780002594,
+            "target_upright": 0.9996824860572815,
+            "known_forward_impulse_Ns": 0.026006702530854145
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 8.934375000000001,
+          "last_contact_s": 8.93475,
+          "forward_impulse_Ns": 0.05988944445853065,
+          "launch_s": 8.02,
+          "response": {
+            "time_s": 9.0,
+            "displacement_m": 0.012586581990618583,
+            "stagger": false,
+            "attacker_upright": 0.9997984766960144,
+            "target_upright": 0.9956200122833252,
+            "known_forward_impulse_Ns": 0.05988944445853065
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.019999999999999574,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [
+        {
+          "actor": "lavender",
+          "enemy_attack_id": "cream:1",
+          "attack_id": "lavender:1",
+          "evade_s": 2.1,
+          "evade_active_end_s": 3.62,
+          "response_s": 6.36,
+          "latency_after_evade_s": 2.74,
+          "after_active": false
+        }
+      ],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91003-1",
+      "source_manifest_sha256": "3ffe89ddc63037af81e94f7442848d229bd88a54f78b61216f417897182ceac7",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 3.333875,
+          "last_contact_s": 4.332375,
+          "forward_impulse_Ns": 0.43245096292926044,
+          "launch_s": 2.7800000000000002,
+          "response": {
+            "time_s": 4.16,
+            "displacement_m": 0.011569012185429259,
+            "stagger": false,
+            "attacker_upright": 0.9984611868858337,
+            "target_upright": 0.9922550320625305,
+            "known_forward_impulse_Ns": 0.43245096292926044
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91004-0",
+      "source_manifest_sha256": "b0ee89e59f064423dbbac0cfde844b1e34b5b4584e8fa637e26f68916d947d4a",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 3.18075,
+          "last_contact_s": 3.4162500000000002,
+          "forward_impulse_Ns": 0.05132975849465234,
+          "launch_s": 2.44,
+          "response": {
+            "time_s": 3.24,
+            "displacement_m": 0.013388956320999368,
+            "stagger": false,
+            "attacker_upright": 0.9999696016311646,
+            "target_upright": 0.999923586845398,
+            "known_forward_impulse_Ns": 0.05132975849465234
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:1",
+          "first_contact_s": 5.259625,
+          "last_contact_s": 5.260375,
+          "forward_impulse_Ns": 0.044443307256852416,
+          "launch_s": 4.7,
+          "response": {
+            "time_s": 5.3,
+            "displacement_m": 0.010947391161859676,
+            "stagger": false,
+            "attacker_upright": 0.9998483061790466,
+            "target_upright": 0.999701738357544,
+            "known_forward_impulse_Ns": 0.044443307256852416
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.438375,
+          "last_contact_s": 7.140875,
+          "forward_impulse_Ns": 0.02780246718942767,
+          "launch_s": 6.46,
+          "response": {
+            "time_s": 6.8,
+            "displacement_m": 0.010394570931212328,
+            "stagger": false,
+            "attacker_upright": 0.9999143481254578,
+            "target_upright": 0.9990055561065674,
+            "known_forward_impulse_Ns": 0.02780246718942767
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91004-0",
+      "source_manifest_sha256": "5679e9c4a0c82f7f81c9730e61ddcec0e056a9d05b2d7c39fa18011e8edb7d10",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 3.163125,
+          "last_contact_s": 3.163875,
+          "forward_impulse_Ns": 0.06271617591460103,
+          "launch_s": 2.44,
+          "response": {
+            "time_s": 3.28,
+            "displacement_m": 0.011791196459050936,
+            "stagger": false,
+            "attacker_upright": 0.9991775155067444,
+            "target_upright": 0.9986469149589539,
+            "known_forward_impulse_Ns": 0.06271617591460103
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 10.448875000000001,
+          "last_contact_s": 11.88875,
+          "forward_impulse_Ns": 0.23853381706371538,
+          "launch_s": 10.42,
+          "response": {
+            "time_s": 11.22,
+            "displacement_m": 0.013118855920137118,
+            "stagger": false,
+            "attacker_upright": 0.9995863437652588,
+            "target_upright": 0.9995850324630737,
+            "known_forward_impulse_Ns": 0.23853381706371538
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:4",
+          "first_contact_s": 14.765,
+          "last_contact_s": 14.765375,
+          "forward_impulse_Ns": 0.031204151647772963,
+          "launch_s": 14.16,
+          "response": {
+            "time_s": 14.84,
+            "displacement_m": 0.014114491745405279,
+            "stagger": false,
+            "attacker_upright": 0.9999181032180786,
+            "target_upright": 0.9991932511329651,
+            "known_forward_impulse_Ns": 0.031204151647772963
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91004-0",
+      "source_manifest_sha256": "d0d9c989b93946bb2b14837770bb8b458363312c152e648bc01828f8771bf792",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91004-1",
+      "source_manifest_sha256": "9277ac217a1db62d4177f139a94f8aa0efa48699efad9e9e20bd4cdb8e052293",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 6.1613750000000005,
+          "last_contact_s": 6.830125,
+          "forward_impulse_Ns": 0.18984305040247526,
+          "launch_s": 5.8,
+          "response": {
+            "time_s": 6.46,
+            "displacement_m": 0.010710179492943164,
+            "stagger": false,
+            "attacker_upright": 0.9991856813430786,
+            "target_upright": 0.9849739074707031,
+            "known_forward_impulse_Ns": 0.18984305040247526
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 11.083625,
+          "last_contact_s": 11.966625,
+          "forward_impulse_Ns": 0.6546583964457977,
+          "launch_s": 10.48,
+          "response": {
+            "time_s": 11.68,
+            "displacement_m": 0.012163761248719256,
+            "stagger": false,
+            "attacker_upright": 0.9988492727279663,
+            "target_upright": 0.9981499910354614,
+            "known_forward_impulse_Ns": 0.6546583964457977
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91004-1",
+      "source_manifest_sha256": "dbb49e7ffab8b4bc18c1a9b75b18e2463a1ceb48eacf27e89f0c9c471744db03",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91004-1",
+      "source_manifest_sha256": "f77c6b5aaf7ad00e7b55eda4c2f10121690fe6762f8d0f1c79ef6b2708d8b706",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:3",
+          "first_contact_s": 10.51375,
+          "last_contact_s": 11.15025,
+          "forward_impulse_Ns": 0.2469041036657995,
+          "launch_s": 9.88,
+          "response": {
+            "time_s": 10.9,
+            "displacement_m": 0.011489857913471641,
+            "stagger": false,
+            "attacker_upright": 0.9988716840744019,
+            "target_upright": 0.9995092749595642,
+            "known_forward_impulse_Ns": 0.2469041036657995
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "pressure",
+      "seed": 91004,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91001-0",
+      "source_manifest_sha256": "162a6d90fde0fd4840935d2c729c22c34f7cfe955b9cf74143d1b083179a005e",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91001-0",
+      "source_manifest_sha256": "dd3720ad07e8db464659806d2e44feae1be72dbdd35151b849209c5891f9ffd5",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91001-0",
+      "source_manifest_sha256": "fef797984e343e8e9e00e6bf8e1eba2e98652d063096526f00eab6f1881b1c08",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:2",
+          "first_contact_s": 11.469,
+          "last_contact_s": 12.349875,
+          "forward_impulse_Ns": 0.18850083745766244,
+          "launch_s": 11.06,
+          "response": {
+            "time_s": 12.08,
+            "displacement_m": 0.011729742523097397,
+            "stagger": false,
+            "attacker_upright": 0.9994885325431824,
+            "target_upright": 0.9954330921173096,
+            "known_forward_impulse_Ns": 0.18850083745766244
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91001-1",
+      "source_manifest_sha256": "0b67970cf857d394d3be8a01d869aa750519e7fc13a11bb653db2672f8222179",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 11.70475,
+          "last_contact_s": 12.076,
+          "forward_impulse_Ns": 0.09765301599820861,
+          "launch_s": 11.44,
+          "response": {
+            "time_s": 12.02,
+            "displacement_m": 0.010215568683876415,
+            "stagger": false,
+            "attacker_upright": 0.9999889731407166,
+            "target_upright": 0.9967515468597412,
+            "known_forward_impulse_Ns": 0.09765301599820861
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91001-1",
+      "source_manifest_sha256": "7c20b35a003774befd88d5bbcd4614c49d5faabaadbb30360bd51b8fcf5d6d12",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 11.70475,
+          "last_contact_s": 12.076,
+          "forward_impulse_Ns": 0.09765301599820861,
+          "launch_s": 11.44,
+          "response": {
+            "time_s": 12.02,
+            "displacement_m": 0.010215568683876415,
+            "stagger": false,
+            "attacker_upright": 0.9999889731407166,
+            "target_upright": 0.9967515468597412,
+            "known_forward_impulse_Ns": 0.09765301599820861
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91001-1",
+      "source_manifest_sha256": "762cdcc886f6ac6ecda727e934172665c3b60ebefced775e51e17de571962104",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91001,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91002-0",
+      "source_manifest_sha256": "70df95a96681097c384961838401782c4e3d0df72118ccf845cfbf722c68b909",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 4.311,
+          "last_contact_s": 4.31175,
+          "forward_impulse_Ns": 0.047464945465289954,
+          "launch_s": 3.72,
+          "response": {
+            "time_s": 4.38,
+            "displacement_m": 0.01504586937743179,
+            "stagger": false,
+            "attacker_upright": 0.999451220035553,
+            "target_upright": 0.9995101690292358,
+            "known_forward_impulse_Ns": 0.047464945465289954
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91002-0",
+      "source_manifest_sha256": "7f9478a1b0bfd58b21d99ed87885f01a161ea42ff307c2012e89d462f3b2fa6b",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 9.941125,
+          "last_contact_s": 10.34125,
+          "forward_impulse_Ns": 0.09542329752502622,
+          "launch_s": 9.200000000000001,
+          "response": {
+            "time_s": 10.22,
+            "displacement_m": 0.010024671398926432,
+            "stagger": false,
+            "attacker_upright": 0.9999642372131348,
+            "target_upright": 0.9988338947296143,
+            "known_forward_impulse_Ns": 0.09542329752502622
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 11.931875,
+          "last_contact_s": 12.33975,
+          "forward_impulse_Ns": 0.040064601265061166,
+          "launch_s": 11.76,
+          "response": {
+            "time_s": 12.04,
+            "displacement_m": 0.011760762451976372,
+            "stagger": false,
+            "attacker_upright": 0.9997485280036926,
+            "target_upright": 0.9991461634635925,
+            "known_forward_impulse_Ns": 0.040064601265061166
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": true
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91002-0",
+      "source_manifest_sha256": "08d334e4b9203d91e927f3f647513fd471a389602d46d36947a6f744aad0abb2",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91002-1",
+      "source_manifest_sha256": "205a1cf0d1fec4637315965667206c706d071337fa34296eb3467b10961704d0",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91002-1",
+      "source_manifest_sha256": "e41b8aba577636e4a5570ac3f3968380dc2bd3c45556c3d95ce675d41f31f64f",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91002-1",
+      "source_manifest_sha256": "7c1d89e4a7afa25a33fbe9899eebabf3ae6006e53fdc70ee8743367b56868295",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91002,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91003-0",
+      "source_manifest_sha256": "aafff383c381a83f6f9a0cf673a6dd9bbedf4e5f92f20f9f2a527f14e4644d01",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 10.88925,
+          "last_contact_s": 10.983625,
+          "forward_impulse_Ns": 0.045367138225318335,
+          "launch_s": 10.32,
+          "response": {
+            "time_s": 10.92,
+            "displacement_m": 0.01108616346053584,
+            "stagger": false,
+            "attacker_upright": 0.9999011158943176,
+            "target_upright": 0.9982529282569885,
+            "known_forward_impulse_Ns": 0.045367138225318335
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91003-0",
+      "source_manifest_sha256": "ea773c52dff2d99ccee28d03a3b4f01f7319d0a1700bcf5e07c9a976dd01ab4e",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 10.88925,
+          "last_contact_s": 10.983625,
+          "forward_impulse_Ns": 0.045367138225318335,
+          "launch_s": 10.32,
+          "response": {
+            "time_s": 10.92,
+            "displacement_m": 0.01108616346053584,
+            "stagger": false,
+            "attacker_upright": 0.9999011158943176,
+            "target_upright": 0.9982529282569885,
+            "known_forward_impulse_Ns": 0.045367138225318335
+          },
+          "after_active": false,
+          "delay_after_active_s": 0.0,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91003-0",
+      "source_manifest_sha256": "e1aca8feceda192c859798f4f79cc34c08ef6ddd524e0d7609a31d715ee579b3",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91003-1",
+      "source_manifest_sha256": "e9fa99a8e8a54499310b3ec9a4a09dacc6d7c7f9d492facbf100eb19d9e13b39",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91003-1",
+      "source_manifest_sha256": "3798cdfa9e6cbc228e922e944d4515247c4e46e3f561ede1fa9c37d1b2bea73c",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91003-1",
+      "source_manifest_sha256": "0c1a7a634fa683799bbcf3837e87205208df2ee477ba5d9e128be1cbf33a6a87",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91003,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91004-0",
+      "source_manifest_sha256": "10ab9b78dae7c37619316682bfa49765fc8fdc9caa02b6963dbc0a2895914d5e",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "cream",
+          "target": "lavender",
+          "attack_id": "cream:1",
+          "first_contact_s": 12.488625,
+          "last_contact_s": 12.6545,
+          "forward_impulse_Ns": 0.18494792699035317,
+          "launch_s": 11.620000000000001,
+          "response": {
+            "time_s": 12.78,
+            "displacement_m": 0.012585922324064523,
+            "stagger": false,
+            "attacker_upright": 0.9996442198753357,
+            "target_upright": 0.9997719526290894,
+            "known_forward_impulse_Ns": 0.18494792699035317
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.09999999999999964,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        },
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:3",
+          "first_contact_s": 13.5075,
+          "last_contact_s": 13.717375,
+          "forward_impulse_Ns": 0.4547342355435059,
+          "launch_s": 13.16,
+          "response": {
+            "time_s": 13.86,
+            "displacement_m": 0.010804714007827097,
+            "stagger": false,
+            "attacker_upright": 0.9983369708061218,
+            "target_upright": 0.9998828768730164,
+            "known_forward_impulse_Ns": 0.4547342355435059
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.15999999999999837,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91004-0",
+      "source_manifest_sha256": "9593d14706cda5d81867fd7da194a1d9c4046d54f83ec99768d386298df5013c",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91004-0",
+      "source_manifest_sha256": "c171245ba2c68b9107af8c92d2b07abba96e2c92ef148b705b7012cf005b6f84",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [
+        {
+          "state": "OBSERVED_CONTACT_RESPONSE_V2",
+          "actor": "lavender",
+          "target": "cream",
+          "attack_id": "lavender:2",
+          "first_contact_s": 11.868875000000001,
+          "last_contact_s": 13.02075,
+          "forward_impulse_Ns": 0.7747068579698821,
+          "launch_s": 11.5,
+          "response": {
+            "time_s": 13.16,
+            "displacement_m": 0.010802937464854027,
+            "stagger": false,
+            "attacker_upright": 0.9996824860572815,
+            "target_upright": 0.9981791973114014,
+            "known_forward_impulse_Ns": 0.7747068579698821
+          },
+          "after_active": true,
+          "delay_after_active_s": 0.2599999999999998,
+          "maximum_contact_lag_s": 0.3,
+          "conflicts_truncated_window": false
+        }
+      ],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": false
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/dynamic/91004-1",
+      "source_manifest_sha256": "115c5abe7b241c6f98f0428a777161e3e1aef17c3097e6bec9579fbf03ad1cd8",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "dynamic",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/full_brake/91004-1",
+      "source_manifest_sha256": "ec109187377608cb68d220a5131c7af273cae36086f6be7ae13c0f533ab5ab72",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "full_brake",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": true
+    },
+    {
+      "schema": "duckfu.contact-response-audit.v2",
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/v1/91004-1",
+      "source_manifest_sha256": "008b4e1e44ac3434303be685c6fd0460965bd17ec129b3561cf1c75d2691bd7c",
+      "measurement_source_sha256": "8dbc0c92340e4a19d62e45a224e224039f887a47ce5d14362f01f651e473c179",
+      "sample_period_s": 0.02,
+      "post_contact_window_s": 0.3,
+      "observed_responses": [],
+      "clean_evade_counters": [],
+      "limitations": [
+        "Only completed contact episodes establish an impulse bound, so onset times are conservative; future impulses cannot qualify earlier displacement.",
+        "20ms public samples; no substep-exact displacement onset claim.",
+        "Positive impulse plus displacement/stagger is observational, not counterfactual causal damage.",
+        "Legacy runtime events, rewards, controls and referee are unchanged."
+      ],
+      "version": "v1",
+      "opponent": "counter",
+      "seed": 91004,
+      "swap": true
+    }
+  ]
+}

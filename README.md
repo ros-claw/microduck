@@ -54,6 +54,12 @@ Native armless Microducks duel and fight in red/blue teams on a fixed octagonal 
 
 This is a simulation development branch awaiting user film acceptance. Jev/network LLMs are not used in Duck Fu's game loop; ROSClaw combat authorization receipts and hardware transfer are not claimed. Earlier failed motor/solver versions remain documented alongside current results.
 
+### V2 development: exchanges and team intent
+
+[![Duck Fu V2: matched-state comparison](docs/combat/v2/media/cover.jpg)](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)
+
+[Matched-state comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4) · [Team intervention course](docs/combat/v2/media/team_course.mp4) · [Methods](docs/combat/v2/README.md) · [Results and unfinished gates](docs/combat/v2/RESULTS.md). V2 adds bounded action composition and state-conditioned handoffs over the frozen V1 motors. These silent review samples are an early development round, not a new accepted release.
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.

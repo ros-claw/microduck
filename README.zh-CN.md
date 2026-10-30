@@ -54,6 +54,12 @@
 
 这是等待用户观感验收的仿真开发分支。格斗循环没有使用 Jev 或网络大模型；不宣称已取得 ROSClaw 格斗授权回执或完成真机迁移。早期失败的运动策略和求解器方案与当前结果一起保留。
 
+### V2 开发：交锋与团队意图
+
+[![Duck Fu V2: matched-state comparison](docs/combat/v2/media/cover.jpg)](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)
+
+[同初态原速对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4) · [团队介入课程](docs/combat/v2/media/team_course.mp4) · [方法与运行](docs/combat/v2/README.zh-CN.md) · [结果与未完成项](docs/combat/v2/RESULTS.md)。V2 在冻结 V1 运动策略上增加受限动作组合和状态过渡；当前为静音开发验证样片，尚非新的已验收版本。
+
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。
