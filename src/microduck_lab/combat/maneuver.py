@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import math
 import numpy as np
 from .observations import relative
+from .motion import OpponentMotionEstimator, facing_twist
 
 
 @dataclass(frozen=True)
@@ -33,6 +34,7 @@ class Maneuver:
         self.recovery_since = None
         self.stable_since = None
         self.contact_since = None
+        self.motion = OpponentMotionEstimator()
 
     def transition(self, now, phase, skill, me):
         self.phase, self.skill, self.since, self.origin = (
@@ -62,6 +64,9 @@ class Maneuver:
 
     def choose(self, now, me, other):
         _, dist, angle, closing = relative(me, other)
+        estimated_closing = self.motion.update(now, me, other)
+        if self.c.threat_motion_history:
+            closing = estimated_closing
         self.min_range = min(self.min_range, dist)
         # One owner. Mild lean uses stand to capture balance; deep falls may
         # enter a bounded get-up candidate. No root motion or target overrides.
@@ -116,10 +121,17 @@ class Maneuver:
         if self.skill == "dash_bump":
             if self.phase == "WINDUP":
                 # Head command is a native delta-from-HOME, never an override.
-                if elapsed >= 0.12 and me.upright > 0.9 and me.foot_support:
+                if (
+                    elapsed >= self.c.dash_windup_s - 1e-9
+                    and me.upright > 0.9
+                    and me.foot_support
+                ):
                     self.transition(now, "ACTIVE", "dash_bump", me)
                 return MotorCommand(
-                    "maneuver", "walk", (0.0, 0.0, 0.0), (self.c.dash_neck_rad, self.c.dash_head_rad, 0.0, 0.0)
+                    "maneuver",
+                    "walk",
+                    (0.0, 0.0, 0.0),
+                    (self.c.dash_neck_rad, self.c.dash_head_rad, 0.0, 0.0),
                 )
             if self.phase == "ACTIVE":
                 if me.touching_opponent and self.contact_since is None:
@@ -169,20 +181,38 @@ class Maneuver:
                 )
         if self.skill == "evade_step":
             if self.phase == "ACTIVE":
-                if moved >= self.c.evade_distance_m or elapsed >= 1.15:
+                clear = elapsed >= 0.6 and dist > 0.31 and closing < 0.02
+                end = (
+                    (clear or moved >= 0.30 or elapsed >= 2.0)
+                    if self.c.evade_sustain_until_clear
+                    else (moved >= self.c.evade_distance_m or elapsed >= 1.15)
+                )
+                if end:
                     self.evaded = True
                     self.transition(now, "RECOVERY", "evade_step", me)
                 else:
                     return MotorCommand(
                         "maneuver",
                         "walk",
-                        (self.c.evade_forward_speed, self.c.evade_sign * self.c.evade_speed, 0.0),
+                        (
+                            self.c.evade_forward_speed,
+                            self.c.evade_sign * self.c.evade_speed,
+                            0.0,
+                        ),
                     )
             if me.speed > 0.15 or elapsed < 0.12:
                 return MotorCommand("maneuver", "walk")
             self.transition(now, "READY", "approach_orbit", me)
         if self.role in ("evade", "counter") and not self.evaded:
-            if dist < self.c.threat_distance_m and closing > self.c.threat_closing_m_s:
+            visible_head = (
+                self.c.threat_head_cue
+                and other.neck_pitch_delta < -0.22
+                and other.head_pitch_delta < -0.02
+                and other.upright > 0.9
+            )
+            if dist < self.c.threat_distance_m and (
+                closing > self.c.threat_closing_m_s or visible_head
+            ):
                 self.transition(now, "ACTIVE", "evade_step", me)
                 self.events.append(
                     dict(
@@ -191,12 +221,17 @@ class Maneuver:
                         actor=self.name,
                         distance_m=dist,
                         closing_m_s=closing,
+                        visible_head_cue=visible_head,
                     )
                 )
                 return MotorCommand(
                     "maneuver",
                     "walk",
-                    (self.c.evade_forward_speed, self.c.evade_sign * self.c.evade_speed, 0.0),
+                    (
+                        self.c.evade_forward_speed,
+                        self.c.evade_sign * self.c.evade_speed,
+                        0.0,
+                    ),
                 )
             return MotorCommand("tactics")
         if self.role == "evade":
@@ -224,4 +259,6 @@ class Maneuver:
             self.transition(now, "WINDUP", "dash_bump", me)
             return MotorCommand("maneuver", "walk")
         speed = 0.28 if dist > 0.29 or abs(angle) > 0.22 else 0.0
+        if self.c.counter_orbit_facing:
+            return MotorCommand("tactics", "walk", facing_twist(dist, angle))
         return MotorCommand("tactics", "walk", (speed, 0.0, turn))

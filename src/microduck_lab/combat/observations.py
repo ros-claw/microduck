@@ -17,6 +17,8 @@ class Body:
     body_ground: bool
     boundary_distance: float
     touching_opponent: bool = False
+    neck_pitch_delta: float = 0.0
+    head_pitch_delta: float = 0.0
 
     @property
     def speed(self):
@@ -43,6 +45,8 @@ def snapshot(ducks, audit, config):
             audit.body_ground[name],
             float(distance),
             audit.touching[name],
+            float(duck.data.qpos[duck.joint_qpos_idx[5]] - duck.default_pose[5]),
+            float(duck.data.qpos[duck.joint_qpos_idx[6]] - duck.default_pose[6]),
         )
     return result
 

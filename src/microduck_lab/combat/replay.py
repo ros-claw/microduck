@@ -10,12 +10,16 @@ import numpy as np
 from .world import digest, ASSETS, ROBOT, POLICIES
 from .episode import run, source_hashes
 from .config import Config, Physics
+from .match_config import MatchConfig
 
 
 def verify(directory):
     directory = Path(directory)
     expected = json.loads((directory / "manifest.json").read_text())
-    if expected["schema"] != "duckfu.run.v1" or not expected["capture"]:
+    if (
+        expected["schema"] not in ("duckfu.run.v1", "duckfu.match-run.v1")
+        or not expected["capture"]
+    ):
         raise ValueError("Replay needs an intact full capture")
     if (
         expected["source_sha256"] != source_hashes()
@@ -33,11 +37,14 @@ def verify(directory):
         dest = Path(temp) / "regenerated"
         actual = run(
             dest,
-            Config(**expected["config"]),
+            (MatchConfig if expected["schema"] == "duckfu.match-run.v1" else Config)(
+                **expected["config"]
+            ),
             Physics(**expected["physics"]),
             expected["seed"],
             True,
             expected["probe"],
+            expected.get("training", False),
         )
         for key in expected:
             if key not in ("performance", "hashes") and expected[key] != actual[key]:
@@ -67,6 +74,11 @@ def verify(directory):
             "runtime_events.jsonl",
             "metrics.json",
             "model_inventory.json",
+            *(
+                ["transitions.json"]
+                if expected["schema"] == "duckfu.match-run.v1"
+                else []
+            ),
         ):
             if (directory / filename).read_bytes() != (dest / filename).read_bytes():
                 raise ValueError(f"Regenerated result differs: {filename}")

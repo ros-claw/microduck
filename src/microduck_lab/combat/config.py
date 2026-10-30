@@ -58,6 +58,7 @@ class Config:
     dash_speed: float = 0.45
     dash_start_distance_m: float = 0.40
     dash_active_s: float = 1.25
+    dash_windup_s: float = 0.12
     dash_contact_min_s: float = 0.16
     dash_neck_rad: float = -0.12
     dash_head_rad: float = -0.10
@@ -65,11 +66,17 @@ class Config:
     evade_distance_m: float = 0.12
     evade_forward_speed: float = -0.26
     threat_closing_m_s: float = 0.18
+    threat_motion_history: bool = False
+    evade_sustain_until_clear: bool = False
+    threat_head_cue: bool = False
+    counter_orbit_facing: bool = False
     threat_distance_m: float = 0.40
     down_count_s: float = 10.0
     physics_profile: str = "physics_profile.yaml"
     candidate_motor_path: str = ""
     candidate_motor_sha256: str = ""
+    evade_motor_path: str = ""
+    evade_motor_sha256: str = ""
 
     def __post_init__(self):
         if self.schema != "duckfu.duel.v1" or self.mode != "simulation":
@@ -108,14 +115,33 @@ class Config:
             raise ValueError("Invalid down-count/offset")
         if not 0.26 <= self.dash_start_distance_m <= 0.44:
             raise ValueError("Dash entry is outside the calibration envelope")
-        if not (0.4 <= self.dash_active_s <= 2.5 and 0.1 <= self.dash_contact_min_s <= 1.5):
+        if not (
+            0.4 <= self.dash_active_s <= 2.5 and 0.1 <= self.dash_contact_min_s <= 1.5
+        ):
             raise ValueError("Invalid bounded attack/contact duration")
-        if not (-0.4 <= self.dash_neck_rad <= 0.4 and -0.3 <= self.dash_head_rad <= 0.3):
+        if (
+            not 0.1 <= self.dash_windup_s <= 0.4
+            or type(self.threat_head_cue) is not bool
+        ):
+            raise ValueError("Invalid visible wind-up/cue calibration")
+        if type(self.counter_orbit_facing) is not bool:
+            raise ValueError("Orbit-facing flag must be a boolean")
+        if not (
+            -0.4 <= self.dash_neck_rad <= 0.4 and -0.3 <= self.dash_head_rad <= 0.3
+        ):
             raise ValueError("Head commands exceed the probed native range")
-        if not .10 <= self.evade_distance_m <= .24:
+        if not 0.10 <= self.evade_distance_m <= 0.24:
             raise ValueError("Invalid bounded evade travel")
-        if not (-.30 <= self.evade_forward_speed <= 0. and .08 <= self.threat_closing_m_s <= .25):
+        if not (
+            -0.30 <= self.evade_forward_speed <= 0.0
+            and 0.08 <= self.threat_closing_m_s <= 0.25
+        ):
             raise ValueError("Invalid public threat/evade parameters")
+        if (
+            type(self.threat_motion_history) is not bool
+            or type(self.evade_sustain_until_clear) is not bool
+        ):
+            raise ValueError("Motion-history flags must be booleans")
         if bool(self.candidate_motor_path) != bool(self.candidate_motor_sha256):
             raise ValueError("Candidate motor requires an explicit file and digest")
         if self.candidate_motor_sha256 and (
@@ -123,6 +149,14 @@ class Config:
             or any(c not in "0123456789abcdef" for c in self.candidate_motor_sha256)
         ):
             raise ValueError("Invalid candidate digest")
+        if bool(self.evade_motor_path) != bool(self.evade_motor_sha256) or (
+            self.evade_motor_sha256
+            and (
+                len(self.evade_motor_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in self.evade_motor_sha256)
+            )
+        ):
+            raise ValueError("Evade motor requires an exact file and digest")
 
     def dict(self):
         return asdict(self)

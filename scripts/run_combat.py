@@ -17,8 +17,13 @@ def main():
     p.add_argument("--capture", action="store_true")
     p.add_argument("--out", required=True)
     a = p.parse_args()
-    content = yaml.safe_load(Path(a.config).read_text())
-    competition = isinstance(content, dict) and content.get("schema") == "duckfu.match.v1"
+    try:
+        content = yaml.safe_load(Path(a.config).read_text())
+    except (OSError, yaml.YAMLError) as error:
+        p.error(f"Cannot load the explicit configuration: {error}; no fallback")
+    competition = (
+        isinstance(content, dict) and content.get("schema") == "duckfu.match.v1"
+    )
     if a.brain == "jev" or (a.brain == "learned" and not competition):
         p.error(f"{a.brain} combat is not implemented/qualified; no fallback")
     if competition:

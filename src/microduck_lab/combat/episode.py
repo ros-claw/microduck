@@ -12,6 +12,7 @@ from .contacts import ContactAudit
 from .observations import snapshot
 from .maneuver import Maneuver, MotorCommand
 from .referee import Referee
+from .events import attack_outcomes, counter_sequences
 
 STATE = mujoco.mjtState.mjSTATE_INTEGRATION
 
@@ -38,6 +39,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         and digest(config.candidate_motor_path) != config.candidate_motor_sha256
     ):
         raise ValueError("Candidate motor digest differs")
+    if (
+        config.evade_motor_path
+        and digest(config.evade_motor_path) != config.evade_motor_sha256
+    ):
+        raise ValueError("Evade motor digest differs")
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     source = source_hashes()
@@ -47,6 +53,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         from .arena import build_match
         from .tactics import Pilot
         from .learning import FrozenSelector
+
         m, d, ducks, spawns, teams = build_match(config, physics, seed)
     else:
         m, d, ducks, spawns = build(config, physics, seed)
@@ -54,27 +61,57 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         next(iter(ducks.values())).bank.paths["dash_candidate"] = (
             config.candidate_motor_path
         )
-        candidate_metadata = next(iter(ducks.values())).bank.get("dash_candidate").get_modelmeta().custom_metadata_map
+        candidate_metadata = (
+            next(iter(ducks.values()))
+            .bank.get("dash_candidate")
+            .get_modelmeta()
+            .custom_metadata_map
+        )
+    bank = next(iter(ducks.values())).bank
+    if config.evade_motor_path:
+        if digest(config.evade_motor_path) != config.evade_motor_sha256:
+            raise ValueError("Evade motor digest differs")
+        bank.paths["evade_candidate"] = config.evade_motor_path
+        bank.get("evade_candidate")
+    if competition:
+        for path, sha in (
+            (config.tactics_path, config.tactics_sha256),
+            (config.opponent_path, config.opponent_sha256),
+        ):
+            if path and digest(path) != sha:
+                raise ValueError("Tactical digest differs")
     audit = ContactAudit(m, ducks)
     if competition:
         controllers = {}
         for i, n in enumerate(ducks):
             path = config.tactics_path if teams[n] == "RED" else config.opponent_path
             sha = config.tactics_sha256 if teams[n] == "RED" else config.opponent_sha256
-            selector = FrozenSelector(path, sha, seed+10007*(i+1), training and teams[n] == "RED") if path else None
+            selector = (
+                FrozenSelector(
+                    path, sha, seed + 10007 * (i + 1), training and teams[n] == "RED"
+                )
+                if path
+                else None
+            )
             controllers[n] = Pilot(n, teams[n], teams, config, selector)
     else:
         controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}
     referee = Referee(ducks, config.down_count_s, teams)
     if competition:
         from .strikes import StrikeAudit
+
         strikes = StrikeAudit(teams)
     nsteps = round(config.duration_s / physics.dt)
     nstate = mujoco.mj_stateSize(m, STATE)
     state = np.empty(nstate)
     mujoco.mj_getState(m, d, state, STATE)
     np.savez_compressed(out / "initial_state.npz", state=state)
-    inventory = model_inventory(m)
+    if competition:
+        from .arena import match_inventory
+
+        inventory = match_inventory(m, ducks)
+    else:
+        inventory = model_inventory(m)
     write_json(out / "model_inventory.json", inventory)
     invariant_arrays = [
         m.body_mass,
@@ -128,18 +165,42 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                     if n in referee.eliminated:
                         commands[n] = MotorCommand("eliminated_hold")
                     else:
-                        commands[n] = (controllers[n].choose(now, public, alive) if competition
-                                       else controllers[n].choose(now, public[n], other))
+                        commands[n] = (
+                            controllers[n].choose(now, public, alive)
+                            if competition
+                            else controllers[n].choose(now, public[n], other)
+                        )
                     if (
-                        not competition and config.candidate_motor_path
+                        not competition
+                        and config.candidate_motor_path
                         and controllers[n].skill == "dash_bump"
                         and commands[n].owner == "maneuver"
-                        and (candidate_metadata.get("duckfu_scope") != "forward_active" or controllers[n].phase == "ACTIVE")
+                        and (
+                            candidate_metadata.get("duckfu_scope") != "forward_active"
+                            or controllers[n].phase == "ACTIVE"
+                        )
+                    ):
+                        cmd = commands[n]
+                        twist = cmd.twist
+                        commands[n] = MotorCommand(
+                            cmd.owner,
+                            "dash_candidate",
+                            twist,
+                            cmd.head
+                            if candidate_metadata.get("duckfu_head_commands")
+                            == "native"
+                            else (0.0, 0.0, 0.0, 0.0),
+                        )
+                    if (
+                        not competition
+                        and config.evade_motor_path
+                        and controllers[n].skill == "evade_step"
+                        and controllers[n].phase == "ACTIVE"
+                        and commands[n].owner == "maneuver"
                     ):
                         cmd = commands[n]
                         commands[n] = MotorCommand(
-                            cmd.owner, "dash_candidate", cmd.twist,
-                            cmd.head if candidate_metadata.get("duckfu_head_commands") == "native" else (0.,0.,0.,0.)
+                            cmd.owner, "evade_candidate", (0.0, cmd.twist[1], 0.0)
                         )
                     if probe is not None:
                         commands[n] = (
@@ -155,7 +216,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                         time_s=now,
                         actor=n,
                         observation=asdict(public[n]),
-                        opponent=({o:asdict(public[o]) for o in public if o != n} if competition else asdict(other)),
+                        opponent=(
+                            {o: asdict(public[o]) for o in public if o != n}
+                            if competition
+                            else asdict(other)
+                        ),
                         command=asdict(commands[n]),
                         phase=controllers[n].phase,
                         skill=controllers[n].skill,
@@ -231,15 +296,28 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 before_public = public
                 public = snapshot(ducks, audit, config)
                 if competition:
-                    for event in strikes.observe(completed*physics.dt, audit.episodes, controllers, before_public, public):
-                        controllers[event["actor"]].pending_reward += .3
+                    for event in strikes.observe(
+                        completed * physics.dt,
+                        audit.episodes,
+                        controllers,
+                        before_public,
+                        public,
+                    ):
+                        controllers[event["actor"]].pending_reward += 0.3
                     for controller in controllers.values():
                         if controller.decision is not None:
-                            controller.pending_reward -= .001/physics.motor_hz
+                            controller.pending_reward -= 0.001 / physics.motor_hz
                 fault = not (finite and clock_ok and external_zero) or bool(
                     any(w.number for w in d.warning)
                 )
+                if competition:
+                    fault |= any(v["depth_m"] > 0.003 for v in audit.maxima.values())
+                previously_eliminated = set(referee.eliminated)
                 referee.update(completed * physics.dt, public, physics_fault=fault)
+                if competition:
+                    for name in set(referee.eliminated) - previously_eliminated:
+                        controllers[name].finish(completed * physics.dt, "ELIMINATED")
+                        controllers[name].phase = "ELIMINATED"
                 if referee.result:
                     break
     finally:
@@ -254,6 +332,18 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         and digest(config.candidate_motor_path) != config.candidate_motor_sha256
     ):
         raise RuntimeError("Candidate motor changed during simulation")
+    if (
+        config.evade_motor_path
+        and digest(config.evade_motor_path) != config.evade_motor_sha256
+    ):
+        raise RuntimeError("Evade motor changed during simulation")
+    if competition:
+        for path, sha in (
+            (config.tactics_path, config.tactics_sha256),
+            (config.opponent_path, config.opponent_sha256),
+        ):
+            if path and digest(path) != sha:
+                raise RuntimeError("Tactical weights changed during simulation")
     immutable = all(
         v.tobytes() == old
         for v, old in zip(invariant_arrays, invariant_bytes, strict=True)
@@ -267,6 +357,10 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     if states is not None:
         states.flush()
     contacts = audit.summary()
+    if competition and (not immutable or not contacts["gate_proposal_pass"]):
+        referee.update(
+            completed * physics.dt, snapshot(ducks, audit, config), physics_fault=True
+        )
     write_json(out / "contacts_summary.json", contacts)
     all_events = (
         [e for c in controllers.values() for e in c.events]
@@ -280,30 +374,28 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         # A terminal team result is the only winner reward; no scripted damage.
         for n, c in controllers.items():
             winner = result_for_learning["winner"]
-            terminal_reward = ((3. if winner == teams[n] else -3.) if winner else 0.)
+            terminal_reward = (3.0 if winner == teams[n] else -3.0) if winner else 0.0
             if c.decision is not None:
                 c.pending_reward += terminal_reward
             elif c.trace:
                 c.trace[-1]["reward"] += terminal_reward
                 c.trace[-1]["terminal"] = True
             c.finish(completed * physics.dt, "EPISODE_END", final=True)
-        write_json(out / "transitions.json", {n:c.trace for n,c in controllers.items()})
-        all_events = ([e for c in controllers.values() for e in c.events]
-                      + [e for c in controllers.values() for e in c.guard.events]
-                      + audit.events + referee.events + strikes.events)
+        write_json(
+            out / "transitions.json", {n: c.trace for n, c in controllers.items()}
+        )
+        all_events = (
+            [e for c in controllers.values() for e in c.events]
+            + [e for c in controllers.values() for e in c.guard.events]
+            + audit.events
+            + referee.events
+            + strikes.events
+        )
     # Attribute attack results after contact episode consolidation. CONTACTED is
     # deliberately not VALID_STRIKE: its effectiveness remains unqualified.
-    linked = {a for e in audit.episodes for a in e["attacks"]}
-    for e in list(all_events):
-        if e["state"] == "ATTACK_WINDOW_ENDED":
-            all_events.append(
-                dict(
-                    state="CONTACTED_ATTACK" if e["attack_id"] in linked else "MISS",
-                    time_s=e["time_s"],
-                    actor=e["actor"],
-                    attack_id=e["attack_id"],
-                )
-            )
+    all_events += attack_outcomes(all_events, audit.episodes, teams)
+    if competition:
+        all_events += counter_sequences(all_events)
     all_events.sort(key=lambda e: e.get("time_s", 0.0))
     with open(out / "runtime_events.jsonl", "w") as f:
         for e in all_events:
@@ -370,10 +462,14 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         result=result,
         film_gate="PENDING_HUMAN_REVIEW",
         motor_gate="UNQUALIFIED",
-        tactical_backend="public_state_rule_with_fixed_coach",
+        tactical_backend=(
+            "learned_categorical" if config.tactics_path else "public_state_rule"
+        )
+        if competition
+        else "public_state_rule_with_fixed_coach",
         notes=[
-            "Existing BAM-trained policies transferred to capped position servos; simulation-only, not matched new training or hardware validation.",
-            "No new policy trained; contacted attacks are not automatically qualified effective strikes.",
+            "Upstream motor priors transfer from BAM to capped position servos; new Duck Fu candidates are trained with matched capped position servos. Simulation only; no hardware validation.",
+            "CONTACTED_ATTACK alone is not VALID_STRIKE; see frozen motor qualification and separate observed-response events. No health/contact damage.",
         ],
     )
     manifest["hashes"] = {

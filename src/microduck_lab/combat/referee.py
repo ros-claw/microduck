@@ -63,7 +63,9 @@ class Referee:
             self.eliminated[name] = reason
             self.events.append(dict(state=reason, actor=name, time_s=now))
         alive = [n for n in self.names if n not in self.eliminated]
-        remaining = sorted({self.teams[n] for n in alive}) if self.teams is not None else alive
+        remaining = (
+            sorted({self.teams[n] for n in alive}) if self.teams is not None else alive
+        )
         if len(remaining) <= 1:
             self.result = dict(
                 kind="WIN" if alive else "DRAW",

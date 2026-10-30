@@ -1,0 +1,13 @@
+{
+  "experiment": "evade-v1-lateral-acceleration-and-braking",
+  "reason": "Two native command variants failed to clear the stronger attack; measured lateral travel about 0.08 m",
+  "maximum_iterations": 501,
+  "number_of_environments": 512,
+  "maximum_gpu_hours": 1.5,
+  "maximum_checkpoint_count": 14,
+  "maximum_new_disk_bytes": 1073741824,
+  "required_smoke": "64 environments x 5 iterations",
+  "stop_conditions": ["non-finite physics or solver warnings", "two frozen checkpoint CPU evaluations without improvement", "torque/physics limits", "loss of stable braking"],
+  "cloud": false,
+  "cancel": "SIGINT only this experiment's own PID"
+}

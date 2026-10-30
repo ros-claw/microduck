@@ -23,6 +23,7 @@ class Protocol:
     stable_upright: float = 0.94
     stable_speed_m_s: float = 0.16
     stable_hold_s: float = 0.3
+    duration_s: float = 8.0
 
     def __post_init__(self):
         if (
@@ -37,6 +38,8 @@ class Protocol:
             or self.stable_hold_s != 0.3
         ):
             raise ValueError("Development measurement thresholds are frozen")
+        if not 8.0 <= self.duration_s <= 12.0:
+            raise ValueError("Invalid bounded motor qualification duration")
 
 
 def measure(row, protocol):
@@ -61,8 +64,23 @@ def measure(row, protocol):
     )
     row["target_effect_m"] = effect
     row["actor_final_stable"] = stable
+    defender_last = v[-round(protocol.stable_hold_s * 50) :, di]
+    row["defender_final_stable"] = bool(
+        np.all(
+            (defender_last[:, 3] > protocol.stable_upright)
+            & (defender_last[:, 4] < protocol.stable_speed_m_s)
+            & (defender_last[:, 6] > 0.5)
+        )
+    )
+    row["first_attack_avoided"] = bool(
+        row["first_attack_s"] is not None and not row["first_exchange_contact"]
+    )
+    row["stable_evade_pass"] = (
+        row["first_attack_avoided"] and row["defender_final_stable"]
+    )
     row["attack_effect_candidate_pass"] = bool(
-        row["first_exchange_contact"]
+        row["config"]["defense"] == "stand"
+        and row["first_exchange_contact"]
         and effect >= protocol.effect_threshold_m
         and stable
     )
@@ -119,7 +137,7 @@ def main():
             heading_rad=(i % 4) * math.pi / 2,
             swap=bool(i % 2),
             evade_sign=1 if i % 2 else -1,
-            duration_s=8.0,
+            duration_s=protocol.duration_s,
             dash_speed=0.4,
         )
         for group, config in [
@@ -147,14 +165,21 @@ def main():
         selected = [r for r, g in zip(rows, groups, strict=True) if g == group]
         n = len(selected)
         effect = sum(r["attack_effect_candidate_pass"] for r in selected)
+        standing = group.endswith("_stand")
         summaries[group] = dict(
             runs=n,
             first_exchange_contact=sum(r["first_exchange_contact"] for r in selected),
-            effect_and_stable=effect,
-            effect_and_stable_wilson95=wilson(effect, n),
+            effect_and_stable=effect if standing else None,
+            effect_and_stable_wilson95=wilson(effect, n) if standing else None,
             median_target_effect_m=float(
                 np.median([r["target_effect_m"] for r in selected])
-            ),
+            )
+            if standing
+            else None,
+            nonstanding_motion_is_self_actuated=not standing,
+            first_attack_avoided=sum(r["first_attack_avoided"] for r in selected),
+            stable_evades=sum(r["stable_evade_pass"] for r in selected),
+            defender_final_stable=sum(r["defender_final_stable"] for r in selected),
             physics_pass=sum(r["physics_proposal_pass"] for r in selected),
             counter_contact=sum(
                 any(

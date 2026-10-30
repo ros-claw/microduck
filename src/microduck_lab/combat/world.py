@@ -91,7 +91,7 @@ class CombatBank(PolicyBank):
                 or s.get_outputs()[0].shape != [1, 14]
             ):
                 raise ValueError(f"Invalid legacy 61D/14D policy: {name}")
-            if name == "dash_candidate":
+            if name in ("dash_candidate", "evade_candidate"):
                 meta = s.get_modelmeta().custom_metadata_map
                 required = {
                     "duckfu_motor_schema": "legacy61.v1",
