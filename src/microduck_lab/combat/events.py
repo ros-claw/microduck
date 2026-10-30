@@ -1,5 +1,7 @@
 """Post-match event attribution; never feeds hidden labels into an actor."""
 
+ATTRIBUTION_SCHEMA = "duckfu.attack-outcomes.v2"
+
 
 def attack_outcomes(events, episodes, teams=None):
     outcomes = []
@@ -14,14 +16,21 @@ def attack_outcomes(events, episodes, teams=None):
                 for e in linked
                 if any(teams[n] != teams[actor] for n in e["actor_pair"])
             ]
+        reason = event.get("reason", "COMPLETE")
+        completed = reason == "COMPLETE"
         outcomes.append(
             dict(
-                state="CONTACTED_ATTACK" if linked else "MISS",
+                state=("CONTACTED_ATTACK" if linked else "MISS")
+                if completed
+                else "ATTACK_INTERRUPTED",
                 time_s=event["time_s"],
                 actor=actor,
                 attack_id=attack,
                 target=event.get("target"),
                 contact_episode_ids=[e["event_id"] for e in linked],
+                end_reason=reason,
+                completed=completed,
+                contacted=bool(linked),
             )
         )
     return outcomes

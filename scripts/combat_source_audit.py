@@ -16,7 +16,7 @@ def git(path, *args):
     return subprocess.check_output(["git", "-C", str(path), *args], text=True).strip()
 
 
-def main(out):
+def main(out, checkpoint_out="training/combat/checkpoints_manifest.json"):
     path = Path(out)
     if path.exists():
         raise FileExistsError(path)
@@ -30,7 +30,7 @@ def main(out):
         dict(path=str(p.relative_to(training)), bytes=p.stat().st_size)
         for p in sorted(checkpoints)
     ]
-    checkpoint_path = ROOT / "training/combat/checkpoints_manifest.json"
+    checkpoint_path = ROOT / checkpoint_out
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(
         checkpoint_path,
@@ -66,6 +66,10 @@ def main(out):
             str(p.relative_to(ROOT)): digest(p)
             for p in sorted((ROOT / "policies/candidates").glob("*.onnx"))
         },
+        tactical_models={
+            str(p.relative_to(ROOT)): digest(p)
+            for p in sorted((ROOT / "policies/tactics").glob("*.npz"))
+        },
         configuration_files={
             str(p.relative_to(ROOT)): digest(p)
             for p in sorted((ROOT / "configs/combat").glob("*.yaml"))
@@ -94,10 +98,14 @@ def main(out):
     combat_training = ROOT.parent / "duck-fu-training"
     if combat_training.is_dir():
         result["combat_training"] = dict(
-            base_commit=git(combat_training, "rev-parse", "HEAD"),
+            source_commit=git(combat_training, "rev-parse", "HEAD"),
+            base_commit="18052aaf7d98942921a8d57319f40d3692f96bcd",
             branch=git(combat_training, "branch", "--show-current"),
             patch_sha256=digest(ROOT / "training/combat/duckfu.patch"),
             r1_patch_sha256=digest(ROOT / "training/combat/duckfu-r1.patch"),
+            complete_patch_sha256=digest(
+                ROOT / "training/combat/duckfu-complete.patch"
+            ),
         )
     path.write_text(yaml.safe_dump(result, sort_keys=False, allow_unicode=True))
     print(
@@ -115,5 +123,8 @@ def main(out):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--out", required=True)
+    p.add_argument(
+        "--checkpoint-out", default="training/combat/checkpoints_manifest.json"
+    )
     a = p.parse_args()
-    main(a.out)
+    main(a.out, a.checkpoint_out)

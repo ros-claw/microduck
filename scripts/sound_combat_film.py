@@ -188,13 +188,39 @@ def main():
             ):
                 at = shot["output_start_s"] + hit["time_s"] - shot["start_s"]
                 actor = manifest["spawns"][hit["actor"]]["display_name"].title()
+                chinese_actor = manifest["spawns"][hit["actor"]].get(
+                    "chinese_name", actor
+                )
                 cues.append(
                     (
                         max(6.3, at),
                         f"{actor}! That bump lands!",
-                        f"{actor}，这一下撞到了！",
+                        f"{chinese_actor}，这一下撞到了！",
                     )
                 )
+                break
+        # One additional call follows an actual response in the normal-speed
+        # segment. It is not a scripted hit or a claim of a counter sequence.
+        extra = None
+        for event in events:
+            if event["state"] != "VALID_STRIKE" or event["actor"] == hit["actor"]:
+                continue
+            for shot in plan["shots"]:
+                if shot["kind"] != "match" or shot["speed"] != 1:
+                    continue
+                if shot["start_s"] <= event["time_s"] < shot["end_s"]:
+                    at = shot["output_start_s"] + event["time_s"] - shot["start_s"]
+                    if 10 <= at <= 11.5:
+                        person = manifest["spawns"][event["actor"]]
+                        extra = (
+                            at,
+                            person["display_name"].title() + " lands a bump!",
+                            person.get("chinese_name", person["display_name"])
+                            + "也撞中了！",
+                        )
+                        break
+            if extra:
+                cues.append(extra)
                 break
         cues.append(
             (
@@ -263,7 +289,19 @@ def main():
                 "真实出界和公开倒地读秒决定结果，淘汰后的身体仍保留在仿真中。",
             ),
         ]
-        for s, (en, cn) in zip(plan["shots"][:6], lines):
+        for s in plan["shots"]:
+            if s["kind"] == "result":
+                continue
+            chapter = s["caption"][:2]
+            if chapter.isdigit() and 1 <= int(chapter) <= len(lines):
+                en, cn = lines[int(chapter) - 1]
+            elif s["caption"].startswith("RECOVERY"):
+                en, cn = (
+                    "Stable foot support.",
+                    "恢复要求持续的足部支撑与稳定运动。",
+                )
+            else:
+                continue
             cues.append((s["output_start_s"] + 0.2, en, cn))
     cues.append((plan["shots"][-1]["output_start_s"] + 0.1, final_en, final_cn))
     cues.sort()

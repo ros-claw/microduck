@@ -46,17 +46,25 @@ def trial(job):
         physical=physical,
         metrics=metrics,
         event_counts={
-            state: sum(e["state"] == state for e in events)
-            for state in (
-                "VALID_STRIKE",
-                "MISS",
-                "COUNTER_SEQUENCE",
-                "DOWN",
-                "RECOVERED",
-                "RING_OUT",
-                "DOWN_COUNT",
-                "TARGET_CHANGED",
-            )
+            **{
+                state: sum(e["state"] == state for e in events)
+                for state in (
+                    "VALID_STRIKE",
+                    "MISS",
+                    "COUNTER_SEQUENCE",
+                    "DOWN",
+                    "RING_OUT",
+                    "DOWN_COUNT",
+                    "TARGET_CHANGED",
+                    "ATTACK_INTERRUPTED",
+                )
+            },
+            "RECOVERED": sum(
+                e["state"] == "RECOVERED" and "duration_s" in e for e in events
+            ),
+            "DOWN_COUNT_CLEARED": sum(
+                e["state"] == "RECOVERED" and "duration_s" not in e for e in events
+            ),
         },
         first_contact_s=min(
             (e["time_s"] for e in events if e["state"] == "CONTACT"), default=None

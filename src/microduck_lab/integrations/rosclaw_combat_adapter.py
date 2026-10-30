@@ -17,15 +17,33 @@ import jsonschema
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 
-from .rosclaw_adapter import body_profiles
-
 ROOT = Path(__file__).resolve().parents[3]
 PRESETS = {
-    "duel": "configs/combat/match_motors_v1.yaml",
+    "duel": "configs/combat/duel_final_learned.yaml",
     "team": "configs/combat/team_final.yaml",
 }
 _busy = False
 _latest = None
+
+
+def body_profiles():
+    """Combat identities are distinct from the older survival bodies."""
+    home = Path(os.environ.get("ROSCLAW_HOME", Path.home() / ".rosclaw"))
+    rows = []
+    for name in ("lavender", "cream", "coral", "cyan"):
+        body_id = "duckfu-" + name
+        path = home / "bodies" / body_id / "refs/eurdf.profile.yaml"
+        rows.append(
+            dict(
+                body_id=body_id,
+                actor_identity=name,
+                registered=path.is_file(),
+                profile_sha256=sha256(path.read_bytes()).hexdigest()
+                if path.is_file()
+                else None,
+            )
+        )
+    return rows
 
 
 class CombatMCP(FastMCP):
@@ -123,7 +141,7 @@ async def start_match(seed: int, preset: str = "duel") -> dict:
                 "OPENBLAS_NUM_THREADS": "1",
             },
         )
-        _, stderr = await asyncio.wait_for(process.communicate(), 240.0)
+        _, stderr = await asyncio.wait_for(process.communicate(), 600.0)
         if process.returncode:
             raise RuntimeError("Combat worker failed: " + stderr.decode()[-1200:])
         manifest_path = out / "manifest.json"

@@ -1,4 +1,4 @@
-"""Run the development duel; learned/Jev/team modes are not yet qualified."""
+"""Run an explicit simulation duel or shared-world competition; unsupported modes fail."""
 
 import argparse
 import json

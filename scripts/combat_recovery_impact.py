@@ -6,6 +6,7 @@ All attempts (including no fall and numerical rejection) remain in the report.
 """
 
 import argparse
+from dataclasses import asdict, replace
 from concurrent.futures import ProcessPoolExecutor
 import json
 from pathlib import Path
@@ -41,6 +42,8 @@ def trial(job):
         heading_rad=(index % 4) * np.pi / 2,
     )
     physics = strict_load(physics_path, Physics) if physics_path else Physics()
+    if physics_path:
+        cfg = replace(cfg, physics_profile=Path(physics_path).name)
     m, d, ducks, _ = build(cfg, physics, seed)
     frozen_source = source_hashes()
     audit, guard = (
@@ -124,6 +127,7 @@ def trial(job):
         group=group,
         course=course,
         config=cfg.dict(),
+        physics=asdict(physics),
         coach="fixed rolling-motor stress course",
         recovery_calibration=dict(
             moving_delay_s=moving_delay, moving_first_roll=first_roll

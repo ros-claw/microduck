@@ -25,7 +25,7 @@ def shot(run, start, end, speed=1.0, view="wide", caption="", kind="match"):
     )
 
 
-def plan(run, edition):
+def plan(run, edition, contact_detail=None):
     run = Path(run)
     manifest = json.loads((run / "manifest.json").read_text())
     if manifest["schema"] != "duckfu.match-run.v1" or not manifest["capture"]:
@@ -36,7 +36,11 @@ def plan(run, edition):
     ):
         raise ValueError("Physical audit failed")
     physical = manifest["physical"]
-    if (
+    if edition == "diagnostic" and manifest["result"]["kind"] != "NO_CONTEST_PHYSICS":
+        raise ValueError(
+            "The diagnostic edition requires an actual numerical rejection"
+        )
+    if edition != "diagnostic" and (
         physical["penetration_max_m"] > 0.003
         or physical["penetrating_p99_m"] > 0.0015
         or any(physical["solver_warnings"])
@@ -48,16 +52,23 @@ def plan(run, edition):
     ]
     contacts = [e for e in events if e["state"] == "VALID_STRIKE"]
     duration = manifest["duration_s"]
-    if not contacts and edition != "reference":
+    if not contacts and edition not in ("reference", "diagnostic"):
         raise ValueError(
             "No measured response event: do not manufacture an action film"
         )
     first = contacts[0]["time_s"] if contacts else 3.0
     last = contacts[-1]["time_s"] if contacts else duration / 2
-    if edition == "reference":
+    if edition in ("reference", "diagnostic"):
         shots = [
             shot(
-                run, 0, duration, caption="CONTINUOUS NORMAL SPEED / NO CUTS / NO FOLEY"
+                run,
+                0,
+                duration,
+                caption=(
+                    "DIAGNOSTIC / NUMERICAL REJECTION / NO CONTEST"
+                    if edition == "diagnostic"
+                    else "CONTINUOUS NORMAL SPEED / NO CUTS / NO FOLEY"
+                ),
             )
         ]
     elif edition == "hero":
@@ -213,15 +224,39 @@ def plan(run, edition):
             )
     else:
         raise ValueError(edition)
+    if edition == "technical" and contact_detail:
+        measured = json.loads(Path(contact_detail).read_text())
+        if measured["source_manifest_sha256"] != digest(run / "manifest.json"):
+            raise ValueError("Contact detail belongs to another physical capture")
+        shots.insert(
+            3,
+            dict(
+                run=str(run.resolve()),
+                start_s=measured["source_time_s"],
+                end_s=measured["source_time_s"],
+                speed=0.0,
+                frames=100,
+                view="collision",
+                kind="contact_detail",
+                caption="CONTACT DETAIL / PEAK SINGLE-CONTACT NORMAL FORCE",
+                source_manifest_sha256=digest(run / "manifest.json"),
+                measurement=measured,
+                focus_pair=[measured["actor"], measured["target"]],
+            ),
+        )
     timeline, at = [], 0.0
     for s in shots:
-        frames = round((s["end_s"] - s["start_s"]) / s["speed"] * 50)
+        frames = (
+            s["frames"]
+            if s["speed"] == 0
+            else round((s["end_s"] - s["start_s"]) / s["speed"] * 50)
+        )
         if frames < 1:
             continue
         s.update(output_start_s=at, frames=frames)
         at += frames / 50
         timeline.append(s)
-    if edition != "reference":
+    if edition not in ("reference", "diagnostic"):
         outcome = manifest["result"]
         caption = (
             f"{outcome['winner']} TEAM WINS"
@@ -249,14 +284,16 @@ def plan(run, edition):
         fps=50,
         shots=timeline,
         duration_s=at,
-        continuous=edition == "reference",
+        continuous=edition in ("reference", "diagnostic"),
         simulation_only=True,
         source_run=str(run.resolve()),
         source_seed=manifest["seed"],
         source_result=manifest["result"],
         director_sha256=digest(__file__),
         slow_motion_uses_actual_states=True,
-        film_gate="PENDING_HUMAN_REVIEW",
+        film_gate="DIAGNOSTIC_NOT_QUALIFIED"
+        if edition == "diagnostic"
+        else "PENDING_HUMAN_REVIEW",
         audio="optional post-produced foley; never sensor audio",
     )
     if edition == "hero" and not 35 <= at <= 45:
@@ -274,15 +311,21 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--run", required=True)
     p.add_argument(
-        "--edition", choices=["hero", "short", "reference", "technical"], required=True
+        "--edition",
+        choices=["hero", "short", "reference", "technical", "diagnostic"],
+        required=True,
     )
     p.add_argument("--out", required=True)
+    p.add_argument(
+        "--contact-detail",
+        help="Measured solved-contact JSON for an explicitly marked technical frame hold",
+    )
     a = p.parse_args()
     out = Path(a.out)
     if out.exists():
         raise FileExistsError(out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    result = plan(Path(a.run), a.edition)
+    result = plan(Path(a.run), a.edition, a.contact_detail)
     write_json(out, result)
     print(json.dumps({k: v for k, v in result.items() if k != "shots"}, indent=2))
 

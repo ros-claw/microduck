@@ -5,6 +5,7 @@ The height comes from actual collision geometry, never a penetrating spawn.
 """
 
 import argparse
+from dataclasses import asdict
 import json
 import math
 from concurrent.futures import ProcessPoolExecutor
@@ -124,6 +125,7 @@ def trial(job):
         seed=seed,
         side=side,
         group=group,
+        physics=asdict(physics),
         initial_root_pose=initial,
         stage_friction=friction,
         reset_boundary="before first physics step",

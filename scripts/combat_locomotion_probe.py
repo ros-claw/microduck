@@ -2,7 +2,6 @@
 
 import argparse
 from concurrent.futures import ProcessPoolExecutor
-import itertools
 import json
 from pathlib import Path
 import mujoco

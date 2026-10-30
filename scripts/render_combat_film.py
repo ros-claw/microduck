@@ -56,7 +56,21 @@ def render(plan_path, out, width=1920, height=1080):
         raise ValueError("Unsupported event-driven film plan")
     out.parent.mkdir(parents=True, exist_ok=True)
     writer = imageio.get_writer(
-        str(out), fps=50, codec="libx264", quality=8, macro_block_size=1
+        str(out),
+        fps=50,
+        codec="libx264",
+        quality=None,
+        macro_block_size=1,
+        ffmpeg_params=[
+            "-crf",
+            "22",
+            "-preset",
+            "fast",
+            "-movflags",
+            "+faststart",
+            "-threads",
+            "2",
+        ],
     )
     cache = {}
     frame_number = 0
@@ -81,13 +95,22 @@ def render(plan_path, out, width=1920, height=1080):
                     .read_text()
                     .splitlines()
                 ]
-                cache[key] = (manifest, m, d, states, events, m.geom_group.copy())
-            manifest, m, d, states, events, groups = cache[key]
+                cache[key] = (
+                    manifest,
+                    m,
+                    d,
+                    states,
+                    events,
+                    m.geom_group.copy(),
+                    m.geom_rgba.copy(),
+                )
+            manifest, m, d, states, events, groups, rgba = cache[key]
             renderer = Renderer(m, height=height, width=width)
             camera = mujoco.MjvCamera()
             camera.type = mujoco.mjtCamera.mjCAMERA_FREE
             opt = mujoco.MjvOption()
             m.geom_group[:] = groups
+            m.geom_rgba[:] = rgba
             collision = shot["view"] == "collision"
             opt.geomgroup[3] = int(collision)
             if collision:
@@ -95,6 +118,11 @@ def render(plan_path, out, width=1920, height=1080):
                 opt.geomgroup[4] = 0
                 opt.flags[mujoco.mjtVisFlag.mjVIS_CONVEXHULL] = 1
                 for g in range(m.ngeom):
+                    body_name = m.body(int(m.geom_bodyid[g])).name
+                    owner = body_name.split("/")[0]
+                    if "_combat_shell" in body_name and owner in manifest["spawns"]:
+                        team_color = COLORS[manifest["spawns"][owner]["team"]]
+                        m.geom_rgba[g] = [*(v / 255 for v in team_color), 0.45]
                     if (
                         m.geom_group[g] == 3
                         and "_combat_shell" not in m.body(int(m.geom_bodyid[g])).name
@@ -135,7 +163,9 @@ def render(plan_path, out, width=1920, height=1080):
                     and e["time_s"] <= event_time
                 }
                 alive = [n for n in positions if n not in eliminated]
-                if shot.get("focus_actor"):
+                if shot.get("focus_pair"):
+                    selected = shot["focus_pair"]
+                elif shot.get("focus_actor"):
                     selected = [shot["focus_actor"]]
                 elif shot["view"] in ("pair", "collision") and focus:
                     selected = [focus["actor"], focus["target"]]
@@ -275,6 +305,8 @@ def render(plan_path, out, width=1920, height=1080):
                 )
                 if shot["kind"] == "result":
                     speed = "FINAL RESULT / FRAME HOLD"
+                elif shot["kind"] == "contact_detail":
+                    speed = "ACTUAL SOLVED CONTACT / FRAME HOLD"
                 clock = f"{source_time:05.2f}s"
                 label(
                     draw,
@@ -291,7 +323,46 @@ def render(plan_path, out, width=1920, height=1080):
                     max(18, round(20 * scale)),
                     anchor="rs",
                 )
-                if plan["edition"] == "technical" and focus and shot["speed"] < 1:
+                if shot.get("measurement"):
+                    measured = shot["measurement"]
+                    label(
+                        draw,
+                        (30, top + 25),
+                        f"SOLVER NORMAL FORCE / {measured['normal_force_N']:.2f} N",
+                        max(20, round(25 * scale)),
+                        color=(255, 205, 105),
+                    )
+                    parts = [
+                        m.body(int(m.geom_bodyid[g]))
+                        .name.split("/")[-1]
+                        .replace("_combat_shell", "")
+                        .replace("_", " ")
+                        .upper()
+                        for g in measured["geometry_ids"]
+                    ]
+                    label(
+                        draw,
+                        (30, top + 65),
+                        " / ".join(parts),
+                        max(18, round(22 * scale)),
+                        color=(205, 216, 230),
+                    )
+                    position = np.array(measured["position_world_m"])
+                    tip = position + np.array(measured["normal_world"]) * 0.06
+                    point_xy = project(position, renderer.scene, m, width, height)
+                    tip_xy = project(tip, renderer.scene, m, width, height)
+                    if point_xy and tip_xy:
+                        draw.line([point_xy, tip_xy], fill=(255, 205, 105), width=3)
+                        x, y = point_xy
+                        draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=(255, 205, 105))
+                        label(
+                            draw,
+                            tip_xy,
+                            "CONTACT NORMAL",
+                            max(17, round(20 * scale)),
+                            color=(255, 205, 105),
+                        )
+                elif plan["edition"] == "technical" and focus and shot["speed"] < 1:
                     impulse = focus["forward_impulse_Ns"]
                     label(
                         draw,
@@ -339,7 +410,7 @@ def render(plan_path, out, width=1920, height=1080):
         plan_sha256=digest(plan_path),
         video_sha256=digest(out),
         provenance_sha256=digest(out.with_suffix(".frames.jsonl")),
-        film_gate="PENDING_HUMAN_REVIEW",
+        film_gate=plan["film_gate"],
     )
     write_json(out.with_suffix(".json"), metadata)
     print(json.dumps(metadata, indent=2))

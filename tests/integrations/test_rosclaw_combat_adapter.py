@@ -9,6 +9,12 @@ def test_combat_read_only_status_never_creates_a_run(tmp_path, monkeypatch):
     assert combat.get_status()["usable_for_real_execution"] is False
     assert before == list(tmp_path.rglob("*"))
     assert combat.get_status()["last_executor_report"] is None
+    assert [p["body_id"] for p in combat.get_status()["participant_profiles"]] == [
+        "duckfu-lavender",
+        "duckfu-cream",
+        "duckfu-coral",
+        "duckfu-cyan",
+    ]
 
 
 def test_combat_catalog_strictly_separates_observation_and_action():
