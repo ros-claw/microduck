@@ -1,6 +1,7 @@
 """Render actual recorded integration states; camera/UI never enter physics."""
 
 import argparse
+import gzip
 import json
 import math
 import os
@@ -95,6 +96,16 @@ def render(plan_path, out, width=1920, height=1080):
                     .read_text()
                     .splitlines()
                 ]
+                roles = {}
+                if manifest["config"]["schema"] == "duckfu.match.v2":
+                    with gzip.open(
+                        directory / "tactical_decisions.jsonl.gz", "rt"
+                    ) as stream:
+                        for line in stream:
+                            row = json.loads(line)
+                            roles.setdefault(row["sim_step"], {})[row["actor"]] = (
+                                row.get("role", "")
+                            )
                 cache[key] = (
                     manifest,
                     m,
@@ -103,8 +114,9 @@ def render(plan_path, out, width=1920, height=1080):
                     events,
                     m.geom_group.copy(),
                     m.geom_rgba.copy(),
+                    roles,
                 )
-            manifest, m, d, states, events, groups, rgba = cache[key]
+            manifest, m, d, states, events, groups, rgba, roles = cache[key]
             renderer = Renderer(m, height=height, width=width)
             camera = mujoco.MjvCamera()
             camera.type = mujoco.mjtCamera.mjCAMERA_FREE
@@ -269,6 +281,13 @@ def render(plan_path, out, width=1920, height=1080):
                     spawn = manifest["spawns"][n]
                     color = COLORS[spawn["team"]]
                     text = spawn["display_name"]
+                    motor_step = step - step % round(
+                        1
+                        / (manifest["physics"]["motor_hz"] * manifest["physics"]["dt"])
+                    )
+                    role = roles.get(motor_step, {}).get(n, "")
+                    if role and role not in ("DUEL", "V1"):
+                        text += " / " + role
                     font = ImageFont.truetype(BOLD, max(19, round(24 * scale)))
                     box = draw.textbbox((x, y), text, font=font, anchor="ms")
                     draw.rounded_rectangle(

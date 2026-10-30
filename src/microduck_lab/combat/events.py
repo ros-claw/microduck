@@ -41,7 +41,9 @@ def counter_sequences(events):
     launches = [e for e in events if e["state"] == "ATTACK_LAUNCHED"]
     misses = {e["attack_id"]: e for e in events if e["state"] == "MISS"}
     evades = [
-        e for e in events if e["state"] == "MANEUVER" and e.get("skill") == "evade_step"
+        e
+        for e in events
+        if e["state"] == "MANEUVER" and e.get("skill") in ("evade_step", "cut_counter")
     ]
     strikes = [e for e in events if e["state"] == "VALID_STRIKE"]
     used, result = set(), []

@@ -11,6 +11,7 @@ from .world import digest, ASSETS, ROBOT, POLICIES
 from .episode import run, source_hashes
 from .config import Config, Physics
 from .match_config import MatchConfig
+from .v2_config import V2Config
 
 
 def verify(directory):
@@ -37,9 +38,13 @@ def verify(directory):
         dest = Path(temp) / "regenerated"
         actual = run(
             dest,
-            (MatchConfig if expected["schema"] == "duckfu.match-run.v1" else Config)(
-                **expected["config"]
-            ),
+            (
+                V2Config
+                if expected["config"]["schema"] == "duckfu.match.v2"
+                else MatchConfig
+                if expected["schema"] == "duckfu.match-run.v1"
+                else Config
+            )(**expected["config"]),
             Physics(**expected["physics"]),
             expected["seed"],
             True,
