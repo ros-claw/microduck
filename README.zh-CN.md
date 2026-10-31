@@ -58,7 +58,13 @@
 
 [![Duck Fu V2：持续支援与真实接触](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
 
-[自由对抗与接触特写](docs/combat/v2/round2/media/team_review.mp4) · [连续原速参考](docs/combat/v2/round2/media/team_reference.mp4) · [最新方法与结果](docs/combat/v2/round2/README.zh-CN.md) · [首轮同初态对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)。V2 在冻结运动策略上组合公开状态动作和持续团队任务，最新一轮将支援计划落实到实际换目标与求解器接触。长局倒地增多、反击提速目标未完成等限制均已记录，当前仍是待验收开发样片。
+[自由对抗与接触特写](docs/combat/v2/round2/media/team_review.mp4) · [连续原速参考](docs/combat/v2/round2/media/team_reference.mp4) · [第二轮方法与结果](docs/combat/v2/round2/README.zh-CN.md) · [首轮同初态对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)。V2 在冻结运动策略上组合公开状态动作和持续团队任务，最新一轮将支援计划落实到实际换目标与求解器接触。长局倒地增多、反击提速目标未完成等限制均已记录，当前仍是待验收开发样片。
+
+### 战术 2v2——牵制、绕侧、反击与掩护
+
+[![战术 2v2：闪避反击与边缘混战](docs/combat/v2/tactics/media/cover.jpg)](docs/combat/v2/tactics/media/tactical_en.mp4)
+
+[英文解说与慢动作视频，约 64 秒](docs/combat/v2/tactics/media/tactical_en.mp4) · [方法、实测与复现](docs/combat/v2/tactics/README.zh-CN.md)。公开状态规则在已有学习运动策略上协调牵制、绕侧、分路施压和撤离掩护。每种控制器各八次配对运行中，实测侧面响应由 **43 次变为 65 次**，保持直立且不中断的“闪避—敌方扑空—反击接触”由 **1 次变为 3 次**；16 场均通过原数值检查。但新控制八场仍全部平局，尚不能宣称已形成更强的制胜打法。成片明确区分两场自由对抗及其慢放。
 
 ### 身体恢复专项训练——可选方案
 

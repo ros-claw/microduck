@@ -111,7 +111,6 @@ def main():
     cache.mkdir(parents=True, exist_ok=True)
     run = Path(plan["source_run"])
     manifest = json.loads((run / "manifest.json").read_text())
-    episodes = json.loads((run / "contacts_summary.json").read_text())["episodes"]
     events = [
         json.loads(line)
         for line in (run / "runtime_events.jsonl").read_text().splitlines()
@@ -136,11 +135,21 @@ def main():
         tick = np.arange(round(0.07 * rate)) / rate
         add(at, 0.035 * np.exp(-tick * 55) * np.sin(2 * np.pi * 90 * tick))
     foley = []
+    contact_sources = {}
     for shot in plan["shots"]:
         if shot["speed"] <= 0:
             continue
-        for e in episodes:
-            time = e["start_step"] * manifest["physics"]["dt"]
+        shot_run = Path(shot["run"])
+        if str(shot_run) not in contact_sources:
+            contact_sources[str(shot_run)] = (
+                json.loads((shot_run / "manifest.json").read_text()),
+                json.loads((shot_run / "contacts_summary.json").read_text())[
+                    "episodes"
+                ],
+            )
+        shot_manifest, shot_episodes = contact_sources[str(shot_run)]
+        for e in shot_episodes:
+            time = e["start_step"] * shot_manifest["physics"]["dt"]
             if (
                 e["summed_normal_impulse_Ns"] < 0.015
                 or not shot["start_s"] <= time < shot["end_s"]
@@ -161,6 +170,10 @@ def main():
                     source_contact_episode=e["event_id"],
                     source_time_s=time,
                     impulse_Ns=e["summed_normal_impulse_Ns"],
+                    source_run=str(shot_run),
+                    source_contact_summary_sha256=digest(
+                        shot_run / "contacts_summary.json"
+                    ),
                 )
             )
     winner = manifest["result"]["winner"]
@@ -171,7 +184,12 @@ def main():
         else "裁判宣布平局！"
     )
     cues = []
-    if plan["edition"] == "hero":
+    if plan.get("commentary"):
+        cues = [
+            (c["at_s"], c["text"], c.get("zh_CN", c["text"]))
+            for c in plan["commentary"]
+        ]
+    elif plan["edition"] == "hero":
         cues.append(
             (
                 0.15,
@@ -303,7 +321,8 @@ def main():
             else:
                 continue
             cues.append((s["output_start_s"] + 0.2, en, cn))
-    cues.append((plan["shots"][-1]["output_start_s"] + 0.1, final_en, final_cn))
+    if not plan.get("commentary"):
+        cues.append((plan["shots"][-1]["output_start_s"] + 0.1, final_en, final_cn))
     cues.sort()
     jobs = []
     for i, (at, en, cn) in enumerate(cues):
@@ -332,6 +351,35 @@ def main():
         w.setsampwidth(2)
         w.setframerate(rate)
         w.writeframes((audio * 32767).astype("<i2").tobytes())
+    loudness = None
+    loudness_filter = []
+    if plan["edition"] == "tactical":
+        measured = subprocess.run(
+            [
+                imageio_ffmpeg.get_ffmpeg_exe(),
+                "-hide_banner",
+                "-i",
+                str(wav),
+                "-af",
+                "loudnorm=I=-16:TP=-2:LRA=11:print_format=json",
+                "-f",
+                "null",
+                "-",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        loudness = json.loads(
+            measured.stderr[measured.stderr.rfind("{") : measured.stderr.rfind("}") + 1]
+        )
+        filt = (
+            "loudnorm=I=-16:TP=-2:LRA=11:linear=false"
+            f":measured_I={loudness['input_i']}:measured_TP={loudness['input_tp']}"
+            f":measured_LRA={loudness['input_lra']}:measured_thresh={loudness['input_thresh']}"
+            f":offset={loudness['target_offset']}"
+        )
+        loudness_filter = ["-af", filt, "-ar", "48000"]
     subprocess.run(
         [
             imageio_ffmpeg.get_ffmpeg_exe(),
@@ -351,6 +399,7 @@ def main():
             "aac",
             "-b:a",
             "192k",
+            *loudness_filter,
             "-movflags",
             "+faststart",
             "-shortest",
@@ -378,6 +427,11 @@ def main():
             voice="en-GB-RyanNeural",
             peak_before_limiting=peak,
             limiter_ceiling=0.94,
+            loudness_mastering=dict(
+                target_LUFS=-16, target_true_peak_dBTP=-2, first_pass=loudness
+            )
+            if loudness
+            else None,
         ),
     )
     for language, key in (("en", "text"), ("zh-CN", "zh_CN")):

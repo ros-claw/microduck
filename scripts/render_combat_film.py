@@ -218,7 +218,9 @@ def render(plan_path, out, width=1920, height=1080):
                 )
                 camera.lookat[:] = look
                 camera.distance = distance
-                camera.azimuth = 112 + math.degrees(manifest["config"]["heading_rad"])
+                camera.azimuth = shot.get("camera_azimuth_deg", 112) + math.degrees(
+                    manifest["config"]["heading_rad"]
+                )
                 camera.elevation = shot.get(
                     "camera_elevation_deg", -34 if shot["view"] == "wide" else -25
                 )
@@ -251,6 +253,29 @@ def render(plan_path, out, width=1920, height=1080):
                                 width=max(2, width // 640),
                             )
                 scale = width / 1920
+                if plan.get("team_markers"):
+                    for n in alive:
+                        p = positions[n]
+                        ring = [
+                            project(
+                                [
+                                    p[0] + 0.075 * math.cos(a),
+                                    p[1] + 0.075 * math.sin(a),
+                                    0.003,
+                                ],
+                                renderer.scene,
+                                m,
+                                width,
+                                height,
+                            )
+                            for a in np.linspace(0, 2 * math.pi, 33)
+                        ]
+                        if all(v is not None for v in ring):
+                            draw.line(
+                                ring,
+                                fill=COLORS[manifest["spawns"][n]["team"]],
+                                width=max(2, round(3 * scale)),
+                            )
                 top = round(90 * max(scale, 0.65))
                 draw.rectangle((0, 0, width, top), fill=(12, 17, 25))
                 label(
@@ -283,6 +308,81 @@ def render(plan_path, out, width=1920, height=1080):
                     bold=True,
                     anchor="mm",
                 )
+                if plan.get("tactical_hud"):
+                    size = round(250 * scale)
+                    right, y0 = width - round(24 * scale), top + round(20 * scale)
+                    x0 = right - size
+                    draw.rounded_rectangle(
+                        (x0, y0, right, y0 + size + round(38 * scale)),
+                        radius=10,
+                        fill=(14, 22, 33),
+                        outline=(69, 85, 107),
+                        width=2,
+                    )
+                    radius = manifest["config"]["radius_m"]
+
+                    def map_point(p):
+                        return (
+                            x0 + size / 2 + p[0] / radius * size * 0.40,
+                            y0 + size / 2 - p[1] / radius * size * 0.40,
+                        )
+
+                    outline = [
+                        map_point([radius * math.cos(a), radius * math.sin(a)])
+                        for a in np.linspace(0, 2 * math.pi, 9)
+                    ]
+                    draw.line(outline, fill=(124, 141, 162), width=2)
+                    control_step = step - step % round(0.02 / manifest["physics"]["dt"])
+                    rows = body_status.get(control_step, {})
+                    for n in alive:
+                        row = rows.get(n, {})
+                        target = row.get("target")
+                        if target in alive:
+                            start, end = (
+                                map_point(positions[n]),
+                                map_point(positions[target]),
+                            )
+                            draw.line(
+                                [start, end],
+                                fill=tuple(
+                                    v // 2
+                                    for v in COLORS[manifest["spawns"][n]["team"]]
+                                ),
+                                width=2,
+                            )
+                    for n in alive:
+                        x, y = map_point(positions[n])
+                        color = COLORS[manifest["spawns"][n]["team"]]
+                        r = max(4, round(6 * scale))
+                        draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
+                        status = rows.get(n, {}).get("observation", {})
+                        if "yaw" in status:
+                            yaw = status["yaw"]
+                            tip = (
+                                x + round(15 * scale) * math.cos(yaw),
+                                y - round(15 * scale) * math.sin(yaw),
+                            )
+                            draw.line(
+                                [(x, y), tip],
+                                fill=color,
+                                width=max(2, round(3 * scale)),
+                            )
+                        label(
+                            draw,
+                            (x + round(8 * scale), y - round(10 * scale)),
+                            manifest["spawns"][n]["display_name"][0],
+                            max(13, round(19 * scale)),
+                            color=color,
+                            bold=True,
+                        )
+                    label(
+                        draw,
+                        (x0 + size / 2, y0 + size + round(9 * scale)),
+                        "LIVE TARGETS / PUBLIC STATE",
+                        max(11, round(15 * scale)),
+                        anchor="mt",
+                        color=(173, 190, 206),
+                    )
                 placed_labels = []
                 for n, p in positions.items():
                     if n in eliminated:
@@ -369,7 +469,9 @@ def render(plan_path, out, width=1920, height=1080):
                     speed = "FINAL RESULT / FRAME HOLD"
                 elif shot["kind"] == "contact_detail":
                     speed = "ACTUAL SOLVED CONTACT / FRAME HOLD"
-                clock = f"{source_time:05.2f}s"
+                clock = (
+                    shot.get("bout_label", "") + " / " if shot.get("bout_label") else ""
+                ) + f"{source_time:05.2f}s"
                 label(
                     draw,
                     (25, height - 22),

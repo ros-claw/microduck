@@ -58,7 +58,13 @@ This is a simulation development branch awaiting user film acceptance. Jev/netwo
 
 [![Duck Fu V2: committed team cover](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
 
-[Free match and contact close-ups](docs/combat/v2/round2/media/team_review.mp4) · [Continuous reference](docs/combat/v2/round2/media/team_reference.mp4) · [Latest methods and results](docs/combat/v2/round2/README.md) · [First-round comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4). V2 composes frozen learned motors using public-state maneuvers and persistent team assignments. The latest round connects cover plans to actual target changes and solved contacts. More long-match falls and unfinished counter-speed goals remain documented; these are development samples pending acceptance.
+[Free match and contact close-ups](docs/combat/v2/round2/media/team_review.mp4) · [Continuous reference](docs/combat/v2/round2/media/team_reference.mp4) · [Round-two methods and results](docs/combat/v2/round2/README.md) · [First-round comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4). V2 composes frozen learned motors using public-state maneuvers and persistent team assignments. The latest round connects cover plans to actual target changes and solved contacts. More long-match falls and unfinished counter-speed goals remain documented; these are development samples pending acceptance.
+
+### Tactical 2v2 — draw, flank, counter and cover
+
+[![Tactical 2v2: evade, counter and an edge scramble](docs/combat/v2/tactics/media/cover.jpg)](docs/combat/v2/tactics/media/tactical_en.mp4)
+
+[English commentary and slow-motion film, 64 s](docs/combat/v2/tactics/media/tactical_en.mp4) · [Method, results and reproduction](docs/combat/v2/tactics/README.md). Public-state rules coordinate a drawing fighter, a flanker, separate pressure lanes and withdrawal cover over the existing learned motors. Across eight paired runs per controller, measured flank responses change from **43 to 65**, and uninterrupted upright evade/miss/counter sequences from **1 to 3**. All 16 runs pass the unchanged numerical checks. All eight new-controller bouts still draw; these results do not establish stronger winning tactics. The film explicitly separates two free bouts and their replays.
 
 ### Body recovery experiment — optional
 

@@ -74,6 +74,23 @@ def summarize(root):
             )
         )
     episodes = json.loads((root / "contacts_summary.json").read_text())["episodes"]
+    # The historical sequence detector permits an intervening fall. Keep its
+    # count, but separately require upright uninterrupted execution for a film
+    # to describe the whole sequence as a stable dodge and counter.
+    stable_counters = []
+    for e in events:
+        if e["state"] != "COUNTER_SEQUENCE":
+            continue
+        i, j = round(e["evade_time_s"] * 50), round(e["counter_contact_time_s"] * 50)
+        up = bodies[i : j + 1, names.index(e["actor"]), 3]
+        interrupted = any(
+            x.get("actor") == e["actor"]
+            and x["state"] in ("RECOVERY_STARTED", "DOWN", "RING_OUT", "DOWN_COUNT")
+            and e["evade_time_s"] <= x["time_s"] <= e["counter_contact_time_s"]
+            for x in events
+        )
+        if len(up) and float(up.min()) >= 0.94 and not interrupted:
+            stable_counters.append(dict(**e, minimum_upright=float(up.min())))
     # A long touching episode is a stall proxy, not a diagnosis of an actor's intent.
     long_contacts = [
         e for e in episodes if e["end_step"] - e["start_step"] > 3 / m["physics"]["dt"]
@@ -112,6 +129,7 @@ def summarize(root):
             )
         },
         flank_responses=sum(h["flank_response"] for h in hits),
+        stable_counter_sequences=stable_counters,
         supported_responses=sum(bool(h["nearby_supported_allies"]) for h in hits),
         long_contact_episodes=len(long_contacts),
         strikes=hits,
@@ -187,6 +205,9 @@ def main():
             physical_pass=sum(r["physical_pass"] for r in rs),
             counts={s: sum(r["counts"][s] for r in rs) for s in rs[0]["counts"]},
             flank_responses=sum(r["flank_responses"] for r in rs),
+            stable_counter_sequences=sum(
+                len(r["stable_counter_sequences"]) for r in rs
+            ),
             supported_responses=sum(r["supported_responses"] for r in rs),
             long_contact_episodes=sum(r["long_contact_episodes"] for r in rs),
             outcomes={
