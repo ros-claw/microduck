@@ -1,0 +1,109 @@
+{
+  "schema": "duckfu.round2-verification.v1",
+  "created_utc": "2026-10-31T02:11:06.430710+00:00",
+  "actor_commit": "693f662",
+  "python": "3.13.12",
+  "mujoco": "3.12.0",
+  "numpy": "2.5.2",
+  "onnxruntime": "1.29.0",
+  "tests": {
+    "command": "MICRODUCK_ROOT=/tmp/duckfu-frozen-assets PYTHONPATH=src OPENBLAS_NUM_THREADS=1 /tmp/duckfu-clean-venv/bin/python -m pytest tests -q",
+    "result": "215 passed in 63.04s (0:01:03)",
+    "log_sha256": "ea8cb7199de4965fa0224477b06d56d9b991ebc8515300f4df730b647941d4e4"
+  },
+  "checks": {
+    "capture-parity.json": [
+      {
+        "revision": 1,
+        "parity": {
+          "ctrl": true,
+          "body": true,
+          "phases": true
+        },
+        "same_initial_state": true
+      },
+      {
+        "revision": 2,
+        "parity": {
+          "ctrl": true,
+          "body": true,
+          "phases": true
+        },
+        "same_initial_state": true
+      }
+    ],
+    "replay-r1.json": {
+      "verified": true,
+      "closed_loop_rules_regenerated": true,
+      "motor_histories_regenerated": true,
+      "contact_log_identical": true,
+      "referee_identical": true,
+      "max_integration_state_error": 0.0,
+      "evidence_domain": "simulation",
+      "steps": 480000
+    },
+    "replay-r2.json": {
+      "verified": true,
+      "closed_loop_rules_regenerated": true,
+      "motor_histories_regenerated": true,
+      "contact_log_identical": true,
+      "referee_identical": true,
+      "max_integration_state_error": 0.0,
+      "evidence_domain": "simulation",
+      "steps": 480000
+    },
+    "film-reference-check.json": {
+      "schema": "duckfu.film-check.v1",
+      "video": "out/duckfu-v2-round2/team_reference.mp4",
+      "video_sha256": "631277e41bb9146e0722b04ed895f1df4cec801e6926e1dd551cba59e609772b",
+      "decoded_frames": 3000,
+      "fps": 50,
+      "duration_s": 60.0,
+      "width": 1280,
+      "height": 720,
+      "verified_physical_frame_mappings": 3000,
+      "continuous": true,
+      "audio_codec": null,
+      "film_gate": "PENDING_HUMAN_REVIEW",
+      "physical_sources_pass": true,
+      "passed": true
+    },
+    "film-review-check.json": {
+      "schema": "duckfu.film-check.v1",
+      "video": "out/duckfu-v2-round2/team_review.mp4",
+      "video_sha256": "6f2a2ae5f51d34c7498693cf2409f1d19fe1e593e2205ee6c27120a6af1fb01c",
+      "decoded_frames": 4329,
+      "fps": 50,
+      "duration_s": 86.58,
+      "width": 1920,
+      "height": 1080,
+      "verified_physical_frame_mappings": 4329,
+      "continuous": false,
+      "audio_codec": null,
+      "film_gate": "PENDING_HUMAN_REVIEW",
+      "physical_sources_pass": true,
+      "passed": true
+    }
+  },
+  "evidence_sha256": {
+    "support-1-dt-check.json": "e14897d1bdf0b62f1f46420de7e540c2b1e3ec48ef1239fe33c1e6e59a564396",
+    "development-c.json.gz": "66f4e528ff62d992169b8c826bb3e579b15d0d3001b559a4a5d48ee205011ddf",
+    "replay-r1.json": "c5befcd5d2815fff56017d4b363a8b3702194b3426511fd91d97f9b407b3f75f",
+    "film-reference-check.json": "b0ed503e369e5b3346cfbe5c8c22a89823da100ffcf47b6757320075a912d7e5",
+    "final-evaluation.raw-report.json.gz": "ba722b67b9031ac99c77c485bf6d401491ff960ea9e4749350b3c78d6611b7ca",
+    "development-d.json.gz": "14d494144b18b76db5b54ce9ad0988a84a12b2ba0e63fc5a0e537b364467a66b",
+    "film-review-check.json": "dac1de9beea6e1a00a1085b0e11d7f07255a7b2bf71e6acde93412bd0eae0671",
+    "replay-r2.json": "c5befcd5d2815fff56017d4b363a8b3702194b3426511fd91d97f9b407b3f75f",
+    "support-2-dt-check.json": "412f44a4d526d2ddb1aed44e61132f8f590f101c642f0385c53bc212a33e57d0",
+    "pivot-component-91003.json": "baaa276634cc8779f75869c99cfbc3668a881eb0e6eeec83de1f63072fc5133f",
+    "development-a.json.gz": "e5516e3bc1badbe0f02d497b05f27b9557be7eb22344bb94991fd4be3cf7c9db",
+    "development-e.json.gz": "d00eda820f1f5aff38ea8d64046c54a545c2b1cdab702c927853e42704c39720",
+    "final-evaluation.json": "8df7e61cdec683296bb9f027cf6902510ceab8f6666f7c62506c937f911aa9b1",
+    "stage-edge-dt-check.json": "89dd35c11a887e2ef52310be1039851cb58ac4e72dc9b20b7b56d27456d24150",
+    "development-b.json.gz": "0960f8aac7915f7c976c72fe4302ee2ae257245e5267564b8c1b705df31a1967",
+    "capture-parity.json": "2ee52fada8a2f564eb9731e37ee2ae38de9a23d5950ecdc30cf071789acb3a82"
+  },
+  "runtime_source_matches_all_80_runs": true,
+  "legacy_contact_detail_fields_preserved": true,
+  "existing_review_overwrite_rejected": true
+}

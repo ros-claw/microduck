@@ -56,9 +56,9 @@ This is a simulation development branch awaiting user film acceptance. Jev/netwo
 
 ### V2 development: exchanges and team intent
 
-[![Duck Fu V2: matched-state comparison](docs/combat/v2/media/cover.jpg)](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)
+[![Duck Fu V2: committed team cover](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
 
-[Matched-state comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4) · [Team intervention course](docs/combat/v2/media/team_course.mp4) · [Methods](docs/combat/v2/README.md) · [Results and unfinished gates](docs/combat/v2/RESULTS.md). V2 adds bounded action composition and state-conditioned handoffs over the frozen V1 motors. These silent review samples are an early development round, not a new accepted release.
+[Free match and contact close-ups](docs/combat/v2/round2/media/team_review.mp4) · [Continuous reference](docs/combat/v2/round2/media/team_reference.mp4) · [Latest methods and results](docs/combat/v2/round2/README.md) · [First-round comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4). V2 composes frozen learned motors using public-state maneuvers and persistent team assignments. The latest round connects cover plans to actual target changes and solved contacts. More long-match falls and unfinished counter-speed goals remain documented; these are development samples pending acceptance.
 
 ## How it works
 

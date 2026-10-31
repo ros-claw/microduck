@@ -2,6 +2,8 @@
 
 **English** · [简体中文](README.zh-CN.md) · [V1 methods](../README.md) · [Results](RESULTS.md)
 
+**Latest:** [Round two — committed cover, complete free team match and measured contact close-ups](round2/README.md). The first-round methods and samples below remain available for comparison.
+
 This is the first V2 development round: exchange diagnosis, bounded short/committed attacks, state-conditioned handoffs, and a transparent team-intent prototype. It is not a completed V2 release or evidence of stable tactical superiority.
 
 [![Matched-state V1/V2 comparison](media/cover.jpg)](media/duck_fu_v2_duel_comparison.mp4)

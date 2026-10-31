@@ -1,0 +1,249 @@
+{
+  "schema": "duckfu.film-plan.v1",
+  "edition": "reference",
+  "fps": 50,
+  "simulation_only": true,
+  "slow_motion_uses_actual_states": true,
+  "film_gate": "PENDING_HUMAN_REVIEW",
+  "audio": "silent",
+  "source_result": {
+    "kind": "TIMEOUT_DRAW",
+    "winner": null,
+    "time_s": 60.0
+  },
+  "selected_interventions": [
+    {
+      "state": "TEAM_INTERVENTION",
+      "actor": "cyan",
+      "target": "lavender",
+      "protected": "cream",
+      "previous_target": "coral",
+      "change_s": 4.22,
+      "contact_s": 6.606375,
+      "episode_id": 9,
+      "measured_impulse_Ns": 0.08586146933376379,
+      "pressure_proximity": {
+        "before": 0.5645503847327635,
+        "before_seconds": 0.6,
+        "after": 0.4142221000599124,
+        "after_seconds": 1.0
+      },
+      "intervention_schema": "duckfu.team-intervention.v2",
+      "actor_progress_toward_initial_target_m": 0.09769045634946952,
+      "contact_delay_s": 2.386375,
+      "role_at_contact": "PEEL",
+      "actual_target_at_contact": "lavender",
+      "current_plan_matches": true,
+      "pressure_relief_observed": true,
+      "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+    },
+    {
+      "state": "TEAM_INTERVENTION",
+      "actor": "coral",
+      "target": "cyan",
+      "protected": "lavender",
+      "previous_target": "cream",
+      "change_s": 30.98,
+      "contact_s": 32.341875,
+      "episode_id": 127,
+      "measured_impulse_Ns": 0.1766730273085208,
+      "pressure_proximity": {
+        "before": 1.2445403624666862,
+        "before_seconds": 0.6,
+        "after": 0.874366423153191,
+        "after_seconds": 1.0
+      },
+      "intervention_schema": "duckfu.team-intervention.v2",
+      "actor_progress_toward_initial_target_m": 0.06792567525339298,
+      "contact_delay_s": 1.3618750000000013,
+      "role_at_contact": "PEEL",
+      "actual_target_at_contact": "cyan",
+      "current_plan_matches": true,
+      "pressure_relief_observed": true,
+      "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+    }
+  ],
+  "selection_note": "Editorial selection from the frozen evaluation; source seed 110001, swapped side, contains retained target changes by both teams. Demonstration is not another independent trial.",
+  "shots": [
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 0.0,
+      "end_s": 59.99975,
+      "speed": 1,
+      "view": "follow",
+      "caption": "FREE 2v2 / PUBLIC-STATE TEAM PLANS / FULL MATCH AT 1x",
+      "kind": "match",
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "frames": 3000,
+      "output_start_s": 0.0
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 3.92,
+      "end_s": 7.006375,
+      "speed": 0.25,
+      "view": "pair",
+      "caption": "ANCHOR: SHADE -> ROOK / COVERING BOLT",
+      "kind": "replay",
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "focus_pair": [
+        "cyan",
+        "lavender",
+        "cream"
+      ],
+      "frames": 617,
+      "output_start_s": 60.0
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 6.606375,
+      "end_s": 6.606375,
+      "speed": 0.0,
+      "frames": 100,
+      "view": "collision",
+      "kind": "contact_detail",
+      "caption": "SOLVED CONTACT / SINGLE-FRAME HOLD / COLLISION GEOMETRY",
+      "focus_pair": [
+        "cyan",
+        "lavender"
+      ],
+      "measurement": {
+        "schema": "duckfu.contact-detail.v1",
+        "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+        "source_contact_log_sha256": "e29838b5ed75365bb4e0f0547b576839adda5410e57fe29d91b18eae15956bcd",
+        "source_step": 52851,
+        "source_time_s": 6.606375,
+        "source_contact_episode_id": 9,
+        "actor": "cyan",
+        "target": "lavender",
+        "attack_id": "lavender:2",
+        "normal_force_N": 169.96589646591613,
+        "position_world_m": [
+          0.16807304291853897,
+          0.0697594496047636,
+          0.25983177522437106
+        ],
+        "normal_world": [
+          -0.22448329701325268,
+          0.9335845967044564,
+          0.2793332242291233
+        ],
+        "geometry_ids": [
+          87,
+          540
+        ],
+        "raw_contact": [
+          87,
+          540,
+          -2.0351788343461727e-06,
+          169.96589646591613,
+          -128.74714803609663,
+          41.2187484298195,
+          0.0,
+          0.0,
+          0.0,
+          0.16807304291853897,
+          0.0697594496047636,
+          0.25983177522437106,
+          -0.22448329701325268,
+          0.9335845967044564,
+          0.2793332242291233
+        ],
+        "note": "Peak individual solved normal force within the selected measured contact episode; frame hold is explicitly marked, not two seconds of sustained force or causal damage."
+      },
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "output_start_s": 72.34
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 30.68,
+      "end_s": 32.741875,
+      "speed": 0.25,
+      "view": "pair",
+      "caption": "SHADE: BOLT -> ANCHOR / COVERING ROOK",
+      "kind": "replay",
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "focus_pair": [
+        "coral",
+        "cyan",
+        "lavender"
+      ],
+      "frames": 412,
+      "output_start_s": 74.34
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 32.360375,
+      "end_s": 32.360375,
+      "speed": 0.0,
+      "frames": 100,
+      "view": "collision",
+      "kind": "contact_detail",
+      "caption": "SOLVED CONTACT / SINGLE-FRAME HOLD / COLLISION GEOMETRY",
+      "focus_pair": [
+        "coral",
+        "cyan"
+      ],
+      "measurement": {
+        "schema": "duckfu.contact-detail.v1",
+        "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+        "source_contact_log_sha256": "e29838b5ed75365bb4e0f0547b576839adda5410e57fe29d91b18eae15956bcd",
+        "source_step": 258883,
+        "source_time_s": 32.360375,
+        "source_contact_episode_id": 127,
+        "actor": "coral",
+        "target": "cyan",
+        "attack_id": null,
+        "normal_force_N": 407.06620980256065,
+        "position_world_m": [
+          -0.0009278975136571875,
+          0.19687493794587543,
+          0.23485567627468
+        ],
+        "normal_world": [
+          0.10469612041455245,
+          -0.9918286920710975,
+          -0.07290108335736586
+        ],
+        "geometry_ids": [
+          395,
+          546
+        ],
+        "raw_contact": [
+          395,
+          546,
+          -5.469591690234397e-05,
+          407.06620980256065,
+          -173.8157700836502,
+          58.546549549261584,
+          0.0,
+          0.0,
+          0.0,
+          -0.0009278975136571875,
+          0.19687493794587543,
+          0.23485567627468,
+          0.10469612041455245,
+          -0.9918286920710975,
+          -0.07290108335736586
+        ],
+        "note": "Peak individual solved normal force within the selected measured contact episode; frame hold is explicitly marked, not two seconds of sustained force or causal damage."
+      },
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "output_start_s": 82.58
+    },
+    {
+      "run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-round2-film-r2",
+      "start_s": 59.999875,
+      "end_s": 59.999875,
+      "speed": 0.0,
+      "frames": 100,
+      "view": "follow",
+      "kind": "result",
+      "caption": "TIME LIMIT / DRAW",
+      "source_manifest_sha256": "83205473cf9c4ff752fc3f2505be81338f7626b521b834daddfa83c349c4ea07",
+      "output_start_s": 84.58
+    }
+  ],
+  "duration_s": 86.58,
+  "continuous": false
+}

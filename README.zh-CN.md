@@ -56,9 +56,9 @@
 
 ### V2 开发：交锋与团队意图
 
-[![Duck Fu V2: matched-state comparison](docs/combat/v2/media/cover.jpg)](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)
+[![Duck Fu V2：持续支援与真实接触](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
 
-[同初态原速对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4) · [团队介入课程](docs/combat/v2/media/team_course.mp4) · [方法与运行](docs/combat/v2/README.zh-CN.md) · [结果与未完成项](docs/combat/v2/RESULTS.md)。V2 在冻结 V1 运动策略上增加受限动作组合和状态过渡；当前为静音开发验证样片，尚非新的已验收版本。
+[自由对抗与接触特写](docs/combat/v2/round2/media/team_review.mp4) · [连续原速参考](docs/combat/v2/round2/media/team_reference.mp4) · [最新方法与结果](docs/combat/v2/round2/README.zh-CN.md) · [首轮同初态对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)。V2 在冻结运动策略上组合公开状态动作和持续团队任务，最新一轮将支援计划落实到实际换目标与求解器接触。长局倒地增多、反击提速目标未完成等限制均已记录，当前仍是待验收开发样片。
 
 ## 方法
 

@@ -9,21 +9,38 @@ from microduck_lab.combat.world import digest
 from microduck_lab.combat.episode import write_json
 
 
-def detail(run):
+def detail(run, episode_id=None, actor=None):
+    # With an explicit contact participant, attack_id still identifies the
+    # associated legacy strike event; that attack may belong to the other
+    # participant. A contact actor is not automatically the attacking actor.
     run = Path(run)
     manifest = json.loads((run / "manifest.json").read_text())
     events = [
         json.loads(s) for s in (run / "runtime_events.jsonl").read_text().splitlines()
     ]
-    event = next(e for e in events if e["state"] == "VALID_STRIKE")
-    episode = json.loads((run / "contacts_summary.json").read_text())["episodes"][
-        event["contact_episode_id"]
-    ]
+    episodes = json.loads((run / "contacts_summary.json").read_text())["episodes"]
+    if episode_id is None:
+        event = next(e for e in events if e["state"] == "VALID_STRIKE")
+        episode_id, actor = event["contact_episode_id"], event["actor"]
+    else:
+        event = next(
+            (
+                e
+                for e in events
+                if e["state"] == "VALID_STRIKE"
+                and e["contact_episode_id"] == episode_id
+            ),
+            {},
+        )
+    episode = next(e for e in episodes if e["event_id"] == episode_id)
+    if actor not in episode["actor_pair"]:
+        raise ValueError("The declared actor must belong to the measured episode")
+    target = next(n for n in episode["actor_pair"] if n != actor)
     contact_log = run / "contacts_full.jsonl.gz"
     if digest(contact_log) != manifest["hashes"]["contacts_full.jsonl.gz"]:
         raise ValueError("Changed solved-contact log")
     model = mujoco.MjModel.from_binary_path(str(run / "scene.mjb"))
-    wanted = {event["actor"], event["target"]}
+    wanted = {actor, target}
     peak = None
     with gzip.open(contact_log, "rt") as stream:
         for line in stream:
@@ -52,16 +69,16 @@ def detail(run):
         source_contact_log_sha256=digest(contact_log),
         source_step=step,
         source_time_s=step * manifest["physics"]["dt"],
-        source_contact_episode_id=event["contact_episode_id"],
-        actor=event["actor"],
-        target=event["target"],
-        attack_id=event["attack_id"],
+        source_contact_episode_id=episode_id,
+        actor=actor,
+        target=target,
+        attack_id=event.get("attack_id"),
         normal_force_N=row[3],
         position_world_m=row[9:12],
         normal_world=row[12:15],
         geometry_ids=row[:2],
         raw_contact=row,
-        note="Peak individual solved normal force within the first measured-response contact episode; frame hold is explicitly marked, not two seconds of sustained force.",
+        note="Peak individual solved normal force within the selected measured contact episode; frame hold is explicitly marked, not two seconds of sustained force or causal damage.",
     )
 
 
@@ -69,8 +86,10 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--run", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--episode-id", type=int)
+    p.add_argument("--actor")
     a = p.parse_args()
-    result = detail(a.run)
+    result = detail(a.run, a.episode_id, a.actor)
     write_json(a.out, result)
     print(json.dumps(result, indent=2))
 
