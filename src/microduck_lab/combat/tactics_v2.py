@@ -11,8 +11,9 @@ from .observations import relative
 from .maneuver import MotorCommand
 from .transition_contracts import evaluate_entry, evaluate_continuation
 from .parameterized_actions import ManeuverRequest
-from .team_intents import flank_waypoint
+from .team_intents import flank_waypoint, escape_waypoint
 from .command_envelope import facing_command, flank_ready
+from .geometry import boundary_distance
 
 V2_ACTIONS = ACTIONS + ("PROBE_BUMP", "CONTACT_EXIT")
 
@@ -35,6 +36,7 @@ class V2Pilot(Pilot):
         self.evade_min_distance = float("inf")
         self.last_visible_windup = -10.0
         self.entry_opportunity_logged = False
+        self.executed_assignment = None
 
     def navigate(self, me, point, speed=0.30):
         delta = np.array(point) - me.xy
@@ -168,6 +170,23 @@ class V2Pilot(Pilot):
         if candidate is None:
             return MotorCommand("no_live_opponent")
         safe_retarget = self.action is None or self.action in (0, 1, 2, 6, 7, 8, 10)
+        if self.c.controller_revision == 2 and assignment:
+            # A role is part of the maneuver request. Do not display a fresh
+            # PEEL assignment while an old attack/evade is still committed.
+            if safe_retarget or self.target not in alive:
+                if assignment != self.executed_assignment:
+                    self.event(
+                        now,
+                        "TEAM_ASSIGNMENT_ADOPTED",
+                        target=assignment.target,
+                        role=assignment.role,
+                        intent=assignment.intent,
+                        protected=assignment.protected,
+                        plan_since_s=assignment.since_s,
+                    )
+                self.executed_assignment = assignment
+            else:
+                assignment = self.executed_assignment
         if self.target not in alive or (candidate != self.target and safe_retarget):
             previous = self.target
             if self.action is not None:
@@ -225,6 +244,29 @@ class V2Pilot(Pilot):
         if self.action is None:
             mask, _ = self.legal(me, other, now)
             self.side = 1 if me.xy[1] <= 0 else -1
+            if self.c.controller_revision == 2 and partners:
+                lateral = np.array([-math.sin(me.yaw), math.cos(me.yaw)])
+                # Body-local escape sides, scored in the real octagon. Global
+                # y alone chose different behavior after rotating a match.
+                self.side = max(
+                    (1, -1),
+                    key=lambda side: (
+                        boundary_distance(
+                            np.array(me.xy) + side * 0.22 * lateral, self.c
+                        )
+                        - sum(
+                            max(
+                                0.0,
+                                0.28
+                                - np.linalg.norm(
+                                    np.array(b.xy)
+                                    - (np.array(me.xy) + side * 0.18 * lateral)
+                                ),
+                            )
+                            for b in partners
+                        )
+                    ),
+                )
             if not mask[4 if self.side > 0 else 5]:
                 self.side *= -1
             evade = 4 if self.side > 0 else 5
@@ -241,7 +283,12 @@ class V2Pilot(Pilot):
                 )
             elif assignment and self.role == "ESCAPE":
                 action = 7
-            elif self.style != "pressure" and threat and mask[evade]:
+            elif (
+                self.style != "pressure"
+                and threat
+                and mask[evade]
+                and not (self.c.controller_revision == 2 and self.role == "PEEL")
+            ):
                 action = evade
             elif stalled and mask[10]:
                 action = 10
@@ -435,7 +482,13 @@ class V2Pilot(Pilot):
                     np.array(other.velocity)
                     @ ((np.array(other.xy) - me.xy) / max(1e-9, dist))
                 )
-                if mask[9] and self.pending_counter and enemy_toward_us < 0.08:
+                counter_entry = evaluate_entry(me, self.motor_context)
+                if (
+                    mask[9]
+                    and self.pending_counter
+                    and enemy_toward_us < 0.08
+                    and (self.c.controller_revision == 1 or counter_entry["accepted"])
+                ):
                     self.finish(now, "DYNAMIC_HANDOFF")
                     self.begin(now, 9, public)
                     self.event(
@@ -466,6 +519,10 @@ class V2Pilot(Pilot):
             self.finish(now)
             return MotorCommand("tactics", "walk")
         if action == 7:
+            if self.c.controller_revision == 2 and self.role == "ESCAPE":
+                return self.navigate(
+                    me, escape_waypoint(me, other, public, self.c.radius_m)
+                )
             return self.navigate(me, (0.0, 0.0))
         if action == 10:
             return MotorCommand(

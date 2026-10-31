@@ -21,10 +21,15 @@ class V2Config(MatchConfig):
     initial_layout: str = "standard"
     opponent_course: str = "none"
     action_course: str = "none"
+    controller_revision: int = 1
 
     def __post_init__(self):
         if self.schema != "duckfu.match.v2":
             raise ValueError("V2 requires its own explicit schema")
+        if type(
+            self.controller_revision
+        ) is not int or self.controller_revision not in (1, 2):
+            raise ValueError("Unknown V2 controller revision")
         values = {f.name: getattr(self, f.name) for f in fields(MatchConfig)}
         values["schema"] = "duckfu.match.v1"
         MatchConfig(**values)

@@ -102,6 +102,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                     teams,
                     config.team_hold_s,
                     opening_split=config.initial_layout == "peel_course",
+                    revision=config.controller_revision,
                 )
                 for team, enabled in (("RED", config.red_v2), ("BLUE", config.blue_v2))
                 if enabled
