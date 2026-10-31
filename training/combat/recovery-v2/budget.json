@@ -1,0 +1,19 @@
+{
+  "training_commit": "a4a22e0",
+  "maximum_iterations": 251,
+  "environments": 256,
+  "maximum_gpu_hours": 1,
+  "maximum_new_checkpoint_bytes": 2147483648,
+  "smoke": "64 environments x 5 iterations; NaN-free and official ONNX export",
+  "initial_actor": "/tmp/duckfu-frozen-assets/microduck/policies/alpha_stand.onnx",
+  "critic": "fresh deterministic random initialization",
+  "states_sha256": "3337950263600b8145047e904757955f463026c295dc823afced5618fd9bc8e3",
+  "support": "Measured mean vertical foot load over all 40 solved substeps, not last-substep contact sample",
+  "stop_conditions": [
+    "Any non-finite physics state or solver failure",
+    "Two successive CPU development checks without meaningful improvement",
+    "Resource budget"
+  ],
+  "selection": "Development trajectories only; preserve full physical pass and recovery-to-walk, compare both legacy guard and native stand. Freeze selected weights before viewing validation outcomes.",
+  "cloud": false
+}

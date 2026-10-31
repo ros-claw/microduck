@@ -1,0 +1,17 @@
+{
+  "training_commit": "874fe57",
+  "maximum_iterations": 301,
+  "environments": 256,
+  "maximum_gpu_hours": 1,
+  "maximum_new_checkpoint_bytes": 2147483648,
+  "smoke": "64 environments x 5 iterations; root origin velocity and motor history verified",
+  "initial_actor": "/tmp/duckfu-frozen-assets/microduck/policies/alpha_sitstand.onnx",
+  "critic": "fresh deterministic random initialization",
+  "states_sha256": "3337950263600b8145047e904757955f463026c295dc823afced5618fd9bc8e3",
+  "stop_conditions": [
+    "Any non-finite physics state or solver failure",
+    "Two successive CPU development checks without meaningful improvement",
+    "Resource budget"
+  ],
+  "cloud": false
+}
