@@ -1,0 +1,2435 @@
+{
+  "schema": "duckfu.body-recovery-final.v1",
+  "selection": {
+    "frozen_utc": "2026-10-31T08:21:25.021838+00:00",
+    "selected_runtime_mode": "learned_stabilize",
+    "delivery_actor_commit": "02301aa",
+    "training_commit": "a4a22e0",
+    "policy": "policies/candidates/duckfu_recovery_v2_150.onnx",
+    "policy_sha256": "908a82b283bb46a8d8950d132e9c86ed237b7972bae8a00bfa45a91b50f3e59b",
+    "development": {
+      "saved_states": 92,
+      "within_3s": 92,
+      "recovery_to_walk": 92,
+      "median_s": 1.09,
+      "free_matches": {
+        "base_seeds": [
+          170001
+        ],
+        "sides": 2,
+        "physical_pass": 2,
+        "recovery_starts": 7,
+        "recovered_and_returned": 7
+      }
+    },
+    "guard": "New motor while actually tilted (<.94 upright), at most 2 seconds total per recovery; measured standing handoff; legacy fallback after 3 seconds; .30s stable support and .30s settle. Identical body, referee and tactics.",
+    "rejected_variants": [
+      "Sitstand-initialized instantaneous-contact reward run: CPU 0/23 at checkpoints 50/100",
+      "Stand-initialized checkpoint 50: 89/92 within 3s, slower median; contact-only integration regressed one first fall",
+      "Stand-initialized checkpoint 100: 76/92 within 3s and 87/92 post-walk",
+      "Continuous checkpoint 150 motor: 92/92 within 3s but 90/92 post-walk; replaced by measured handoff"
+    ],
+    "heldout": {
+      "recorded_states_source_seeds": [
+        130001,
+        130002,
+        130003,
+        130004
+      ],
+      "free_match_base_seeds": [
+        180001,
+        180002,
+        180003,
+        180004
+      ],
+      "sides": 2,
+      "modes": [
+        "legacy",
+        "stand_first",
+        "learned_stabilize"
+      ],
+      "duration_s": 60,
+      "selection_after_inspecting_heldout": false
+    }
+  },
+  "state_qualification": [
+    {
+      "method": "guard",
+      "trials": 80,
+      "physical_pass": 80,
+      "within_3s": 68,
+      "completed": 79,
+      "recovery_to_walk": 79,
+      "completed_only_median_s": 1.4000000000000001,
+      "max_depth_m": 0.0004907000365560812
+    },
+    {
+      "method": "stand_first",
+      "trials": 80,
+      "physical_pass": 80,
+      "within_3s": 72,
+      "completed": 76,
+      "recovery_to_walk": 76,
+      "completed_only_median_s": 1.37,
+      "max_depth_m": 0.0004907000365560812
+    },
+    {
+      "method": "stabilize_candidate",
+      "trials": 80,
+      "physical_pass": 80,
+      "within_3s": 80,
+      "completed": 80,
+      "recovery_to_walk": 79,
+      "completed_only_median_s": 1.12,
+      "max_depth_m": 0.0005024070045008055
+    }
+  ],
+  "state_subgroups": [
+    {
+      "initial_upright_lt": 0.8,
+      "method": "guard",
+      "trials": 39,
+      "within_3s": 30,
+      "recovery_to_walk": 39,
+      "completed_only_median_s": 1.58
+    },
+    {
+      "initial_upright_lt": 0.8,
+      "method": "stand_first",
+      "trials": 39,
+      "within_3s": 34,
+      "recovery_to_walk": 36,
+      "completed_only_median_s": 1.56
+    },
+    {
+      "initial_upright_lt": 0.8,
+      "method": "stabilize_candidate",
+      "trials": 39,
+      "within_3s": 39,
+      "recovery_to_walk": 38,
+      "completed_only_median_s": 1.1400000000000001
+    },
+    {
+      "initial_upright_lt": 0.0,
+      "method": "guard",
+      "trials": 13,
+      "within_3s": 10,
+      "recovery_to_walk": 13,
+      "completed_only_median_s": 1.36
+    },
+    {
+      "initial_upright_lt": 0.0,
+      "method": "stand_first",
+      "trials": 13,
+      "within_3s": 12,
+      "recovery_to_walk": 13,
+      "completed_only_median_s": 1.36
+    },
+    {
+      "initial_upright_lt": 0.0,
+      "method": "stabilize_candidate",
+      "trials": 13,
+      "within_3s": 13,
+      "recovery_to_walk": 12,
+      "completed_only_median_s": 1.28
+    }
+  ],
+  "snapshot_source_trajectories": 4,
+  "snapshot_source_recovery_events": 10,
+  "state_qualification_sha256": "d2778efc20ae6fb8593a0047fe8a79a51b5a7c4ca0122f003af5deb218b853c2",
+  "match_summary": [
+    {
+      "mode": "learned_stabilize",
+      "games": 8,
+      "physical_pass": 8,
+      "recovery_starts": 31,
+      "completed": 27,
+      "within_3s": 25,
+      "statuses": {
+        "recovered": 27,
+        "eliminated": 4
+      },
+      "censored_before_3s": 0,
+      "completed_only_median_s": 1.4399999999999977,
+      "down_events": 21,
+      "ringouts": 4,
+      "alive_duck_seconds": 1820.52,
+      "down_duck_seconds": 21.08,
+      "outcomes": {
+        "TIMEOUT_DRAW": 7,
+        "WIN": 1
+      }
+    },
+    {
+      "mode": "legacy",
+      "games": 8,
+      "physical_pass": 8,
+      "recovery_starts": 30,
+      "completed": 25,
+      "within_3s": 16,
+      "statuses": {
+        "recovered": 25,
+        "eliminated": 1,
+        "censored": 4
+      },
+      "censored_before_3s": 4,
+      "completed_only_median_s": 2.139999999999997,
+      "down_events": 24,
+      "ringouts": 1,
+      "alive_duck_seconds": 1917.22,
+      "down_duck_seconds": 21.04,
+      "outcomes": {
+        "TIMEOUT_DRAW": 8
+      }
+    },
+    {
+      "mode": "stand_first",
+      "games": 8,
+      "physical_pass": 8,
+      "recovery_starts": 29,
+      "completed": 25,
+      "within_3s": 19,
+      "statuses": {
+        "recovered": 25,
+        "eliminated": 3,
+        "censored": 1
+      },
+      "censored_before_3s": 1,
+      "completed_only_median_s": 1.7800000000000011,
+      "down_events": 22,
+      "ringouts": 3,
+      "alive_duck_seconds": 1888.12,
+      "down_duck_seconds": 20.2,
+      "outcomes": {
+        "TIMEOUT_DRAW": 8
+      }
+    }
+  ],
+  "paired_initial_and_first_fall": [
+    {
+      "seed": 180001,
+      "swap": false,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "lavender",
+      "first_stumble_s": 4.78,
+      "latency_s": {
+        "learned_stabilize": 2.74,
+        "legacy": 3.0199999999999996,
+        "stand_first": 1.8200000000000003
+      }
+    },
+    {
+      "seed": 180001,
+      "swap": true,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "coral",
+      "first_stumble_s": 4.94,
+      "latency_s": {
+        "learned_stabilize": 1.6399999999999997,
+        "legacy": 1.9399999999999995,
+        "stand_first": 1.9399999999999995
+      }
+    },
+    {
+      "seed": 180002,
+      "swap": false,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "cream",
+      "first_stumble_s": 16.0,
+      "latency_s": {
+        "learned_stabilize": 2.6999999999999993,
+        "legacy": 1.6400000000000006,
+        "stand_first": 1.6400000000000006
+      }
+    },
+    {
+      "seed": 180002,
+      "swap": true,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "cream",
+      "first_stumble_s": 11.92,
+      "latency_s": {
+        "learned_stabilize": 1.3800000000000008,
+        "legacy": 1.1600000000000001,
+        "stand_first": 1.1600000000000001
+      }
+    },
+    {
+      "seed": 180003,
+      "swap": false,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "cyan",
+      "first_stumble_s": 11.6,
+      "latency_s": {
+        "learned_stabilize": 1.1600000000000001,
+        "legacy": 2.7200000000000006,
+        "stand_first": 3.540000000000001
+      }
+    },
+    {
+      "seed": 180003,
+      "swap": true,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "lavender",
+      "first_stumble_s": 21.580000000000002,
+      "latency_s": {
+        "learned_stabilize": 1.6600000000000001,
+        "legacy": 4.579999999999998,
+        "stand_first": 3.6199999999999974
+      }
+    },
+    {
+      "seed": 180004,
+      "swap": false,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "cyan",
+      "first_stumble_s": 7.0,
+      "latency_s": {
+        "learned_stabilize": 1.08,
+        "legacy": 1.620000000000001,
+        "stand_first": 1.620000000000001
+      }
+    },
+    {
+      "seed": 180004,
+      "swap": true,
+      "identical_initial_state": true,
+      "same_first_stumble": true,
+      "identical_pre_stumble_controls": true,
+      "identical_first_body_snapshot": true,
+      "first_stumble_actor": "cream",
+      "first_stumble_s": 4.84,
+      "latency_s": {
+        "learned_stabilize": 2.0200000000000005,
+        "legacy": 4.0,
+        "stand_first": 3.3200000000000003
+      }
+    }
+  ],
+  "physics": {
+    "games": 24,
+    "passed": 24,
+    "maximum_penetration_m": 0.0015164116852919365,
+    "maximum_penetrating_p99_m": 1.2744818696242534e-05,
+    "maximum_torque_Nm": 0.6405
+  },
+  "rows": [
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180001-0",
+      "seed": 180001,
+      "swap": false,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00044786145710044655,
+        "penetrating_p99_m": 1.2744818696242534e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 4.78,
+          "observed_until_s": 8.94,
+          "common_complete_after_s": 2.74,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.04,
+          "observed_window_s": 4.159999999999999,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "lavender",
+          "start_s": 8.94,
+          "observed_until_s": 15.9,
+          "common_complete_after_s": 1.2800000000000011,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.6000000000000014,
+          "observed_window_s": 6.960000000000001,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "lavender",
+          "start_s": 15.9,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.200000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.5000000000000018,
+          "observed_window_s": 44.1,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 16.26,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 0.9399999999999977,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.2399999999999984,
+          "observed_window_s": 43.739999999999995,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 24.66,
+          "observed_until_s": 36.08,
+          "common_complete_after_s": 1.879999999999999,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.1799999999999997,
+          "observed_window_s": 11.419999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 36.08,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.1200000000000045,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4200000000000017,
+          "observed_window_s": 23.92,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 5.74,
+      "event_counts": {
+        "DOWN": 5,
+        "RECOVERY_STARTED": 6,
+        "RECOVERED": 11,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "938a10fd9b5aa017c1b77291ef86f93456a35e21b255ae1c1c1290e8c3d2dfab",
+      "source_manifest_sha256": "c327a136eb126ec7ccce81458ce8c46ca860c2352fc3058cf8dc13d8f006d414",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 4.22,
+      "ringouts": 0,
+      "guard_recovered_events": 6
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180001-0",
+      "seed": 180001,
+      "swap": false,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0008744294746407393,
+        "penetrating_p99_m": 1.1182819865497274e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 4.78,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.0199999999999996,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.3199999999999994,
+          "observed_window_s": 55.22,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 49.72,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.8599999999999994,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.1600000000000037,
+          "observed_window_s": 10.280000000000001,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 32.06,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.780000000000001,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.079999999999998,
+          "observed_window_s": 27.939999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "938a10fd9b5aa017c1b77291ef86f93456a35e21b255ae1c1c1290e8c3d2dfab",
+      "source_manifest_sha256": "b3af2fad0ef1c4fcf5259c1937580b8bf3b4e19f388e198cfbcaf9a24f96c225",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 4.76,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180001-0",
+      "seed": 180001,
+      "swap": false,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0004693927155379432,
+        "penetrating_p99_m": 6.0887437754996875e-06
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 4.78,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.8200000000000003,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.12,
+          "observed_window_s": 55.22,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 14.74,
+          "observed_until_s": 27.42,
+          "common_complete_after_s": 4.860000000000001,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 5.160000000000002,
+          "observed_window_s": 12.680000000000001,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 27.42,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.6999999999999993,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.0,
+          "observed_window_s": 32.58,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 17.04,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.4000000000000021,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.7000000000000028,
+          "observed_window_s": 42.96,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 28.7,
+          "observed_until_s": 41.660000000000004,
+          "common_complete_after_s": 0.9200000000000017,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.2200000000000024,
+          "observed_window_s": 12.960000000000004,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 41.660000000000004,
+          "observed_until_s": 41.76,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.09999999999999432,
+          "status": "eliminated",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 4,
+        "RECOVERY_STARTED": 6,
+        "RECOVERED": 9,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "938a10fd9b5aa017c1b77291ef86f93456a35e21b255ae1c1c1290e8c3d2dfab",
+      "source_manifest_sha256": "e384bdbb4cb7306d7d602f839c97ce6e1e9f3c46c3665bc10c446fa033b0c07c",
+      "alive_duck_seconds": 221.76,
+      "down_duck_seconds": 4.48,
+      "ringouts": 1,
+      "guard_recovered_events": 5
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180001-1",
+      "seed": 180001,
+      "swap": true,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0004810100845947865,
+        "penetrating_p99_m": 1.161587536025117e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 8.3,
+          "observed_until_s": 30.28,
+          "common_complete_after_s": 3.8200000000000003,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.139999999999999,
+          "observed_window_s": 21.98,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "lavender",
+          "start_s": 30.28,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.219999999999999,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.519999999999996,
+          "observed_window_s": 29.72,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 5.22,
+          "observed_until_s": 7.16,
+          "common_complete_after_s": 1.08,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.3800000000000008,
+          "observed_window_s": 1.9400000000000004,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 7.16,
+          "observed_until_s": 21.82,
+          "common_complete_after_s": 5.5600000000000005,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 5.880000000000001,
+          "observed_window_s": 14.66,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 21.82,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.2399999999999984,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.5399999999999991,
+          "observed_window_s": 38.18,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 4.94,
+          "observed_until_s": 18.1,
+          "common_complete_after_s": 1.6399999999999997,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9399999999999995,
+          "observed_window_s": 13.16,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 18.1,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.4399999999999977,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.7399999999999984,
+          "observed_window_s": 41.9,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 8.48,
+      "event_counts": {
+        "DOWN": 7,
+        "RECOVERY_STARTED": 7,
+        "RECOVERED": 14,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0af0eac2f41485784b60e6d8c5dc6a261cf9419ce45f86c8355e45649794dd76",
+      "source_manifest_sha256": "19290985ed2f6deb57de33065a6fb7b8362561690303837bce5e847f6b6df7ae",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 9.28,
+      "ringouts": 0,
+      "guard_recovered_events": 7
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180001-1",
+      "seed": 180001,
+      "swap": true,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00036106557844175005,
+        "penetrating_p99_m": 1.0509397713067783e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 22.740000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.5799999999999983,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.879999999999999,
+          "observed_window_s": 37.26,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 28.560000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.7199999999999989,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.0199999999999996,
+          "observed_window_s": 31.439999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 4.94,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.9399999999999995,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.2399999999999993,
+          "observed_window_s": 55.06,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0af0eac2f41485784b60e6d8c5dc6a261cf9419ce45f86c8355e45649794dd76",
+      "source_manifest_sha256": "7627974a149c10f65f0be885b4a56951fcb3b8fdaf696a016654fe0a6c9361e7",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.2,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180001-1",
+      "seed": 180001,
+      "swap": true,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00036106557844175005,
+        "penetrating_p99_m": 1.0509397713067783e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 22.740000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.5799999999999983,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.879999999999999,
+          "observed_window_s": 37.26,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 28.560000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.7199999999999989,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.0199999999999996,
+          "observed_window_s": 31.439999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 4.94,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.9399999999999995,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.2399999999999993,
+          "observed_window_s": 55.06,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0af0eac2f41485784b60e6d8c5dc6a261cf9419ce45f86c8355e45649794dd76",
+      "source_manifest_sha256": "9695a6010cdf8064ed6b98b0c65196472f9b31fb01b4856aea0ae57b185c3ada",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.2,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180002-0",
+      "seed": 180002,
+      "swap": false,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00029898493125080083,
+        "penetrating_p99_m": 1.1027020661026509e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 17.76,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.1199999999999974,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4199999999999982,
+          "observed_window_s": 42.239999999999995,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 16.0,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.6999999999999993,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.0,
+          "observed_window_s": 44.0,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 56.72,
+          "observed_until_s": 57.76,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 1.0399999999999991,
+          "status": "eliminated",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 25.3,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.1799999999999997,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4800000000000004,
+          "observed_window_s": 34.7,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 3.62,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 4,
+        "RECOVERED": 5,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "8f2a14337c15f07ae669b90e1e6b471a9be7cedb85ab83f135c7c67401bfe7a7",
+      "source_manifest_sha256": "835cb3c00790bace3950f9063fc215ae1754eddafc03a4ea32770e002d74799f",
+      "alive_duck_seconds": 237.76,
+      "down_duck_seconds": 3.0999999999999996,
+      "ringouts": 1,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180002-0",
+      "seed": 180002,
+      "swap": false,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000422831235232457,
+        "penetrating_p99_m": 1.056979609745723e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 16.0,
+          "observed_until_s": 56.94,
+          "common_complete_after_s": 1.6400000000000006,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9400000000000013,
+          "observed_window_s": 40.94,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 56.94,
+          "observed_until_s": 57.22,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.28000000000000114,
+          "status": "eliminated",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 27.82,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.9200000000000017,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.240000000000002,
+          "observed_window_s": 32.18,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 2,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 4,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "8f2a14337c15f07ae669b90e1e6b471a9be7cedb85ab83f135c7c67401bfe7a7",
+      "source_manifest_sha256": "9e48f129d2c21dfe24754c29414a38ce64ad3dc7db0c96165e9fe0233179980b",
+      "alive_duck_seconds": 237.22,
+      "down_duck_seconds": 1.14,
+      "ringouts": 1,
+      "guard_recovered_events": 2
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180002-0",
+      "seed": 180002,
+      "swap": false,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000422831235232457,
+        "penetrating_p99_m": 1.056979609745723e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 16.0,
+          "observed_until_s": 56.94,
+          "common_complete_after_s": 1.6400000000000006,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9400000000000013,
+          "observed_window_s": 40.94,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 56.94,
+          "observed_until_s": 57.22,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.28000000000000114,
+          "status": "eliminated",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 27.82,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.9200000000000017,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.240000000000002,
+          "observed_window_s": 32.18,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 2,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 4,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "8f2a14337c15f07ae669b90e1e6b471a9be7cedb85ab83f135c7c67401bfe7a7",
+      "source_manifest_sha256": "a1d5b8a3dac8412678380648896fb1cf05138a568a95da8063a46ca3145b1954",
+      "alive_duck_seconds": 237.22,
+      "down_duck_seconds": 1.14,
+      "ringouts": 1,
+      "guard_recovered_events": 2
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180002-1",
+      "seed": 180002,
+      "swap": true,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0015164116852919365,
+        "penetrating_p99_m": 7.419222985280833e-06
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 11.92,
+          "observed_until_s": 52.620000000000005,
+          "common_complete_after_s": 1.3800000000000008,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.700000000000001,
+          "observed_window_s": 40.7,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 52.620000000000005,
+          "observed_until_s": 52.92,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.29999999999999716,
+          "status": "eliminated",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.38,
+      "event_counts": {
+        "DOWN": 0,
+        "RECOVERY_STARTED": 2,
+        "RECOVERED": 1,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "d6532eeb3edbcb399937972edf2618f33b6e0f679bb10310d3bb0f38fd5c5694",
+      "source_manifest_sha256": "c54a60b7d713e6462dc92ed8301afd7ecbff3a94e6b4ec2fa82e267cfc9c5124",
+      "alive_duck_seconds": 232.92000000000002,
+      "down_duck_seconds": 0.32,
+      "ringouts": 1,
+      "guard_recovered_events": 1
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180002-1",
+      "seed": 180002,
+      "swap": true,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000277527464405479,
+        "penetrating_p99_m": 1.0767543270839543e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 35.36,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.5600000000000023,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.8599999999999994,
+          "observed_window_s": 24.64,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 11.92,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.1600000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4600000000000009,
+          "observed_window_s": 48.08,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 33.480000000000004,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 4.079999999999998,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.3799999999999955,
+          "observed_window_s": 26.519999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 2,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 5,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "d6532eeb3edbcb399937972edf2618f33b6e0f679bb10310d3bb0f38fd5c5694",
+      "source_manifest_sha256": "aa9a683642cd72b7df9e6803fb472aaa9abf9f21da78f19d6fb879ba7d18a953",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 4.12,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180002-1",
+      "seed": 180002,
+      "swap": true,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0004838648916521901,
+        "penetrating_p99_m": 1.1781154321543418e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 35.58,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.7800000000000011,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.0800000000000054,
+          "observed_window_s": 24.42,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 11.92,
+          "observed_until_s": 53.94,
+          "common_complete_after_s": 1.1600000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4600000000000009,
+          "observed_window_s": 42.019999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 53.94,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.760000000000005,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.0600000000000023,
+          "observed_window_s": 6.060000000000002,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 33.480000000000004,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 4.019999999999996,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.32,
+          "observed_window_s": 26.519999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 49.04,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.960000000000001,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.260000000000005,
+          "observed_window_s": 10.96,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 4,
+        "RECOVERY_STARTED": 5,
+        "RECOVERED": 9,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "d6532eeb3edbcb399937972edf2618f33b6e0f679bb10310d3bb0f38fd5c5694",
+      "source_manifest_sha256": "83c748c03293df0707cc6adb16b3311ef0133e3dd824c4ecc7d51a3693b6ecc7",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 7.7,
+      "ringouts": 0,
+      "guard_recovered_events": 5
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180003-0",
+      "seed": 180003,
+      "swap": false,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0004004717483758867,
+        "penetrating_p99_m": 1.0302218329242606e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 20.36,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.1799999999999997,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4800000000000004,
+          "observed_window_s": 39.64,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 25.6,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.6199999999999974,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9199999999999982,
+          "observed_window_s": 34.4,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 14.200000000000001,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.4799999999999986,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.7799999999999994,
+          "observed_window_s": 45.8,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 11.6,
+          "observed_until_s": 15.32,
+          "common_complete_after_s": 1.1600000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.4600000000000009,
+          "observed_window_s": 3.7200000000000006,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 15.32,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 0.8999999999999986,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.1999999999999993,
+          "observed_window_s": 44.68,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 3.58,
+      "event_counts": {
+        "DOWN": 4,
+        "RECOVERY_STARTED": 5,
+        "RECOVERED": 9,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "8d3ee3370c1f20b805c4d5ed0c2a086e62e7d6ab7b40bc25063b590cfbcfff17",
+      "source_manifest_sha256": "d47fda1bf26505cdb5cfd5b2329670a5948890eb14f7802a6114795a8a811e3a",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.7999999999999998,
+      "ringouts": 0,
+      "guard_recovered_events": 5
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180003-0",
+      "seed": 180003,
+      "swap": false,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00037213420552283674,
+        "penetrating_p99_m": 1.1091189949423777e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 34.56,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.519999999999996,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.8200000000000003,
+          "observed_window_s": 25.439999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 59.92,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.0799999999999983,
+          "status": "censored",
+          "censored_before_3s": true
+        },
+        {
+          "actor": "coral",
+          "start_s": 35.160000000000004,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 0.9599999999999937,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.259999999999998,
+          "observed_window_s": 24.839999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 11.6,
+          "observed_until_s": 35.4,
+          "common_complete_after_s": 2.7200000000000006,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.0200000000000014,
+          "observed_window_s": 23.799999999999997,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 35.4,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 4.520000000000003,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.82,
+          "observed_window_s": 24.6,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 5,
+        "RECOVERY_STARTED": 5,
+        "RECOVERED": 8,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "8d3ee3370c1f20b805c4d5ed0c2a086e62e7d6ab7b40bc25063b590cfbcfff17",
+      "source_manifest_sha256": "f99165005679a8db452f16e648c5e5789e9e9f7aef41a9b1b379dff7863812b3",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 3.7800000000000002,
+      "ringouts": 0,
+      "guard_recovered_events": 4
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180003-0",
+      "seed": 180003,
+      "swap": false,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0008088066301605766,
+        "penetrating_p99_m": 8.83482884230305e-06
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 48.94,
+          "observed_until_s": 49.14,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.20000000000000284,
+          "status": "eliminated",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 15.66,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.740000000000002,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.0599999999999987,
+          "observed_window_s": 44.34,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 11.6,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.540000000000001,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.860000000000001,
+          "observed_window_s": 48.4,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 2,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 4,
+        "RING_OUT": 1
+      },
+      "initial_state_sha256": "8d3ee3370c1f20b805c4d5ed0c2a086e62e7d6ab7b40bc25063b590cfbcfff17",
+      "source_manifest_sha256": "5d80af46951ed51ba79cb2e6fde4bd4ba364e57e088fa4111be4020b2900e44c",
+      "alive_duck_seconds": 229.14,
+      "down_duck_seconds": 1.8800000000000001,
+      "ringouts": 1,
+      "guard_recovered_events": 2
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180003-1",
+      "seed": 180003,
+      "swap": true,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0002476928238831985,
+        "penetrating_p99_m": 1.0614080813509285e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 21.580000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.6600000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9799999999999969,
+          "observed_window_s": 38.42,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.62,
+      "event_counts": {
+        "DOWN": 0,
+        "RECOVERY_STARTED": 1,
+        "RECOVERED": 1,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0614951f2b78ac8b6ba50a06036bb1011dc1f3a8bc26dd4be8eca04d8a817ae7",
+      "source_manifest_sha256": "26212df81eb002bac3d52cf0f0ca96531c7ef5b042a85b49c151b89982aa3abc",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 0.0,
+      "ringouts": 0,
+      "guard_recovered_events": 1
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180003-1",
+      "seed": 180003,
+      "swap": true,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000659227038487493,
+        "penetrating_p99_m": 1.189709263093503e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 21.580000000000002,
+          "observed_until_s": 50.94,
+          "common_complete_after_s": 4.579999999999998,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.879999999999999,
+          "observed_window_s": 29.359999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "lavender",
+          "start_s": 50.94,
+          "observed_until_s": 59.88,
+          "common_complete_after_s": 0.9000000000000057,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.2000000000000028,
+          "observed_window_s": 8.940000000000005,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "lavender",
+          "start_s": 59.88,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.11999999999999744,
+          "status": "censored",
+          "censored_before_3s": true
+        },
+        {
+          "actor": "cream",
+          "start_s": 50.38,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.059999999999995,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.3599999999999994,
+          "observed_window_s": 9.619999999999997,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 40.980000000000004,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.0399999999999991,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.3399999999999963,
+          "observed_window_s": 19.019999999999996,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 50.620000000000005,
+          "observed_until_s": 58.7,
+          "common_complete_after_s": 3.1399999999999935,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.4399999999999977,
+          "observed_window_s": 8.079999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 58.7,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 1.2999999999999972,
+          "status": "censored",
+          "censored_before_3s": true
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 4,
+        "RECOVERY_STARTED": 7,
+        "RECOVERED": 7,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0614951f2b78ac8b6ba50a06036bb1011dc1f3a8bc26dd4be8eca04d8a817ae7",
+      "source_manifest_sha256": "db5ec424a56acab015c141034a221de724d94c9120ae76406ceef1e9ad92fdd9",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 2.52,
+      "ringouts": 0,
+      "guard_recovered_events": 5
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180003-1",
+      "seed": 180003,
+      "swap": true,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000263963877401679,
+        "penetrating_p99_m": 1.2500948436585539e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 21.580000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 3.6199999999999974,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.919999999999998,
+          "observed_window_s": 38.42,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "coral",
+          "start_s": 44.58,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.2800000000000011,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.5800000000000054,
+          "observed_window_s": 15.420000000000002,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 1,
+        "RECOVERY_STARTED": 2,
+        "RECOVERED": 3,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "0614951f2b78ac8b6ba50a06036bb1011dc1f3a8bc26dd4be8eca04d8a817ae7",
+      "source_manifest_sha256": "9af153382e3d9571a1b93629e81a1e11c5285ddc4bc962021abd42f9ce66599b",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 0.46,
+      "ringouts": 0,
+      "guard_recovered_events": 2
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180004-0",
+      "seed": 180004,
+      "swap": false,
+      "mode": "learned_stabilize",
+      "duration_s": 41.54,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000932985945964155,
+        "penetrating_p99_m": 6.098419381161263e-06
+      },
+      "result": {
+        "kind": "WIN",
+        "winner": "RED",
+        "time_s": 41.54
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 25.02,
+          "observed_until_s": 25.22,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.1999999999999993,
+          "status": "eliminated",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 7.0,
+          "observed_until_s": 41.26,
+          "common_complete_after_s": 1.08,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.3800000000000008,
+          "observed_window_s": 34.26,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 41.26,
+          "observed_until_s": 41.54,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.28000000000000114,
+          "status": "eliminated",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.52,
+      "event_counts": {
+        "DOWN": 1,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 2,
+        "RING_OUT": 2
+      },
+      "initial_state_sha256": "a4478758192e47a189716786f606f5e41dfdc8ce4c01408b250a640f83b78b65",
+      "source_manifest_sha256": "f6f6ab4ca3f4ca694e4a40cce5e9691ab9b165a87e08ed97cddcc749ea959392",
+      "alive_duck_seconds": 149.83999999999997,
+      "down_duck_seconds": 0.76,
+      "ringouts": 2,
+      "guard_recovered_events": 1
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180004-0",
+      "seed": 180004,
+      "swap": false,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00041681577031695005,
+        "penetrating_p99_m": 1.071793105352575e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 59.6,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.3999999999999986,
+          "status": "censored",
+          "censored_before_3s": true
+        },
+        {
+          "actor": "cyan",
+          "start_s": 7.0,
+          "observed_until_s": 14.32,
+          "common_complete_after_s": 1.620000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9399999999999995,
+          "observed_window_s": 7.32,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 14.32,
+          "observed_until_s": 29.400000000000002,
+          "common_complete_after_s": 1.4000000000000004,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.6999999999999993,
+          "observed_window_s": 15.080000000000002,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 29.400000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.139999999999997,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.4399999999999977,
+          "observed_window_s": 30.599999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 4,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "a4478758192e47a189716786f606f5e41dfdc8ce4c01408b250a640f83b78b65",
+      "source_manifest_sha256": "14ddbe0b9824bb1d1f77bb08a3ce332fc30cda822743bbda084cc4947a4bc931",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.5,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180004-0",
+      "seed": 180004,
+      "swap": false,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00041681577031695005,
+        "penetrating_p99_m": 1.071793105352575e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 59.6,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": null,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": null,
+          "observed_window_s": 0.3999999999999986,
+          "status": "censored",
+          "censored_before_3s": true
+        },
+        {
+          "actor": "cyan",
+          "start_s": 7.0,
+          "observed_until_s": 14.32,
+          "common_complete_after_s": 1.620000000000001,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.9399999999999995,
+          "observed_window_s": 7.32,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 14.32,
+          "observed_until_s": 29.400000000000002,
+          "common_complete_after_s": 1.4000000000000004,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.6999999999999993,
+          "observed_window_s": 15.080000000000002,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 29.400000000000002,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.139999999999997,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.4399999999999977,
+          "observed_window_s": 30.599999999999998,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 4,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "a4478758192e47a189716786f606f5e41dfdc8ce4c01408b250a640f83b78b65",
+      "source_manifest_sha256": "958716fef0b1c2089858887310a5a242fc87db258daad364087623dff3aeead0",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.5,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/learned_stabilize/180004-1",
+      "seed": 180004,
+      "swap": true,
+      "mode": "learned_stabilize",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00032951426036268924,
+        "penetrating_p99_m": 1.2110018756882928e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "lavender",
+          "start_s": 47.04,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.2199999999999989,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.5200000000000031,
+          "observed_window_s": 12.96,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 4.84,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.0200000000000005,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.3200000000000003,
+          "observed_window_s": 55.16,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 30.36,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.520000000000003,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.8200000000000003,
+          "observed_window_s": 29.64,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 2.98,
+      "event_counts": {
+        "DOWN": 1,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 4,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "803e4f81b3f913e6df0e8b3523673c69da5f3915888a36459b59919fc1627b08",
+      "source_manifest_sha256": "35cbb034ddb3db47ccd4a9f7171947c7fa97bbded17619a91c61add2597c5794",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.6,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/legacy/180004-1",
+      "seed": 180004,
+      "swap": true,
+      "mode": "legacy",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00027313131770283564,
+        "penetrating_p99_m": 1.2234366921950697e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 4.84,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 4.0,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 4.300000000000001,
+          "observed_window_s": 55.16,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 12.02,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 2.92,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 3.2200000000000006,
+          "observed_window_s": 47.980000000000004,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 2,
+        "RECOVERY_STARTED": 2,
+        "RECOVERED": 4,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "803e4f81b3f913e6df0e8b3523673c69da5f3915888a36459b59919fc1627b08",
+      "source_manifest_sha256": "e3d8739fc36c584b50157fa76efddbcee0090390091876e2ca5b3e2d0e4e1f2a",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 2.02,
+      "ringouts": 0,
+      "guard_recovered_events": 2
+    },
+    {
+      "directory": "/home/nvidia/workspace/microduck/duck-fu-body/artifacts/combat/local/body-matches-handoff-150-validation/stand_first/180004-1",
+      "seed": 180004,
+      "swap": true,
+      "mode": "stand_first",
+      "duration_s": 60.0,
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0003191292947907834,
+        "penetrating_p99_m": 1.2314664697758062e-05
+      },
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 60.0
+      },
+      "recovery_episodes": [
+        {
+          "actor": "cream",
+          "start_s": 4.84,
+          "observed_until_s": 34.32,
+          "common_complete_after_s": 3.3200000000000003,
+          "within_3s": false,
+          "returned_to_normal_command_after_s": 3.620000000000001,
+          "observed_window_s": 29.48,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cream",
+          "start_s": 34.32,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 1.8800000000000026,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 2.1799999999999997,
+          "observed_window_s": 25.68,
+          "status": "recovered",
+          "censored_before_3s": false
+        },
+        {
+          "actor": "cyan",
+          "start_s": 10.64,
+          "observed_until_s": 60.0,
+          "common_complete_after_s": 0.9599999999999991,
+          "within_3s": true,
+          "returned_to_normal_command_after_s": 1.2599999999999998,
+          "observed_window_s": 49.36,
+          "status": "recovered",
+          "censored_before_3s": false
+        }
+      ],
+      "learned_motor_s": 0.0,
+      "event_counts": {
+        "DOWN": 3,
+        "RECOVERY_STARTED": 3,
+        "RECOVERED": 6,
+        "RING_OUT": 0
+      },
+      "initial_state_sha256": "803e4f81b3f913e6df0e8b3523673c69da5f3915888a36459b59919fc1627b08",
+      "source_manifest_sha256": "410eaf1df7755e17141ad4e38195ce61a4a6a246c55b95ea1c6c30a2ef15a9d8",
+      "alive_duck_seconds": 240.0,
+      "down_duck_seconds": 1.84,
+      "ringouts": 0,
+      "guard_recovered_events": 3
+    }
+  ],
+  "interpretation": "Four held-out base seeds, both sides, three modes: correlated games. Snapshot trials are correlated offsets from four other held-out trajectories. Completed-only medians exclude failures; status and censoring counts are retained. New recovery counts are not independent matched falls after trajectories diverge. No hardware or invariant winner claim.",
+  "summarizer_sha256": "f43c5d5d584232d0f071188cb8c9e022969854c062ff0573837db06f824060ef"
+}

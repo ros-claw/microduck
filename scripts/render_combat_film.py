@@ -96,7 +96,7 @@ def render(plan_path, out, width=1920, height=1080):
                     .read_text()
                     .splitlines()
                 ]
-                roles = {}
+                roles, body_status = {}, {}
                 if manifest["config"]["schema"] == "duckfu.match.v2":
                     with gzip.open(
                         directory / "tactical_decisions.jsonl.gz", "rt"
@@ -106,6 +106,9 @@ def render(plan_path, out, width=1920, height=1080):
                             roles.setdefault(row["sim_step"], {})[row["actor"]] = (
                                 row.get("role", "")
                             )
+                            body_status.setdefault(row["sim_step"], {})[
+                                row["actor"]
+                            ] = row
                 cache[key] = (
                     manifest,
                     m,
@@ -115,8 +118,11 @@ def render(plan_path, out, width=1920, height=1080):
                     m.geom_group.copy(),
                     m.geom_rgba.copy(),
                     roles,
+                    body_status,
                 )
-            manifest, m, d, states, events, groups, rgba, roles = cache[key]
+            manifest, m, d, states, events, groups, rgba, roles, body_status = cache[
+                key
+            ]
             renderer = Renderer(m, height=height, width=width)
             camera = mujoco.MjvCamera()
             camera.type = mujoco.mjtCamera.mjCAMERA_FREE
@@ -200,6 +206,10 @@ def render(plan_path, out, width=1920, height=1080):
                     target_distance = max(0.88, span * 2.5 + 0.65)
                     if vertical:
                         target_distance = max(1.65, target_distance * 1.3)
+                if "camera_distance_m" in shot:
+                    target_distance = float(shot["camera_distance_m"])
+                if "camera_offset_world_m" in shot:
+                    target = target + np.array(shot["camera_offset_world_m"])
                 look = target if look is None else look + 0.09 * (target - look)
                 distance = (
                     target_distance
@@ -209,7 +219,9 @@ def render(plan_path, out, width=1920, height=1080):
                 camera.lookat[:] = look
                 camera.distance = distance
                 camera.azimuth = 112 + math.degrees(manifest["config"]["heading_rad"])
-                camera.elevation = -34 if shot["view"] == "wide" else -25
+                camera.elevation = shot.get(
+                    "camera_elevation_deg", -34 if shot["view"] == "wide" else -25
+                )
                 renderer.update_scene(d, camera=camera, scene_option=opt)
                 frame = Image.fromarray(renderer.render()).convert("RGB")
                 draw = ImageDraw.Draw(frame)
@@ -271,8 +283,13 @@ def render(plan_path, out, width=1920, height=1080):
                     bold=True,
                     anchor="mm",
                 )
+                placed_labels = []
                 for n, p in positions.items():
                     if n in eliminated:
+                        continue
+                    if not shot.get("show_names", True) or (
+                        shot.get("focus_labels_only") and n not in selected
+                    ):
                         continue
                     xy = project(p + [0, 0, 0.19], renderer.scene, m, width, height)
                     if xy is None:
@@ -290,6 +307,30 @@ def render(plan_path, out, width=1920, height=1080):
                         text += " / " + role
                     font = ImageFont.truetype(BOLD, max(19, round(24 * scale)))
                     box = draw.textbbox((x, y), text, font=font, anchor="ms")
+                    if plan.get("declutter_labels"):
+                        original = (x, y)
+                        x = min(
+                            width - (box[2] - box[0]) / 2 - 15,
+                            max((box[2] - box[0]) / 2 + 15, x),
+                        )
+                        box = draw.textbbox((x, y), text, font=font, anchor="ms")
+                        while any(
+                            not (
+                                box[2] + 16 < b[0]
+                                or box[0] - 16 > b[2]
+                                or box[3] + 12 < b[1]
+                                or box[1] - 12 > b[3]
+                            )
+                            for b in placed_labels
+                        ):
+                            y -= (box[3] - box[1]) + 20
+                            box = draw.textbbox((x, y), text, font=font, anchor="ms")
+                        if y < top + 45:
+                            y = top + 45
+                            box = draw.textbbox((x, y), text, font=font, anchor="ms")
+                        placed_labels.append(box)
+                        if abs(y - original[1]) > 8 or abs(x - original[0]) > 8:
+                            draw.line([original, (x, y + 7)], fill=color, width=2)
                     draw.rounded_rectangle(
                         (box[0] - 10, box[1] - 6, box[2] + 10, box[3] + 6),
                         radius=6,
@@ -322,6 +363,8 @@ def render(plan_path, out, width=1920, height=1080):
                         "CONTINUOUS 1x" if plan["continuous"] else "MATCH 1x / EDITED"
                     )
                 )
+                if shot.get("continuous_segment"):
+                    speed = "UNCUT MATCH / 1x"
                 if shot["kind"] == "result":
                     speed = "FINAL RESULT / FRAME HOLD"
                 elif shot["kind"] == "contact_detail":
@@ -381,7 +424,50 @@ def render(plan_path, out, width=1920, height=1080):
                             max(17, round(20 * scale)),
                             color=(255, 205, 105),
                         )
-                elif plan["edition"] == "technical" and focus and shot["speed"] < 1:
+                body_overlay_data = None
+                if shot.get("body_overlay"):
+                    actor = shot["body_overlay"]
+                    control_step = step - step % round(0.02 / manifest["physics"]["dt"])
+                    status = body_status.get(control_step, {}).get(actor)
+                    if status is None:
+                        raise ValueError("Missing physical body status for overlay")
+                    policy = status["command"]["policy"]
+                    names = {
+                        "recovery_candidate": "LEARNED RECOVERY",
+                        "stand": "STANDING CONTROL",
+                        "walk_candidate": "LOCOMOTION",
+                        "dash_candidate": "CONTACT DRIVE",
+                        "evade_candidate": "LATERAL STEP",
+                        "sitstand": "GET-UP FALLBACK",
+                    }
+                    label(
+                        draw,
+                        (30, top + 25),
+                        names.get(policy, policy.upper()),
+                        max(20, round(25 * scale)),
+                        color=(255, 205, 105),
+                    )
+                    b = status["observation"]
+                    body_overlay_data = dict(
+                        actor=actor,
+                        source_control_step=control_step,
+                        policy=policy,
+                        upright=b["upright"],
+                        foot_support=b["foot_support"],
+                    )
+                    label(
+                        draw,
+                        (30, top + 65),
+                        f"UPRIGHT {b['upright']:.2f} / FOOT CONTACT {'YES' if b['foot_support'] else 'NO'}",
+                        max(18, round(22 * scale)),
+                        color=(205, 216, 230),
+                    )
+                elif (
+                    not shot.get("measurement")
+                    and plan["edition"] == "technical"
+                    and focus
+                    and shot["speed"] < 1
+                ):
                     impulse = focus["forward_impulse_Ns"]
                     label(
                         draw,
@@ -404,6 +490,11 @@ def render(plan_path, out, width=1920, height=1080):
                             speed=shot["speed"],
                             view=shot["view"],
                             camera_read_only=True,
+                            **(
+                                {"body_overlay": body_overlay_data}
+                                if body_overlay_data is not None
+                                else {}
+                            ),
                         )
                     )
                     + "\n"

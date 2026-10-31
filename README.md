@@ -60,6 +60,12 @@ This is a simulation development branch awaiting user film acceptance. Jev/netwo
 
 [Free match and contact close-ups](docs/combat/v2/round2/media/team_review.mp4) · [Continuous reference](docs/combat/v2/round2/media/team_reference.mp4) · [Latest methods and results](docs/combat/v2/round2/README.md) · [First-round comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4). V2 composes frozen learned motors using public-state maneuvers and persistent team assignments. The latest round connects cover plans to actual target changes and solved contacts. More long-match falls and unfinished counter-speed goals remain documented; these are development samples pending acceptance.
 
+### Body recovery experiment — optional
+
+[![Learned physical recovery and foot-support details](docs/combat/v2/body-recovery/media/cover.jpg)](docs/combat/v2/body-recovery/media/recovery_en.mp4)
+
+A new PPO body motor learns from recorded contact states with their real momentum and previous actions. A measured handoff connects recovery to standing and walking. In held-out component tests, three-second recovery improves from **30/39 to 39/39 initially tilted states**; across all 80 snapshots the completed-only median changes from 1.40 s to 1.12 s. Free-match first-stumble recovery is faster in six of eight matched cases, but ring-outs increase. Existing defaults therefore remain unchanged. [English film, 88.88 s](docs/combat/v2/body-recovery/media/recovery_en.mp4) · [Method, ablation and limitations](docs/combat/v2/body-recovery/README.md) · [Training source and checkpoints](training/combat/recovery-v2/README.md).
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.

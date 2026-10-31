@@ -60,6 +60,12 @@
 
 [自由对抗与接触特写](docs/combat/v2/round2/media/team_review.mp4) · [连续原速参考](docs/combat/v2/round2/media/team_reference.mp4) · [最新方法与结果](docs/combat/v2/round2/README.zh-CN.md) · [首轮同初态对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)。V2 在冻结运动策略上组合公开状态动作和持续团队任务，最新一轮将支援计划落实到实际换目标与求解器接触。长局倒地增多、反击提速目标未完成等限制均已记录，当前仍是待验收开发样片。
 
+### 身体恢复专项训练——可选方案
+
+[![学习恢复动作与脚底承重特写](docs/combat/v2/body-recovery/media/cover.jpg)](docs/combat/v2/body-recovery/media/recovery_en.mp4)
+
+新增 PPO 身体运动网络，从保留真实动量和上一动作的接触轨迹中学习，并通过实测状态交接回站立、行走。留出专项测试中，明显倾斜状态的 3 秒恢复数由 **30/39 提高到 39/39**；全部 80 个快照中已完成样本的恢复中位数由 1.40 秒降至 1.12 秒。自由比赛 8 次同初态首次失衡快了 6 次，但跌落淘汰增多，因此保留旧默认配置。[全英文视频，88.88 秒](docs/combat/v2/body-recovery/media/recovery_en.mp4) · [方法、对照及限制](docs/combat/v2/body-recovery/README.zh-CN.md) · [训练源码与检查点](training/combat/recovery-v2/README.md)。
+
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。
