@@ -22,10 +22,24 @@ class V2Config(MatchConfig):
     opponent_course: str = "none"
     action_course: str = "none"
     controller_revision: int = 1
+    recovery_mode: str = "legacy"
+    recovery_motor_path: str = ""
+    recovery_motor_sha256: str = ""
 
     def __post_init__(self):
         if self.schema != "duckfu.match.v2":
             raise ValueError("V2 requires its own explicit schema")
+        if self.recovery_mode not in ("legacy", "stand_first", "contact_learned"):
+            raise ValueError("Unknown measured body recovery mode")
+        if self.recovery_mode == "contact_learned":
+            if (
+                not self.recovery_motor_path
+                or len(self.recovery_motor_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in self.recovery_motor_sha256)
+            ):
+                raise ValueError("Learned recovery requires an exact motor and digest")
+        elif self.recovery_motor_path or self.recovery_motor_sha256:
+            raise ValueError("Recovery motor requires explicit contact_learned mode")
         if type(
             self.controller_revision
         ) is not int or self.controller_revision not in (1, 2):

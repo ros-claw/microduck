@@ -54,6 +54,10 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     source = source_hashes()
     competition = config.schema in ("duckfu.match.v1", "duckfu.match.v2")
     v2 = config.schema == "duckfu.match.v2"
+    recovery_path = getattr(config, "recovery_motor_path", "")
+    recovery_sha = getattr(config, "recovery_motor_sha256", "")
+    if recovery_path and digest(recovery_path) != recovery_sha:
+        raise ValueError("Recovery motor digest differs")
     planners = {}
     teams = None
     if competition:
@@ -75,6 +79,9 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             .custom_metadata_map
         )
     bank = next(iter(ducks.values())).bank
+    if recovery_path:
+        bank.paths["recovery_candidate"] = recovery_path
+        bank.get("recovery_candidate")
     if config.walk_motor_path:
         bank.paths["walk_candidate"] = config.walk_motor_path
         bank.get("walk_candidate")
@@ -135,6 +142,13 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                     controllers[n] = coach(n, teams[n], teams, config, selector)
                 else:
                     controllers[n] = Pilot(n, teams[n], teams, config, selector)
+        if v2 and config.recovery_mode != "legacy":
+            from .body_recovery import BodyRecoveryGuard
+
+            for n in controllers:
+                controllers[n].guard = BodyRecoveryGuard(
+                    n, learned=config.recovery_mode == "contact_learned"
+                )
     else:
         controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}
     referee = Referee(ducks, config.down_count_s, teams)
@@ -385,6 +399,8 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     wall_s = time.perf_counter() - wall_start
     if source != source_hashes():
         raise RuntimeError("Source changed during simulation; discard this run")
+    if recovery_path and digest(recovery_path) != recovery_sha:
+        raise RuntimeError("Recovery motor changed during simulation")
     if (
         config.candidate_motor_path
         and digest(config.candidate_motor_path) != config.candidate_motor_sha256
