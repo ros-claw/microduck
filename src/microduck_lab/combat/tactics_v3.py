@@ -329,6 +329,8 @@ class TacticalPilot(Pilot):
             )
             if self.role == "ESCAPE":
                 skill, duration = "escape", 0.65
+            elif self.role == "DRAW" and 0.30 < dist < 0.46 and enemy_toward > 0.055:
+                skill, duration = "draw", 0.60
             elif threat and self.style != "pressure" and now - self.last_evade > 1.0:
                 skill, duration = "sidestep", 0.54
                 self.last_evade, self.visible_charge = now, True
@@ -337,6 +339,8 @@ class TacticalPilot(Pilot):
                 self.last_exit = now
             elif attack and now < self.counter_until and entry["accepted"]:
                 skill, duration = "counter_drive", 0.75
+            elif self.role == "FLANK" and flank_angle < 0.85 and dist > 0.23:
+                skill, duration = "cut_flank", 0.35
             elif attack and (
                 flank_angle > 0.85
                 or other.upright < 0.94
@@ -389,9 +393,9 @@ class TacticalPilot(Pilot):
                 contact_done = (
                     self.contact_since is not None
                     and now - self.contact_since
-                    > (0.16 if self.skill == "short_bump" else 0.44)
+                    > (0.16 if self.skill == "short_bump" else 0.70)
                 )
-                active_limit = 0.42 if self.skill == "short_bump" else 0.80
+                active_limit = 0.42 if self.skill == "short_bump" else 1.30
                 if (
                     now - self.phase_since >= active_limit
                     or contact_done

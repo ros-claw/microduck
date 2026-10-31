@@ -13,7 +13,7 @@ from test_v2 import body, config, context, prepared_evade, team_public
 
 def test_revision_is_explicit_and_old_configs_keep_first_round_behavior():
     assert config().controller_revision == 1
-    for value in (True, 0, 3, "2"):
+    for value in (True, 0, 4, "2"):
         with pytest.raises(ValueError, match="revision"):
             replace(config(), controller_revision=value)
 
