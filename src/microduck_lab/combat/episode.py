@@ -147,7 +147,10 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
 
             for n in controllers:
                 controllers[n].guard = BodyRecoveryGuard(
-                    n, learned=config.recovery_mode == "contact_learned"
+                    n,
+                    learned=config.recovery_mode
+                    in ("contact_learned", "learned_stabilize"),
+                    contact_only=config.recovery_mode != "learned_stabilize",
                 )
     else:
         controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}

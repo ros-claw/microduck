@@ -4,8 +4,9 @@ from .recovery import RecoveryGuard
 
 
 class BodyRecoveryGuard:
-    def __init__(self, name, learned=False):
+    def __init__(self, name, learned=False, contact_only=True):
         self.name, self.learned = name, learned
+        self.contact_only = contact_only
         self.active = False
         self.started = self.stable_since = self.last_touch = None
         self.settle_until = 0.0
@@ -71,8 +72,12 @@ class BodyRecoveryGuard:
             self.fallback_cursor = len(self.fallback.events)
         elif (
             self.learned
-            and self.last_touch is not None
-            and now - self.last_touch <= 0.10 + 1e-9
+            and (
+                not self.contact_only
+                or (
+                    self.last_touch is not None and now - self.last_touch <= 0.10 + 1e-9
+                )
+            )
             and me.upright < 0.94
             and me.z > 0.025
             and self.learned_seconds < 2.0 - 1e-9

@@ -19,6 +19,7 @@ from microduck_lab.combat.world import build, digest
 from microduck_lab.combat.contacts import ContactAudit
 from microduck_lab.combat.observations import snapshot
 from microduck_lab.combat.recovery import RecoveryGuard
+from microduck_lab.combat.body_recovery import BodyRecoveryGuard
 from microduck_lab.combat.episode import source_hashes, write_json
 
 
@@ -41,7 +42,11 @@ def template():
 def trial(job):
     path, index, method, motor, timeout = job
     frozen_source = source_hashes()
-    motor_digest = digest(motor) if method == "recovery_candidate" else None
+    motor_digest = (
+        digest(motor)
+        if method in ("recovery_candidate", "stabilize_candidate")
+        else None
+    )
     cfg, physics, m, q0, v0, u0, bank = template()
     from microduck_lab.sim.runtime import DuckRuntime
 
@@ -79,7 +84,13 @@ def trial(job):
     mujoco.mj_forward(m, d)
     audit = ContactAudit(m, ducks)
     audit.read(m, d, 0, 0.0, {})
-    guard = RecoveryGuard("lavender", allow_roll=False)
+    guard = (
+        BodyRecoveryGuard("lavender", learned=True, contact_only=False)
+        if method == "stabilize_candidate"
+        else BodyRecoveryGuard("lavender")
+        if method == "stand_first"
+        else RecoveryGuard("lavender", allow_roll=False)
+    )
     stable_since, complete, walk_start, walk_origin, walk_yaw = (
         None,
         None,
@@ -122,7 +133,9 @@ def trial(job):
                 duck.set_command()
             else:
                 duck.active_policy = (
-                    (guard.choose(now, b) or "stand") if method == "guard" else method
+                    (guard.choose(now, b) or "stand")
+                    if method in ("guard", "stabilize_candidate", "stand_first")
+                    else method
                 )
                 duck.set_command()
             duck.step()
@@ -207,7 +220,14 @@ if __name__ == "__main__":
     p.add_argument(
         "--method",
         action="append",
-        choices=["guard", "stand", "sitstand", "recovery_candidate"],
+        choices=[
+            "guard",
+            "stand",
+            "sitstand",
+            "recovery_candidate",
+            "stabilize_candidate",
+            "stand_first",
+        ],
         required=True,
     )
     p.add_argument("--motor")
@@ -218,7 +238,10 @@ if __name__ == "__main__":
     out = Path(a.out)
     if out.exists():
         raise FileExistsError(out)
-    if "recovery_candidate" in a.method and not a.motor:
+    if (
+        any(m in a.method for m in ("recovery_candidate", "stabilize_candidate"))
+        and not a.motor
+    ):
         p.error("Candidate requires explicit motor")
     meta = json.loads(Path(a.states).with_suffix(".json").read_text())
     offsets = a.offset if a.offset is not None else [0.0, 0.6]

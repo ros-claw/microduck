@@ -31,6 +31,15 @@ def test_stand_ablation_uses_the_same_measured_guard_without_the_new_motor():
     assert guard.choose(0.5, body(upright=0.3, touching_opponent=True)) == "stand"
 
 
+def test_stabilization_specialist_hands_off_to_stand_when_upright():
+    guard = BodyRecoveryGuard("a", learned=True, contact_only=False)
+    assert guard.choose(0, body(upright=0.7)) == "recovery_candidate"
+    assert guard.choose(0.1, body(upright=0.95)) == "stand"
+    assert guard.active
+    guard.choose(0.4, body())
+    assert not guard.active
+
+
 @pytest.mark.parametrize(
     "change",
     [

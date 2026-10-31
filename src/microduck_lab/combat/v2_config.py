@@ -29,9 +29,14 @@ class V2Config(MatchConfig):
     def __post_init__(self):
         if self.schema != "duckfu.match.v2":
             raise ValueError("V2 requires its own explicit schema")
-        if self.recovery_mode not in ("legacy", "stand_first", "contact_learned"):
+        if self.recovery_mode not in (
+            "legacy",
+            "stand_first",
+            "contact_learned",
+            "learned_stabilize",
+        ):
             raise ValueError("Unknown measured body recovery mode")
-        if self.recovery_mode == "contact_learned":
+        if self.recovery_mode in ("contact_learned", "learned_stabilize"):
             if (
                 not self.recovery_motor_path
                 or len(self.recovery_motor_sha256) != 64
