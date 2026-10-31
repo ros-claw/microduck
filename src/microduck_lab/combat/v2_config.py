@@ -47,7 +47,7 @@ class V2Config(MatchConfig):
             raise ValueError("Recovery motor requires explicit contact_learned mode")
         if type(
             self.controller_revision
-        ) is not int or self.controller_revision not in (1, 2):
+        ) is not int or self.controller_revision not in (1, 2, 3):
             raise ValueError("Unknown V2 controller revision")
         values = {f.name: getattr(self, f.name) for f in fields(MatchConfig)}
         values["schema"] = "duckfu.match.v1"

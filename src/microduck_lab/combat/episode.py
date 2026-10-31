@@ -103,6 +103,9 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         if v2 and config.team_intents:
             from .team_intents import TeamPlanner
 
+            if config.controller_revision == 3:
+                from .tactics_v3 import TacticalTeamPlanner as TeamPlanner
+
             planners = {
                 team: TeamPlanner(
                     team,
@@ -126,6 +129,9 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             )
             if v2 and (config.red_v2 if teams[n] == "RED" else config.blue_v2):
                 from .tactics_v2 import V2Pilot
+
+                if config.controller_revision == 3:
+                    from .tactics_v3 import TacticalPilot as V2Pilot
 
                 controllers[n] = V2Pilot(
                     n, teams[n], teams, config, planners.get(teams[n])
