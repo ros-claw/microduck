@@ -43,7 +43,8 @@ def counter_sequences(events):
     evades = [
         e
         for e in events
-        if e["state"] == "MANEUVER" and e.get("skill") in ("evade_step", "cut_counter")
+        if e["state"] == "MANEUVER"
+        and e.get("skill") in ("evade_step", "cut_counter", "sidestep")
     ]
     strikes = [e for e in events if e["state"] == "VALID_STRIKE"]
     used, result = set(), []

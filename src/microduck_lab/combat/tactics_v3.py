@@ -38,6 +38,7 @@ class TacticalTeamPlanner:
         self.team, self.teams, self.hold_s = team, teams, hold_s
         self.assignments, self.events = {}, []
         self.last_plan = -10.0
+        self.style = "mixed"
 
     def assignment(self, name):
         return self.assignments.get(name)
@@ -48,7 +49,10 @@ class TacticalTeamPlanner:
         if not allies or not enemies:
             self.assignments = {}
             return
-        dist = lambda a, b: distance(public[a], public[b])
+
+        def dist(a, b):
+            return distance(public[a], public[b])
+
         invalid = set(self.assignments) != set(allies) or any(
             a.target not in enemies or (a.protected and a.protected not in allies)
             for a in self.assignments.values()
@@ -109,16 +113,28 @@ class TacticalTeamPlanner:
                     plan[wing] = Assignment(target, "FLANK", "PRESS_AND_FLANK", now)
                 else:
                     plan[wing] = Assignment(other, "SCREEN", "PRESS_AND_SCREEN", now)
-            elif self.team == "RED":
+            elif self.style != "pressure":
                 # Counter-oriented team: the closer ally draws pressure while
                 # its wing cuts behind the same enemy if the other lane is free.
-                front = min(allies, key=lambda n: dist(n, plan[n].target))
+                previous_draw = next(
+                    (
+                        n
+                        for n, a in self.assignments.items()
+                        if a.role == "DRAW" and n in allies
+                    ),
+                    None,
+                )
+                front = previous_draw or min(
+                    allies, key=lambda n: dist(n, plan[n].target)
+                )
                 wing = next(n for n in allies if n != front)
                 target = plan[front].target
                 other = next(e for e in enemies if e != target)
                 plan[front] = Assignment(target, "DRAW", "DRAW_AND_CUT", now)
-                if dist(wing, other) > 0.39:
+                if dist(wing, other) > 0.22:
                     plan[wing] = Assignment(target, "FLANK", "DRAW_AND_CUT", now)
+                else:
+                    plan[wing] = Assignment(other, "SCREEN", "DRAW_AND_CUT", now)
         else:
             focus = min(enemies, key=lambda e: sum(dist(n, e) for n in allies))
             front = min(allies, key=lambda n: dist(n, focus))
@@ -371,7 +387,9 @@ class TacticalPilot(Pilot):
                 if me.touching_opponent and self.contact_since is None:
                     self.contact_since = now
                 contact_done = (
-                    self.contact_since is not None and now - self.contact_since > 0.20
+                    self.contact_since is not None
+                    and now - self.contact_since
+                    > (0.16 if self.skill == "short_bump" else 0.44)
                 )
                 active_limit = 0.42 if self.skill == "short_bump" else 0.80
                 if (

@@ -117,6 +117,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 for team, enabled in (("RED", config.red_v2), ("BLUE", config.blue_v2))
                 if enabled
             }
+            if config.controller_revision == 3:
+                for team, planner in planners.items():
+                    planner.style = (
+                        config.red_v2_style if team == "RED" else config.blue_v2_style
+                    )
         for i, n in enumerate(ducks):
             path = config.tactics_path if teams[n] == "RED" else config.opponent_path
             sha = config.tactics_sha256 if teams[n] == "RED" else config.opponent_sha256
