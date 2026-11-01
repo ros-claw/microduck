@@ -1,0 +1,29 @@
+{
+  "delivery_tests": {
+    "passed": 243,
+    "log_sha256": "5f18b9af9ea8cbeab1e1241d363e34345b205d8ced785e035d0790ffd969f5b9"
+  },
+  "clean_training_rebuild": {
+    "passed": 14,
+    "base": "a4a22e0",
+    "patch_source": "7f96987"
+  },
+  "legacy_replay": {
+    "arrays_identical": {
+      "ctrl": true,
+      "body": true,
+      "phases": true
+    },
+    "result": {
+      "kind": "WIN",
+      "winner": "RED",
+      "time_s": 70.06
+    },
+    "note": "Adding an optional finishing bank leaves all old default joint targets, body samples, phases and the actual 70-second match result unchanged."
+  },
+  "selected_capture_payloads": {
+    "scene.mjb": "0248f9d034514796da30cb3ad19ca8a435558d669c16b9a1965f72e05bba58d8",
+    "states.npy": "9eb0886a04bbb2d86f50f1427e050bda3ea4e17a6885050a573985ced29a2bf6"
+  },
+  "note": "Full integration states, binary scene and solved substep logs are retained locally. Compact selected source, 50 Hz motor/body tape and exact hashes are supplied here."
+}

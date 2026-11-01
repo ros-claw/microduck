@@ -69,6 +69,20 @@ def build_match(config, physics, seed):
         y = 0 if config.players == 2 else (-0.20 if i < 2 else 0.20)
         xy = rotation @ [side * config.separation_m / 2, y]
         yaw = config.heading_rad + (0 if side < 0 else math.pi)
+        if getattr(config, "initial_layout", "standard") == "peel_course":
+            # Initialization-only curriculum; future reactions/outcomes are free.
+            layouts = (
+                ([-0.40, -0.20], 0.0),
+                ([0.35, -0.20], math.pi),
+                ([0.0, 0.58], -math.pi / 2),
+                ([0.0, 0.24], math.pi / 2),
+            )
+            point, facing = layouts[i]
+            point = np.array(point)
+            if config.swap:
+                point[0] *= -1
+                facing = math.pi - facing
+            xy, yaw = rotation @ point, config.heading_rad + facing
         spec = mujoco.MjSpec.from_file(str(ASSETS / ROBOT))
         external_parts(spec, i, config.players)
         s.attach(

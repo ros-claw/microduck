@@ -1,0 +1,56 @@
+{
+  "schema": "duckfu.comparison-film.v1",
+  "video_sha256": "3a63aa468a921ec5c554b38911c866e087748cb6f91824432730dd2d359ff1c0",
+  "frames": 400,
+  "fps": 50,
+  "layout": "horizontal/padded",
+  "panels": [
+    {
+      "video": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/probe.mp4",
+      "sha256": "5b5ad40bfb160e0413d44d6637bd0efb3fc437717828c538f52e26a3c740a8fa",
+      "frames": 400,
+      "source_frame_mapping": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/probe.frames.jsonl",
+      "source_frame_mapping_sha256": "f347f3aac7609610939637e6f3374b4d1d779d40eedc7a0f70f1358dd8d693f0"
+    },
+    {
+      "video": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/drive.mp4",
+      "sha256": "106bf5f6d84dd6a5e540c12858b1a186d415ec989d2b0e121e1db91ee0afdc77",
+      "frames": 400,
+      "source_frame_mapping": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/drive.frames.jsonl",
+      "source_frame_mapping_sha256": "2654fc495a3a8056bbc5edf3518c742fa95eabda97ebf8d396473bd8f6578dfc"
+    }
+  ],
+  "command": [
+    "/tmp/duckfu-clean-venv/lib/python3.13/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-aarch64-v7.0.2",
+    "-v",
+    "error",
+    "-i",
+    "out/duckfu-v2-samples/probe.mp4",
+    "-i",
+    "out/duckfu-v2-samples/drive.mp4",
+    "-loop",
+    "1",
+    "-i",
+    "out/duckfu-v2-samples/attack_comparison-banner.png",
+    "-filter_complex",
+    "[0:v][1:v]hstack=inputs=2,pad=1920:1080:0:180:color=0x0c1119[base];[base][2:v]overlay=0:0:shortest=1[v]",
+    "-map",
+    "[v]",
+    "-an",
+    "-c:v",
+    "libx264",
+    "-crf",
+    "20",
+    "-preset",
+    "fast",
+    "-threads",
+    "2",
+    "-movflags",
+    "+faststart",
+    "out/duckfu-v2-samples/duck_fu_v2_attack_comparison.mp4"
+  ],
+  "continuous_each_panel": true,
+  "synthetic_interpolation": false,
+  "silent": true,
+  "human_review": "PENDING_HUMAN_REVIEW"
+}

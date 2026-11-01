@@ -1,0 +1,23 @@
+{
+  "task": "Mjlab-DuckFu-FinishStable-MicroDuck-v1",
+  "num_envs": 256,
+  "max_iterations": 251,
+  "wall_limit_minutes": 45,
+  "train_seed": 1103,
+  "checkpoint_interval": 50,
+  "development_seeds": [
+    210001,
+    210002,
+    210003,
+    210004
+  ],
+  "heldout_seeds": [
+    220001,
+    220002,
+    220003,
+    220004
+  ],
+  "change": "Same native coached braking MDP and seed as version 3, but actor normalizer until=0. All actor weights and critic remain trainable. No fake pseudocount.",
+  "reason": "On 688 recorded native observations at V3 checkpoint 50, action RMS change from normalizer alone was .1317 rad versus .0545 from weight changes alone. V3 first-episode GPU own falls rose 7 to 27 and its CPU free bout 210004-0 failed the unchanged numerical gate. Freeze the imported actor coordinate system, verify exact smoke statistics.",
+  "acceptance": "Select on unchanged numerical gates, bounded motor courses, free rotated/swapped games and visible genuine finish. Heldout seeds remain unseen until final freeze."
+}

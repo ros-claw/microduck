@@ -54,6 +54,30 @@ Native armless Microducks duel and fight in red/blue teams on a fixed octagonal 
 
 This is a simulation development branch awaiting user film acceptance. Jev/network LLMs are not used in Duck Fu's game loop; ROSClaw combat authorization receipts and hardware transfer are not claimed. Earlier failed motor/solver versions remain documented alongside current results.
 
+### Finishing experiment — team cover and a complete winning bout
+
+[![Rook covers Shade and attacks the open side](docs/combat/v2/finishing/media/cover.jpg)](docs/combat/v2/finishing/media/finish_en.mp4)
+
+[English film, 48.9 s](docs/combat/v2/finishing/media/finish_en.mp4) · [Method, challenges and reproduction](docs/combat/v2/finishing/README.md) · [PPO source and checkpoints](training/combat/finish-native/README.md). A native-opponent motor learns contact continuation and braking; public-state team rules compose it with the existing movement and counter skills. The complete 25.04 s free bout ends **RED 2–BLUE 0**, with cover, target switching and marked contact/footwork replays. Four training versions log 3.21 million transitions. Small paired checks and component regressions are documented; the new motor remains an optional exhibition candidate.
+
+### V2 development: exchanges and team intent
+
+[![Duck Fu V2: committed team cover](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
+
+[Free match and contact close-ups](docs/combat/v2/round2/media/team_review.mp4) · [Continuous reference](docs/combat/v2/round2/media/team_reference.mp4) · [Round-two methods and results](docs/combat/v2/round2/README.md) · [First-round comparison](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4). V2 composes frozen learned motors using public-state maneuvers and persistent team assignments. The latest round connects cover plans to actual target changes and solved contacts. More long-match falls and unfinished counter-speed goals remain documented; these are development samples pending acceptance.
+
+### Tactical 2v2 — draw, flank, counter and cover
+
+[![Tactical 2v2: evade, counter and an edge scramble](docs/combat/v2/tactics/media/cover.jpg)](docs/combat/v2/tactics/media/tactical_en.mp4)
+
+[English commentary and slow-motion film, 64 s](docs/combat/v2/tactics/media/tactical_en.mp4) · [Method, results and reproduction](docs/combat/v2/tactics/README.md). Public-state rules coordinate a drawing fighter, a flanker, separate pressure lanes and withdrawal cover over the existing learned motors. Across eight paired runs per controller, measured flank responses change from **43 to 65**, and uninterrupted upright evade/miss/counter sequences from **1 to 3**. All 16 runs pass the unchanged numerical checks. All eight new-controller bouts still draw; these results do not establish stronger winning tactics. The film explicitly separates two free bouts and their replays.
+
+### Body recovery experiment — optional
+
+[![Learned physical recovery and foot-support details](docs/combat/v2/body-recovery/media/cover.jpg)](docs/combat/v2/body-recovery/media/recovery_en.mp4)
+
+A new PPO body motor learns from recorded contact states with their real momentum and previous actions. A measured handoff connects recovery to standing and walking. In held-out component tests, three-second recovery improves from **30/39 to 39/39 initially tilted states**; across all 80 snapshots the completed-only median changes from 1.40 s to 1.12 s. Free-match first-stumble recovery is faster in six of eight matched cases, but ring-outs increase. Existing defaults therefore remain unchanged. [English film, 88.88 s](docs/combat/v2/body-recovery/media/recovery_en.mp4) · [Method, ablation and limitations](docs/combat/v2/body-recovery/README.md) · [Training source and checkpoints](training/combat/recovery-v2/README.md).
+
 ## How it works
 
 1. **Motor skills:** 61D observations feed 14D learned motor actions at 50 Hz; rope turners use a separate extended contract. Joint servos have explicit torque limits.

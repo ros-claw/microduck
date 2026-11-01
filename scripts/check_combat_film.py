@@ -39,7 +39,7 @@ def check(video, plan_path):
     if len(rows) != count:
         raise ValueError("Missing physical frame provenance")
     offset = 0
-    sources = {}
+    sources, body_status = {}, {}
     for index, shot in enumerate(plan["shots"]):
         root = Path(shot["run"])
         key = str(root)
@@ -52,6 +52,15 @@ def check(video, plan_path):
                     raise ValueError("Changed physical capture")
             sources[key] = manifest
         manifest = sources[key]
+        if shot.get("body_overlay") and key not in body_status:
+            trace = root / "tactical_decisions.jsonl.gz"
+            if digest(trace) != manifest["hashes"]["tactical_decisions.jsonl.gz"]:
+                raise ValueError("Changed physical body annotation source")
+            with gzip.open(trace, "rt") as body_stream:
+                body_status[key] = {
+                    (r["sim_step"], r["actor"]): r
+                    for r in (json.loads(s) for s in body_stream)
+                }
         if shot.get("measurement"):
             measured = shot["measurement"]
             log_path = root / "contacts_full.jsonl.gz"
@@ -104,6 +113,22 @@ def check(video, plan_path):
                 )
             if abs(row["source_time_s"] - expected * manifest["physics"]["dt"]) > 1e-10:
                 raise ValueError("Incorrect physical source clock")
+            if shot.get("body_overlay"):
+                control_step = expected - expected % round(
+                    0.02 / manifest["physics"]["dt"]
+                )
+                status = body_status[key][control_step, shot["body_overlay"]]
+                expected_body = dict(
+                    actor=shot["body_overlay"],
+                    source_control_step=control_step,
+                    policy=status["command"]["policy"],
+                    upright=status["observation"]["upright"],
+                    foot_support=status["observation"]["foot_support"],
+                )
+                if row.get("body_overlay") != expected_body:
+                    raise ValueError(
+                        "Body overlay differs from the real motor-boundary observation"
+                    )
         offset += shot["frames"]
     if (
         metadata["synthetic_inbetween_frames"]

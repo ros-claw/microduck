@@ -1,0 +1,3447 @@
+{
+  "schema": "duckfu.team-intent-evaluation.v2",
+  "raw_source": "artifacts/combat/local/v2-peel-validation-93001/report.json",
+  "rows": [
+    {
+      "seed": 93001,
+      "swap": true,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93001-1",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0001486262245852174,
+        "penetrating_p99_m": 6.931119191698038e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 9,
+        "TARGET_CHANGED": 9,
+        "MANEUVER": 104,
+        "ATTACK_LAUNCHED": 17,
+        "CONTACT": 46,
+        "ATTACK_ACTIVE_ENDED": 16,
+        "VALID_STRIKE": 8,
+        "ATTACK_WINDOW_ENDED": 17,
+        "CONTACTED_ATTACK": 11,
+        "CANDIDATE_HANDOFF_AVAILABLE": 3,
+        "DYNAMIC_HANDOFF": 3,
+        "MISS": 4,
+        "COUNTER_ATTEMPT": 3,
+        "COUNTER_SEQUENCE": 1,
+        "HANDOFF_REJECTED": 2,
+        "EVADE_BRAKE": 2,
+        "ATTACK_INTERRUPTED": 2
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.44,
+          "evade_active_end_s": 3.6,
+          "enemy_contacted": false,
+          "counter_response_s": 5.48,
+          "latency_after_evade_active_s": 1.8800000000000003,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:2",
+          "evade_s": 6.140000000000001,
+          "evade_active_end_s": 15.56,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:3",
+          "evade_s": 8.46,
+          "evade_active_end_s": 9.46,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:5",
+          "evade_s": 16.52,
+          "evade_active_end_s": null,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": true
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 4.76,
+          "duration_s": 1.3600000000000003,
+          "path_m": 0.26135681232160995,
+          "minimum_upright": 0.99787837266922,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 12.02,
+          "duration_s": 1.8800000000000008,
+          "path_m": 0.41201830293112596,
+          "minimum_upright": 0.9969069957733154,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 19.04,
+          "duration_s": 0.9600000000000009,
+          "path_m": 0.2174832469914385,
+          "minimum_upright": 0.9973918795585632,
+          "end_reason": "EPISODE_END"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.46,
+          "path_m": 0.3368878254175195,
+          "minimum_upright": 0.9983330965042114,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 4.16,
+          "duration_s": 1.12,
+          "path_m": 0.1996968595415639,
+          "minimum_upright": 0.9976902008056641,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 6.82,
+          "duration_s": 1.4800000000000004,
+          "path_m": 0.2440778886013888,
+          "minimum_upright": 0.998261034488678,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 11.040000000000001,
+          "duration_s": 1.4399999999999995,
+          "path_m": 0.30864826387686706,
+          "minimum_upright": 0.9979467391967773,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.22174999999998943,
+      "red_down_fraction": 0.0,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 6.4,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 6.4,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 6.4,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 8.02,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.02,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.02,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 9.5,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 9.5,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 9.5,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 12.74,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.74,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.74,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 13.56,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 13.56,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 13.56,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 15.18,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.18,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.18,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 17.66,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 17.66,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 17.66,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 19.26,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 19.26,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 19.26,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 7.36,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.5494522812803575,
+            "before_seconds": 0.58,
+            "after": 0.5064206368917593,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 9.5,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.5576957503514997,
+            "before_seconds": 0.6,
+            "after": 0.6194978945290022,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "UNRESOLVED_PLANNED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 18.6,
+          "contact_s": 19.432625,
+          "episode_id": 40,
+          "measured_impulse_Ns": 0.0941700406156864,
+          "pressure_proximity": {
+            "before": 0.7702260911413621,
+            "before_seconds": 0.6,
+            "after": 1.0172892412740604,
+            "after_seconds": 0.26
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.08548456881748179,
+          "contact_delay_s": 0.8326250000000002,
+          "role_at_contact": "PRESS",
+          "actual_target_at_contact": "cyan",
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 2.740000000000002,
+      "longest_angular_position_s": 1.2400000000000007,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93001,
+      "swap": false,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93001-0",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00016596955684355062,
+        "penetrating_p99_m": 7.009824051759798e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 9,
+        "TARGET_CHANGED": 12,
+        "MANEUVER": 112,
+        "ATTACK_LAUNCHED": 16,
+        "CONTACT": 69,
+        "ATTACK_ACTIVE_ENDED": 14,
+        "VALID_STRIKE": 10,
+        "ATTACK_WINDOW_ENDED": 16,
+        "CONTACTED_ATTACK": 13,
+        "CANDIDATE_HANDOFF_AVAILABLE": 4,
+        "DYNAMIC_HANDOFF": 4,
+        "COUNTER_ATTEMPT": 4,
+        "MISS": 1,
+        "COUNTER_SEQUENCE": 1,
+        "HANDOFF_REJECTED": 3,
+        "ATTACK_INTERRUPTED": 2
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.54,
+          "evade_active_end_s": 3.38,
+          "enemy_contacted": false,
+          "counter_response_s": 5.34,
+          "latency_after_evade_active_s": 1.96,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:2",
+          "evade_s": 5.42,
+          "evade_active_end_s": 6.54,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:2",
+          "evade_s": 6.3,
+          "evade_active_end_s": null,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:4",
+          "evade_s": 15.9,
+          "evade_active_end_s": 16.36,
+          "enemy_contacted": true,
+          "counter_response_s": 18.86,
+          "latency_after_evade_active_s": 2.5,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": true
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:5",
+          "evade_s": 19.6,
+          "evade_active_end_s": null,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": true
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 4.66,
+          "duration_s": 1.38,
+          "path_m": 0.2474838826089011,
+          "minimum_upright": 0.9984598755836487,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 19.62,
+          "duration_s": 0.379999999999999,
+          "path_m": 0.04610479211156635,
+          "minimum_upright": 0.9994839429855347,
+          "end_reason": "EPISODE_END"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.12,
+          "path_m": 0.3069050889949569,
+          "minimum_upright": 0.9984057545661926,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.8000000000000003,
+          "duration_s": 1.06,
+          "path_m": 0.21785305148863499,
+          "minimum_upright": 0.9976913928985596,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 7.74,
+          "duration_s": 1.3399999999999999,
+          "path_m": 0.23141925030044702,
+          "minimum_upright": 0.9977969527244568,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 12.16,
+          "duration_s": 2.0600000000000005,
+          "path_m": 0.3315228575769051,
+          "minimum_upright": 0.9978361129760742,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 18.32,
+          "duration_s": 1.2600000000000016,
+          "path_m": 0.22243408983842222,
+          "minimum_upright": 0.9977095127105713,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.05550000000000004,
+      "red_down_fraction": 0.0,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 7.72,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 7.72,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 7.72,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 9.32,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 9.32,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 9.32,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 10.98,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 10.98,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 10.98,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 12.6,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.6,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.6,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 13.42,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 13.42,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 13.42,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 15.040000000000001,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.040000000000001,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.040000000000001,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 15.98,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 15.98,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 15.98,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 19.2,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 19.2,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 19.2,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 7.9,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.6820562007918811,
+            "before_seconds": 0.58,
+            "after": 0.7311604179619423,
+            "after_seconds": 0.98
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 10.98,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.3523088651579779,
+            "before_seconds": 0.6,
+            "after": 0.476463886876784,
+            "after_seconds": 0.98
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 13.42,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.7295313989417664,
+            "before_seconds": 0.6,
+            "after": 0.6515026421273602,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 15.98,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.39077794866883003,
+            "before_seconds": 0.6,
+            "after": 0.5045862450531297,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 0.8400000000000004,
+      "longest_angular_position_s": 0.38000000000000006,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93002,
+      "swap": false,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93002-0",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0003227444800170433,
+        "penetrating_p99_m": 7.546274253089665e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 9,
+        "TARGET_CHANGED": 12,
+        "MANEUVER": 87,
+        "ATTACK_LAUNCHED": 13,
+        "CONTACT": 84,
+        "ATTACK_ACTIVE_ENDED": 10,
+        "VALID_STRIKE": 6,
+        "ATTACK_WINDOW_ENDED": 13,
+        "CONTACTED_ATTACK": 8,
+        "HANDOFF_REJECTED": 3,
+        "CANDIDATE_HANDOFF_AVAILABLE": 2,
+        "DYNAMIC_HANDOFF": 2,
+        "MISS": 2,
+        "COUNTER_ATTEMPT": 1,
+        "COUNTER_SEQUENCE": 1,
+        "RECOVERY_STARTED": 6,
+        "ATTACK_INTERRUPTED": 3,
+        "DOWN": 5,
+        "RECOVERY_MOTOR_STARTED": 1,
+        "RECOVERED": 11,
+        "HANDOFF_ABORT": 1
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.44,
+          "evade_active_end_s": 3.62,
+          "enemy_contacted": false,
+          "counter_response_s": 5.58,
+          "latency_after_evade_active_s": 1.96,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": true,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:2",
+          "evade_s": 6.3,
+          "evade_active_end_s": null,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cyan:3",
+          "evade_s": 12.620000000000001,
+          "evade_active_end_s": null,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 4.88,
+          "duration_s": 1.4000000000000004,
+          "path_m": 0.27205930369675047,
+          "minimum_upright": 0.9982754588127136,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 17.98,
+          "duration_s": 1.879999999999999,
+          "path_m": 0.293268896480372,
+          "minimum_upright": 0.9971074461936951,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 1.9800000000000002,
+          "path_m": 0.3125936887907012,
+          "minimum_upright": 0.9980936646461487,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.24,
+          "duration_s": 1.1799999999999997,
+          "path_m": 0.24956207366173466,
+          "minimum_upright": 0.9981085658073425,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 5.72,
+          "duration_s": 2.0600000000000005,
+          "path_m": 0.44331726025151563,
+          "minimum_upright": 0.9976266622543335,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.21962499999998966,
+      "red_down_fraction": 0.029,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.3000000000000003,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3000000000000003,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3000000000000003,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 4.9,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.9,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.9,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 9.74,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 9.74,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 9.74,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 9.92,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 9.92,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 9.92,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 11.540000000000001,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 11.540000000000001,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 11.540000000000001,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 14.08,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 14.08,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 14.08,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 16.48,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 16.48,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 16.48,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 18.080000000000002,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 18.080000000000002,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 18.080000000000002,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "coral",
+          "target": "cyan",
+          "protected": "lavender",
+          "previous_target": "cream",
+          "change_s": 9.92,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 1.2331496187070543,
+            "before_seconds": 0.6,
+            "after": 0.22567170884459778,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "UNRESOLVED_PLANNED_CONTACT",
+          "actor": "coral",
+          "target": "cyan",
+          "protected": "lavender",
+          "previous_target": "cream",
+          "change_s": 14.08,
+          "contact_s": 14.083875,
+          "episode_id": 54,
+          "measured_impulse_Ns": 0.14076551129098855,
+          "pressure_proximity": {
+            "before": 1.1787978578957008,
+            "before_seconds": 0.6,
+            "after": 0.3571266102275244,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": 0.003875000000000739,
+          "role_at_contact": "PEEL",
+          "actual_target_at_contact": "cyan",
+          "current_plan_matches": true,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 2.920000000000002,
+      "longest_angular_position_s": 2.2400000000000015,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93002,
+      "swap": true,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93002-1",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0002552680808129079,
+        "penetrating_p99_m": 8.997256637087621e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 10,
+        "TARGET_CHANGED": 13,
+        "MANEUVER": 106,
+        "ATTACK_LAUNCHED": 12,
+        "CONTACT": 53,
+        "ATTACK_ACTIVE_ENDED": 12,
+        "VALID_STRIKE": 5,
+        "ATTACK_WINDOW_ENDED": 12,
+        "CONTACTED_ATTACK": 8,
+        "EVADE_BRAKE": 2,
+        "MISS": 3,
+        "CANDIDATE_HANDOFF_AVAILABLE": 4,
+        "DYNAMIC_HANDOFF": 4,
+        "COUNTER_ATTEMPT": 1,
+        "RECOVERY_STARTED": 2,
+        "DOWN": 2,
+        "RECOVERY_MOTOR_STARTED": 1,
+        "ATTACK_INTERRUPTED": 1,
+        "RECOVERED": 4,
+        "HANDOFF_ABORT": 1
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.4,
+          "evade_active_end_s": 3.42,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:2",
+          "evade_s": 5.08,
+          "evade_active_end_s": 5.78,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 7.08,
+          "duration_s": 3.8000000000000007,
+          "path_m": 0.6148996723803839,
+          "minimum_upright": 0.7741020321846008,
+          "end_reason": "RECOVERY_PREEMPTION"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.0199999999999996,
+          "path_m": 0.31913791999198415,
+          "minimum_upright": 0.9981175661087036,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.2600000000000002,
+          "duration_s": 1.3799999999999994,
+          "path_m": 0.2615781057921476,
+          "minimum_upright": 0.9982549548149109,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 6.5200000000000005,
+          "duration_s": 1.1999999999999993,
+          "path_m": 0.20788550741781087,
+          "minimum_upright": 0.9977993965148926,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.8610000000000794,
+      "red_down_fraction": 0.0565,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.3000000000000003,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3000000000000003,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3000000000000003,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 4.9,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.9,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.9,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 6.92,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 6.92,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 6.92,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 8.540000000000001,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.540000000000001,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.540000000000001,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 9.64,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 9.64,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 9.64,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 10.88,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 10.88,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 10.88,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 15.74,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.74,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 15.74,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 17.36,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 17.36,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 17.36,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 17.46,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 17.46,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 17.46,
+              "protected": "coral"
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 3.68,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.4448445889461215,
+            "before_seconds": 0.6,
+            "after": 0.5401974046503626,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "coral",
+          "target": "cyan",
+          "protected": "lavender",
+          "previous_target": "cream",
+          "change_s": 13.64,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.9049023229176534,
+            "before_seconds": 0.6,
+            "after": 1.1048647008637031,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cream",
+          "protected": "coral",
+          "previous_target": "cyan",
+          "change_s": 17.46,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.6373337118953035,
+            "before_seconds": 0.6,
+            "after": 0.42073991772991676,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 2.860000000000002,
+      "longest_angular_position_s": 1.620000000000001,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93003,
+      "swap": false,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93003-0",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.000217595026216863,
+        "penetrating_p99_m": 7.285784962942462e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 5,
+        "TARGET_CHANGED": 6,
+        "MANEUVER": 94,
+        "ATTACK_LAUNCHED": 17,
+        "CONTACT": 59,
+        "ATTACK_ACTIVE_ENDED": 14,
+        "VALID_STRIKE": 8,
+        "ATTACK_WINDOW_ENDED": 17,
+        "CONTACTED_ATTACK": 9,
+        "CANDIDATE_HANDOFF_AVAILABLE": 4,
+        "DYNAMIC_HANDOFF": 4,
+        "MISS": 3,
+        "COUNTER_ATTEMPT": 3,
+        "HANDOFF_REJECTED": 3,
+        "RECOVERY_STARTED": 2,
+        "ATTACK_INTERRUPTED": 5,
+        "DOWN": 1,
+        "RECOVERED": 3
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.48,
+          "evade_active_end_s": 3.9,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:2",
+          "evade_s": 5.0,
+          "evade_active_end_s": 11.34,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:3",
+          "evade_s": 10.82,
+          "evade_active_end_s": 11.34,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:3",
+          "evade_s": 13.56,
+          "evade_active_end_s": 14.3,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:4",
+          "evade_s": 18.6,
+          "evade_active_end_s": 19.1,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": true
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 5.24,
+          "duration_s": 1.8600000000000003,
+          "path_m": 0.27431103168325277,
+          "minimum_upright": 0.9967963099479675,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 7.54,
+          "duration_s": 1.4200000000000008,
+          "path_m": 0.2012817375439847,
+          "minimum_upright": 0.9980614185333252,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 15.46,
+          "duration_s": 1.3000000000000007,
+          "path_m": 0.24390124758284237,
+          "minimum_upright": 0.9980798959732056,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 1.9400000000000002,
+          "path_m": 0.2932617368635908,
+          "minimum_upright": 0.998318612575531,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.2,
+          "duration_s": 1.3399999999999999,
+          "path_m": 0.26139958257628637,
+          "minimum_upright": 0.9981896281242371,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 12.98,
+          "duration_s": 1.5199999999999996,
+          "path_m": 0.277183075934164,
+          "minimum_upright": 0.9982494711875916,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 14.94,
+          "duration_s": 1.2200000000000006,
+          "path_m": 0.21502306212028338,
+          "minimum_upright": 0.9986087083816528,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 18.28,
+          "duration_s": 1.7199999999999989,
+          "path_m": 0.31310703410913016,
+          "minimum_upright": 0.9983784556388855,
+          "end_reason": "EPISODE_END"
+        }
+      ],
+      "longest_contact_s": 0.09200000000000007,
+      "red_down_fraction": 0.0,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.3200000000000003,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3200000000000003,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3200000000000003,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 4.94,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.94,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.94,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 8.540000000000001,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 8.540000000000001,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 8.540000000000001,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 10.16,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 10.16,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 10.16,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "coral",
+          "target": "cream",
+          "protected": "lavender",
+          "previous_target": "cyan",
+          "change_s": 8.540000000000001,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.644892242314234,
+            "before_seconds": 0.58,
+            "after": 0.7393515509424966,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 0.16,
+      "longest_angular_position_s": 0.16,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93003,
+      "swap": true,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93003-1",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00024532694872676786,
+        "penetrating_p99_m": 7.543722010418775e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 3,
+        "TARGET_CHANGED": 4,
+        "MANEUVER": 90,
+        "ATTACK_LAUNCHED": 19,
+        "CONTACT": 72,
+        "ATTACK_ACTIVE_ENDED": 18,
+        "VALID_STRIKE": 12,
+        "ATTACK_WINDOW_ENDED": 19,
+        "CONTACTED_ATTACK": 16,
+        "CANDIDATE_HANDOFF_AVAILABLE": 4,
+        "DYNAMIC_HANDOFF": 4,
+        "MISS": 2,
+        "COUNTER_ATTEMPT": 3,
+        "COUNTER_SEQUENCE": 1,
+        "RECOVERY_STARTED": 1,
+        "ATTACK_INTERRUPTED": 1,
+        "HANDOFF_REJECTED": 1,
+        "DOWN": 1,
+        "RECOVERED": 2
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.4,
+          "evade_active_end_s": 3.8000000000000003,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:2",
+          "evade_s": 5.0,
+          "evade_active_end_s": 5.68,
+          "enemy_contacted": true,
+          "counter_response_s": 6.5600000000000005,
+          "latency_after_evade_active_s": 0.8800000000000008,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:4",
+          "evade_s": 12.620000000000001,
+          "evade_active_end_s": 13.46,
+          "enemy_contacted": false,
+          "counter_response_s": 15.96,
+          "latency_after_evade_active_s": 2.5,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": true,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:5",
+          "evade_s": 16.96,
+          "evade_active_end_s": 17.56,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": true
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 5.0200000000000005,
+          "duration_s": 1.08,
+          "path_m": 0.23455260650373896,
+          "minimum_upright": 0.9976699948310852,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 8.24,
+          "duration_s": 2.1400000000000006,
+          "path_m": 0.32320705065935107,
+          "minimum_upright": 0.9975917339324951,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 11.24,
+          "duration_s": 3.16,
+          "path_m": 0.5528749905699039,
+          "minimum_upright": 0.9976910352706909,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 15.68,
+          "duration_s": 2.2600000000000016,
+          "path_m": 0.4384101036725971,
+          "minimum_upright": 0.9972891211509705,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.0199999999999996,
+          "path_m": 0.30682293608573097,
+          "minimum_upright": 0.9983093738555908,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.2600000000000002,
+          "duration_s": 1.2799999999999998,
+          "path_m": 0.23472288652982584,
+          "minimum_upright": 0.9985013604164124,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 5.96,
+          "duration_s": 1.08,
+          "path_m": 0.17973795746879168,
+          "minimum_upright": 0.997684121131897,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 7.92,
+          "duration_s": 2.42,
+          "path_m": 0.39148676657704173,
+          "minimum_upright": 0.998868465423584,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 11.200000000000001,
+          "duration_s": 1.3999999999999986,
+          "path_m": 0.23280794256438847,
+          "minimum_upright": 0.9971234202384949,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 15.36,
+          "duration_s": 1.5800000000000018,
+          "path_m": 0.3053433460008384,
+          "minimum_upright": 0.9975859522819519,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.03312500000000002,
+      "red_down_fraction": 0.0,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.38,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.38,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.38,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 4.98,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.98,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.98,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [],
+      "same_target_different_role_45_135_degree_seconds": 0.0,
+      "longest_angular_position_s": 0.0,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93004,
+      "swap": false,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93004-0",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.0004437093225612143,
+        "penetrating_p99_m": 6.742009266176054e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 8,
+        "TARGET_CHANGED": 13,
+        "MANEUVER": 104,
+        "ATTACK_LAUNCHED": 15,
+        "CONTACT": 60,
+        "ATTACK_ACTIVE_ENDED": 15,
+        "VALID_STRIKE": 6,
+        "CANDIDATE_HANDOFF_AVAILABLE": 2,
+        "DYNAMIC_HANDOFF": 2,
+        "ATTACK_WINDOW_ENDED": 15,
+        "CONTACTED_ATTACK": 11,
+        "HANDOFF_ABORT": 1,
+        "HANDOFF_REJECTED": 2,
+        "MISS": 2,
+        "COUNTER_ATTEMPT": 1,
+        "RECOVERY_STARTED": 2,
+        "ATTACK_INTERRUPTED": 2,
+        "DOWN": 1,
+        "RECOVERED": 2,
+        "RING_OUT": 1
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.44,
+          "evade_active_end_s": 3.04,
+          "enemy_contacted": true,
+          "counter_response_s": 6.4,
+          "latency_after_evade_active_s": 3.3600000000000003,
+          "stable_at_response_or_window_end": false,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:2",
+          "evade_s": 7.24,
+          "evade_active_end_s": 8.32,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 5.88,
+          "duration_s": 1.3399999999999999,
+          "path_m": 0.22746612687515189,
+          "minimum_upright": 0.9962400197982788,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 9.88,
+          "duration_s": 1.459999999999999,
+          "path_m": 0.22967016219878061,
+          "minimum_upright": 0.998657763004303,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.5,
+          "path_m": 0.3508890346373227,
+          "minimum_upright": 0.9982617497444153,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.7600000000000002,
+          "duration_s": 1.3000000000000003,
+          "path_m": 0.24899148202259025,
+          "minimum_upright": 0.9972329139709473,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 5.5,
+          "duration_s": 1.1400000000000006,
+          "path_m": 0.19843102515302707,
+          "minimum_upright": 0.9977325201034546,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 9.16,
+          "duration_s": 1.9800000000000004,
+          "path_m": 0.3576267903171767,
+          "minimum_upright": 0.7850096821784973,
+          "end_reason": "RECOVERY_PREEMPTION"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 13.780000000000001,
+          "duration_s": 2.3000000000000007,
+          "path_m": 0.2929740846876507,
+          "minimum_upright": 0.9959445595741272,
+          "end_reason": "COMPLETE"
+        }
+      ],
+      "longest_contact_s": 0.09162500000000007,
+      "red_down_fraction": 0.074,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.8200000000000003,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.8200000000000003,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.8200000000000003,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 5.44,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 5.44,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 5.44,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 11.14,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 11.14,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 11.14,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 12.76,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.76,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 12.76,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 15.34,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 15.34,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 15.34,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 16.94,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 16.94,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 16.94,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 18.3,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SOLO",
+              "since_s": 18.3,
+              "protected": null
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 5.0600000000000005,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.6076503016610638,
+            "before_seconds": 0.58,
+            "after": 0.562966620117216,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 11.36,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.8039066355360303,
+            "before_seconds": 0.6,
+            "after": 0.30086258986520414,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 15.34,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.7696851362227284,
+            "before_seconds": 0.6,
+            "after": 0.7583189175669608,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "RETARGET_WITHOUT_QUALIFIED_CONTACT",
+          "actor": "coral",
+          "target": "cream",
+          "protected": "lavender",
+          "previous_target": "cyan",
+          "change_s": 16.94,
+          "contact_s": null,
+          "episode_id": null,
+          "measured_impulse_Ns": null,
+          "pressure_proximity": {
+            "before": 0.3687273453589965,
+            "before_seconds": 0.6,
+            "after": 0.43268168410757385,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.0,
+          "contact_delay_s": null,
+          "role_at_contact": null,
+          "actual_target_at_contact": null,
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 0.5400000000000001,
+      "longest_angular_position_s": 0.36000000000000004,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    },
+    {
+      "seed": 93004,
+      "swap": true,
+      "source_run": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93004-1",
+      "result": {
+        "kind": "TIMEOUT_DRAW",
+        "winner": null,
+        "time_s": 20.0
+      },
+      "physical_pass": true,
+      "physical": {
+        "finite": true,
+        "clock_ok": true,
+        "external_forces_zero": true,
+        "model_unchanged": true,
+        "solver_warnings": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "torque_max_Nm": 0.6405,
+        "penetration_max_m": 0.00018439668317402763,
+        "penetrating_p99_m": 7.519822139182937e-06
+      },
+      "event_counts": {
+        "TEAM_PLAN": 12,
+        "TARGET_CHANGED": 10,
+        "MANEUVER": 107,
+        "ATTACK_LAUNCHED": 15,
+        "CONTACT": 70,
+        "ATTACK_ACTIVE_ENDED": 15,
+        "VALID_STRIKE": 9,
+        "ATTACK_WINDOW_ENDED": 15,
+        "CONTACTED_ATTACK": 10,
+        "HANDOFF_REJECTED": 2,
+        "CANDIDATE_HANDOFF_AVAILABLE": 4,
+        "DYNAMIC_HANDOFF": 4,
+        "MISS": 4,
+        "COUNTER_ATTEMPT": 3,
+        "HANDOFF_ABORT": 1,
+        "RECOVERY_STARTED": 1,
+        "DOWN": 1,
+        "RECOVERED": 2,
+        "ATTACK_INTERRUPTED": 1
+      },
+      "evade_counter_windows": [
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:1",
+          "evade_s": 2.44,
+          "evade_active_end_s": 3.36,
+          "enemy_contacted": false,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:2",
+          "evade_s": 5.1000000000000005,
+          "evade_active_end_s": 5.74,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "lavender",
+          "enemy_attack": "cream:2",
+          "evade_s": 6.42,
+          "evade_active_end_s": 7.0200000000000005,
+          "enemy_contacted": true,
+          "counter_response_s": 9.36,
+          "latency_after_evade_active_s": 2.339999999999999,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        },
+        {
+          "actor": "coral",
+          "enemy_attack": "cyan:3",
+          "evade_s": 9.02,
+          "evade_active_end_s": 9.56,
+          "enemy_contacted": true,
+          "counter_response_s": null,
+          "latency_after_evade_active_s": null,
+          "stable_at_response_or_window_end": true,
+          "clean_evade_counter_response": false,
+          "censored_by_episode_end": false
+        }
+      ],
+      "attack_trajectories": [
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 4.94,
+          "duration_s": 1.46,
+          "path_m": 0.299721027575331,
+          "minimum_upright": 0.997711181640625,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "probe",
+          "start_s": 8.64,
+          "duration_s": 1.08,
+          "path_m": 0.22394961177839748,
+          "minimum_upright": 0.9974318742752075,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "lavender",
+          "family": "drive",
+          "start_s": 11.86,
+          "duration_s": 2.6000000000000014,
+          "path_m": 0.3614297296566446,
+          "minimum_upright": 0.9976989030838013,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 0.8,
+          "duration_s": 2.0199999999999996,
+          "path_m": 0.3178871749830048,
+          "minimum_upright": 0.9980763792991638,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 3.2600000000000002,
+          "duration_s": 1.4,
+          "path_m": 0.274828182751361,
+          "minimum_upright": 0.9981863498687744,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "probe",
+          "start_s": 7.26,
+          "duration_s": 1.4600000000000009,
+          "path_m": 0.32457021866745256,
+          "minimum_upright": 0.997512936592102,
+          "end_reason": "COMPLETE"
+        },
+        {
+          "actor": "coral",
+          "family": "drive",
+          "start_s": 18.1,
+          "duration_s": 1.8999999999999986,
+          "path_m": 0.35554773048925764,
+          "minimum_upright": 0.9974464774131775,
+          "end_reason": "EPISODE_END"
+        }
+      ],
+      "longest_contact_s": 0.06750000000000005,
+      "red_down_fraction": 0.015,
+      "duration_s": 20.0,
+      "source_sha256": {
+        "src/microduck_lab/combat/__init__.py": "0d23942edd2937d8e89e03d7da51e11bc3ae3189e58998ebc0ca35ea1d2fd2c2",
+        "src/microduck_lab/combat/arena.py": "ce3e775e07dcd5b669509b9c883cbdaea084df3b481f81d887c9a06f403f2e53",
+        "src/microduck_lab/combat/braking.py": "fe21a37ad5e91275cc967694cf8d420bd089c75b0822913b033573584d82c5f0",
+        "src/microduck_lab/combat/command_envelope.py": "67a3a2220d4cf029be115c38692b96dd92c140935111eacb8a578f516c91e137",
+        "src/microduck_lab/combat/config.py": "20da68ba1a476f3e31d9f758f1154b05e63eee93bb44a94e4644febd049dd1c6",
+        "src/microduck_lab/combat/contacts.py": "c7aeb46f482ef7b9f3ae4504e715a821f5a91c6206e486e0728f9c295fa4728f",
+        "src/microduck_lab/combat/course_coach.py": "45045c384a852a44ed1bbb83bc3b73b0725940d592a95a423b346908b317c729",
+        "src/microduck_lab/combat/engagement_metrics.py": "4debc06ae93faed546f4247ca440fae1f60251d6841269cc089b26612e1f9c40",
+        "src/microduck_lab/combat/episode.py": "c33c32ea3bcc5c0faf4ab6aee2ea8fc285a402b36f4168ddba4e1e6ec4d5016d",
+        "src/microduck_lab/combat/events.py": "4d7b57a82c54c8408923bc5df34e470ce29e5478b898f4435f15d7a48ae62235",
+        "src/microduck_lab/combat/geometry.py": "c913ad47e5a9b1547b03777922c92f507e9cf7d041e37d1e29f09ad9b40b0b8b",
+        "src/microduck_lab/combat/learning.py": "6167261015e1b75e3bd713c1c04dad3581b2f874933af45748c4d6afa7ec3762",
+        "src/microduck_lab/combat/maneuver.py": "a4930d0ff30c32a15796c5f668ed8b0b26402cd8472053310bae171aa9881cfe",
+        "src/microduck_lab/combat/match_config.py": "13aaf3b2658170a78dfd47d2644014fc5a1f756287b89e15d4abe9f16fde6296",
+        "src/microduck_lab/combat/motion.py": "8803217cdb6482751988dbe2180f962ac74042007806350f01a67392ad5888d2",
+        "src/microduck_lab/combat/observations.py": "6cb482cd9a4742ebd644834ba06436946beccbde5754d1b481224470a7b60291",
+        "src/microduck_lab/combat/parameterized_actions.py": "e065f40289284774457c280716c7dd638afcd82b3f5f3aedab0792fd4d1d525d",
+        "src/microduck_lab/combat/recovery.py": "c507b68aa21ae201ce85e2022256b7231eec4bdcc63e77858f679ce680dc48bb",
+        "src/microduck_lab/combat/referee.py": "4fb9e17077932a90870d8976ee0d9b374cd7f41da441e88edd3fa47cc372ad19",
+        "src/microduck_lab/combat/replay.py": "9e0c7decc8d86795e5e0b1515cc0120a9ed8d275cbf919d71ec12d50c45c03e7",
+        "src/microduck_lab/combat/strikes.py": "28d0e0697c545c63c9bf9b5104ca2900a76f9d98ed7cb3d52d66033966ea0c0a",
+        "src/microduck_lab/combat/tactics.py": "8139f08f8151f70d1c535314711107d69e3fd28f7ef3b7cea1d02f024d8f523a",
+        "src/microduck_lab/combat/tactics_v2.py": "346317c4efb49822aaf5ec8ce947ae94d28a223b79d3acacee8ff63787fd3b71",
+        "src/microduck_lab/combat/team_intents.py": "c7cf20850871054b1595dd644a58835e385edb4f5e5da9791b7dd89a4e380687",
+        "src/microduck_lab/combat/transition_contracts.py": "633404d1a34ccc29407d10fdb1d08c3ea58282f94b1d61b9cb4fdf1b1e67d110",
+        "src/microduck_lab/combat/v2_config.py": "9e05c16a6f1f33e772e20113c03680c0d56c699cf4f08c2e722aeb5e3df33989",
+        "src/microduck_lab/combat/world.py": "97ea23bb12a2bc71feb78cca785aaae9dc66713c4450b908733736719ec108b2",
+        "src/microduck_lab/sim/composer.py": "d37ac1db5f9fc5511029fc1f0849770e0bdb5485cd77d33820df556df2803624",
+        "src/microduck_lab/sim/runtime.py": "22e9fe70f7845d4afa8aa60bc2d794e6c82c831f4a017d8827a5f48085278dc2"
+      },
+      "layout": "peel_course",
+      "team_plans": [
+        {
+          "time_s": 0.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 0.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 3.3200000000000003,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3200000000000003,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 3.3200000000000003,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 4.94,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.94,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 4.94,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 6.92,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 6.92,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 6.92,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 8.540000000000001,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.540000000000001,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 8.540000000000001,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 9.76,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 9.76,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 9.76,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 13.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 13.0,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 13.0,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 13.72,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 13.72,
+              "protected": "coral"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 13.72,
+              "protected": "coral"
+            }
+          }
+        },
+        {
+          "time_s": 16.94,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 16.94,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 16.94,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 17.240000000000002,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 17.240000000000002,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cream",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 17.240000000000002,
+              "protected": "lavender"
+            }
+          }
+        },
+        {
+          "time_s": 18.86,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cream",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 18.86,
+              "protected": null
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "PRESS",
+              "intent": "SPLIT_PRESSURE_COURSE",
+              "since_s": 18.86,
+              "protected": null
+            }
+          }
+        },
+        {
+          "time_s": 19.0,
+          "state": "TEAM_PLAN",
+          "team": "RED",
+          "assignments": {
+            "coral": {
+              "target": "cyan",
+              "role": "PEEL",
+              "intent": "PEEL_COVER",
+              "since_s": 19.0,
+              "protected": "lavender"
+            },
+            "lavender": {
+              "target": "cyan",
+              "role": "ESCAPE",
+              "intent": "PEEL_COVER",
+              "since_s": 19.0,
+              "protected": "lavender"
+            }
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "state": "TEAM_INTERVENTION",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 9.76,
+          "contact_s": 12.3725,
+          "episode_id": 25,
+          "measured_impulse_Ns": 0.05603699386850301,
+          "pressure_proximity": {
+            "before": 0.6752783864762516,
+            "before_seconds": 0.6,
+            "after": 0.6511361320771073,
+            "after_seconds": 1.0
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.3976350366187162,
+          "contact_delay_s": 2.6125000000000007,
+          "role_at_contact": "PEEL",
+          "actual_target_at_contact": "cyan",
+          "current_plan_matches": true,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "UNRESOLVED_PLANNED_CONTACT",
+          "actor": "coral",
+          "target": "cream",
+          "protected": "lavender",
+          "previous_target": "cyan",
+          "change_s": 17.240000000000002,
+          "contact_s": 19.029625,
+          "episode_id": 63,
+          "measured_impulse_Ns": 0.07652387415120611,
+          "pressure_proximity": {
+            "before": 0.6610599027771829,
+            "before_seconds": 0.6,
+            "after": 0.9184100632815924,
+            "after_seconds": 0.66
+          },
+          "intervention_schema": "duckfu.team-intervention.v2",
+          "actor_progress_toward_initial_target_m": 0.27340701065929124,
+          "contact_delay_s": 1.7896249999999974,
+          "role_at_contact": "PEEL",
+          "actual_target_at_contact": "cream",
+          "current_plan_matches": false,
+          "pressure_relief_observed": false,
+          "note": "Intent qualification requires >=0.12s, >=0.03m own directed travel, retained PEEL role/target/plan and measured contact. Proximity changes are observational, not a saved-win counterfactual."
+        }
+      ],
+      "same_target_different_role_45_135_degree_seconds": 3.780000000000003,
+      "longest_angular_position_s": 1.4400000000000008,
+      "qualification_note": "Angular positions are not alone proof of effective coordinated pressure."
+    }
+  ]
+}

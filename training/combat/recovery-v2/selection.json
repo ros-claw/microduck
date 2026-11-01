@@ -1,0 +1,52 @@
+{
+  "frozen_utc": "2026-10-31T08:21:25.021838+00:00",
+  "selected_runtime_mode": "learned_stabilize",
+  "delivery_actor_commit": "02301aa",
+  "training_commit": "a4a22e0",
+  "policy": "policies/candidates/duckfu_recovery_v2_150.onnx",
+  "policy_sha256": "908a82b283bb46a8d8950d132e9c86ed237b7972bae8a00bfa45a91b50f3e59b",
+  "development": {
+    "saved_states": 92,
+    "within_3s": 92,
+    "recovery_to_walk": 92,
+    "median_s": 1.09,
+    "free_matches": {
+      "base_seeds": [
+        170001
+      ],
+      "sides": 2,
+      "physical_pass": 2,
+      "recovery_starts": 7,
+      "recovered_and_returned": 7
+    }
+  },
+  "guard": "New motor while actually tilted (<.94 upright), at most 2 seconds total per recovery; measured standing handoff; legacy fallback after 3 seconds; .30s stable support and .30s settle. Identical body, referee and tactics.",
+  "rejected_variants": [
+    "Sitstand-initialized instantaneous-contact reward run: CPU 0/23 at checkpoints 50/100",
+    "Stand-initialized checkpoint 50: 89/92 within 3s, slower median; contact-only integration regressed one first fall",
+    "Stand-initialized checkpoint 100: 76/92 within 3s and 87/92 post-walk",
+    "Continuous checkpoint 150 motor: 92/92 within 3s but 90/92 post-walk; replaced by measured handoff"
+  ],
+  "heldout": {
+    "recorded_states_source_seeds": [
+      130001,
+      130002,
+      130003,
+      130004
+    ],
+    "free_match_base_seeds": [
+      180001,
+      180002,
+      180003,
+      180004
+    ],
+    "sides": 2,
+    "modes": [
+      "legacy",
+      "stand_first",
+      "learned_stabilize"
+    ],
+    "duration_s": 60,
+    "selection_after_inspecting_heldout": false
+  }
+}

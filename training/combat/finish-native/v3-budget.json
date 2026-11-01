@@ -1,0 +1,27 @@
+{
+  "task": "Mjlab-DuckFu-Finish-MicroDuck-v1",
+  "num_envs": 256,
+  "max_iterations": 301,
+  "wall_limit_minutes": 50,
+  "checkpoint_interval": 50,
+  "train_seed": 1103,
+  "development_seeds": [
+    210001,
+    210002,
+    210003,
+    210004
+  ],
+  "heldout_seeds": [
+    220001,
+    220002,
+    220003,
+    220004
+  ],
+  "source": "a new frozen source commit; fresh original contact actor, fresh 85D critic and cleared optimizer; initial std .06",
+  "reason": "Version 2 checkpoints 50 and 100 deteriorated CPU unsupported finishes and falls. Actor has no edge coordinates; add a latched public-state brake command and frequent shorter drives. No physical changes.",
+  "acceptance": "Same native CPU stress courses; same-start free bouts; select before heldout. Reject numerical failure, do not claim best from GPU reward alone.",
+  "stopped_v3": {
+    "checkpoint_iteration": 100,
+    "reason": "Measured actor-normalization drift dominates output changes; checkpoint 50 regresses support and has one CPU numerical rejection. Freeze actor coordinates for a separately scoped run."
+  }
+}

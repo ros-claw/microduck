@@ -52,7 +52,13 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     source = source_hashes()
-    competition = config.schema == "duckfu.match.v1"
+    competition = config.schema in ("duckfu.match.v1", "duckfu.match.v2")
+    v2 = config.schema == "duckfu.match.v2"
+    recovery_path = getattr(config, "recovery_motor_path", "")
+    recovery_sha = getattr(config, "recovery_motor_sha256", "")
+    if recovery_path and digest(recovery_path) != recovery_sha:
+        raise ValueError("Recovery motor digest differs")
+    planners = {}
     teams = None
     if competition:
         from .arena import build_match
@@ -73,6 +79,16 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             .custom_metadata_map
         )
     bank = next(iter(ducks.values())).bank
+    finish_path = getattr(config, "finish_motor_path", "")
+    finish_sha = getattr(config, "finish_motor_sha256", "")
+    if finish_path:
+        if digest(finish_path) != finish_sha:
+            raise ValueError("Pinned finishing motor mismatch")
+        bank.paths["finish_candidate"] = finish_path
+        bank.get("finish_candidate")
+    if recovery_path:
+        bank.paths["recovery_candidate"] = recovery_path
+        bank.get("recovery_candidate")
     if config.walk_motor_path:
         bank.paths["walk_candidate"] = config.walk_motor_path
         bank.get("walk_candidate")
@@ -81,6 +97,19 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             raise ValueError("Evade motor digest differs")
         bank.paths["evade_candidate"] = config.evade_motor_path
         bank.get("evade_candidate")
+    blue_motor_path = getattr(config, "blue_motor_path", "")
+    blue_motor_sha = getattr(config, "blue_motor_sha256", "")
+    if blue_motor_path:
+        if not competition or digest(blue_motor_path) != blue_motor_sha:
+            raise ValueError("Pinned blue motor mismatch")
+        from .world import CombatBank
+
+        opponent_bank = CombatBank(dict(bank.paths))
+        opponent_bank.paths["dash_candidate"] = blue_motor_path
+        opponent_bank.get("dash_candidate")
+        for name, duck in ducks.items():
+            if teams[name] == "BLUE":
+                duck.bank = opponent_bank
     if competition:
         for path, sha in (
             (config.tactics_path, config.tactics_sha256),
@@ -91,6 +120,28 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     audit = ContactAudit(m, ducks)
     if competition:
         controllers = {}
+        if v2 and config.team_intents:
+            from .team_intents import TeamPlanner
+
+            if config.controller_revision >= 3:
+                from .tactics_v3 import TacticalTeamPlanner as TeamPlanner
+
+            planners = {
+                team: TeamPlanner(
+                    team,
+                    teams,
+                    config.team_hold_s,
+                    opening_split=config.initial_layout == "peel_course",
+                    revision=config.controller_revision,
+                )
+                for team, enabled in (("RED", config.red_v2), ("BLUE", config.blue_v2))
+                if enabled
+            }
+            if config.controller_revision >= 3:
+                for team, planner in planners.items():
+                    planner.style = (
+                        config.red_v2_style if team == "RED" else config.blue_v2_style
+                    )
         for i, n in enumerate(ducks):
             path = config.tactics_path if teams[n] == "RED" else config.opponent_path
             sha = config.tactics_sha256 if teams[n] == "RED" else config.opponent_sha256
@@ -101,7 +152,39 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 if path
                 else None
             )
-            controllers[n] = Pilot(n, teams[n], teams, config, selector)
+            if v2 and (config.red_v2 if teams[n] == "RED" else config.blue_v2):
+                from .tactics_v2 import V2Pilot
+
+                if config.controller_revision == 3:
+                    from .tactics_v3 import TacticalPilot as V2Pilot
+                if config.controller_revision == 4:
+                    from .tactics_v4 import FinisherPilot as V2Pilot
+
+                controllers[n] = V2Pilot(
+                    n, teams[n], teams, config, planners.get(teams[n])
+                )
+            else:
+                if v2 and config.opponent_course != "none" and teams[n] == "BLUE":
+                    from .course_coach import SingleDriveCoach, StandingCoach
+
+                    coach = (
+                        StandingCoach
+                        if config.opponent_course == "stand"
+                        else SingleDriveCoach
+                    )
+                    controllers[n] = coach(n, teams[n], teams, config, selector)
+                else:
+                    controllers[n] = Pilot(n, teams[n], teams, config, selector)
+        if v2 and config.recovery_mode != "legacy":
+            from .body_recovery import BodyRecoveryGuard
+
+            for n in controllers:
+                controllers[n].guard = BodyRecoveryGuard(
+                    n,
+                    learned=config.recovery_mode
+                    in ("contact_learned", "learned_stabilize"),
+                    contact_only=config.recovery_mode != "learned_stabilize",
+                )
     else:
         controllers = {n: Maneuver(n, spawns[n]["role"], config) for n in ducks}
     referee = Referee(ducks, config.down_count_s, teams)
@@ -168,7 +251,15 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 public = snapshot(ducks, audit, config)
                 commands = {}
                 alive = [n for n in ducks if n not in referee.eliminated]
+                for planner in planners.values():
+                    planner.update(now, public, alive)
                 for n in ducks:
+                    if v2 and hasattr(controllers[n], "motor_context"):
+                        from .transition_contracts import measure_motor_context
+
+                        controllers[n].motor_context = measure_motor_context(
+                            ducks[n], audit
+                        )
                     other = next(public[o] for o in ducks if o != n)
                     if n in referee.eliminated:
                         commands[n] = MotorCommand("eliminated_hold")
@@ -177,6 +268,15 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                             controllers[n].choose(now, public, alive)
                             if competition
                             else controllers[n].choose(now, public[n], other)
+                        )
+                    if (
+                        finish_path
+                        and controllers[n].skill == "finish_drive"
+                        and commands[n].policy == "dash_candidate"
+                    ):
+                        cmd = commands[n]
+                        commands[n] = MotorCommand(
+                            cmd.owner, "finish_candidate", cmd.twist, cmd.head
                         )
                     if (
                         not competition
@@ -240,6 +340,9 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                         attack_id=controllers[n].active_attack,
                         observation_contact_age_s=physics.dt,
                     )
+                    if v2:
+                        row["target"] = controllers[n].target
+                        row["role"] = getattr(controllers[n], "role", "V1")
                     decision_file.write(json.dumps(row, separators=(",", ":")) + "\n")
                 decision_times.append(time.perf_counter() - before)
                 # Unique motor writer per duck. All inference before physics.
@@ -341,6 +444,12 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     wall_s = time.perf_counter() - wall_start
     if source != source_hashes():
         raise RuntimeError("Source changed during simulation; discard this run")
+    if recovery_path and digest(recovery_path) != recovery_sha:
+        raise RuntimeError("Recovery motor changed during simulation")
+    if finish_path and digest(finish_path) != finish_sha:
+        raise RuntimeError("Finishing motor changed during simulation")
+    if blue_motor_path and digest(blue_motor_path) != blue_motor_sha:
+        raise RuntimeError("Blue motor changed during simulation")
     if (
         config.candidate_motor_path
         and digest(config.candidate_motor_path) != config.candidate_motor_sha256
@@ -415,6 +524,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             + audit.events
             + referee.events
             + strikes.events
+            + [e for planner in planners.values() for e in planner.events]
         )
     # Attribute attack results after contact episode consolidation. CONTACTED is
     # deliberately not VALID_STRIKE: its effectiveness remains unqualified.
@@ -449,7 +559,17 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
     )
     manifest = dict(
         schema="duckfu.match-run.v1" if competition else "duckfu.run.v1",
-        stage="COMPETITION_DEVELOPMENT" if competition else "CF00-03 DEVELOPMENT",
+        stage=(
+            "STANDING_TARGET_ACTION_COURSE"
+            if v2 and config.opponent_course == "stand"
+            else "SINGLE_DRIVE_TRANSITION_COURSE"
+            if v2 and config.opponent_course == "single_drive"
+            else "PEEL_PRESSURE_COURSE"
+            if v2 and config.initial_layout != "standard"
+            else "COMPETITION_DEVELOPMENT"
+            if competition
+            else "CF00-03 DEVELOPMENT"
+        ),
         seed=seed,
         config=config.dict(),
         physics=asdict(physics),
@@ -488,7 +608,11 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         film_gate="PENDING_HUMAN_REVIEW",
         motor_gate="SEE_FROZEN_QUALIFICATION_REPORT",
         tactical_backend=(
-            "learned_categorical" if config.tactics_path else "public_state_rule"
+            "v2_public_rule_composition"
+            if v2
+            else "learned_categorical"
+            if config.tactics_path
+            else "public_state_rule"
         )
         if competition
         else "public_state_rule_with_fixed_coach",

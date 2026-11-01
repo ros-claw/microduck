@@ -1,0 +1,23 @@
+{
+  "schema": "duckfu.v2-film-selection.v1",
+  "actor_commit": "1e5f3a6",
+  "selection_rules": {
+    "duel": "First paired seed/side where both full-brake and dynamic have a clean response to the same enemy attack ID; sorted by seed/side. This is a selected demonstration, not a random sample.",
+    "actions": "First validation base seed, un-swapped side, both action families, regardless of response.",
+    "team_course": "First course run with at least two contact-qualified interventions; explicitly a pressure course.",
+    "team_free": "First free-team validation seed, un-swapped side, regardless of outcome."
+  },
+  "sources": {
+    "selected_v1": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/v1/91003-1",
+    "selected_full_brake": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/full_brake/91003-1",
+    "selected_dynamic": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/dynamic/91003-1",
+    "selected_probe": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-action-validation-94001/probe_bump/94001-0",
+    "selected_drive": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-action-validation-94001/committed_drive/94001-0",
+    "selected_team_course": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/runs/93004-1",
+    "selected_team_free": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-team-validation-92001/runs/92001-0"
+  },
+  "limitations": [
+    "Selection is for readability, not a random sample or independent performance validation.",
+    "Pressure relief or saved-win causality is not established."
+  ]
+}

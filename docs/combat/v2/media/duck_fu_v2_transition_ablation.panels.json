@@ -1,0 +1,56 @@
+{
+  "schema": "duckfu.comparison-film.v1",
+  "video_sha256": "dcd05cc47d27d76019e50a95817c27ddaf4567120deda01bfaee9f0366b0a6af",
+  "frames": 750,
+  "fps": 50,
+  "layout": "horizontal/padded",
+  "panels": [
+    {
+      "video": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/full_brake.mp4",
+      "sha256": "f29ddb73bf3f274e63d78da486b869f272f5e1598922a6992a03b1f2d475de15",
+      "frames": 750,
+      "source_frame_mapping": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/full_brake.frames.jsonl",
+      "source_frame_mapping_sha256": "b4fd4f12c6eb0cfa6688c0557803cadeb05a9fb58ebdab2d3e539fa30c9b93e0"
+    },
+    {
+      "video": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/dynamic.mp4",
+      "sha256": "7693bc90b7116d036d3fb73cfaeac1fea3f6a938680fe61dc8e0c4ad0a523f0d",
+      "frames": 750,
+      "source_frame_mapping": "/home/nvidia/workspace/microduck/duck-fu-v2/out/duckfu-v2-samples/dynamic.frames.jsonl",
+      "source_frame_mapping_sha256": "8b60ef2767ff10a1577341faf559a9af868fe6fb9c8a33d1bd60f734835aa3a4"
+    }
+  ],
+  "command": [
+    "/tmp/duckfu-clean-venv/lib/python3.13/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-aarch64-v7.0.2",
+    "-v",
+    "error",
+    "-i",
+    "out/duckfu-v2-samples/full_brake.mp4",
+    "-i",
+    "out/duckfu-v2-samples/dynamic.mp4",
+    "-loop",
+    "1",
+    "-i",
+    "out/duckfu-v2-samples/transition_ablation-banner.png",
+    "-filter_complex",
+    "[0:v][1:v]hstack=inputs=2,pad=1920:1080:0:180:color=0x0c1119[base];[base][2:v]overlay=0:0:shortest=1[v]",
+    "-map",
+    "[v]",
+    "-an",
+    "-c:v",
+    "libx264",
+    "-crf",
+    "20",
+    "-preset",
+    "fast",
+    "-threads",
+    "2",
+    "-movflags",
+    "+faststart",
+    "out/duckfu-v2-samples/duck_fu_v2_transition_ablation.mp4"
+  ],
+  "continuous_each_panel": true,
+  "synthetic_interpolation": false,
+  "silent": true,
+  "human_review": "PENDING_HUMAN_REVIEW"
+}

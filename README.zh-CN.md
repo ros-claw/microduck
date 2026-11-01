@@ -54,6 +54,30 @@
 
 这是等待用户观感验收的仿真开发分支。格斗循环没有使用 Jev 或网络大模型；不宣称已取得 ROSClaw 格斗授权回执或完成真机迁移。早期失败的运动策略和求解器方案与当前结果一起保留。
 
+### 终结专项实验——团队掩护与完整胜局
+
+[![ROOK 掩护 SHADE，从侧后方进攻](docs/combat/v2/finishing/media/cover.jpg)](docs/combat/v2/finishing/media/finish_en.mp4)
+
+[全英文视频，48.9 秒](docs/combat/v2/finishing/media/finish_en.mp4) · [方法、挑战与复现](docs/combat/v2/finishing/README.zh-CN.md) · [PPO 源码与检查点](training/combat/finish-native/README.md)。新增原生对手下的持续接触与刹车训练，由公开状态团队规则与既有移动、反击技能组合。25.04 秒完整自由对抗最终 **红队 2–蓝队 0**，展示掩护、换目标与明确标记的接触/脚步慢放。四轮训练记录约 321 万条采样；小规模配对检查与专项退步均有记录，新网络作为可选展示方案保留。
+
+### V2 开发：交锋与团队意图
+
+[![Duck Fu V2：持续支援与真实接触](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
+
+[自由对抗与接触特写](docs/combat/v2/round2/media/team_review.mp4) · [连续原速参考](docs/combat/v2/round2/media/team_reference.mp4) · [第二轮方法与结果](docs/combat/v2/round2/README.zh-CN.md) · [首轮同初态对照](docs/combat/v2/media/duck_fu_v2_duel_comparison.mp4)。V2 在冻结运动策略上组合公开状态动作和持续团队任务，最新一轮将支援计划落实到实际换目标与求解器接触。长局倒地增多、反击提速目标未完成等限制均已记录，当前仍是待验收开发样片。
+
+### 战术 2v2——牵制、绕侧、反击与掩护
+
+[![战术 2v2：闪避反击与边缘混战](docs/combat/v2/tactics/media/cover.jpg)](docs/combat/v2/tactics/media/tactical_en.mp4)
+
+[英文解说与慢动作视频，约 64 秒](docs/combat/v2/tactics/media/tactical_en.mp4) · [方法、实测与复现](docs/combat/v2/tactics/README.zh-CN.md)。公开状态规则在已有学习运动策略上协调牵制、绕侧、分路施压和撤离掩护。每种控制器各八次配对运行中，实测侧面响应由 **43 次变为 65 次**，保持直立且不中断的“闪避—敌方扑空—反击接触”由 **1 次变为 3 次**；16 场均通过原数值检查。但新控制八场仍全部平局，尚不能宣称已形成更强的制胜打法。成片明确区分两场自由对抗及其慢放。
+
+### 身体恢复专项训练——可选方案
+
+[![学习恢复动作与脚底承重特写](docs/combat/v2/body-recovery/media/cover.jpg)](docs/combat/v2/body-recovery/media/recovery_en.mp4)
+
+新增 PPO 身体运动网络，从保留真实动量和上一动作的接触轨迹中学习，并通过实测状态交接回站立、行走。留出专项测试中，明显倾斜状态的 3 秒恢复数由 **30/39 提高到 39/39**；全部 80 个快照中已完成样本的恢复中位数由 1.40 秒降至 1.12 秒。自由比赛 8 次同初态首次失衡快了 6 次，但跌落淘汰增多，因此保留旧默认配置。[全英文视频，88.88 秒](docs/combat/v2/body-recovery/media/recovery_en.mp4) · [方法、对照及限制](docs/combat/v2/body-recovery/README.zh-CN.md) · [训练源码与检查点](training/combat/recovery-v2/README.md)。
+
 ## 方法
 
 1. **运动技能**：61 维观测输入学习策略，以 50 Hz 输出 14 维电机动作；甩绳策略使用独立扩展接口。关节伺服有明确力矩限制。

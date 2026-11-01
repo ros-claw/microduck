@@ -1,0 +1,301 @@
+{
+  "schema": "duckfu.v2-first-round-evaluation.v1",
+  "actor_commit": "1e5f3a6",
+  "groups": {
+    "v2-validation-pressure-91001": {
+      "scheduled": 24,
+      "physical_pass": 24,
+      "penetration_max_m": 0.0006000239326040546,
+      "maximum_run_penetrating_p99_m": 8.146757488136721e-06
+    },
+    "v2-validation-counter-91001": {
+      "scheduled": 24,
+      "physical_pass": 24,
+      "penetration_max_m": 0.0009734664970036391,
+      "maximum_run_penetrating_p99_m": 8.257852751358814e-06
+    },
+    "v2-action-validation-94001": {
+      "scheduled": 16,
+      "physical_pass": 16,
+      "penetration_max_m": 0.00011440816192458732,
+      "maximum_run_penetrating_p99_m": 1.4711954423830484e-06
+    },
+    "v2-team-validation-92001": {
+      "scheduled": 8,
+      "physical_pass": 8,
+      "penetration_max_m": 0.0013130729136616264,
+      "maximum_run_penetrating_p99_m": 9.05842430823714e-06
+    },
+    "v2-peel-validation-93001": {
+      "scheduled": 8,
+      "physical_pass": 8,
+      "penetration_max_m": 0.0004437093225612143,
+      "maximum_run_penetrating_p99_m": 8.997256637087621e-06
+    }
+  },
+  "total_scheduled": 80,
+  "total_numerical_pass": 80,
+  "distinct_base_seeds": 16,
+  "duel": {
+    "pressure": {
+      "v1": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 0,
+        "observed_clean_counters": 0,
+        "counter_response_latencies_s": [],
+        "conditional_median_latency_s": null,
+        "down_events": 0,
+        "scheduled_results": {
+          "WIN": 4,
+          "TIMEOUT_DRAW": 4,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      },
+      "full_brake": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 1,
+        "observed_clean_counters": 2,
+        "counter_response_latencies_s": [
+          3.619999999999999,
+          2.74
+        ],
+        "conditional_median_latency_s": 3.1799999999999997,
+        "down_events": 4,
+        "scheduled_results": {
+          "WIN": 1,
+          "TIMEOUT_DRAW": 7,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      },
+      "dynamic": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 4,
+        "observed_clean_counters": 4,
+        "counter_response_latencies_s": [
+          2.039999999999999,
+          2.0199999999999996,
+          2.02,
+          2.3399999999999994
+        ],
+        "conditional_median_latency_s": 2.0299999999999994,
+        "down_events": 4,
+        "scheduled_results": {
+          "WIN": 0,
+          "TIMEOUT_DRAW": 8,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      }
+    },
+    "counter": {
+      "v1": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 0,
+        "observed_clean_counters": 0,
+        "counter_response_latencies_s": [],
+        "conditional_median_latency_s": null,
+        "down_events": 1,
+        "scheduled_results": {
+          "WIN": 1,
+          "TIMEOUT_DRAW": 7,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      },
+      "full_brake": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 0,
+        "observed_clean_counters": 0,
+        "counter_response_latencies_s": [],
+        "conditional_median_latency_s": null,
+        "down_events": 0,
+        "scheduled_results": {
+          "WIN": 2,
+          "TIMEOUT_DRAW": 6,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      },
+      "dynamic": {
+        "games": 8,
+        "base_seeds": 4,
+        "physical_pass": 8,
+        "legacy_counter_sequences": 0,
+        "observed_clean_counters": 0,
+        "counter_response_latencies_s": [],
+        "conditional_median_latency_s": null,
+        "down_events": 0,
+        "scheduled_results": {
+          "WIN": 1,
+          "TIMEOUT_DRAW": 7,
+          "SIMULTANEOUS_DRAW": 0,
+          "NO_CONTEST_PHYSICS": 0
+        }
+      }
+    }
+  },
+  "standing_target": {
+    "probe_bump": {
+      "games": 8,
+      "base_seeds": 4,
+      "physical_pass": 8,
+      "active_response_runs": 5,
+      "response_audit_runs": 6,
+      "median_complete_maneuver_s": 1.1,
+      "median_complete_maneuver_path_m": 0.17346736295545345,
+      "worst_attack_upright": 0.9973963499069214,
+      "action_ids_are_not_the_diversity_metric": true
+    },
+    "committed_drive": {
+      "games": 8,
+      "base_seeds": 4,
+      "physical_pass": 8,
+      "active_response_runs": 8,
+      "response_audit_runs": 8,
+      "median_complete_maneuver_s": 2.06,
+      "median_complete_maneuver_path_m": 0.38191168131357944,
+      "worst_attack_upright": 0.9960113167762756,
+      "action_ids_are_not_the_diversity_metric": true
+    }
+  },
+  "teams": {
+    "free": {
+      "games": 8,
+      "base_seeds": 4,
+      "physical_pass": 8,
+      "actual_interventions": 0,
+      "runs_with_intervention": 0,
+      "pressure_relief_observed": 0,
+      "angular_position_seconds": 80.379999999999,
+      "interventions": []
+    },
+    "pressure_course": {
+      "games": 8,
+      "base_seeds": 4,
+      "physical_pass": 8,
+      "actual_interventions": 4,
+      "runs_with_intervention": 3,
+      "pressure_relief_observed": 1,
+      "angular_position_seconds": 13.84000000000001,
+      "interventions": [
+        {
+          "state": "TEAM_INTERVENTION",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 18.6,
+          "contact_s": 19.432625,
+          "episode_id": 40,
+          "measured_impulse_Ns": 0.0941700406156864,
+          "pressure_proximity": {
+            "before": 0.7702260911413621,
+            "before_seconds": 0.6,
+            "after": 1.0172892412740604,
+            "after_seconds": 0.26
+          },
+          "pressure_relief_observed": false,
+          "note": "Planned target change plus new measured contact; proximity change is observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "TEAM_INTERVENTION",
+          "actor": "coral",
+          "target": "cyan",
+          "protected": "lavender",
+          "previous_target": "cream",
+          "change_s": 14.08,
+          "contact_s": 14.083875,
+          "episode_id": 54,
+          "measured_impulse_Ns": 0.14076551129098855,
+          "pressure_proximity": {
+            "before": 1.1787978578957008,
+            "before_seconds": 0.6,
+            "after": 0.3571266102275244,
+            "after_seconds": 1.0
+          },
+          "pressure_relief_observed": true,
+          "note": "Planned target change plus new measured contact; proximity change is observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "TEAM_INTERVENTION",
+          "actor": "lavender",
+          "target": "cyan",
+          "protected": "coral",
+          "previous_target": "cream",
+          "change_s": 9.76,
+          "contact_s": 12.3725,
+          "episode_id": 25,
+          "measured_impulse_Ns": 0.05603699386850301,
+          "pressure_proximity": {
+            "before": 0.6752783864762516,
+            "before_seconds": 0.6,
+            "after": 0.6511361320771073,
+            "after_seconds": 1.0
+          },
+          "pressure_relief_observed": false,
+          "note": "Planned target change plus new measured contact; proximity change is observational, not a saved-win counterfactual."
+        },
+        {
+          "state": "TEAM_INTERVENTION",
+          "actor": "coral",
+          "target": "cream",
+          "protected": "lavender",
+          "previous_target": "cyan",
+          "change_s": 17.240000000000002,
+          "contact_s": 19.029625,
+          "episode_id": 63,
+          "measured_impulse_Ns": 0.07652387415120611,
+          "pressure_proximity": {
+            "before": 0.6610599027771829,
+            "before_seconds": 0.6,
+            "after": 0.9184100632815924,
+            "after_seconds": 0.66
+          },
+          "pressure_relief_observed": false,
+          "note": "Planned target change plus new measured contact; proximity change is observational, not a saved-win counterfactual."
+        }
+      ]
+    }
+  },
+  "raw_reports": {
+    "v2-validation-pressure-91001": {
+      "path": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-pressure-91001/report.json",
+      "sha256": "f6a3ea5997f5635f9e38e753b5a43262e029954baea5e363c7327a1028d65739"
+    },
+    "v2-validation-counter-91001": {
+      "path": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-validation-counter-91001/report.json",
+      "sha256": "fe7df0a746821a6ce6407dccd3b7c25430bb913ae6b8b534593418bf3eb3cca2"
+    },
+    "v2-action-validation-94001": {
+      "path": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-action-validation-94001/report.json",
+      "sha256": "c125206d1077a2374cb7df541607fc0238c52d17c6893aaea4cb803630508b29"
+    },
+    "v2-team-validation-92001": {
+      "path": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-team-validation-92001/report.json",
+      "sha256": "88eed2f3108df68caf25f1763adfd04328163bc3cf986c15f064a245a1ed91f4"
+    },
+    "v2-peel-validation-93001": {
+      "path": "/home/nvidia/workspace/microduck/duck-fu-v2/artifacts/combat/local/v2-peel-validation-93001/report.json",
+      "sha256": "132277a426fd48d6a9b37b846392f07af10bd16c7e3e19cbb1336822e8992a27"
+    }
+  },
+  "limitations": [
+    "Four base seeds per group; paired sides/opponents are correlated. No stable tactical superiority is established.",
+    "The delayed-response audit was introduced from development diagnosis; it is a secondary observational metric, not a changed winner/reward.",
+    "Conditional latency compares successful sequences and is not itself a paired causal improvement estimate.",
+    "Team angular positions alone do not prove effective coordinated pressure.",
+    "Human viewing acceptance and official ROSClaw authorization receipt remain pending."
+  ]
+}

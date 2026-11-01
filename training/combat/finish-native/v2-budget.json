@@ -1,0 +1,35 @@
+{
+  "task": "Mjlab-DuckFu-Finish-MicroDuck-v1",
+  "num_envs": 256,
+  "max_iterations": 401,
+  "wall_limit_minutes": 65,
+  "checkpoint_interval": 50,
+  "teacher_baseline_seed": 1102,
+  "train_seed": 1101,
+  "development_seeds": [
+    210001,
+    210002,
+    210003,
+    210004
+  ],
+  "heldout_seeds": [
+    220001,
+    220002,
+    220003,
+    220004
+  ],
+  "acceptance": "Native CPU torque/contact checks unchanged; select on development physical effects and stability, then freeze before heldout. GPU rewards alone cannot promote.",
+  "stop": "Stop on sustained nonfinite training, export mismatch, repeated CPU physical rejection or budget; record all stopped/rejected runs.",
+  "source_priors": "Contact ONNX is a verified initialization with a fresh 85D critic and cleared optimizer state, not a faithful resume of its original training.",
+  "actors": "61D observations, 14 unfiltered joint targets, 50 Hz. Two 0.73724318 kg robots with matched capped PD and separate native collision layers. Critic alone has 85 privileged features.",
+  "version2": "After actual target exit, request zero motor command and require 0.30 s supported stable braking before one-shot goal and termination. Initial exploration std .06; same deterministic contact actor and fresh critic.",
+  "stopped_v1": {
+    "last_iteration": 18,
+    "last_logged_elapsed": "00:02:10",
+    "reason": "Found that immediate target-exit termination never teaches post-exit braking; preserve short run, restart from original verified actor rather than promoting it."
+  },
+  "stopped_v2": {
+    "checkpoint_iteration": 150,
+    "reason": "50 and 100 CPU courses regressed supported finishing and falls; restructure invisible-edge coach, preserving original training and all rejected candidates."
+  }
+}
