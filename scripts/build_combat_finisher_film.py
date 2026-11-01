@@ -56,7 +56,11 @@ def build(run, storyboard, hold_audit, out):
         e
         for e in json.loads((run / "contacts_summary.json").read_text())["episodes"]
         if last["actor"] in e["actor_pair"]
-        and any(teams[n] == m["result"]["winner"] for n in e["actor_pair"])
+        and any(
+            teams[n] == m["result"]["winner"]
+            and n not in referee["eliminated"]
+            for n in e["actor_pair"]
+        )
         and last["time_s"] - 1.5 <= e["end_step"] * m["physics"]["dt"] <= last["time_s"]
         and e["summed_normal_impulse_Ns"] > 0.01
     ]

@@ -54,6 +54,12 @@ Native armless Microducks duel and fight in red/blue teams on a fixed octagonal 
 
 This is a simulation development branch awaiting user film acceptance. Jev/network LLMs are not used in Duck Fu's game loop; ROSClaw combat authorization receipts and hardware transfer are not claimed. Earlier failed motor/solver versions remain documented alongside current results.
 
+### Finishing experiment — team cover and a complete winning bout
+
+[![Rook covers Shade and attacks the open side](docs/combat/v2/finishing/media/cover.jpg)](docs/combat/v2/finishing/media/finish_en.mp4)
+
+[English film, 48.9 s](docs/combat/v2/finishing/media/finish_en.mp4) · [Method, challenges and reproduction](docs/combat/v2/finishing/README.md) · [PPO source and checkpoints](training/combat/finish-native/README.md). A native-opponent motor learns contact continuation and braking; public-state team rules compose it with the existing movement and counter skills. The complete 25.04 s free bout ends **RED 2–BLUE 0**, with cover, target switching and marked contact/footwork replays. Four training versions log 3.21 million transitions. Small paired checks and component regressions are documented; the new motor remains an optional exhibition candidate.
+
 ### V2 development: exchanges and team intent
 
 [![Duck Fu V2: committed team cover](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)

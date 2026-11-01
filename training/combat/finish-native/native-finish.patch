@@ -1,0 +1,792 @@
+diff --git a/scripts/export.py b/scripts/export.py
+index d855bf0..86c1eb9 100644
+--- a/scripts/export.py
++++ b/scripts/export.py
+@@ -242,10 +242,12 @@ def run_export(task_id: str, cfg: ExportConfig):
+         metadata["hop_centering"] = "v1"
+     if task_id == "Mjlab-SweepRopeHop-Flat-MicroDuck":
+         metadata["hop_height_command"] = "sweep-v1"
+-    if task_id in ("Mjlab-DuckFu-DashBump-MicroDuck-v0", "Mjlab-DuckFu-Contact-MicroDuck-v1", "Mjlab-DuckFu-EvadeStep-MicroDuck-v1", "Mjlab-DuckFu-Locomotion-MicroDuck-v1", "Mjlab-DuckFu-Recovery-MicroDuck-v1"):
++    if task_id in ("Mjlab-DuckFu-DashBump-MicroDuck-v0", "Mjlab-DuckFu-Contact-MicroDuck-v1", "Mjlab-DuckFu-EvadeStep-MicroDuck-v1", "Mjlab-DuckFu-Locomotion-MicroDuck-v1", "Mjlab-DuckFu-Recovery-MicroDuck-v1", "Mjlab-DuckFu-Finish-MicroDuck-v1", "Mjlab-DuckFu-FinishStable-MicroDuck-v1"):
+         metadata.update(duckfu_motor_schema="legacy61.v1",
+                         duckfu_training_actuator="position_servo_simulation_only",
+                         duckfu_motor_hz="50", duckfu_normalization_baked="true")
++        if task_id in ("Mjlab-DuckFu-Finish-MicroDuck-v1", "Mjlab-DuckFu-FinishStable-MicroDuck-v1"):
++            metadata.update(duckfu_head_commands="native", duckfu_scope="supported_contact_pressure", duckfu_skill="finish_drive")
+         if task_id == "Mjlab-DuckFu-Contact-MicroDuck-v1":
+             metadata.update(duckfu_head_commands="native", duckfu_scope="forward_active")
+         if task_id == "Mjlab-DuckFu-EvadeStep-MicroDuck-v1":
+diff --git a/scripts/probe_duckfu_finish_teacher.py b/scripts/probe_duckfu_finish_teacher.py
+new file mode 100644
+index 0000000..2bff585
+--- /dev/null
++++ b/scripts/probe_duckfu_finish_teacher.py
+@@ -0,0 +1,106 @@
++"""Measure full native-robot opposition before and after PPO; first episodes."""
++
++import argparse, json, time
++from pathlib import Path
++import numpy as np
++import torch
++import onnxruntime as ort
++import mjlab.tasks
++from mjlab.envs import ManagerBasedRlEnv
++from mjlab.tasks.registry import load_env_cfg
++from mjlab_microduck.tasks.mdp import (
++    _duckfu_finish_load_teacher,
++    duckfu_finish_target_out,
++    duckfu_finish_own_out,
++)
++
++p = argparse.ArgumentParser()
++p.add_argument("--policy", required=True)
++p.add_argument("--out", required=True)
++p.add_argument("--seed", type=int, default=1102)
++p.add_argument("--task", default="Mjlab-DuckFu-Finish-MicroDuck-v1")
++a = p.parse_args()
++start = time.monotonic()
++net, mean, std = _duckfu_finish_load_teacher(a.policy, "cuda:0")
++opts = ort.SessionOptions()
++opts.intra_op_num_threads = 1
++opts.inter_op_num_threads = 1
++s = ort.InferenceSession(
++    a.policy, sess_options=opts, providers=["CPUExecutionProvider"]
++)
++x = np.random.default_rng(1102).normal(size=(64, 61)).astype("float32")
++expected = np.concatenate(
++    [s.run(None, {s.get_inputs()[0].name: z[None]})[0] for z in x]
++)
++actual = net((torch.tensor(x, device="cuda:0") - mean) / std).detach().cpu().numpy()
++np.testing.assert_allclose(actual, expected, atol=1e-4, rtol=2e-4)
++cfg = load_env_cfg(a.task)
++cfg.scene.num_envs = 64
++cfg.auto_reset = False
++cfg.observations["actor"].enable_corruption = False
++env = ManagerBasedRlEnv(cfg, device="cuda:0")
++obs, _ = env.reset(seed=a.seed)
++done_once = torch.zeros(64, dtype=torch.bool, device="cuda:0")
++rows = []
++bodies = []
++for k in range(300):
++    with torch.inference_mode():
++        action = net((obs["actor"] - mean) / std)
++    obs, reward, term, timeout, extras = env.step(action)
++    robot, target = env.scene["robot"], env.scene["target"]
++    up = -robot.data.projected_gravity_b[:, 2]
++    if not torch.isfinite(obs["actor"]).all():
++        raise RuntimeError("Nonfinite observation")
++    bodies.append(
++        torch.stack(
++            (
++                robot.data.root_link_pos_w[:, 0] - env.scene.env_origins[:, 0],
++                target.data.root_link_pos_w[:, 0] - env.scene.env_origins[:, 0],
++                up,
++                -target.data.projected_gravity_b[:, 2],
++            ),
++            dim=1,
++        )
++        .cpu()
++        .numpy()
++    )
++    new = (term | timeout) & ~done_once
++    for i in new.nonzero().flatten().tolist():
++        rows.append(
++            dict(
++                environment=i,
++                time_s=(k + 1) * 0.02,
++                target_out=bool(duckfu_finish_target_out(env)[i]),
++                own_out=bool(duckfu_finish_own_out(env)[i]),
++                actor_up=float(up[i]),
++                ever_contact=bool(env._finish_ever_contact[i]),
++                qualified_win=bool(env._finish_win_paid[i]),
++                paid_frontier_m=float(env._finish_paid[i]),
++                opponent_style=int(env._finish_style[i]),
++                reward=float(reward[i]),
++            )
++        )
++    done_once |= new
++    if done_once.all():
++        break
++    ids = (term | timeout).nonzero().flatten()
++    if len(ids):
++        obs, _ = env.reset(env_ids=ids)
++result = dict(
++    policy=a.policy,
++    seed=a.seed,
++    rows=rows,
++    environments=64,
++    completed_first_episodes=int(done_once.sum()),
++    target_out=sum(r["target_out"] for r in rows),
++    supported_wins=sum(r["qualified_win"] for r in rows),
++    own_falls=sum(r["actor_up"] < 0.65 or r["own_out"] for r in rows),
++    median_paid_frontier_m=float(np.median([r["paid_frontier_m"] for r in rows])),
++    teacher_parity_max_error=float(abs(actual - expected).max()),
++    wall_s=time.monotonic() - start,
++)
++Path(a.out).parent.mkdir(parents=True, exist_ok=True)
++Path(a.out).write_text(json.dumps(result, indent=2) + "\n")
++np.savez_compressed(Path(a.out).with_suffix(".npz"), body=np.array(bodies))
++print(json.dumps({k: v for k, v in result.items() if k != "rows"}, indent=2))
++env.close()
+diff --git a/src/mjlab_microduck/tasks/__init__.py b/src/mjlab_microduck/tasks/__init__.py
+index dd158b7..b500100 100644
+--- a/src/mjlab_microduck/tasks/__init__.py
++++ b/src/mjlab_microduck/tasks/__init__.py
+@@ -422,3 +422,32 @@ register_mjlab_task(
+     env_cfg=make_duckfu_env_cfg(),play_env_cfg=make_duckfu_env_cfg(play=True),
+     rl_cfg=DuckFuRlCfg,runner_cls=MicroduckOnPolicyRunner,
+ )
++
++# Native opponent finishing motor, optional simulation curriculum.
++from .microduck_duckfu_finish_env_cfg import make_duckfu_finish_env_cfg, DuckFuFinishRlCfg
++register_mjlab_task(
++    task_id='Mjlab-DuckFu-Finish-MicroDuck-v1',
++    env_cfg=make_duckfu_finish_env_cfg(),play_env_cfg=make_duckfu_finish_env_cfg(play=True),
++    rl_cfg=DuckFuFinishRlCfg,runner_cls=DuckFuRecoveryRunner,
++)
++
++
++class DuckFuFinishStableRunner(DuckFuRecoveryRunner):
++    def __init__(self, *args, **kwargs):
++        super().__init__(*args, **kwargs)
++        # Preserve the imported actor's coordinate system during fine-tuning.
++        # PPO still updates every actor weight; the privileged critic continues
++        # learning its own normalizer. No artificial sample count is inserted.
++        self.alg.actor.obs_normalizer.until = 0
++
++
++from copy import deepcopy as _duckfu_deepcopy
++DuckFuFinishStableRlCfg = _duckfu_deepcopy(DuckFuFinishRlCfg)
++DuckFuFinishStableRlCfg.experiment_name = 'duckfu_finish_stable'
++register_mjlab_task(
++    task_id='Mjlab-DuckFu-FinishStable-MicroDuck-v1',
++    env_cfg=make_duckfu_finish_env_cfg(),
++    play_env_cfg=make_duckfu_finish_env_cfg(play=True),
++    rl_cfg=DuckFuFinishStableRlCfg,
++    runner_cls=DuckFuFinishStableRunner,
++)
+diff --git a/src/mjlab_microduck/tasks/mdp.py b/src/mjlab_microduck/tasks/mdp.py
+index 921244d..9611dd3 100644
+--- a/src/mjlab_microduck/tasks/mdp.py
++++ b/src/mjlab_microduck/tasks/mdp.py
+@@ -8475,3 +8475,212 @@ def duckfu_recovery_home_cost(env):
+     up,height,_,supported = _duckfu_recovery_state(env)
+     error = (robot.data.joint_pos[:,ids]-robot.data.default_joint_pos[:,ids]).square().mean(dim=1)
+     return error*((up>0.94)&(height>0.105)&supported).float()
++
++
++# Native-robot finishing curriculum. Root/joint writes occur ONLY on reset.
++def _duckfu_finish_margin(env, asset):
++    xy=asset.data.root_link_pos_w[:,:2]-env.scene.env_origins[:,:2]
++    angles=torch.arange(8,device=env.device)*math.pi/4+math.pi/8
++    normals=torch.stack((angles.cos(),angles.sin()),dim=1)
++    return .85*math.cos(math.pi/8)-(xy@normals.T).amax(dim=1)
++
++
++def duckfu_finish_reset(env,env_ids):
++    n=len(env_ids)
++    if not hasattr(env,'_finish_origin'):
++        env._finish_origin=torch.zeros(env.num_envs,device=env.device)
++        env._finish_paid=torch.zeros(env.num_envs,device=env.device)
++        env._finish_touch_clock=torch.full((env.num_envs,),-100.,device=env.device)
++        env._finish_ever_contact=torch.zeros(env.num_envs,dtype=torch.bool,device=env.device)
++        env._finish_style=torch.zeros(env.num_envs,dtype=torch.long,device=env.device)
++        env._finish_teacher_last=torch.zeros((env.num_envs,14),device=env.device)
++        env._finish_drive_end=torch.zeros(env.num_envs,device=env.device)
++        env._finish_brake_latched=torch.zeros(env.num_envs,dtype=torch.bool,device=env.device)
++        env._finish_hold=torch.zeros(env.num_envs,device=env.device)
++        env._finish_complete=torch.zeros(env.num_envs,dtype=torch.bool,device=env.device)
++        env._finish_win_paid=torch.zeros(env.num_envs,dtype=torch.bool,device=env.device)
++        env._finish_result_step=torch.full((env.num_envs,),-1,dtype=torch.long,device=env.device)
++    target_x=torch.empty(n,device=env.device).uniform_(.46,.63)
++    gap=torch.empty(n,device=env.device).uniform_(.20,.32)
++    y=torch.empty(n,device=env.device).uniform_(-.035,.035)
++    for name,x in [('robot',target_x-gap),('target',target_x)]:
++        asset=env.scene[name]
++        pose=asset.data.default_root_state[env_ids,:7].clone()
++        pose[:,:3]=env.scene.env_origins[env_ids]+torch.stack((x,y,torch.full_like(x,.12)),dim=1)
++        yaw=torch.empty(n,device=env.device).uniform_(-.12,.12)
++        if name=='target':yaw+=torch.randint(0,4,(n,),device=env.device)*math.pi/2
++        pose[:,3:]=0.
++        pose[:,3]=torch.cos(yaw/2);pose[:,6]=torch.sin(yaw/2)
++        asset.write_root_link_pose_to_sim(pose,env_ids=env_ids)
++        asset.write_root_link_velocity_to_sim(torch.zeros((n,6),device=env.device),env_ids=env_ids)
++        ids=_servo_joint_ids(env,asset)
++        joints=asset.data.default_joint_pos[env_ids][:,ids]+torch.empty((n,14),device=env.device).uniform_(-.005,.005)
++        asset.write_joint_state_to_sim(joints,torch.zeros_like(joints),joint_ids=ids,env_ids=env_ids)
++        asset.set_joint_position_target(asset.data.default_joint_pos[env_ids][:,ids],joint_ids=ids,env_ids=env_ids[:,None])
++    env._finish_origin[env_ids]=target_x
++    env._finish_paid[env_ids]=0.
++    env._finish_hold[env_ids]=0.
++    env._finish_complete[env_ids]=False
++    env._finish_win_paid[env_ids]=False
++    env._finish_result_step[env_ids]=-1
++    env._finish_touch_clock[env_ids]=-100.
++    env._finish_ever_contact[env_ids]=False
++    env._finish_teacher_last[env_ids]=0.
++    # Frozen opponent pool. A walk opponent may step inward or sideways using
++    # bounded native locomotion commands; it never receives an external shove.
++    walk_fraction=.25 if env.common_step_counter<3600 else .50
++    env._finish_style[env_ids]=(torch.rand(n,device=env.device)<walk_fraction).long()
++    env._finish_brake_latched[env_ids]=False
++    # Frequent short drives expose braking before rare successful ring-outs.
++    short_fraction=.50 if env.common_step_counter<2400 else .25
++    short=torch.rand(n,device=env.device)<short_fraction
++    env._finish_drive_end[env_ids]=torch.where(short,
++        torch.empty(n,device=env.device).uniform_(1.2,2.0),
++        torch.empty(n,device=env.device).uniform_(2.7,3.1))
++
++
++def _duckfu_finish_load_teacher(path,device):
++    import onnx
++    from onnx import numpy_helper
++    from torch import nn
++    values={x.name:torch.as_tensor(numpy_helper.to_array(x).copy(),device=device) for x in onnx.load(path).graph.initializer}
++    net=nn.Sequential(nn.Linear(61,512),nn.ELU(),nn.Linear(512,256),nn.ELU(),nn.Linear(256,128),nn.ELU(),nn.Linear(128,14)).to(device)
++    net.load_state_dict({k.removeprefix('mlp.'):v for k,v in values.items() if k.startswith('mlp.')})
++    divisors=[v for k,v in values.items() if k.startswith('onnx::Div')]
++    if len(divisors)!=1:raise ValueError('Unexpected teacher normalization graph')
++    net.eval()
++    for p in net.parameters():p.requires_grad_(False)
++    return net,values['obs_normalizer._mean'],divisors[0]
++
++
++def _duckfu_finish_direction(asset,delta):
++    q=asset.data.root_link_quat_w
++    yaw=torch.atan2(2*(q[:,0]*q[:,3]+q[:,1]*q[:,2]),1-2*(q[:,2].square()+q[:,3].square()))
++    x=yaw.cos()*delta[:,0]+yaw.sin()*delta[:,1]
++    y=-yaw.sin()*delta[:,0]+yaw.cos()*delta[:,1]
++    return x,y,torch.atan2(y,x)
++
++
++def duckfu_finish_drive_command(env):
++    """A public-state coach requests braking; actor keeps its native 61D input.
++
++    Arena coordinates are not in the actor observation. Asking it to infer an
++    invisible edge while holding a forward command is an inconsistent task.
++    Latch zero commands at a conservative inner margin, like runtime preemption.
++    """
++    t=env.episode_length_buf*env.step_dt
++    edge=(_duckfu_finish_margin(env,env.scene['robot'])<.14)&(t>=.60)
++    env._finish_brake_latched|=edge|duckfu_finish_target_out(env)
++    return (t>=.60)&(t<env._finish_drive_end)&~env._finish_brake_latched
++
++
++def duckfu_finish_control(env,env_ids=None,stand_path='',walk_path=''):
++    if not stand_path or not walk_path:
++        raise ValueError('Finishing task requires explicit frozen opponent motor paths')
++    if not hasattr(env,'_finish_teachers'):
++        env._finish_teachers=[_duckfu_finish_load_teacher(p,env.device) for p in (stand_path,walk_path)]
++    robot,target=env.scene['robot'],env.scene['target']
++    t=env.episode_length_buf*env.step_dt
++    active=duckfu_finish_drive_command(env)
++    twist=env.command_manager.get_term('twist').command
++    twist.zero_();twist[:,0]=active.float()*.4
++    _,_,angle=_duckfu_finish_direction(robot,target.data.root_link_pos_w[:,:2]-robot.data.root_link_pos_w[:,:2])
++    twist[:,2]=torch.clamp(2*angle,-.5,.5)*active
++    head=env.command_manager.get_term('head_pose').command
++    head.zero_();head[:,0]=-.3*active;head[:,1]=-.15*active
++    env.command_manager.get_term('body_pose').command.zero_()
++    command=torch.zeros((env.num_envs,13),device=env.device)
++    tx,ty,ta=_duckfu_finish_direction(target,robot.data.root_link_pos_w[:,:2]-target.data.root_link_pos_w[:,:2])
++    gap=torch.sqrt(tx.square()+ty.square()).clamp(min=1e-6)
++    command[:,0]=torch.clamp(tx/gap*.14,-.14,.14)
++    command[:,1]=torch.clamp(ty/gap*.14,-.14,.14)
++    command[:,2]=torch.clamp(2*ta,-1.,1.)
++    command*=((t>.60)&(t<env._finish_drive_end+.4))[:,None]
++    ids=_servo_joint_ids(env,target)
++    obs=torch.cat((target.data.root_link_ang_vel_b,target.data.projected_gravity_b,
++        _servo_joint_pos(env,target)-_servo_default_joint_pos(env,target),_servo_joint_vel(env,target),env._finish_teacher_last,command),dim=1)
++    stand_obs=obs.clone();stand_obs[:,48:]=0.
++    with torch.no_grad():
++        stand,walk=env._finish_teachers
++        a=stand[0]((stand_obs-stand[1])/stand[2])
++        b=walk[0]((obs-walk[1])/walk[2])
++        action=torch.where((env._finish_style==0)[:,None],a,b)
++    if not torch.isfinite(action).all():raise RuntimeError('Nonfinite native opponent action')
++    target.set_joint_position_target(_servo_default_joint_pos(env,target)+action,joint_ids=ids)
++    env._finish_teacher_last.copy_(action)
++
++
++def duckfu_finish_critic(env):
++    robot,target=env.scene['robot'],env.scene['target']
++    delta=target.data.root_link_pos_w[:,:2]-robot.data.root_link_pos_w[:,:2]
++    x,y,_=_duckfu_finish_direction(robot,delta)
++    target_up=-target.data.projected_gravity_b[:,2]
++    t=env.episode_length_buf*env.step_dt
++    return torch.cat((torch.stack((x,y,target_up,_duckfu_finish_margin(env,robot),_duckfu_finish_margin(env,target),t/5.6,(env.command_manager.get_term('twist').command.norm(dim=1)>1e-5).float()),dim=1),target.data.root_link_lin_vel_w[:,:2]),dim=1)
++
++
++def _duckfu_finish_supported(env):
++    history=env.scene.sensors['feet_ground_contact'].data.force_history
++    if history is None:raise ValueError('Need whole-period solved foot support')
++    return history[...,2].abs().mean(-1).sum(-1)>.5
++
++
++def duckfu_finish_progress(env):
++    robot,target=env.scene['robot'],env.scene['target']
++    force=env.scene.sensors['finish_contact'].data.force_history
++    if force is None:raise ValueError('Need actual opponent contact history')
++    contact=force.norm(dim=-1).mean(-1).sum(-1)>.25
++    t=env.episode_length_buf*env.step_dt
++    env._finish_touch_clock=torch.where(contact,t,env._finish_touch_clock)
++    env._finish_ever_contact|=contact
++    progress=(target.data.root_link_pos_w[:,0]-env.scene.env_origins[:,0]-env._finish_origin).clamp(0.,.45)
++    delta=(progress-env._finish_paid).clamp(0.,.5*env.step_dt)
++    good=((-robot.data.projected_gravity_b[:,2])>.90)&_duckfu_finish_supported(env)&(_duckfu_finish_margin(env,robot)>.06)&(t-env._finish_touch_clock<.30)
++    delta*=good
++    env._finish_paid+=delta
++    return delta/env.step_dt
++
++
++def duckfu_finish_target_out(env):
++    return env.scene['target'].data.root_link_pos_w[:,2]-env.scene.env_origins[:,2]<-.10
++
++
++def duckfu_finish_own_out(env):
++    return env.scene['robot'].data.root_link_pos_w[:,2]-env.scene.env_origins[:,2]<-.10
++
++
++def duckfu_finish_win(env):
++    complete=duckfu_finish_complete(env)
++    paid=complete&~env._finish_win_paid
++    env._finish_win_paid|=paid
++    return paid.float()/env.step_dt
++
++
++def duckfu_finish_loss(env):
++    fallen=(-env.scene['robot'].data.projected_gravity_b[:,2])<.65
++    return (duckfu_finish_own_out(env)|fallen).float()/env.step_dt
++
++
++def duckfu_finish_brake(env):
++    late=(env.command_manager.get_term('twist').command.norm(dim=1)<1e-5)&(env.episode_length_buf*env.step_dt>.65)
++    speed=env.scene['robot'].data.root_link_lin_vel_w[:,:2].square().sum(-1)
++    return speed*late
++
++
++def duckfu_finish_complete(env):
++    """An exit is not enough: require the attacker to brake and keep support.
++
++    Cache per global motor tick because termination and reward both query it.
++    The one-shot reward has a separate paid latch; no repeated win annuity.
++    """
++    fresh=env._finish_result_step!=env.common_step_counter
++    robot=env.scene['robot']
++    good=(duckfu_finish_target_out(env)&env._finish_ever_contact
++          &((-robot.data.projected_gravity_b[:,2])>.94)&_duckfu_finish_supported(env)
++          &(_duckfu_finish_margin(env,robot)>.06)
++          &(robot.data.root_link_lin_vel_w[:,:2].norm(dim=1)<.16))
++    hold=torch.where(good,env._finish_hold+env.step_dt,0.)
++    env._finish_hold=torch.where(fresh,hold,env._finish_hold)
++    env._finish_complete=env._finish_hold>=.30-1e-6
++    env._finish_result_step=torch.where(fresh,torch.full_like(env._finish_result_step,env.common_step_counter),env._finish_result_step)
++    return env._finish_complete
+diff --git a/src/mjlab_microduck/tasks/microduck_duckfu_finish_env_cfg.py b/src/mjlab_microduck/tasks/microduck_duckfu_finish_env_cfg.py
+new file mode 100644
+index 0000000..9b98d1b
+--- /dev/null
++++ b/src/mjlab_microduck/tasks/microduck_duckfu_finish_env_cfg.py
+@@ -0,0 +1,193 @@
++"""Native opponent curriculum: supported pressure, real edge exits and braking.
++
++The actor retains 61 physical observations. A frozen native robot opposes it;
++only the critic sees privileged relative geometry. No in-episode root writes.
++"""
++
++from copy import deepcopy
++from dataclasses import dataclass
++import math
++import os
++
++import mujoco
++import numpy as np
++from mjlab.managers import (
++    EventTermCfg,
++    RewardTermCfg,
++    TerminationTermCfg,
++    ObservationTermCfg,
++)
++from mjlab.sensor import ContactSensorCfg, ContactMatch
++from mjlab.terrains.terrain_generator import TerrainGeometry, TerrainOutput
++
++from .microduck_duckfu_env_cfg import (
++    DuckFuFloor,
++    DuckFuRlCfg,
++    make_duckfu_contact_env_cfg,
++)
++from mjlab_microduck.robot.microduck_constants import (
++    MICRODUCK_STANDUP_PD_ROBOT_CFG,
++    get_standup_spec,
++)
++from . import mdp
++
++
++def finish_robot_spec(index=0):
++    from microduck_lab.combat.world import external_parts
++
++    s = get_standup_spec()
++    external_parts(s, index, 2)
++    for a in s.actuators:
++        a.forcelimited = True
++        a.forcerange = [-0.6405, 0.6405]
++    for g in s.geoms:
++        if g.contype or g.conaffinity:
++            g.solref = [0.0005, 1.0]
++            g.solimp = [0.99, 0.99, 0.001, 0.5, 2.0]
++            g.margin = 0.0
++    return s
++
++
++def finish_target_spec():
++    s = finish_robot_spec(1)
++    # The CPU forward used by Warp allocation precedes reset events. Keep the
++    # two compile-time free roots apart instead of allocating overlapping ducks.
++    s.body("trunk_base").pos[0] = 0.5
++    return s
++
++
++@dataclass(kw_only=True)
++class FinishRing(DuckFuFloor):
++    def function(self, difficulty, spec, rng):
++        ox, oy = self.size[0] / 2, self.size[1] / 2
++        vertices = [
++            [0.85 * math.cos(i * math.pi / 4), 0.85 * math.sin(i * math.pi / 4), z]
++            for z in (-0.04, 0.04)
++            for i in range(8)
++        ]
++        spec.add_mesh(
++            name="finish_octagon", uservert=np.asarray(vertices).flatten().tolist()
++        )
++        stage = spec.body("terrain").add_geom(
++            name="finish_stage",
++            type=mujoco.mjtGeom.mjGEOM_MESH,
++            meshname="finish_octagon",
++            pos=[ox, oy, -0.04],
++            contype=1,
++            conaffinity=20,
++            friction=[1.0, 0.005, 0.0001],
++            solref=[0.0005, 1.0],
++            solimp=[0.99, 0.99, 0.001, 0.5, 2.0],
++        )
++        receiver = spec.body("terrain").add_geom(
++            name="finish_receiver",
++            type=mujoco.mjtGeom.mjGEOM_BOX,
++            pos=[ox, oy, -0.55],
++            size=[self.size[0] / 2, self.size[1] / 2, 0.04],
++            contype=1,
++            conaffinity=20,
++            friction=[1.0, 0.005, 0.0001],
++            solref=[0.0005, 1.0],
++            solimp=[0.99, 0.99, 0.001, 0.5, 2.0],
++        )
++        return TerrainOutput(
++            origin=np.array([ox, oy, 0.0]),
++            geometries=[
++                TerrainGeometry(geom=stage, color=(0.4, 0.4, 0.4, 1)),
++                TerrainGeometry(geom=receiver, color=(0.1, 0.1, 0.1, 1)),
++            ],
++        )
++
++
++def make_duckfu_finish_env_cfg(play=False):
++    cfg = make_duckfu_contact_env_cfg(play=play)
++    cfg.scene.entities["robot"].spec_fn = finish_robot_spec
++    target = deepcopy(MICRODUCK_STANDUP_PD_ROBOT_CFG)
++    target.spec_fn = finish_target_spec
++    target.collisions = ()
++    target.init_state.pos = (0.5, 0.0, 0.12)
++    cfg.scene.entities["target"] = target
++    cfg.scene.terrain.terrain_generator.sub_terrains = {"ring": FinishRing()}
++    cfg.sim.nconmax = 512
++    cfg.sim.njmax = 10000
++    cfg.episode_length_s = 5.6
++    cfg.terminations["fell_over"].params["limit_angle"] = math.acos(0.65)
++    twist = cfg.commands["twist"]
++    twist.ranges.lin_vel_x = twist.ranges.lin_vel_y = twist.ranges.ang_vel_z = (
++        0.0,
++        0.0,
++    )
++    for name in ("head_pose", "body_pose"):
++        cfg.commands[name].ranges = tuple((0.0, 0.0) for _ in cfg.commands[name].ranges)
++    for sensor in cfg.scene.sensors:
++        if sensor.name == "feet_ground_contact":
++            sensor.history_length = cfg.decimation
++    cfg.scene.sensors = (
++        *cfg.scene.sensors,
++        ContactSensorCfg(
++            name="finish_contact",
++            primary=ContactMatch(mode="subtree", entity="robot", pattern="trunk_base"),
++            secondary=ContactMatch(
++                mode="subtree", entity="target", pattern="trunk_base"
++            ),
++            fields=("found", "force"),
++            reduce="netforce",
++            global_frame=True,
++            history_length=cfg.decimation,
++        ),
++    )
++    for name in ("reset_base", "reset_robot_joints", "reset_target", "duckfu_commands"):
++        cfg.events.pop(name, None)
++    cfg.events["finish_reset"] = EventTermCfg(
++        func=mdp.duckfu_finish_reset, mode="reset"
++    )
++    cfg.events["finish_control"] = EventTermCfg(
++        func=mdp.duckfu_finish_control,
++        mode="step",
++        params={
++            "stand_path": os.environ.get("DUCKFU_STAND_TEACHER", ""),
++            "walk_path": os.environ.get("DUCKFU_WALK_TEACHER", ""),
++        },
++    )
++    for group in ("actor", "critic"):
++        # Disabled delays were inherited from the matched contact task.
++        assert len(cfg.observations[group].terms) > 0
++    cfg.observations["critic"].terms["finish_context"] = ObservationTermCfg(
++        func=mdp.duckfu_finish_critic
++    )
++    original = cfg.rewards
++    cfg.rewards = {
++        k: deepcopy(original[k])
++        for k in ("upright", "head_pose_tracking", "action_rate_l2", "dof_pos_limits")
++        if k in original
++    }
++    cfg.rewards["action_rate_l2"].weight = -0.005
++    cfg.rewards["upright"].weight = 0.4
++    cfg.rewards["head_pose_tracking"].weight = 0.8
++    cfg.rewards["track_linear_velocity"] = deepcopy(original["track_linear_velocity"])
++    cfg.rewards["track_linear_velocity"].weight = 2.0
++    cfg.rewards["finish_progress"] = RewardTermCfg(
++        func=mdp.duckfu_finish_progress, weight=30.0
++    )
++    cfg.rewards["finish_win"] = RewardTermCfg(func=mdp.duckfu_finish_win, weight=20.0)
++    cfg.rewards["finish_loss"] = RewardTermCfg(
++        func=mdp.duckfu_finish_loss, weight=-25.0
++    )
++    cfg.rewards["finish_brake"] = RewardTermCfg(
++        func=mdp.duckfu_finish_brake, weight=-2.0
++    )
++    cfg.rewards["finish_stable"] = RewardTermCfg(func=mdp.duckfu_stable, weight=0.3)
++    cfg.terminations["supported_finish"] = TerminationTermCfg(
++        func=mdp.duckfu_finish_complete
++    )
++    cfg.terminations["own_out"] = TerminationTermCfg(func=mdp.duckfu_finish_own_out)
++    return cfg
++
++
++DuckFuFinishRlCfg = deepcopy(DuckFuRlCfg)
++DuckFuFinishRlCfg.experiment_name = "duckfu_finish"
++DuckFuFinishRlCfg.run_name = "native_opponent_pressure"
++DuckFuFinishRlCfg.save_interval = 50
++DuckFuFinishRlCfg.max_iterations = 601
++DuckFuFinishRlCfg.algorithm.learning_rate = 1e-4
++DuckFuFinishRlCfg.actor.distribution_cfg["init_std"] = 0.12
+diff --git a/tests/test_duckfu_finish_cfg.py b/tests/test_duckfu_finish_cfg.py
+new file mode 100644
+index 0000000..c9cfeeb
+--- /dev/null
++++ b/tests/test_duckfu_finish_cfg.py
+@@ -0,0 +1,174 @@
++import numpy as np
++import pytest
++from mjlab_microduck.tasks.microduck_duckfu_finish_env_cfg import (
++    make_duckfu_finish_env_cfg,
++    finish_robot_spec,
++    finish_target_spec,
++)
++
++
++def test_two_native_robots_keep_mass_joint_and_torque_contract():
++    a, b = finish_robot_spec().compile(), finish_target_spec().compile()
++    for m in [a, b]:
++        assert m.nu == 14 and m.nq == 21 and m.nv == 20
++        assert m.body_mass.sum() == pytest.approx(0.73724318)
++        assert np.allclose(m.actuator_forcerange, [-0.6405, 0.6405])
++    ea = a.geom_contype == 64
++    eb = b.geom_contype == 128
++    assert ea.sum() == eb.sum() == 70
++    assert (a.geom_conaffinity[ea] == 128).all() and (
++        b.geom_conaffinity[eb] == 64
++    ).all()
++
++
++def test_only_reset_moves_roots_and_actor_interface_stays_native():
++    c = make_duckfu_finish_env_cfg()
++    assert c.decimation * c.sim.mujoco.timestep == pytest.approx(0.02)
++    assert c.events["finish_reset"].mode == "reset"
++    assert c.events["finish_control"].mode == "step"
++    assert not any(e.mode == "interval" for e in c.events.values())
++    assert "finish_context" not in c.observations["actor"].terms
++    assert "finish_context" in c.observations["critic"].terms
++    assert (
++        c.rewards["finish_progress"].weight > 0 and c.rewards["finish_win"].weight > 0
++    )
++    assert c.rewards["finish_loss"].weight < 0 and c.rewards["finish_brake"].weight < 0
++    for n in ["feet_ground_contact", "finish_contact"]:
++        assert (
++            next(s for s in c.scene.sensors if s.name == n).history_length
++            == c.decimation
++        )
++    assert "supported_finish" in c.terminations and "own_out" in c.terminations
++
++
++def fake_finish_env():
++    from types import SimpleNamespace as NS
++    import torch
++
++    class Scene(dict):
++        pass
++
++    a = NS(
++        data=NS(
++            root_link_pos_w=torch.tensor([[0.25, 0.0, 0.12]]),
++            root_link_lin_vel_w=torch.zeros((1, 3)),
++            projected_gravity_b=torch.tensor([[0.0, 0.0, -1.0]]),
++        )
++    )
++    b = NS(
++        data=NS(
++            root_link_pos_w=torch.tensor([[0.5, 0.0, 0.12]]),
++            projected_gravity_b=torch.tensor([[0.0, 0.0, -1.0]]),
++        )
++    )
++    feet = torch.zeros((1, 2, 40, 3))
++    feet[:, :, :, 2] = 4.0
++    contact = torch.zeros((1, 1, 40, 3))
++    contact[:, :, :, 0] = 1.0
++    scene = Scene(robot=a, target=b)
++    scene.env_origins = torch.zeros((1, 3))
++    scene.sensors = {
++        "feet_ground_contact": NS(data=NS(force_history=feet)),
++        "finish_contact": NS(data=NS(force_history=contact)),
++    }
++    return NS(
++        scene=scene,
++        device="cpu",
++        step_dt=0.02,
++        common_step_counter=0,
++        _finish_hold=torch.zeros(1),
++        _finish_complete=torch.tensor([False]),
++        _finish_win_paid=torch.tensor([False]),
++        _finish_result_step=torch.tensor([-1]),
++        episode_length_buf=torch.tensor([10]),
++        _finish_origin=torch.tensor([0.5]),
++        _finish_paid=torch.zeros(1),
++        _finish_touch_clock=torch.tensor([-100.0]),
++        _finish_ever_contact=torch.tensor([False]),
++    )
++
++
++def test_progress_requires_real_contact_and_support_and_cannot_farm_a_hold():
++    from mjlab_microduck.tasks import mdp
++
++    e = fake_finish_env()
++    assert mdp.duckfu_finish_progress(e).item() == 0
++    e.scene["target"].data.root_link_pos_w[:, 0] += 0.02
++    assert mdp.duckfu_finish_progress(e).item() == pytest.approx(0.5)
++    assert mdp.duckfu_finish_progress(e).item() == pytest.approx(0.5, abs=1e-5)
++    assert mdp.duckfu_finish_progress(e).item() == pytest.approx(0, abs=1e-5)
++    e.scene["target"].data.root_link_pos_w[:, 0] -= 0.02
++    assert mdp.duckfu_finish_progress(e).item() == 0
++    e.scene["target"].data.root_link_pos_w[:, 0] += 0.02
++    assert mdp.duckfu_finish_progress(e).item() == pytest.approx(0, abs=1e-5)
++
++
++@pytest.mark.parametrize("failure", ["no_contact", "no_support", "fallen", "own_edge"])
++def test_flying_flopping_or_unrelated_opponent_movement_does_not_pay(failure):
++    from mjlab_microduck.tasks import mdp
++
++    e = fake_finish_env()
++    e.scene["target"].data.root_link_pos_w[:, 0] += 0.04
++    if failure == "no_contact":
++        e.scene.sensors["finish_contact"].data.force_history.zero_()
++    if failure == "no_support":
++        e.scene.sensors["feet_ground_contact"].data.force_history.zero_()
++    if failure == "fallen":
++        e.scene["robot"].data.projected_gravity_b[:, 2] = 0.0
++    if failure == "own_edge":
++        e.scene["robot"].data.root_link_pos_w[:, 0] = 0.82
++    assert mdp.duckfu_finish_progress(e).item() == 0
++
++
++def test_target_ringout_requires_continuous_post_exit_support_and_pays_once():
++    from mjlab_microduck.tasks import mdp
++
++    e = fake_finish_env()
++    e.scene["target"].data.root_link_pos_w[:, 2] = -0.2
++    assert mdp.duckfu_finish_target_out(e).item()
++    assert mdp.duckfu_finish_win(e).item() == 0
++
++    mdp.duckfu_finish_progress(e)
++    for i in range(1, 15):
++        e.common_step_counter = i
++        assert mdp.duckfu_finish_win(e).item() == 0
++        # Re-reading termination and reward in the same tick must not accrue
++        # another tick of virtual support.
++        mdp.duckfu_finish_complete(e)
++    e.common_step_counter = 15
++    assert mdp.duckfu_finish_win(e).item() == pytest.approx(50.0)
++    assert mdp.duckfu_finish_win(e).item() == 0
++    e.scene["robot"].data.root_link_pos_w[:, 2] = -0.2
++    e.common_step_counter = 16
++    assert mdp.duckfu_finish_win(e).item() == 0
++
++
++def test_invisible_edge_is_handled_by_a_latched_public_coach_command():
++    import torch
++    from mjlab_microduck.tasks import mdp
++
++    e = fake_finish_env()
++    e.episode_length_buf[:] = 50
++    e._finish_drive_end = torch.tensor([3.0])
++    e._finish_brake_latched = torch.tensor([False])
++    assert mdp.duckfu_finish_drive_command(e).item()
++    e.scene["robot"].data.root_link_pos_w[:, 0] = 0.72
++    assert not mdp.duckfu_finish_drive_command(e).item()
++    # Coasting inward does not oscillate between forward and braking commands.
++    e.scene["robot"].data.root_link_pos_w[:, 0] = 0.60
++    assert not mdp.duckfu_finish_drive_command(e).item()
++
++
++def test_real_exit_and_short_drive_timeout_both_request_zero_motor_command():
++    import torch
++    from mjlab_microduck.tasks import mdp
++
++    e = fake_finish_env()
++    e.episode_length_buf[:] = 50
++    e._finish_drive_end = torch.tensor([0.9])
++    e._finish_brake_latched = torch.tensor([False])
++    assert not mdp.duckfu_finish_drive_command(e).item()
++    e._finish_drive_end[:] = 3.0
++    assert mdp.duckfu_finish_drive_command(e).item()
++    e.scene["target"].data.root_link_pos_w[:, 2] = -0.2
++    assert not mdp.duckfu_finish_drive_command(e).item()
+diff --git a/tests/test_duckfu_finish_normalization.py b/tests/test_duckfu_finish_normalization.py
+new file mode 100644
+index 0000000..17d708d
+--- /dev/null
++++ b/tests/test_duckfu_finish_normalization.py
+@@ -0,0 +1,23 @@
++from types import SimpleNamespace
++import torch
++from rsl_rl.modules import EmpiricalNormalization
++from mjlab_microduck.tasks import DuckFuRecoveryRunner, DuckFuFinishStableRunner
++
++
++def test_finish_finetuning_preserves_actor_normalizer_but_trains_critic(monkeypatch):
++    actor_norm = EmpiricalNormalization(61)
++    critic_norm = EmpiricalNormalization(85)
++
++    def init(self, *args, **kwargs):
++        self.alg = SimpleNamespace(
++            actor=SimpleNamespace(obs_normalizer=actor_norm),
++            critic=SimpleNamespace(obs_normalizer=critic_norm),
++        )
++
++    monkeypatch.setattr(DuckFuRecoveryRunner, "__init__", init)
++    runner = DuckFuFinishStableRunner(None, {})
++    before = {k: v.clone() for k, v in actor_norm.state_dict().items()}
++    runner.alg.actor.obs_normalizer.update(torch.randn(64, 61))
++    runner.alg.critic.obs_normalizer.update(torch.randn(64, 85))
++    assert all(torch.equal(before[k], v) for k, v in actor_norm.state_dict().items())
++    assert critic_norm.count.item() == 64

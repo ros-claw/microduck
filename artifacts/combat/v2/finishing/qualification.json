@@ -1,0 +1,147 @@
+{
+  "heldout_runs": 28,
+  "physical_pass": 28,
+  "paired_initial_states": [
+    {
+      "case": "220002-0",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220001-0",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220003-0",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220002-1",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220003-1",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220001-1",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220004-0",
+      "initial_states_bit_identical": true
+    },
+    {
+      "case": "220004-1",
+      "initial_states_bit_identical": true
+    }
+  ],
+  "groups": {
+    "finisher-050-heldout": {
+      "new": {
+        "runs": 8,
+        "physical_pass": 8,
+        "wins": 5,
+        "outcomes": {
+          "TIMEOUT_DRAW": 3,
+          "WIN": 5
+        },
+        "counts": {
+          "VALID_STRIKE": 183,
+          "COUNTER_SEQUENCE": 1,
+          "MISS": 23,
+          "DOWN": 21,
+          "RING_OUT": 15,
+          "DOWN_COUNT": 0,
+          "COUNTER_ATTEMPT": 39
+        },
+        "flank_responses": 86,
+        "stable_counters": 1
+      },
+      "old": {
+        "runs": 8,
+        "physical_pass": 8,
+        "wins": 4,
+        "outcomes": {
+          "TIMEOUT_DRAW": 4,
+          "WIN": 4
+        },
+        "counts": {
+          "VALID_STRIKE": 215,
+          "COUNTER_SEQUENCE": 0,
+          "MISS": 20,
+          "DOWN": 25,
+          "RING_OUT": 15,
+          "DOWN_COUNT": 0,
+          "COUNTER_ATTEMPT": 46
+        },
+        "flank_responses": 92,
+        "stable_counters": 0
+      }
+    },
+    "finisher-050-styles-heldout": {
+      "counter-counter": {
+        "runs": 4,
+        "physical_pass": 4,
+        "wins": 2,
+        "outcomes": {
+          "TIMEOUT_DRAW": 2,
+          "WIN": 2
+        },
+        "counts": {
+          "VALID_STRIKE": 84,
+          "COUNTER_SEQUENCE": 4,
+          "MISS": 18,
+          "DOWN": 9,
+          "RING_OUT": 6,
+          "DOWN_COUNT": 0,
+          "COUNTER_ATTEMPT": 32
+        },
+        "flank_responses": 42,
+        "stable_counters": 4
+      },
+      "pressure-pressure": {
+        "runs": 4,
+        "physical_pass": 4,
+        "wins": 1,
+        "outcomes": {
+          "TIMEOUT_DRAW": 3,
+          "WIN": 1
+        },
+        "counts": {
+          "VALID_STRIKE": 125,
+          "COUNTER_SEQUENCE": 0,
+          "MISS": 10,
+          "DOWN": 12,
+          "RING_OUT": 6,
+          "DOWN_COUNT": 0,
+          "COUNTER_ATTEMPT": 0
+        },
+        "flank_responses": 34,
+        "stable_counters": 0
+      },
+      "mixed-mixed-large": {
+        "runs": 4,
+        "physical_pass": 4,
+        "wins": 1,
+        "outcomes": {
+          "TIMEOUT_DRAW": 3,
+          "WIN": 1
+        },
+        "counts": {
+          "VALID_STRIKE": 111,
+          "COUNTER_SEQUENCE": 8,
+          "MISS": 21,
+          "DOWN": 18,
+          "RING_OUT": 6,
+          "DOWN_COUNT": 0,
+          "COUNTER_ATTEMPT": 55
+        },
+        "flank_responses": 62,
+        "stable_counters": 8
+      }
+    }
+  },
+  "max_penetration_m": 0.0016487236597377071,
+  "max_penetrating_p99_m": 9.747554170207036e-06,
+  "note": "Four base seeds, correlated swaps and overlapping style groups; not 28 independent games. Frozen selection retained; no body/controller/model tuning on this audit."
+}

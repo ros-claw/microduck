@@ -54,6 +54,12 @@
 
 这是等待用户观感验收的仿真开发分支。格斗循环没有使用 Jev 或网络大模型；不宣称已取得 ROSClaw 格斗授权回执或完成真机迁移。早期失败的运动策略和求解器方案与当前结果一起保留。
 
+### 终结专项实验——团队掩护与完整胜局
+
+[![ROOK 掩护 SHADE，从侧后方进攻](docs/combat/v2/finishing/media/cover.jpg)](docs/combat/v2/finishing/media/finish_en.mp4)
+
+[全英文视频，48.9 秒](docs/combat/v2/finishing/media/finish_en.mp4) · [方法、挑战与复现](docs/combat/v2/finishing/README.zh-CN.md) · [PPO 源码与检查点](training/combat/finish-native/README.md)。新增原生对手下的持续接触与刹车训练，由公开状态团队规则与既有移动、反击技能组合。25.04 秒完整自由对抗最终 **红队 2–蓝队 0**，展示掩护、换目标与明确标记的接触/脚步慢放。四轮训练记录约 321 万条采样；小规模配对检查与专项退步均有记录，新网络作为可选展示方案保留。
+
 ### V2 开发：交锋与团队意图
 
 [![Duck Fu V2：持续支援与真实接触](docs/combat/v2/round2/media/cover.jpg)](docs/combat/v2/round2/media/team_review.mp4)
