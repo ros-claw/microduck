@@ -25,18 +25,18 @@ The actor sees proprioception and native physical commands; only the training cr
 
 Four long-run versions logged **3,207,168 environment transitions**, excluding smoke tests and qualification. The final fixed-normalizer version completed 251 iterations at 256 environments. Earlier runs stopped at their recorded checkpoints; they are not labelled completed runs. A measured input-normalization drift motivated preserving the imported actor statistics while continuing to train all actor weights and the critic. [Run counts](../../../../training/combat/finish-native/run-counts.json), source variants, logs, the exact seed, selected checkpoint 50, final checkpoint 250 and a rejected diagnostic checkpoint are retained.
 
-The film assembly was frozen before held-out seeds `220001..220004` were run. Four base seeds × two side swaps produce eight paired starts per assembly; rotations, swaps and style trials are correlated.
+The film assembly was frozen before held-out seeds `220001..220004` were run. Four base seeds × two side swaps produce eight paired starts per assembly; rotations, swaps and style trials are correlated. Both teams use the assembly under test. These counts measure bouts that reach a result, not victories of the new motor against the old motor.
 
 | Held-out free bouts, same V4 rules and physics | Previous contact motor | Scoped native finishing motor |
 | --- | ---: | ---: |
 | Numerical checks passed | 8/8 | 8/8 |
-| Wins / timeout draws | 4 / 4 | 5 / 3 |
+| Resolved bouts / timeout draws | 4 / 4 | 5 / 3 |
 | DOWN events | 25 | 21 |
 | Uninterrupted upright evade/miss/counter sequences | 0 | 1 |
 
-This small cohort does not establish a general win-rate improvement. Counts also depend on bout duration. The standalone bounded native-opponent course is **11/24 supported finishes for the previous motor and 6/24 for the selected new motor**. The new bare motor is therefore not a universal upgrade. Checkpoints 100/200/250, failed adaptive-normalizer candidates, additional styles and a larger ring remain in the [audit](../../../../artifacts/combat/v2/finishing/). Existing configurations remain available; the selected assembly is explicit and optional.
+This small cohort does not establish a general improvement in bout completion or opponent strength. Counts also depend on bout duration. The standalone bounded native-opponent course is **11/24 supported finishes for the previous motor and 6/24 for the selected new motor**. The new bare motor is therefore not a universal upgrade. Checkpoints 100/200/250, failed adaptive-normalizer candidates, additional styles and a larger ring remain in the [audit](../../../../artifacts/combat/v2/finishing/). Existing configurations remain available; the selected assembly is explicit and optional.
 
-All **28 held-out executions** pass the unchanged numerical checks, including counter/counter, pressure/pressure and mixed-style bouts on a 1.0 m radius ring. All eight old/new paired starts have bit-identical initial integration states. Additional style groups produce 2/4, 1/4 and 1/4 wins respectively; the remaining bouts draw. Their shared base seeds make these challenge groups correlated, not an independent win-rate estimate.
+All **28 held-out executions** pass the unchanged numerical checks, including counter/counter, pressure/pressure and mixed-style bouts on a 1.0 m radius ring. All eight old/new paired starts have bit-identical initial integration states. Additional style groups resolve 2/4, 1/4 and 1/4 bouts respectively; the remaining bouts draw. Their shared base seeds make these challenge groups correlated, not an independent resolution-rate estimate.
 
 The selected film's maximum penetration is **0.454 mm**, with a 0.6405 Nm torque cap, zero applied external forces, an unchanged model and no solver warnings. The gates remain 3 mm maximum and 1.5 mm penetrating-contact P99. Component hulls and compliant numerical contact are approximations; a recent measured contact is not counterfactual proof that a single blow caused an exit.
 
