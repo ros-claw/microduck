@@ -9,9 +9,60 @@ import numpy as np
 
 from .tactics_v3 import TacticalPilot, bearing, distance, inside
 from .tactics import wrap
+from .geometry import boundary_distance
+from .maneuver import MotorCommand
 
 
 class FinisherPilot(TacticalPilot):
+    def control_override(self, now, public, alive):
+        me = public[self.name]
+        enemies = [n for n in alive if self.teams[n] != self.team]
+        if self.skill == "edge_brake":
+            if self.brake.ready(now, me) and me.speed < 0.10:
+                self.finish(now, "SUPPORTED_EDGE_STOP")
+                if not enemies:
+                    return MotorCommand("edge_stop", "walk")
+                target = min(enemies, key=lambda n: distance(me, public[n]))
+                self.target = target
+                self.start(now, "escape", 0.8, me, public[target])
+                return None
+            else:
+                return MotorCommand("edge_brake", self.edge_brake_policy)
+        future_margin = boundary_distance(
+            np.array(me.xy) + 0.35 * np.array(me.velocity), self.c
+        )
+        if (
+            me.upright > 0.94
+            and not me.body_ground
+            and future_margin < 0.12
+            and future_margin < me.boundary_distance - 0.025
+        ):
+            policy = (
+                "dash_candidate"
+                if self.action == 3
+                else "evade_candidate"
+                if self.skill == "sidestep"
+                else "walk"
+            )
+            self.finish(now, "PREDICTED_EDGE_PREEMPTION")
+            if not enemies:
+                return MotorCommand("edge_stop", policy)
+            target = min(enemies, key=lambda n: distance(me, public[n]))
+            self.target = target
+            self.start(
+                now,
+                "edge_brake",
+                3.0,
+                me,
+                public[target],
+                predicted_margin_m=future_margin,
+                measured_margin_m=me.boundary_distance,
+            )
+            self.edge_brake_policy = policy
+            self.brake.ready(now, me)
+            return MotorCommand("edge_brake", policy)
+        return None
+
     def special_choice(self, now, me, other, public, alive):
         dist = distance(me, other)
         if not (

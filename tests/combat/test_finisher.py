@@ -1,6 +1,5 @@
 from dataclasses import replace
 import math
-import numpy as np
 from microduck_lab.combat.tactics_v4 import FinisherPilot
 from test_v2 import body, config, context
 
@@ -64,3 +63,26 @@ def test_late_evade_handoff_does_not_expire_a_new_turn_immediately():
     p.choose(2.0, {"a": a, "b": b}, ["a", "b"])
     assert p.skill == "turn_counter" and p.action is not None
     assert p.since == 2.0
+
+
+def test_outward_momentum_requests_zero_motor_before_reaching_the_edge():
+    p = pilot()
+    a = body("a", xy=(0.62, 0.0), velocity=(0.40, 0.0), boundary_distance=0.21)
+    b = body("b", xy=(0.78, 0.0))
+    p.start(1.0, "finish_drive", 2.4, a, b)
+    command = p.choose(1.2, {"a": a, "b": b}, ["a", "b"])
+    assert p.skill == "edge_brake" and p.active_attack is None
+    assert command.policy == "dash_candidate" and command.twist == (0.0, 0.0, 0.0)
+    assert a.velocity == (0.40, 0.0)
+
+
+def test_inward_momentum_is_not_stopped_and_edge_brake_waits_for_support():
+    p = pilot()
+    b = body("b", xy=(0.78, 0.0))
+    a = body("a", xy=(0.62, 0.0), velocity=(-0.40, 0.0), boundary_distance=0.21)
+    assert p.control_override(1.2, {"a": a, "b": b}, ["a", "b"]) is None
+    a = replace(a, velocity=(0.40, 0.0))
+    p.control_override(1.2, {"a": a, "b": b}, ["a", "b"])
+    slow = replace(a, velocity=(0.0, 0.0), foot_support=False)
+    c = p.control_override(1.7, {"a": slow, "b": b}, ["a", "b"])
+    assert p.skill == "edge_brake" and c.twist == (0.0, 0.0, 0.0)

@@ -262,6 +262,9 @@ class TacticalPilot(Pilot):
     def special_choice(self, now, me, other, public, alive):
         return None
 
+    def control_override(self, now, public, alive):
+        return None
+
     def attack_limits(self, me, other):
         return (
             0.42 if self.skill == "short_bump" else 1.30,
@@ -282,6 +285,9 @@ class TacticalPilot(Pilot):
             return MotorCommand("recovery", recovery)
         if now < 0.8:
             return MotorCommand("settle")
+        override = self.control_override(now, public, alive)
+        if override is not None:
+            return override
         if self.target not in alive and self.action is not None:
             self.finish(now, "TARGET_ELIMINATED")
         if self.action is None:
