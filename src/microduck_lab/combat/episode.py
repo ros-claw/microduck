@@ -90,6 +90,19 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             raise ValueError("Evade motor digest differs")
         bank.paths["evade_candidate"] = config.evade_motor_path
         bank.get("evade_candidate")
+    blue_motor_path = getattr(config, "blue_motor_path", "")
+    blue_motor_sha = getattr(config, "blue_motor_sha256", "")
+    if blue_motor_path:
+        if not competition or digest(blue_motor_path) != blue_motor_sha:
+            raise ValueError("Pinned blue motor mismatch")
+        from .world import CombatBank
+
+        opponent_bank = CombatBank(dict(bank.paths))
+        opponent_bank.paths["dash_candidate"] = blue_motor_path
+        opponent_bank.get("dash_candidate")
+        for name, duck in ducks.items():
+            if teams[name] == "BLUE":
+                duck.bank = opponent_bank
     if competition:
         for path, sha in (
             (config.tactics_path, config.tactics_sha256),
@@ -103,7 +116,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         if v2 and config.team_intents:
             from .team_intents import TeamPlanner
 
-            if config.controller_revision == 3:
+            if config.controller_revision >= 3:
                 from .tactics_v3 import TacticalTeamPlanner as TeamPlanner
 
             planners = {
@@ -117,7 +130,7 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                 for team, enabled in (("RED", config.red_v2), ("BLUE", config.blue_v2))
                 if enabled
             }
-            if config.controller_revision == 3:
+            if config.controller_revision >= 3:
                 for team, planner in planners.items():
                     planner.style = (
                         config.red_v2_style if team == "RED" else config.blue_v2_style
@@ -137,6 +150,8 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
 
                 if config.controller_revision == 3:
                     from .tactics_v3 import TacticalPilot as V2Pilot
+                if config.controller_revision == 4:
+                    from .tactics_v4 import FinisherPilot as V2Pilot
 
                 controllers[n] = V2Pilot(
                     n, teams[n], teams, config, planners.get(teams[n])
@@ -415,6 +430,8 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         raise RuntimeError("Source changed during simulation; discard this run")
     if recovery_path and digest(recovery_path) != recovery_sha:
         raise RuntimeError("Recovery motor changed during simulation")
+    if blue_motor_path and digest(blue_motor_path) != blue_motor_sha:
+        raise RuntimeError("Blue motor changed during simulation")
     if (
         config.candidate_motor_path
         and digest(config.candidate_motor_path) != config.candidate_motor_sha256

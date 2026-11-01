@@ -25,10 +25,25 @@ class V2Config(MatchConfig):
     recovery_mode: str = "legacy"
     recovery_motor_path: str = ""
     recovery_motor_sha256: str = ""
+    finish_active_s: float = 2.2
+    finish_contact_s: float = 2.0
+    finish_travel_m: float = 0.38
+    finish_entry_m: float = 0.34
+    finish_safety_m: float = 0.14
+    blue_motor_path: str = ""
+    blue_motor_sha256: str = ""
 
     def __post_init__(self):
         if self.schema != "duckfu.match.v2":
             raise ValueError("V2 requires its own explicit schema")
+        if bool(self.blue_motor_path) != bool(self.blue_motor_sha256) or (
+            self.blue_motor_sha256
+            and (
+                len(self.blue_motor_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in self.blue_motor_sha256)
+            )
+        ):
+            raise ValueError("Blue motor requires an exact pinned digest")
         if self.recovery_mode not in (
             "legacy",
             "stand_first",
@@ -47,8 +62,16 @@ class V2Config(MatchConfig):
             raise ValueError("Recovery motor requires explicit contact_learned mode")
         if type(
             self.controller_revision
-        ) is not int or self.controller_revision not in (1, 2, 3):
+        ) is not int or self.controller_revision not in (1, 2, 3, 4):
             raise ValueError("Unknown V2 controller revision")
+        if not (
+            1.3 <= self.finish_active_s <= 2.5
+            and 0.7 <= self.finish_contact_s <= 2.4
+            and 0.24 <= self.finish_travel_m <= 0.45
+            and 0.24 <= self.finish_entry_m <= 0.40
+            and 0.10 <= self.finish_safety_m <= 0.22
+        ):
+            raise ValueError("Finishing request outside bounded development envelope")
         values = {f.name: getattr(self, f.name) for f in fields(MatchConfig)}
         values["schema"] = "duckfu.match.v1"
         MatchConfig(**values)

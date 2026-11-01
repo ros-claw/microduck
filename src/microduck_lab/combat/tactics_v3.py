@@ -191,7 +191,11 @@ class TacticalPilot(Pilot):
         return self.attack_id if self.action == 3 and self.phase == "ACTIVE" else None
 
     def start(self, now, skill, duration, me, other, phase="ACTIVE", **evidence):
-        self.action = 3 if skill in ("short_bump", "drive", "counter_drive") else 0
+        self.action = (
+            3
+            if skill in ("short_bump", "drive", "counter_drive", "finish_drive")
+            else 0
+        )
         self.skill, self.phase = skill, phase
         self.since, self.phase_since, self.until = now, now, now + duration
         self.origin = np.array(me.xy)
@@ -254,6 +258,19 @@ class TacticalPilot(Pilot):
             )
 
         return min((1, -1), key=score)
+
+    def special_choice(self, now, me, other, public, alive):
+        return None
+
+    def attack_limits(self, me, other):
+        return (
+            0.42 if self.skill == "short_bump" else 1.30,
+            0.16 if self.skill == "short_bump" else 0.70,
+            0.24,
+        )
+
+    def drive_yaw(self, me, other):
+        return float(np.clip(2 * wrap(self.aim - me.yaw), -0.5, 0.5))
 
     def choose(self, now, public, alive):
         me = public[self.name]
@@ -327,6 +344,7 @@ class TacticalPilot(Pilot):
                 and me.foot_support
                 and not me.body_ground
             )
+            special = self.special_choice(now, me, other, public, alive)
             if self.role == "ESCAPE":
                 skill, duration = "escape", 0.65
             elif self.role == "DRAW" and 0.30 < dist < 0.46 and enemy_toward > 0.055:
@@ -334,6 +352,8 @@ class TacticalPilot(Pilot):
             elif threat and self.style != "pressure" and now - self.last_evade > 1.0:
                 skill, duration = "sidestep", 0.54
                 self.last_evade, self.visible_charge = now, True
+            elif special is not None:
+                skill, duration = special
             elif me.touching_opponent or dist < 0.19:
                 skill, duration = "break_contact", 0.72
                 self.last_exit = now
@@ -366,7 +386,7 @@ class TacticalPilot(Pilot):
                 me,
                 other,
                 phase="WINDUP"
-                if skill in ("drive", "short_bump", "counter_drive")
+                if skill in ("drive", "short_bump", "counter_drive", "finish_drive")
                 else "ACTIVE",
                 target_bearing_rad=flank_angle,
                 enemy_toward_m_s=enemy_toward,
@@ -388,18 +408,19 @@ class TacticalPilot(Pilot):
                     )
                 return MotorCommand("maneuver", "walk", head=(-0.30, -0.15, 0.0, 0.0))
             if self.phase == "ACTIVE":
+                active_limit, contact_limit, travel_limit = self.attack_limits(
+                    me, other
+                )
                 if me.touching_opponent and self.contact_since is None:
                     self.contact_since = now
                 contact_done = (
                     self.contact_since is not None
-                    and now - self.contact_since
-                    > (0.16 if self.skill == "short_bump" else 0.70)
+                    and now - self.contact_since > contact_limit
                 )
-                active_limit = 0.42 if self.skill == "short_bump" else 1.30
                 if (
                     now - self.phase_since >= active_limit
                     or contact_done
-                    or np.linalg.norm(np.array(me.xy) - self.origin) > 0.24
+                    or np.linalg.norm(np.array(me.xy) - self.origin) > travel_limit
                 ):
                     self.phase, self.phase_since = "RECOVERY", now
                     self.event(
@@ -415,7 +436,7 @@ class TacticalPilot(Pilot):
                         (
                             self.c.dash_speed,
                             0.0,
-                            float(np.clip(2 * wrap(self.aim - me.yaw), -0.5, 0.5)),
+                            self.drive_yaw(me, other),
                         ),
                         (-0.30, -0.15, 0.0, 0.0),
                     )
@@ -443,6 +464,8 @@ class TacticalPilot(Pilot):
                 )
                 self.finish(now)
                 self.start(now, "turn_counter", 0.8, me, other)
+                if self.c.controller_revision >= 4:
+                    elapsed = 0.0  # New maneuver owns its own expiry clock.
             else:
                 return MotorCommand("maneuver", "evade_candidate")
         if self.skill == "turn_counter":
