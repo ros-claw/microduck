@@ -79,6 +79,13 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
             .custom_metadata_map
         )
     bank = next(iter(ducks.values())).bank
+    finish_path = getattr(config, "finish_motor_path", "")
+    finish_sha = getattr(config, "finish_motor_sha256", "")
+    if finish_path:
+        if digest(finish_path) != finish_sha:
+            raise ValueError("Pinned finishing motor mismatch")
+        bank.paths["finish_candidate"] = finish_path
+        bank.get("finish_candidate")
     if recovery_path:
         bank.paths["recovery_candidate"] = recovery_path
         bank.get("recovery_candidate")
@@ -263,6 +270,15 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
                             else controllers[n].choose(now, public[n], other)
                         )
                     if (
+                        finish_path
+                        and controllers[n].skill == "finish_drive"
+                        and commands[n].policy == "dash_candidate"
+                    ):
+                        cmd = commands[n]
+                        commands[n] = MotorCommand(
+                            cmd.owner, "finish_candidate", cmd.twist, cmd.head
+                        )
+                    if (
                         not competition
                         and config.candidate_motor_path
                         and controllers[n].skill == "dash_bump"
@@ -430,6 +446,8 @@ def run(out, config, physics, seed=101, capture=False, probe=None, training=Fals
         raise RuntimeError("Source changed during simulation; discard this run")
     if recovery_path and digest(recovery_path) != recovery_sha:
         raise RuntimeError("Recovery motor changed during simulation")
+    if finish_path and digest(finish_path) != finish_sha:
+        raise RuntimeError("Finishing motor changed during simulation")
     if blue_motor_path and digest(blue_motor_path) != blue_motor_sha:
         raise RuntimeError("Blue motor changed during simulation")
     if (

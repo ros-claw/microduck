@@ -1,6 +1,9 @@
 from dataclasses import replace
 import math
+from pathlib import Path
+import pytest
 from microduck_lab.combat.tactics_v4 import FinisherPilot
+from microduck_lab.combat.world import CombatBank
 from test_v2 import body, config, context
 
 
@@ -86,3 +89,38 @@ def test_inward_momentum_is_not_stopped_and_edge_brake_waits_for_support():
     slow = replace(a, velocity=(0.0, 0.0), foot_support=False)
     c = p.control_override(1.7, {"a": slow, "b": b}, ["a", "b"])
     assert p.skill == "edge_brake" and c.twist == (0.0, 0.0, 0.0)
+
+
+def test_finishing_handoff_keeps_the_same_motor_for_its_zero_command_brake():
+    p = pilot()
+    p.c = replace(
+        p.c, finish_motor_path="native_finish.onnx", finish_motor_sha256="0" * 64
+    )
+    a = body("a", xy=(0.62, 0.0), velocity=(0.40, 0.0), boundary_distance=0.21)
+    b = body("b", xy=(0.78, 0.0))
+    p.start(1.0, "finish_drive", 2.4, a, b)
+    cmd = p.choose(1.2, {"a": a, "b": b}, ["a", "b"])
+    assert cmd.policy == "finish_candidate" and cmd.twist == (0.0, 0.0, 0.0)
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        dict(finish_motor_path="unsealed.onnx"),
+        dict(finish_motor_sha256="0" * 64),
+        dict(
+            finish_motor_path="sealed.onnx",
+            finish_motor_sha256="0" * 64,
+            controller_revision=3,
+        ),
+    ],
+)
+def test_unpinned_or_incompatible_finishing_weights_are_rejected(changes):
+    with pytest.raises(ValueError, match="[Ff]inishing motor"):
+        replace(pilot().c, **changes)
+
+
+def test_ordinary_contact_export_cannot_masquerade_as_native_finisher():
+    path = Path(__file__).parents[2] / "policies/candidates/duckfu_contact_v1_100.onnx"
+    with pytest.raises(ValueError, match="trained skill scope"):
+        CombatBank({"finish_candidate": str(path)}).get("finish_candidate")

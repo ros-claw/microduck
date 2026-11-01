@@ -38,7 +38,9 @@ class FinisherPilot(TacticalPilot):
             and future_margin < me.boundary_distance - 0.025
         ):
             policy = (
-                "dash_candidate"
+                "finish_candidate"
+                if self.skill == "finish_drive" and self.c.finish_motor_path
+                else "dash_candidate"
                 if self.action == 3
                 else "evade_candidate"
                 if self.skill == "sidestep"

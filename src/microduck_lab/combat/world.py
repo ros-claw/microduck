@@ -96,6 +96,7 @@ class CombatBank(PolicyBank):
                 "evade_candidate",
                 "walk_candidate",
                 "recovery_candidate",
+                "finish_candidate",
             ):
                 meta = s.get_modelmeta().custom_metadata_map
                 required = {
@@ -108,6 +109,11 @@ class CombatBank(PolicyBank):
                     raise ValueError(
                         "Candidate lacks the audited motor/export contract"
                     )
+                if name == "finish_candidate" and (
+                    meta.get("duckfu_scope") != "supported_contact_pressure"
+                    or meta.get("duckfu_skill") != "finish_drive"
+                ):
+                    raise ValueError("Finishing motor lacks its trained skill scope")
                 if name == "recovery_candidate" and (
                     meta.get("duckfu_scope") != "recorded_contact_recovery"
                     or meta.get("duckfu_head_commands") != "zero"

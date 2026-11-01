@@ -35,6 +35,11 @@ def main():
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument(
+        "--finish-only",
+        action="store_true",
+        help="Use the new native-opponent motor only for finish_drive and its measured braking; preserve the previous bump/counter motor",
+    )
+    parser.add_argument(
         "--mode",
         choices=["baseline", "candidate", "paired", "crossplay", "styles"],
         default="candidate",
@@ -43,6 +48,10 @@ def main():
         "--split", choices=["development", "heldout"], default="development"
     )
     args = parser.parse_args()
+    if args.finish_only and args.mode == "crossplay":
+        parser.error(
+            "Crossplay is a whole-motor check; finishing scope uses paired baseline checks"
+        )
     if args.seeds < 1 or args.jobs < 1:
         parser.error("Positive seed and worker counts required")
     if args.split == "heldout" and not 220001 <= args.seed_base <= 220004:
@@ -53,8 +62,12 @@ def main():
     old = strict_load(path, V2Config)
     physics = strict_load(path.parent / old.physics_profile, Physics)
     motor_sha = digest(args.motor)
-    new = replace(
-        old, candidate_motor_path=args.motor, candidate_motor_sha256=motor_sha
+    new = (
+        replace(old, finish_motor_path=args.motor, finish_motor_sha256=motor_sha)
+        if args.finish_only
+        else replace(
+            old, candidate_motor_path=args.motor, candidate_motor_sha256=motor_sha
+        )
     )
     groups = {"new": new}
     if args.mode == "baseline":
@@ -100,6 +113,7 @@ def main():
         schema="duckfu.finisher-check.v1",
         split=args.split,
         mode=args.mode,
+        finish_only=args.finish_only,
         source_sha256=source_hashes(),
         motor_sha256=motor_sha,
         jobs=[

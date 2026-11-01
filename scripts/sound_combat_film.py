@@ -176,6 +176,24 @@ def main():
                     ),
                 )
             )
+    editorial_cues = []
+    if plan["edition"] == "finisher":
+        final_shot = next(s for s in plan["shots"] if s["kind"] == "result")
+        at = final_shot["output_start_s"] + 0.08
+        for offset, length in ((0.0, 0.10), (0.20, 0.18)):
+            u = np.arange(round(length * rate)) / rate
+            whistle = np.sin(np.pi * u / length) ** 2 * (
+                np.sin(2 * np.pi * 2450 * u) + 0.3 * np.sin(2 * np.pi * 2850 * u)
+            )
+            add(at + offset, whistle, 0.045)
+        editorial_cues.append(
+            dict(
+                kind="synthesized_final_whistle",
+                output_time_s=at,
+                actual_result=manifest["result"],
+                source_manifest_sha256=digest(run / "manifest.json"),
+            )
+        )
     winner = manifest["result"]["winner"]
     final_en = f"{winner.title()} team wins!" if winner else "The referee calls a draw!"
     final_cn = (
@@ -353,7 +371,7 @@ def main():
         w.writeframes((audio * 32767).astype("<i2").tobytes())
     loudness = None
     loudness_filter = []
-    if plan["edition"] == "tactical":
+    if plan["edition"] in ("tactical", "finisher"):
         measured = subprocess.run(
             [
                 imageio_ffmpeg.get_ffmpeg_exe(),
@@ -423,6 +441,8 @@ def main():
         dict(
             cues=spoken,
             contact_foley=foley,
+            editorial_cues=editorial_cues,
+            audio_builder_sha256=digest(__file__),
             source_plan_sha256=digest(plan_path),
             voice="en-GB-RyanNeural",
             peak_before_limiting=peak,

@@ -308,7 +308,7 @@ def render(plan_path, out, width=1920, height=1080):
                     bold=True,
                     anchor="mm",
                 )
-                if plan.get("tactical_hud"):
+                if shot.get("tactical_hud", plan.get("tactical_hud")):
                     size = round(250 * scale)
                     right, y0 = width - round(24 * scale), top + round(20 * scale)
                     x0 = right - size
@@ -403,7 +403,11 @@ def render(plan_path, out, width=1920, height=1080):
                         / (manifest["physics"]["motor_hz"] * manifest["physics"]["dt"])
                     )
                     role = roles.get(motor_step, {}).get(n, "")
-                    if role and role not in ("DUEL", "V1"):
+                    if (
+                        shot.get("show_roles", True)
+                        and role
+                        and role not in ("DUEL", "V1")
+                    ):
                         text += " / " + role
                     font = ImageFont.truetype(BOLD, max(19, round(24 * scale)))
                     box = draw.textbbox((x, y), text, font=font, anchor="ms")

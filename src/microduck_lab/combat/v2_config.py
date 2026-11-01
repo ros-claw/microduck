@@ -32,10 +32,22 @@ class V2Config(MatchConfig):
     finish_safety_m: float = 0.14
     blue_motor_path: str = ""
     blue_motor_sha256: str = ""
+    finish_motor_path: str = ""
+    finish_motor_sha256: str = ""
 
     def __post_init__(self):
         if self.schema != "duckfu.match.v2":
             raise ValueError("V2 requires its own explicit schema")
+        if bool(self.finish_motor_path) != bool(self.finish_motor_sha256) or (
+            self.finish_motor_sha256
+            and (
+                len(self.finish_motor_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in self.finish_motor_sha256)
+            )
+        ):
+            raise ValueError("Finishing motor requires an exact pinned digest")
+        if self.finish_motor_path and self.controller_revision != 4:
+            raise ValueError("Finishing motor is scoped to the V4 finish_drive skill")
         if bool(self.blue_motor_path) != bool(self.blue_motor_sha256) or (
             self.blue_motor_sha256
             and (
